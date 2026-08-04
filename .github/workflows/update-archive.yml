@@ -1,0 +1,407 @@
+name: Update KSÍ archive
+
+on:
+  workflow_dispatch:
+
+  schedule:
+    - cron: "37 3 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  update-archive:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Download 2026 KSÍ archive
+        run: |
+          python <<'PY'
+          import json
+          import os
+          import urllib.request
+
+          from datetime import (
+              date,
+              datetime,
+              timedelta,
+              timezone
+          )
+
+          endpoint = "https://www.abler.io/comet-backend/graphql"
+
+          archive_year = 2026
+
+          year_start = date(archive_year, 1, 1)
+          year_end = date(archive_year, 12, 31)
+
+          fixtures_query = """
+          query CometMatches(
+            $first: Int!,
+            $after: String,
+            $filter: CometMatchFilterInput,
+            $sort: CometMatchSort
+          ) {
+            cometMatches(
+              first: $first,
+              after: $after,
+              filter: $filter,
+              sort: $sort
+            ) {
+              totalCount
+              edges {
+                node {
+                  matchId
+                  matchDescription
+                  matchDate
+                  liveStatus
+                  matchStatus
+                  homeScore
+                  awayScore
+                  facilityName
+
+                  competition {
+                    name
+                    category
+                    gender
+                    competitionType
+                  }
+
+                  homeTeam {
+                    name
+                    logo
+                  }
+
+                  awayTeam {
+                    name
+                    logo
+                  }
+                }
+              }
+            }
+          }
+          """
+
+          officials_query = """
+          query MatchesOfficials($matchIds: [Int!]!) {
+            matchesOfficials(matchIds: $matchIds) {
+              matchId
+              officials {
+                personId
+                name
+                role
+                orderNumber
+              }
+            }
+          }
+          """
+
+          allowed_competitions = (
+              "Besta deild karla",
+              "Besta deild kvenna",
+              "Lengjudeild karla",
+              "Lengjudeild kvenna",
+              "2. deild karla",
+              "2. deild kvenna",
+              "3. deild karla",
+              "4. deild karla",
+              "Mjólkurbikar karla",
+              "Mjólkurbikar kvenna",
+              "Deildabikar karla",
+              "Deildabikar kvenna"
+          )
+
+          def send_graphql_request(payload):
+              request = urllib.request.Request(
+                  endpoint,
+                  data=json.dumps(payload).encode("utf-8"),
+                  headers={
+                      "Content-Type": "application/json",
+                      "User-Agent": "domarar-archive"
+                  },
+                  method="POST"
+              )
+
+              with urllib.request.urlopen(
+                  request,
+                  timeout=60
+              ) as response:
+                  result = json.load(response)
+
+              if result.get("errors"):
+                  raise RuntimeError(
+                      "GraphQL error: "
+                      + json.dumps(
+                          result["errors"],
+                          ensure_ascii=False
+                      )
+                  )
+
+              return result
+
+          def chunks(items, size):
+              for index in range(0, len(items), size):
+                  yield items[index:index + size]
+
+          matches_by_id = {}
+
+          window_start = year_start
+
+          while window_start <= year_end:
+              window_end = min(
+                  window_start + timedelta(days=13),
+                  year_end
+              )
+
+              date_from = (
+                  f"{window_start.isoformat()}"
+                  "T00:00:00.000+00:00"
+              )
+
+              date_to = (
+                  f"{window_end.isoformat()}"
+                  "T23:59:59.999+00:00"
+              )
+
+              fixtures_payload = {
+                  "operationName": "CometMatches",
+                  "variables": {
+                      "first": 100,
+                      "filter": {
+                          "categories": ["Adults"],
+                          "dateFrom": date_from,
+                          "dateTo": date_to
+                      },
+                      "sort": "NEXT_FIRST"
+                  },
+                  "query": fixtures_query
+              }
+
+              fixtures_result = send_graphql_request(
+                  fixtures_payload
+              )
+
+              comet_matches = (
+                  fixtures_result
+                  .get("data", {})
+                  .get("cometMatches", {})
+              )
+
+              total_count = comet_matches.get(
+                  "totalCount",
+                  0
+              )
+
+              edges = comet_matches.get(
+                  "edges",
+                  []
+              )
+
+              if total_count > 100:
+                  raise RuntimeError(
+                      "More than 100 matches returned "
+                      f"between {window_start} and "
+                      f"{window_end}. Reduce the window size."
+                  )
+
+              for edge in edges:
+                  match = edge.get("node") or {}
+                  competition = (
+                      match.get("competition") or {}
+                  )
+
+                  competition_name = competition.get(
+                      "name",
+                      ""
+                  )
+
+                  if competition.get("category") != "Adults":
+                      continue
+
+                  if not any(
+                      allowed in competition_name
+                      for allowed in allowed_competitions
+                  ):
+                      continue
+
+                  match_id = match.get("matchId")
+
+                  if match_id is not None:
+                      matches_by_id[match_id] = match
+
+              print(
+                  f"{window_start} to {window_end}: "
+                  f"{len(edges)} API matches, "
+                  f"{len(matches_by_id)} accepted total"
+              )
+
+              window_start = (
+                  window_end + timedelta(days=1)
+              )
+
+          match_ids = sorted(matches_by_id.keys())
+          officials_by_match = {}
+
+          for match_id_chunk in chunks(match_ids, 100):
+              officials_payload = {
+                  "operationName": "MatchesOfficials",
+                  "variables": {
+                      "matchIds": match_id_chunk
+                  },
+                  "query": officials_query
+              }
+
+              officials_result = send_graphql_request(
+                  officials_payload
+              )
+
+              officials_matches = (
+                  officials_result
+                  .get("data", {})
+                  .get("matchesOfficials", [])
+              )
+
+              for match_officials in officials_matches:
+                  match_id = match_officials.get(
+                      "matchId"
+                  )
+
+                  officials = sorted(
+                      match_officials.get(
+                          "officials"
+                      ) or [],
+                      key=lambda official: (
+                          official.get("orderNumber")
+                          if official.get("orderNumber")
+                          is not None
+                          else 999
+                      )
+                  )
+
+                  officials_by_match[match_id] = [
+                      {
+                          "personId": official.get(
+                              "personId"
+                          ),
+                          "name": official.get("name"),
+                          "role": official.get("role"),
+                          "orderNumber": official.get(
+                              "orderNumber"
+                          )
+                      }
+                      for official in officials
+                  ]
+
+          games = []
+
+          for match_id, match in matches_by_id.items():
+              competition = (
+                  match.get("competition") or {}
+              )
+
+              home_team = match.get("homeTeam") or {}
+              away_team = match.get("awayTeam") or {}
+
+              games.append({
+                  "id": match_id,
+                  "date": match.get("matchDate"),
+                  "description": match.get(
+                      "matchDescription"
+                  ),
+                  "competition": competition.get(
+                      "name"
+                  ),
+                  "gender": competition.get("gender"),
+                  "competitionType": competition.get(
+                      "competitionType"
+                  ),
+                  "home": home_team.get("name"),
+                  "away": away_team.get("name"),
+                  "homeLogo": home_team.get("logo"),
+                  "awayLogo": away_team.get("logo"),
+                  "facility": match.get(
+                      "facilityName"
+                  ),
+                  "status": match.get("matchStatus"),
+                  "liveStatus": match.get(
+                      "liveStatus"
+                  ),
+                  "homeScore": match.get("homeScore"),
+                  "awayScore": match.get("awayScore"),
+                  "officials": officials_by_match.get(
+                      match_id,
+                      []
+                  )
+              })
+
+          games.sort(
+              key=lambda game: game.get("date") or ""
+          )
+
+          output = {
+              "updatedAt": datetime.now(
+                  timezone.utc
+              ).isoformat(),
+              "year": archive_year,
+              "dateFrom": year_start.isoformat(),
+              "dateTo": year_end.isoformat(),
+              "gameCount": len(games),
+              "games": games
+          }
+
+          os.makedirs("data", exist_ok=True)
+
+          with open(
+              "data/archive.json",
+              "w",
+              encoding="utf-8"
+          ) as file:
+              json.dump(
+                  output,
+                  file,
+                  ensure_ascii=False,
+                  indent=2
+              )
+
+          officials_count = sum(
+              len(game["officials"])
+              for game in games
+          )
+
+          completed_count = sum(
+              1
+              for game in games
+              if game.get("homeScore") is not None
+              and game.get("awayScore") is not None
+          )
+
+          print(
+              f"Saved {len(games)} matches, "
+              f"{completed_count} results and "
+              f"{officials_count} officials to "
+              "data/archive.json"
+          )
+          PY
+
+      - name: Commit updated archive
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add data/archive.json
+
+          if git diff --cached --quiet; then
+            echo "No archive changes"
+          else
+            git commit -m "Update KSÍ 2026 archive"
+            git pull --rebase origin main
+            git push origin main
+          fi
