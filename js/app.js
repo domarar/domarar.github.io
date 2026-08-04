@@ -232,7 +232,7 @@ function createOfficialRows(officials = []) {
     return `
       <div class="official-row">
         <div class="official-name">
-          Dómarar hafa ekki verið skráðir.
+          KSÍ hefur ekki birt nöfn dómara á þessum leik.
         </div>
       </div>
     `;
