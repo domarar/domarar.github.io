@@ -277,46 +277,58 @@ function createGameCard(game) {
 function renderGamesForSelectedDay() {
     const selectedDate = getDateForOffset(selectedDayOffset);
     const selectedDateKey = getDateKey(selectedDate);
+const search = searchInput.value
+    .toLowerCase()
+    .trim();
+
 const gamesForDay = allGames
     .filter(game => {
+
+        if (search) {
+            return true;
+        }
+
         return getGameDateKey(game.date) === selectedDateKey;
     })
 
     .filter(game => {
 
-        const search = searchInput.value
-            .toLowerCase()
-            .trim();
+        if (!search) {
+            return true;
+        }
 
-        if (!search) return true;
-
-       const officials = (game.officials || [])
-            .map(o => o.name.toLowerCase())
+        const officials = (game.officials || [])
+            .map(official =>
+                (official.name || "").toLowerCase()
+            )
             .join(" ");
 
         return (
-            game.home.toLowerCase().includes(search) ||
-            game.away.toLowerCase().includes(search) ||
-            game.competition.toLowerCase().includes(search) ||
+            (game.home || "").toLowerCase().includes(search) ||
+            (game.away || "").toLowerCase().includes(search) ||
+            (game.competition || "").toLowerCase().includes(search) ||
             (game.facility || "").toLowerCase().includes(search) ||
             officials.includes(search)
         );
-
     })
 
     .sort((firstGame, secondGame) => {
         return new Date(firstGame.date) - new Date(secondGame.date);
     });
 
-  if (gamesForDay.length === 0) {
+ if (gamesForDay.length === 0) {
     gamesContainer.innerHTML = `
-      <p class="loading-message">
-        Engir leikir eru skráðir þennan dag.
-      </p>
+        <p class="loading-message">
+            ${
+                search
+                    ? "Engar niðurstöður fundust."
+                    : "Engir leikir eru skráðir þennan dag."
+            }
+        </p>
     `;
 
     return;
-  }
+}
 
   const competitionGroups = {};
 
