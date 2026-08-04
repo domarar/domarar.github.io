@@ -157,7 +157,7 @@ jobs:
 
           while window_start <= year_end:
               window_end = min(
-                  window_start + timedelta(days=13),
+                  window_start + timedelta(days=6),
                   year_end
               )
 
