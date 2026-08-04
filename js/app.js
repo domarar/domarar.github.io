@@ -214,11 +214,13 @@ function createGameCard(game) {
     const time = formatTime(game.date);
 
     const date = new Intl.DateTimeFormat("is-IS", {
-        timeZone: "Atlantic/Reykjavik",
-        weekday: "short",
-        day: "numeric",
-        month: "short"
-    }).format(new Date(game.date));
+    timeZone: "Atlantic/Reykjavik",
+    weekday: "short",
+    day: "numeric",
+    month: "short"
+})
+    .format(new Date(game.date))
+    .replace(/\.$/, "");
 
   return `
     <article class="fixture-card">
