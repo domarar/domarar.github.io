@@ -232,7 +232,7 @@ function createOfficialRows(officials = []) {
     return `
       <div class="official-row">
         <div class="official-name">
-          KSÍ hefur ekki birt nöfn dómara á þessum leik.
+          KSÍ birtir nöfn dómara um 24 klst fyrir leik.
         </div>
       </div>
     `;
