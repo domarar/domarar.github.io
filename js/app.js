@@ -417,6 +417,8 @@ async function loadGames() {
 // =====================================
 // START APP
 // =====================================
-
+searchInput.addEventListener("input", () => {
+    renderGamesForSelectedDay();
+});
 updateDateTabs();
 loadGames();
