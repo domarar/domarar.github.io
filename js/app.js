@@ -135,7 +135,7 @@ function createGameCard(game) {
 
 async function loadGames() {
   try {
-    const response = await fetch("data/games.json");
+    const response = await fetch("data/games.json?v=3");
 
     if (!response.ok) {
       throw new Error(`HTTP error: ${response.status}`);
