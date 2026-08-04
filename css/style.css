@@ -339,17 +339,31 @@
       font-weight: 700;
     }
 
-    .versus {
-      color: var(--muted);
-      font-size: 13px;
+   .versus {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+
+    color: var(--muted);
+    font-size: 13px;
+    text-align: center;
     }
     .versus.score {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+
     color: var(--text);
 
-    font-size: 28px;
+    font-size: 30px;
     font-weight: 800;
     line-height: 1;
 
+    text-align: center;
     white-space: nowrap;
 }
     .officials {
