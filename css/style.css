@@ -483,4 +483,28 @@
         padding: 14px 22px;
       }
     }
-  
+  @media (min-width: 700px) {
+    .bottom-nav {
+        left: 50%;
+        right: auto;
+
+        width: min(520px, calc(100% - 48px));
+        min-height: 48px;
+
+        padding: 7px 18px;
+
+        transform: translateX(-50%);
+
+        border: 1px solid var(--border);
+        border-bottom: 0;
+        border-radius: 16px 16px 0 0;
+    }
+
+    .bottom-message strong {
+        font-size: 13px;
+    }
+
+    .bottom-message span {
+        font-size: 9px;
+    }
+}
