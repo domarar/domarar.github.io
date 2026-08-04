@@ -369,6 +369,7 @@ const gamesForDay = allGames
 
 dateTabs.forEach((tab, index) => {
   tab.addEventListener("click", () => {
+    searchInput.value = "";
     selectedDayOffset = index;
 
     dateTabs.forEach(button => {
@@ -432,6 +433,20 @@ async function loadGames() {
 // START APP
 // =====================================
 searchInput.addEventListener("input", () => {
+    const search = searchInput.value.trim();
+
+    if (search) {
+        dateTabs.forEach(tab => {
+            tab.classList.remove("active");
+        });
+    } else {
+        dateTabs.forEach(tab => {
+            tab.classList.remove("active");
+        });
+
+        dateTabs[selectedDayOffset].classList.add("active");
+    }
+
     renderGamesForSelectedDay();
 });
 updateDateTabs();
