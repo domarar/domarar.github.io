@@ -6,6 +6,7 @@
 
 const gamesContainer = document.querySelector("#games-container");
 const dateTabs = document.querySelectorAll(".date-tab");
+const searchInput = document.querySelector("#search-input");
 
 
 // =====================================
@@ -274,16 +275,35 @@ function createGameCard(game) {
 // GROUP AND DISPLAY GAMES
 // =====================================
 
-function renderGamesForSelectedDay() {
-  const selectedDate = getDateForOffset(selectedDayOffset);
-  const selectedDateKey = getDateKey(selectedDate);
-
-  const gamesForDay = allGames
+const gamesForDay = allGames
     .filter(game => {
-      return getGameDateKey(game.date) === selectedDateKey;
+        return getGameDateKey(game.date) === selectedDateKey;
     })
+
+    .filter(game => {
+
+        const search = searchInput.value
+            .toLowerCase()
+            .trim();
+
+        if (!search) return true;
+
+        const officials = game.officials
+            .map(o => o.name.toLowerCase())
+            .join(" ");
+
+        return (
+            game.home.toLowerCase().includes(search) ||
+            game.away.toLowerCase().includes(search) ||
+            game.competition.toLowerCase().includes(search) ||
+            (game.facility || "").toLowerCase().includes(search) ||
+            officials.includes(search)
+        );
+
+    })
+
     .sort((firstGame, secondGame) => {
-      return new Date(firstGame.date) - new Date(secondGame.date);
+        return new Date(firstGame.date) - new Date(secondGame.date);
     });
 
   if (gamesForDay.length === 0) {
