@@ -13,6 +13,8 @@ const searchInput = document.querySelector("#search-input");
 // APP STATE
 // =====================================
 
+let upcomingGames = [];
+let archiveGames = [];
 let allGames = [];
 let selectedDayOffset = 0;
 
@@ -386,47 +388,76 @@ dateTabs.forEach((tab, index) => {
 // =====================================
 // LOAD REAL GAME DATA
 // =====================================
-
 async function loadGames() {
-  try {
-    const response = await fetch(
-      "data/games.json",
-      {
-        cache: "no-store"
-      }
-    );
+    try {
+        const [
+            upcomingResponse,
+            archiveResponse
+        ] = await Promise.all([
+            fetch("data/games.json", {
+                cache: "no-store"
+            }),
 
-    if (!response.ok) {
-      throw new Error(
-        `HTTP error: ${response.status}`
-      );
+            fetch("data/archive.json", {
+                cache: "no-store"
+            })
+        ]);
+
+        if (!upcomingResponse.ok) {
+            throw new Error(
+                `Upcoming games HTTP error: ${upcomingResponse.status}`
+            );
+        }
+
+        if (!archiveResponse.ok) {
+            throw new Error(
+                `Archive HTTP error: ${archiveResponse.status}`
+            );
+        }
+
+        const upcomingData = await upcomingResponse.json();
+        const archiveData = await archiveResponse.json();
+
+        upcomingGames = Array.isArray(upcomingData.games)
+            ? upcomingData.games
+            : [];
+
+        archiveGames = Array.isArray(archiveData.games)
+            ? archiveData.games
+            : [];
+
+        const gamesById = new Map();
+
+        archiveGames.forEach(game => {
+            if (game.id !== null && game.id !== undefined) {
+                gamesById.set(game.id, game);
+            }
+        });
+
+        upcomingGames.forEach(game => {
+            if (game.id !== null && game.id !== undefined) {
+                gamesById.set(game.id, game);
+            }
+        });
+
+        allGames = Array.from(gamesById.values());
+
+        renderGamesForSelectedDay();
+
+    } catch (error) {
+        console.error(
+            "Villa við að sækja leiki og skjalasafn:",
+            error
+        );
+
+        gamesContainer.innerHTML = `
+            <p class="loading-message">
+                Ekki tókst að sækja leiki.
+            </p>
+        `;
     }
-
-    const data = await response.json();
-
-    if (!Array.isArray(data.games)) {
-      throw new Error(
-        "games property is not an array"
-      );
-    }
-
-    allGames = data.games;
-
-    renderGamesForSelectedDay();
-
-  } catch (error) {
-    console.error(
-      "Villa við að sækja leiki:",
-      error
-    );
-
-    gamesContainer.innerHTML = `
-      <p class="loading-message">
-        Ekki tókst að sækja leiki.
-      </p>
-    `;
-  }
 }
+
 
 
 // =====================================
