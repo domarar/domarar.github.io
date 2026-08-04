@@ -284,8 +284,10 @@ const date = formatIcelandicDate(game.date);
     <div class="fixture-venue">
         ${game.facility || "Völlur óskráður"}
     </div>
-
-</div>
+    <div class="fixture-competition">
+    ${cleanCompetitionName(game.competition)}
+    
+    </div>
 
         <div class="teams">
 
