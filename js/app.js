@@ -290,7 +290,7 @@ const gamesForDay = allGames
 
         if (!search) return true;
 
-        const officials = game.officials
+       const officials = (game.officials || [])
             .map(o => o.name.toLowerCase())
             .join(" ");
 
