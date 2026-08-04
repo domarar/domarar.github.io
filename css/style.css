@@ -346,8 +346,11 @@
     .versus.score {
     color: var(--text);
 
-    font-size: 20px;
+    font-size: 28px;
     font-weight: 800;
+    line-height: 1;
+
+    white-space: nowrap;
 }
     .officials {
       border-top: 1px solid var(--border);
