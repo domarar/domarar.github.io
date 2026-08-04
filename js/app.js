@@ -265,7 +265,15 @@ function createOfficialRows(officials = []) {
 function createGameCard(game) {
 const time = formatTime(game.date);
 const date = formatIcelandicDate(game.date);
+const hasScore =
+    game.homeScore !== null &&
+    game.homeScore !== undefined &&
+    game.awayScore !== null &&
+    game.awayScore !== undefined;
 
+const centerText = hasScore
+    ? `${game.homeScore} - ${game.awayScore}`
+    : "VS";
   return `
     <article class="fixture-card">
 
@@ -303,9 +311,9 @@ const date = formatIcelandicDate(game.date);
 
           </div>
 
-          <div class="versus">
-            VS
-          </div>
+          <div class="versus ${hasScore ? "score" : ""}">
+    ${centerText}
+</div>
 
           <div class="team">
 
