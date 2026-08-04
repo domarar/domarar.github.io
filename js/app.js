@@ -315,8 +315,32 @@ const gamesForDay = allGames
     })
 
     .sort((firstGame, secondGame) => {
-        return new Date(firstGame.date) - new Date(secondGame.date);
-    });
+    const firstDate = new Date(firstGame.date);
+    const secondDate = new Date(secondGame.date);
+
+    if (!search) {
+        return firstDate - secondDate;
+    }
+
+    const now = new Date();
+
+    const firstIsUpcoming = firstDate >= now;
+    const secondIsUpcoming = secondDate >= now;
+
+    if (firstIsUpcoming && !secondIsUpcoming) {
+        return -1;
+    }
+
+    if (!firstIsUpcoming && secondIsUpcoming) {
+        return 1;
+    }
+
+    if (firstIsUpcoming && secondIsUpcoming) {
+        return firstDate - secondDate;
+    }
+
+    return secondDate - firstDate;
+});
 
  if (gamesForDay.length === 0) {
     gamesContainer.innerHTML = `
