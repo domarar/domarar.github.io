@@ -274,7 +274,9 @@ function createGameCard(game) {
 // =====================================
 // GROUP AND DISPLAY GAMES
 // =====================================
-
+function renderGamesForSelectedDay() {
+    const selectedDate = getDateForOffset(selectedDayOffset);
+    const selectedDateKey = getDateKey(selectedDate);
 const gamesForDay = allGames
     .filter(game => {
         return getGameDateKey(game.date) === selectedDateKey;
