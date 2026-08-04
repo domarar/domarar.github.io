@@ -110,7 +110,59 @@ function formatTime(dateString) {
     hour12: false
   }).format(new Date(dateString));
 }
+function formatIcelandicDate(dateString) {
+    const date = new Date(dateString);
 
+    const parts = new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Atlantic/Reykjavik",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+    }).formatToParts(date);
+
+    const year = Number(
+        parts.find(part => part.type === "year").value
+    );
+
+    const month = Number(
+        parts.find(part => part.type === "month").value
+    );
+
+    const day = Number(
+        parts.find(part => part.type === "day").value
+    );
+
+    const localDate = new Date(
+        Date.UTC(year, month - 1, day)
+    );
+
+    const weekdays = [
+        "sun.",
+        "mán.",
+        "þri.",
+        "mið.",
+        "fim.",
+        "fös.",
+        "lau."
+    ];
+
+    const months = [
+        "jan.",
+        "feb.",
+        "mar.",
+        "apr.",
+        "maí",
+        "jún.",
+        "júl.",
+        "ágú.",
+        "sep.",
+        "okt.",
+        "nóv.",
+        "des."
+    ];
+
+    return `${weekdays[localDate.getUTCDay()]} ${day}. ${months[month - 1]}`;
+}
 
 // =====================================
 // GENERAL HELPERS
@@ -211,23 +263,15 @@ function createOfficialRows(officials = []) {
 // =====================================
 
 function createGameCard(game) {
-    const time = formatTime(game.date);
-
-    const date = new Intl.DateTimeFormat("is-IS", {
-    timeZone: "Atlantic/Reykjavik",
-    weekday: "short",
-    day: "numeric",
-    month: "short"
-})
-    .format(new Date(game.date))
-    .replace(/\.$/, "");
+const time = formatTime(game.date);
+const date = formatIcelandicDate(game.date);
 
   return `
     <article class="fixture-card">
 
       <div class="fixture-main">
 
-        <div class="fixture-info">
+        <div class="fixture-meta">
 
     <div class="fixture-date">
         ${date}
@@ -242,8 +286,6 @@ function createGameCard(game) {
     </div>
 
 </div>
-
-        </div>
 
         <div class="teams">
 
