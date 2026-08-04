@@ -290,7 +290,16 @@
       font-size: 13px;
       line-height: 1.45;
     }
+    .fixture-competition {
+    margin-top: 4px;
 
+    color: var(--accent);
+
+    font-size: 12px;
+    font-weight: 700;
+
+    letter-spacing: 0.3px;
+}
     .teams {
       display: grid;
       grid-template-columns: 1fr 36px 1fr;
