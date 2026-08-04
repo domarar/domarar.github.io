@@ -211,7 +211,14 @@ function createOfficialRows(officials = []) {
 // =====================================
 
 function createGameCard(game) {
-  const time = formatTime(game.date);
+    const time = formatTime(game.date);
+
+    const date = new Intl.DateTimeFormat("is-IS", {
+        timeZone: "Atlantic/Reykjavik",
+        weekday: "short",
+        day: "numeric",
+        month: "short"
+    }).format(new Date(game.date));
 
   return `
     <article class="fixture-card">
@@ -220,13 +227,19 @@ function createGameCard(game) {
 
         <div class="fixture-info">
 
-          <div class="fixture-time">
-            ${time}
-          </div>
+    <div class="fixture-date">
+        ${date}
+    </div>
 
-          <div class="fixture-venue">
-            ${game.facility || "Völlur óskráður"}
-          </div>
+    <div class="fixture-time">
+        ${time}
+    </div>
+
+    <div class="fixture-venue">
+        ${game.facility || "Völlur óskráður"}
+    </div>
+
+</div>
 
         </div>
 
