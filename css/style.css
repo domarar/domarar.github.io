@@ -257,7 +257,17 @@
 
       padding: 18px;
     }
+    
+    .fixture-date {
+    margin-bottom: 4px;
 
+    color: var(--muted);
+
+    font-size: 12px;
+    font-weight: 600;
+
+    text-transform: capitalize;
+}
     .fixture-time {
       font-size: 23px;
       font-weight: 800;
