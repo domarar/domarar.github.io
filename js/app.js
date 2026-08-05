@@ -435,10 +435,48 @@ const gamesForDay = allGames
 
     competitionGroups[competition].push(game);
   });
+const competitionOrder = [
+    "Besta deild karla",
+    "Lengjudeild karla",
+    "Besta deild kvenna",
+    "2. deild karla",
+    "3. deild karla",
+    "4. deild karla",
+    "Lengjudeild kvenna"
+];
 
-  gamesContainer.innerHTML = Object.entries(
+const sortedCompetitionEntries = Object.entries(
     competitionGroups
-  )
+).sort(([firstCompetition], [secondCompetition]) => {
+    const firstIndex = competitionOrder.indexOf(
+        firstCompetition
+    );
+
+    const secondIndex = competitionOrder.indexOf(
+        secondCompetition
+    );
+
+    const firstPriority =
+        firstIndex === -1
+            ? competitionOrder.length
+            : firstIndex;
+
+    const secondPriority =
+        secondIndex === -1
+            ? competitionOrder.length
+            : secondIndex;
+
+    if (firstPriority !== secondPriority) {
+        return firstPriority - secondPriority;
+    }
+
+    return firstCompetition.localeCompare(
+        secondCompetition,
+        "is"
+    );
+});
+  gamesContainer.innerHTML = sortedCompetitionEntries
+  
     .map(
       ([competition, games]) => `
         <section class="competition-group">
