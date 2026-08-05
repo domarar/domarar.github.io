@@ -650,6 +650,19 @@ async function loadGames() {
 // =====================================
 // START APP
 // =====================================
+genderButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        selectedGender = button.dataset.gender;
+
+        genderButtons.forEach(item => {
+            item.classList.remove("active");
+        });
+
+        button.classList.add("active");
+
+        renderGamesForSelectedDay();
+    });
+});
 searchInput.addEventListener("input", () => {
     const search = searchInput.value.trim();
 
