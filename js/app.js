@@ -7,6 +7,7 @@
 const gamesContainer = document.querySelector("#games-container");
 const dateTabs = document.querySelectorAll(".date-tab");
 const searchInput = document.querySelector("#search-input");
+const searchClear = document.querySelector("#search-clear");
 const genderFilters = document.getElementById("gender-filters");
 const genderButtons = document.querySelectorAll(".gender-filter");
 
@@ -665,6 +666,7 @@ genderButtons.forEach(button => {
 });
 searchInput.addEventListener("input", () => {
     const search = searchInput.value.trim();
+  searchClear.hidden = search === "";
 
     if (search) {
 
@@ -681,6 +683,14 @@ searchInput.addEventListener("input", () => {
     }
 
     renderGamesForSelectedDay();
+});
+searchClear.addEventListener("click", () => {
+    searchInput.value = "";
+    searchClear.hidden = true;
+
+    renderGamesForSelectedDay();
+
+    searchInput.focus();
 });
 updateDateTabs();
 loadGames();
