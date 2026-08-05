@@ -2,6 +2,16 @@ name: Update KSÍ archive
 
 on:
   workflow_dispatch:
+    inputs:
+      year:
+        description: "Choose archive year"
+        required: true
+        default: "2026"
+        type: choice
+        options:
+          - "2026"
+          - "2025"
+          - "2024"
 
   schedule:
     - cron: "37 3 * * *"
@@ -13,6 +23,9 @@ jobs:
   update-archive:
     runs-on: ubuntu-latest
 
+    env:
+      ARCHIVE_YEAR: ${{ github.event.inputs.year || '2026' }}
+
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -22,9 +35,10 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Download 2026 KSÍ archive
+      - name: Download selected KSÍ archive
         run: |
           python <<'PY'
+          import glob
           import json
           import os
           import urllib.request
@@ -38,7 +52,9 @@ jobs:
 
           endpoint = "https://www.abler.io/comet-backend/graphql"
 
-          archive_year = 2026
+          archive_year = int(
+              os.environ.get("ARCHIVE_YEAR", "2026")
+          )
 
           year_start = date(archive_year, 1, 1)
           year_end = date(archive_year, 12, 31)
@@ -209,11 +225,12 @@ jobs:
                   raise RuntimeError(
                       "More than 100 matches returned "
                       f"between {window_start} and "
-                      f"{window_end}. Reduce the window size."
+                      f"{window_end}."
                   )
 
               for edge in edges:
                   match = edge.get("node") or {}
+
                   competition = (
                       match.get("competition") or {}
                   )
@@ -346,7 +363,7 @@ jobs:
               key=lambda game: game.get("date") or ""
           )
 
-          output = {
+          year_output = {
               "updatedAt": datetime.now(
                   timezone.utc
               ).isoformat(),
@@ -359,35 +376,90 @@ jobs:
 
           os.makedirs("data", exist_ok=True)
 
+          year_filename = (
+              f"data/archive-{archive_year}.json"
+          )
+
+          with open(
+              year_filename,
+              "w",
+              encoding="utf-8"
+          ) as file:
+              json.dump(
+                  year_output,
+                  file,
+                  ensure_ascii=False,
+                  indent=2
+              )
+
+          print(
+              f"Saved {len(games)} matches to "
+              f"{year_filename}"
+          )
+
+          # =====================================
+          # COMBINE EVERY YEAR
+          # =====================================
+
+          combined_games_by_id = {}
+          included_years = []
+
+          archive_files = sorted(
+              glob.glob("data/archive-20*.json")
+          )
+
+          for archive_file in archive_files:
+              with open(
+                  archive_file,
+                  "r",
+                  encoding="utf-8"
+              ) as file:
+                  archive_data = json.load(file)
+
+              file_year = archive_data.get("year")
+
+              if file_year is not None:
+                  included_years.append(file_year)
+
+              for game in archive_data.get("games", []):
+                  game_id = game.get("id")
+
+                  if game_id is not None:
+                      combined_games_by_id[game_id] = game
+
+          combined_games = list(
+              combined_games_by_id.values()
+          )
+
+          combined_games.sort(
+              key=lambda game: game.get("date") or ""
+          )
+
+          combined_output = {
+              "updatedAt": datetime.now(
+                  timezone.utc
+              ).isoformat(),
+              "years": sorted(set(included_years)),
+              "gameCount": len(combined_games),
+              "games": combined_games
+          }
+
           with open(
               "data/archive.json",
               "w",
               encoding="utf-8"
           ) as file:
               json.dump(
-                  output,
+                  combined_output,
                   file,
                   ensure_ascii=False,
                   indent=2
               )
 
-          officials_count = sum(
-              len(game["officials"])
-              for game in games
-          )
-
-          completed_count = sum(
-              1
-              for game in games
-              if game.get("homeScore") is not None
-              and game.get("awayScore") is not None
-          )
-
           print(
-              f"Saved {len(games)} matches, "
-              f"{completed_count} results and "
-              f"{officials_count} officials to "
-              "data/archive.json"
+              f"Combined {len(combined_games)} matches "
+              f"from years "
+              f"{sorted(set(included_years))}"
           )
           PY
 
@@ -396,12 +468,12 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add data/archive.json
+          git add data/archive*.json
 
           if git diff --cached --quiet; then
             echo "No archive changes"
           else
-            git commit -m "Update KSÍ 2026 archive"
+            git commit -m "Update KSÍ archive"
             git pull --rebase origin main
             git push origin main
           fi
