@@ -286,7 +286,6 @@ const centerText = hasScore
   <div class="fixture-meta-top">
 
     <div class="fixture-date">
-      <span class="fixture-icon">▣</span>
       <span>${date}</span>
     </div>
 
@@ -295,7 +294,6 @@ const centerText = hasScore
     </div>
 
     <div class="fixture-venue">
-      <span class="fixture-icon">⌖</span>
       <span>${game.facility || "Völlur óskráður"}</span>
     </div>
 
