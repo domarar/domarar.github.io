@@ -364,46 +364,60 @@ padding-right: 38px;
     width: 100%;
 }
     .fixture-meta {
-    display: flex;
-    align-items: baseline;
-    flex-wrap: wrap;
-    gap: 6px 14px;
-
+    width: 100%;
     padding-bottom: 14px;
-
 }
-    .fixture-date {
-    margin-bottom: 4px;
+
+.fixture-meta-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.fixture-date,
+.fixture-venue {
+    display: flex;
+    align-items: center;
+    gap: 6px;
 
     color: var(--muted);
-
-    font-size: 12px;
-    font-weight: 600;
-
-    text-transform: capitalize;
+    font-size: 13px;
+    font-weight: 500;
 }
-    .fixture-time {
-      font-size: 23px;
-      font-weight: 800;
-    }
 
-    .fixture-venue {
-      margin-top: 7px;
+.fixture-icon {
+    opacity: .8;
+    font-size: 13px;
+}
 
-      color: var(--muted);
+.fixture-time {
+    font-size: 23px;
+    font-weight: 800;
+    line-height: 1;
+    white-space: nowrap;
+}
 
-      font-size: 13px;
-      line-height: 1.45;
-    }
-    .fixture-competition {
-    margin-top: 4px;
+.fixture-competition-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 
+    margin-top: 12px;
+    margin-bottom: 18px;
+}
+
+.fixture-competition-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+}
+
+.fixture-competition {
     color: var(--accent);
-
-    font-size: 12px;
+    font-size: 17px;
     font-weight: 700;
-
-    letter-spacing: 0.3px;
+    white-space: nowrap;
 }
     .teams {
       display: grid;
