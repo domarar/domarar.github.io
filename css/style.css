@@ -498,16 +498,14 @@ padding-right: 38px;
     }
 
     .official-row {
-      display: grid;
-      grid-template-columns: 145px 1fr;
-      gap: 10px;
+    display: grid;
 
-      padding: 13px 16px;
+    grid-template-columns: 200px minmax(220px, 320px);
+    justify-content: center;
 
-      border-bottom: 1px solid var(--border);
+    column-gap: 36px;
 
-      font-size: 13px;
-    }
+    padding: 13px 16px;
 
     .official-row:last-child {
       border-bottom: 0;
@@ -635,15 +633,4 @@ padding-right: 38px;
         font-size: 9px;
     }
 }
-@media (min-width: 700px) {
-    .officials {
-        max-width: 680px;
-        width: 100%;
-        margin: 0 auto;
-    }
 
-    .official-row {
-        grid-template-columns: 190px 1fr;
-        column-gap: 34px;
-    }
-}
