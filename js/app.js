@@ -422,7 +422,58 @@ const gamesForDay = allGames
 
     return;
 }
+if (search) {
+    const now = new Date();
 
+    const upcomingSearchGames = gamesForDay
+        .filter(game => new Date(game.date) >= now)
+        .sort((firstGame, secondGame) => {
+            return new Date(firstGame.date) - new Date(secondGame.date);
+        });
+
+    const olderSearchGames = gamesForDay
+        .filter(game => new Date(game.date) < now)
+        .sort((firstGame, secondGame) => {
+            return new Date(secondGame.date) - new Date(firstGame.date);
+        });
+
+    const upcomingSection = upcomingSearchGames.length
+        ? `
+            <section class="search-timeline-section">
+
+                <h2 class="search-section-title">
+                    Næstu leikir
+                </h2>
+
+                ${upcomingSearchGames
+                    .map(createGameCard)
+                    .join("")}
+
+            </section>
+        `
+        : "";
+
+    const olderSection = olderSearchGames.length
+        ? `
+            <section class="search-timeline-section">
+
+                <h2 class="search-section-title">
+                    Eldri leikir
+                </h2>
+
+                ${olderSearchGames
+                    .map(createGameCard)
+                    .join("")}
+
+            </section>
+        `
+        : "";
+
+    gamesContainer.innerHTML =
+        upcomingSection + olderSection;
+
+    return;
+}
   const competitionGroups = {};
 
   gamesForDay.forEach(game => {
