@@ -387,9 +387,14 @@ padding-right: 38px;
 }
 
 .fixture-time {
+    flex: 0 0 78px;
+
     font-size: 23px;
     font-weight: 800;
     line-height: 1;
+
+    color: #fff;
+    text-align: left;
     white-space: nowrap;
 }
 
