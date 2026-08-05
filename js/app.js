@@ -285,17 +285,17 @@ const centerText = hasScore
 
   <div class="fixture-meta-top">
 
-    <div class="fixture-date">
-      <span>${date}</span>
-    </div>
+   <div class="fixture-time">
+    ${time}
+</div>
 
-    <div class="fixture-time">
-      ${time}
-    </div>
+<div class="fixture-date">
+    ${date}
+</div>
 
-    <div class="fixture-venue">
-      <span>${game.facility || "Völlur óskráður"}</span>
-    </div>
+<div class="fixture-venue">
+    ${game.facility || "Völlur óskráður"}
+</div>
 
   </div>
 
