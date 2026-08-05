@@ -499,17 +499,15 @@ padding-right: 38px;
 
     .official-row {
     display: grid;
-
-    grid-template-columns: 200px minmax(220px, 320px);
-    justify-content: center;
-
-    column-gap: 36px;
+    grid-template-columns: 145px 1fr;
+    gap: 10px;
 
     padding: 13px 16px;
 
-    .official-row:last-child {
-      border-bottom: 0;
-    }
+    border-bottom: 1px solid var(--border);
+
+    font-size: 13px;
+}
 
     .official-role {
       color: var(--green);
@@ -633,4 +631,10 @@ padding-right: 38px;
         font-size: 9px;
     }
 }
-
+@media (min-width: 700px) {
+    .official-row {
+        grid-template-columns: 200px 320px;
+        justify-content: center;
+        column-gap: 36px;
+    }
+}
