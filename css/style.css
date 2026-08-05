@@ -157,7 +157,45 @@
     .search-box input::placeholder {
       color: rgba(255, 255, 255, 0.45);
     }
+.gender-filters {
+    display: flex;
+    gap: 10px;
 
+    margin: 12px 0 18px;
+}
+
+.gender-filter {
+    border: 1px solid var(--border);
+    border-radius: 999px;
+
+    padding: 8px 18px;
+
+    background: var(--surface);
+
+    color: var(--muted);
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s,
+        color 0.2s,
+        border-color 0.2s;
+}
+
+.gender-filter.active {
+    background: var(--accent);
+
+    border-color: var(--accent);
+
+    color: #ffffff;
+}
+
+.gender-filters[hidden] {
+    display: none;
+}
     .filter-button {
       border: 1px solid var(--border);
       border-radius: 14px;
