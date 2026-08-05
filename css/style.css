@@ -635,3 +635,15 @@ padding-right: 38px;
         font-size: 9px;
     }
 }
+@media (min-width: 700px) {
+    .officials {
+        max-width: 680px;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .official-row {
+        grid-template-columns: 190px 1fr;
+        column-gap: 34px;
+    }
+}
