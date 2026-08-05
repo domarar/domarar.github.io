@@ -157,6 +157,44 @@
     .search-box input::placeholder {
       color: rgba(255, 255, 255, 0.45);
     }
+.search-box {
+    position: relative;
+}
+
+.search-clear {
+    position: absolute;
+
+    right: 14px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    width: 28px;
+    height: 28px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: transparent;
+
+    color: var(--muted);
+
+    font-size: 20px;
+    line-height: 1;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.search-clear:hover {
+    color: var(--text);
+    background: rgba(255,255,255,0.08);
+}
+
+.search-clear[hidden] {
+    display: none;
+}
 .gender-filters {
     display: flex;
     gap: 10px;
