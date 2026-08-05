@@ -7,7 +7,8 @@
 const gamesContainer = document.querySelector("#games-container");
 const dateTabs = document.querySelectorAll(".date-tab");
 const searchInput = document.querySelector("#search-input");
-
+const genderFilters = document.getElementById("gender-filters");
+const genderButtons = document.querySelectorAll(".gender-filter");
 
 // =====================================
 // APP STATE
@@ -17,7 +18,7 @@ let upcomingGames = [];
 let archiveGames = [];
 let allGames = [];
 let selectedDayOffset = 0;
-
+let selectedGender = "all";
 
 // =====================================
 // ICELANDIC DATE NAMES
@@ -380,7 +381,13 @@ const gamesForDay = allGames
             officials.includes(search)
         );
     })
+.filter(game => {
+    if (!search || selectedGender === "all") {
+        return true;
+    }
 
+    return game.gender === selectedGender;
+})
     .sort((firstGame, secondGame) => {
     const firstDate = new Date(firstGame.date);
     const secondDate = new Date(secondGame.date);
@@ -647,10 +654,22 @@ searchInput.addEventListener("input", () => {
     const search = searchInput.value.trim();
 
     if (search) {
+        genderFilters.hidden = false;
+
         dateTabs.forEach(tab => {
             tab.classList.remove("active");
         });
     } else {
+        genderFilters.hidden = true;
+        selectedGender = "all";
+
+        genderButtons.forEach(button => {
+            button.classList.toggle(
+                "active",
+                button.dataset.gender === "all"
+            );
+        });
+
         dateTabs.forEach(tab => {
             tab.classList.remove("active");
         });
