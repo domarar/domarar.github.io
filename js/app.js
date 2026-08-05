@@ -283,21 +283,33 @@ const centerText = hasScore
 
         <div class="fixture-meta">
 
+  <div class="fixture-meta-top">
+
     <div class="fixture-date">
-        ${date}
+      <span class="fixture-icon">▣</span>
+      <span>${date}</span>
     </div>
 
     <div class="fixture-time">
-        ${time}
+      ${time}
     </div>
 
     <div class="fixture-venue">
-        ${game.facility || "Völlur óskráður"}
+      <span class="fixture-icon">⌖</span>
+      <span>${game.facility || "Völlur óskráður"}</span>
     </div>
+
+  </div>
+
+  <div class="fixture-competition-row">
+    <span class="fixture-competition-line"></span>
+
     <div class="fixture-competition">
-    ${cleanCompetitionName(game.competition)}
-    
+      ${cleanCompetitionName(game.competition)}
     </div>
+
+    <span class="fixture-competition-line"></span>
+  </div>
 
         <div class="teams">
 
