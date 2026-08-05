@@ -382,7 +382,7 @@ const gamesForDay = allGames
         );
     })
 .filter(game => {
-    if (!search || selectedGender === "all") {
+    if (selectedGender === "all") {
         return true;
     }
 
@@ -667,21 +667,11 @@ searchInput.addEventListener("input", () => {
     const search = searchInput.value.trim();
 
     if (search) {
-        genderFilters.hidden = false;
 
         dateTabs.forEach(tab => {
             tab.classList.remove("active");
         });
     } else {
-        genderFilters.hidden = true;
-        selectedGender = "all";
-
-        genderButtons.forEach(button => {
-            button.classList.toggle(
-                "active",
-                button.dataset.gender === "all"
-            );
-        });
 
         dateTabs.forEach(tab => {
             tab.classList.remove("active");
