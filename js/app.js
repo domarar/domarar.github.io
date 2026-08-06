@@ -511,6 +511,7 @@ const competitionOrder = [
     "2. deild karla",
     "3. deild karla",
     "4. deild karla",
+    "Gatorade bikarinn 2026 - Bikarkeppni neðri deilda",
     "Lengjudeild kvenna"
 ];
 
