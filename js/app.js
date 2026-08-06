@@ -384,13 +384,26 @@ const gamesForDay = allGames
             )
             .join(" ");
 
-        return (
-            (game.home || "").toLowerCase().includes(search) ||
-            (game.away || "").toLowerCase().includes(search) ||
-            (game.competition || "").toLowerCase().includes(search) ||
-            (game.facility || "").toLowerCase().includes(search) ||
-            officials.includes(search)
-        );
+        const home = (game.home || "").toLowerCase();
+const away = (game.away || "").toLowerCase();
+
+if (search.length < 3) {
+    return (
+        home === search ||
+        away === search ||
+        officials
+            .split(" ")
+            .some(namePart => namePart === search)
+    );
+}
+
+return (
+    home.includes(search) ||
+    away.includes(search) ||
+    (game.competition || "").toLowerCase().includes(search) ||
+    (game.facility || "").toLowerCase().includes(search) ||
+    officials.includes(search)
+);
     })
 .filter(game => {
     if (selectedGender === "all") {
