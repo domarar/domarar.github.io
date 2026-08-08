@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-08T17:45:48.943416+00:00",
+  "updatedAt": "2026-08-08T18:57:51.438272+00:00",
   "date": "2026-08-08",
   "dateFrom": "2026-08-08",
   "dateTo": "2026-08-14",
@@ -215,8 +215,8 @@
       "facility": "Fagrilundur - gervigras",
       "status": "SCHEDULED",
       "liveStatus": null,
-      "homeScore": null,
-      "awayScore": null,
+      "homeScore": 1,
+      "awayScore": 2,
       "officials": [
         {
           "personId": 89901,
@@ -353,10 +353,10 @@
       "homeLogo": "https://comet.ksi.is/file?id=135b7edd-e558-4dfe-a1dd-2956ac5a4bf3",
       "awayLogo": "https://comet.ksi.is/file?id=5afa29d4-a7bd-472a-93be-ce649fab8af5",
       "facility": "HS Orku völlurinn",
-      "status": "SCHEDULED",
-      "liveStatus": "NA",
-      "homeScore": 1,
-      "awayScore": 0,
+      "status": "PLAYED",
+      "liveStatus": "FULL_TIME",
+      "homeScore": 2,
+      "awayScore": 2,
       "officials": [
         {
           "personId": 71522,
@@ -388,10 +388,10 @@
       "homeLogo": "https://comet.ksi.is/file?id=65d44e5b-3a1b-440a-91f7-6f6a06e2b0d2",
       "awayLogo": "https://comet.ksi.is/file?id=e9216648-28b9-456a-8f13-ad72223d75e3",
       "facility": "Dalvíkurvöllur",
-      "status": "SCHEDULED",
+      "status": "PLAYED",
       "liveStatus": null,
-      "homeScore": null,
-      "awayScore": null,
+      "homeScore": 1,
+      "awayScore": 1,
       "officials": [
         {
           "personId": 74027,
@@ -791,6 +791,12 @@
           "name": "Stefán Ragnar Guðlaugsson",
           "role": "Fjórði dómari",
           "orderNumber": 4
+        },
+        {
+          "personId": 2044,
+          "name": "Valdimar Pálsson",
+          "role": "Dómaraeftirlitsmaður",
+          "orderNumber": 5
         }
       ]
     },
