@@ -305,13 +305,53 @@ jobs:
               f"data/games.json"
           )
           PY
+          - name: Download match reports
+            run: |
+              python <<'PY'
+              import json
+              import subprocess
+              from pathlib import Path
 
-      - name: Commit updated games
-        run: |
+              with open("data/games.json", encoding="utf-8") as file:
+                  data = json.load(file)
+
+              games = data.get("games", [])
+
+              for game in games:
+                  match_id = game.get("id")
+                  status = game.get("status")
+
+                  if not match_id:
+                      continue
+
+                  if status != "PLAYED":
+                      continue
+
+                  report_file = Path(
+                      f"data/match-reports/{match_id}.json"
+                  )
+
+                  if report_file.exists():
+                      print(f"Report already exists for {match_id}, skipping")
+                      continue      
+
+                  print(f"Fetching report for match {match_id}")
+
+                  subprocess.run(
+                      [
+                          "python",
+                          "fetch_match_report.py",
+                          str(match_id)
+                      ],
+                      check=True
+                  )
+              PY
+          - name: Commit updated games
+            run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add data/games.json
+          git add data/games.json data/match-reports/
 
           if git diff --cached --quiet; then
             echo "No game changes"

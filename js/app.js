@@ -323,10 +323,21 @@ const centerText = hasScore
 
           </div>
 
-          <div class="versus ${hasScore ? "score" : ""}">
-    ${centerText}
-</div>
+         <div class="versus ${hasScore ? "score" : ""} ${game.status === "PLAYED" ? "has-report" : ""}">
+  ${centerText}
 
+  ${
+  game.status === "PLAYED"
+    ? `<button
+         class="match-report-button"
+         type="button"
+         data-match-id="${game.id}"
+       >
+         Leikskýrsla
+       </button>`
+    : ""
+}
+</div>
           <div class="team">
 
             <div class="team-logo">
@@ -342,6 +353,8 @@ const centerText = hasScore
         </div>
 
       </div>
+      <div
+      
 
       <div class="officials">
         ${createOfficialRows(game.officials)}
@@ -716,5 +729,275 @@ searchClear.addEventListener("click", () => {
 
     searchInput.focus();
 });
+document.addEventListener("click", async event => {
+  const closeButton = event.target.closest("#match-report-close");
+
+if (closeButton) {
+    event.preventDefault();
+
+    const overlay = document.getElementById("match-report-overlay");
+
+    if (overlay) {
+        overlay.hidden = true;
+    }
+
+    return;
+}
+    const button = event.target.closest(".match-report-button");
+
+    if (!button) {
+        return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    const matchId = button.dataset.matchId;
+
+    console.log("Loading match report:", matchId);
+
+    try {
+        const response = await fetch(
+            `data/match-reports/${matchId}.json`
+        );
+
+        if (!response.ok) {
+            throw new Error("Match report not found");
+        }
+
+        const report = await response.json();
+
+        console.log("Match report loaded:", report);
+        const overlay = document.getElementById("match-report-overlay");
+const content = document.getElementById("match-report-content");
+
+if (!overlay || !content) {
+    return;
+}
+
+const home = report.homeTeam?.name || "";
+const away = report.awayTeam?.name || "";
+
+const homePicture = report.homeTeam?.picture || "";
+const awayPicture = report.awayTeam?.picture || "";
+
+const homeLogo = homePicture
+    ? `https://comet.ksi.is/file?id=${homePicture}`
+    : "";
+
+const awayLogo = awayPicture
+    ? `https://comet.ksi.is/file?id=${awayPicture}`
+    : "";
+const homeScore = report.homeTeamResult?.current ?? "";
+const awayScore = report.awayTeamResult?.current ?? "";
+const events = report.events || [];
+const matchEvents = events.filter(
+    event => event.matchPhase?.fcdName !== "PEN"
+);
+
+const penaltyEvents = events.filter(
+    event => event.matchPhase?.fcdName === "PEN"
+);
+
+let runningHomeScore = 0;
+let runningAwayScore = 0;
+
+const timelineHtml = matchEvents.map((matchEvent, index) => {
+    const minute = matchEvent.displayMinute || "";
+    const type = matchEvent.eventType?.fcdName || "";
+    const player = matchEvent.player?.name || "";
+    const player2 = matchEvent.player2?.name || "";
+    const side = matchEvent.homeTeam ? "home" : "away";
+    const phase = matchEvent.matchPhase?.fcdName || "";
+    let scoreProgress = "";
+    
+    const previousPhase =
+        index > 0
+            ? matchEvents[index - 1].matchPhase?.fcdName || ""
+            : "";
+
+let phaseMarker = "";
+
+if (
+    phase === "SECOND_HALF" &&
+    previousPhase === "FIRST_HALF"
+) {
+    phaseMarker = `
+        <div class="timeline-phase-row">
+            <div class="timeline-phase-marker">HT</div>
+        </div>
+    `;
+}
+if (
+    phase === "FIRST_ET" &&
+    previousPhase === "SECOND_HALF"
+) {
+    phaseMarker = `
+        <div class="timeline-phase-row">
+            <div class="timeline-phase-marker">ET</div>
+        </div>
+    `;
+}
+
+    let symbol = "";
+    let text = player;
+
+    if (type === "GOAL") {
+    symbol = "⚽";
+
+    if (matchEvent.homeTeam) {
+        runningHomeScore += 1;
+    } else {
+        runningAwayScore += 1;
+    }
+
+    scoreProgress = `${runningHomeScore} - ${runningAwayScore}`;
+
+} else if (type === "PENALTY") {
+    symbol = "⚽";
+    text = `${player} (víti)`;
+
+    if (matchEvent.homeTeam) {
+        runningHomeScore += 1;
+    } else {
+        runningAwayScore += 1;
+    }
+
+    scoreProgress = `${runningHomeScore} - ${runningAwayScore}`;
+    } else if (type === "PENALTY_FAILED") {
+    symbol = '<span class="penalty-failed-icon">×</span>';
+    text = `${player} (víti)`;
+    } else if (type === "YELLOW") {
+    symbol = '<span class="event-card-icon yellow-card"></span>';
+    } else if (type === "RED") {
+    symbol = '<span class="event-card-icon red-card"></span>';
+    } else if (type === "SUBSTITUTION") {
+    return `
+    ${phaseMarker}
+
+    <div class="timeline-row ${side}">
+
+        <div class="timeline-event-card substitution-event">
+
+            <div class="substitution-details">
+
+                <div class="substitution-in">
+                    <span class="sub-arrow">↑</span>
+                    <span>${player}</span>
+                </div>
+
+                <div class="substitution-out">
+                    <span class="sub-arrow">↓</span>
+                    <span>${player2}</span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="timeline-minute">
+            ${minute}
+        </div>
+
+    </div>
+`;
+}
+    return `
+    ${phaseMarker}
+
+    <div class="timeline-row ${side}">
+
+        <div class="timeline-event-card">
+
+    <div class="match-report-event-main">
+        <span class="match-report-event-text">${text}</span>
+        <span class="match-report-symbol">${symbol}</span>
+    </div>
+
+    ${
+        scoreProgress
+            ? `<div class="match-report-score-progress">${scoreProgress}</div>`
+            : ""
+    }
+
+</div>
+
+        <div class="timeline-minute">
+            ${minute}
+        </div>
+
+    </div>
+`;
+}).join("");
+const homePenaltyScore = penaltyEvents.filter(
+    event =>
+        event.homeTeam &&
+        event.eventType?.fcdName === "PENALTY_GOAL"
+).length;
+
+const awayPenaltyScore = penaltyEvents.filter(
+    event =>
+        !event.homeTeam &&
+        event.eventType?.fcdName === "PENALTY_GOAL"
+).length;
+
+const penaltyResultHtml =
+    penaltyEvents.length > 0
+        ? `
+            <div class="penalty-result">
+                <div class="penalty-result-label">VÍTI</div>
+                <div class="penalty-result-score">
+                    ${homePenaltyScore} - ${awayPenaltyScore}
+                </div>
+            </div>
+        `
+        : "";
+
+content.innerHTML = `
+    <div class="match-report-header">
+
+    <div class="match-report-team">
+        <div class="match-report-team-logo">
+            ${createTeamLogo(homeLogo, home)}
+        </div>
+
+        <div class="match-report-team-name">
+            ${home}
+        </div>
+    </div>
+
+    <div class="match-report-score-wrap">
+    <div class="match-report-score">
+        ${homeScore} - ${awayScore}
+    </div>
+</div>
+
+    <div class="match-report-team">
+        <div class="match-report-team-logo">
+            ${createTeamLogo(awayLogo, away)}
+        </div>
+
+        <div class="match-report-team-name">
+            ${away}
+        </div>
+    </div>
+
+</div>
+    <div class="match-report-timeline">
+    ${timelineHtml}
+</div>
+
+${penaltyResultHtml}
+`;
+
+overlay.hidden = false;
+        
+        
+
+    } catch (error) {
+        console.log("Could not load match report:", error);
+    }
+});
+
 updateDateTabs();
 loadGames();
