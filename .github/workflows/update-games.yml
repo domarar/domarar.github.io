@@ -305,8 +305,9 @@ jobs:
               f"data/games.json"
           )
           PY
-          - name: Download match reports
-                 run: |
+
+      - name: Download match reports
+        run: |
           python <<'PY'
           import json
           import subprocess
@@ -363,4 +364,3 @@ jobs:
             git pull --rebase origin main
             git push origin main
           fi
-          
