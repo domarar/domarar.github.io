@@ -493,8 +493,26 @@ if (search) {
                 </h2>
 
                 ${upcomingSearchGames
+                    .slice(0, 2)
                     .map(createGameCard)
                     .join("")}
+
+                ${
+    upcomingSearchGames.length > 2
+        ? `
+            <button class="show-more-search-games">
+               Sýna fleiri leiki framundan ↓
+            </button>
+
+            <div class="more-search-games" style="display: none;">
+                ${upcomingSearchGames
+                    .slice(2)
+                    .map(createGameCard)
+                    .join("")}
+            </div>
+        `
+        : ""
+}
 
             </section>
         `
@@ -518,7 +536,27 @@ if (search) {
 
     gamesContainer.innerHTML =
         upcomingSection + olderSection;
+    const showMoreButton =
+    gamesContainer.querySelector(".show-more-search-games");
 
+    const moreSearchGames =
+    gamesContainer.querySelector(".more-search-games");
+
+    if (showMoreButton && moreSearchGames) {
+        showMoreButton.addEventListener("click", () => {
+            const isHidden =
+            moreSearchGames.style.display === "none";
+
+        moreSearchGames.style.display =
+            isHidden ? "block" : "none";
+
+        showMoreButton.textContent =
+            isHidden
+                ? "Fela leiki ↑"
+                : "Sýna fleiri leiki framundan ↓";
+    });
+}
+    
     return;
 }
   const competitionGroups = {};
