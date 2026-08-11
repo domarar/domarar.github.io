@@ -201,7 +201,8 @@ function createTeamLogo(logoUrl, teamName) {
 
 function updateDateTabs() {
   dateTabs.forEach((tab, index) => {
-    const tabDate = getDateForOffset(index);
+    const dayOffset = index - 2;
+    const tabDate = getDateForOffset(dayOffset);
 
     const day = tabDate.getUTCDate();
     const month = tabDate.getUTCMonth();
@@ -210,14 +211,16 @@ function updateDateTabs() {
     const titleElement = tab.querySelector("strong");
     const dateElement = tab.querySelector("span");
 
-    if (index === 0) {
-      titleElement.textContent = "Í dag";
-    } else if (index === 1) {
-      titleElement.textContent = "Á morgun";
-    } else {
-      titleElement.textContent =
+    if (dayOffset === -1) {
+    titleElement.textContent = "Í gær";
+} else if (dayOffset === 0) {
+    titleElement.textContent = "Í dag";
+} else if (dayOffset === 1) {
+    titleElement.textContent = "Á morgun";
+} else {
+    titleElement.textContent =
         icelandicWeekdaysShort[weekday];
-    }
+}
 
     dateElement.textContent =
       `${day}. ${icelandicMonthsShort[month]}`;
@@ -597,7 +600,7 @@ const sortedCompetitionEntries = Object.entries(
 dateTabs.forEach((tab, index) => {
   tab.addEventListener("click", () => {
     searchInput.value = "";
-    selectedDayOffset = index;
+    selectedDayOffset = index - 2;
 
     dateTabs.forEach(button => {
       button.classList.remove("active");
@@ -806,8 +809,12 @@ const timelineHtml = matchEvents.map((matchEvent, index) => {
     const minute = matchEvent.displayMinute || "";
     const type = matchEvent.eventType?.fcdName || "";
     const player = matchEvent.player?.name || "";
+    const teamOfficial = matchEvent.teamOfficial?.name || "";
     const player2 = matchEvent.player2?.name || "";
-    const side = matchEvent.homeTeam ? "home" : "away";
+    const side =
+    type === "OWN_GOAL"
+        ? (matchEvent.homeTeam ? "away" : "home")
+        : (matchEvent.homeTeam ? "home" : "away");
     const phase = matchEvent.matchPhase?.fcdName || "";
     let scoreProgress = "";
     
@@ -843,12 +850,28 @@ if (
     let text = player;
 
     if (type === "GOAL") {
-    symbol = "⚽";
+    symbol = `<span class="goal-ball">⚽</span>`;
 
     if (matchEvent.homeTeam) {
         runningHomeScore += 1;
     } else {
         runningAwayScore += 1;
+    }
+
+    scoreProgress = `${runningHomeScore} - ${runningAwayScore}`;
+
+    } else if (type === "OWN_GOAL") {
+    symbol = `
+        <span class="own-goal-symbol">
+            <span class="own-goal-ball">⚽</span>
+            <span class="own-goal-label">S.M</span>
+        </span>
+    `;
+
+    if (matchEvent.homeTeam) {
+        runningAwayScore += 1;
+    } else {
+        runningHomeScore += 1;
     }
 
     scoreProgress = `${runningHomeScore} - ${runningAwayScore}`;
@@ -868,9 +891,18 @@ if (
     symbol = '<span class="penalty-failed-icon">×</span>';
     text = `${player} (víti)`;
     } else if (type === "YELLOW") {
-    symbol = '<span class="event-card-icon yellow-card"></span>';
-    } else if (type === "RED") {
-    symbol = '<span class="event-card-icon red-card"></span>';
+    symbol = `<span class="event-card-icon yellow-card"></span>`;
+
+    if (!player && teamOfficial) {
+        text = `${teamOfficial}<span class="match-report-official-label">Liðsstjórn</span>`;
+    }
+
+} else if (type === "RED") {
+    symbol = `<span class="event-card-icon red-card"></span>`;
+
+    if (!player && teamOfficial) {
+        text = `${teamOfficial}<span class="match-report-official-label">Liðsstjórn</span>`;
+    }
     } else if (type === "SUBSTITUTION") {
     return `
     ${phaseMarker}
