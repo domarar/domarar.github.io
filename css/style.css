@@ -413,10 +413,10 @@ padding-right: 38px;
     padding: 24px;
 }
 .show-more-search-games {
-    display: block;
-    width: 100%;
+    display: inline-block;
+    width: auto;
     margin: 8px 0 14px;
-    padding: 9px 12px;
+    padding: 7px 10px;
 
     border: 1px solid rgba(255, 255, 255, 0.10);
     border-radius: 10px;
@@ -427,6 +427,8 @@ padding-right: 38px;
     font-size: 12px;
     font-weight: 700;
     text-align: center;
+
+    text-align: left;
 
     cursor: pointer;
 }
