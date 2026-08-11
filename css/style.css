@@ -1309,3 +1309,12 @@ padding-right: 38px;
     font-weight: 800;
     color: #fff;
 }
+.second-yellow-symbol {
+    display: inline-flex;
+    align-items: center;
+}
+.second-yellow-symbol .red-card {
+    margin-left: 0px;
+    position: relative;
+    z-index: 2;
+}

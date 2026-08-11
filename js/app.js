@@ -934,6 +934,13 @@ if (
     if (!player && teamOfficial) {
         text = `${teamOfficial}<span class="match-report-official-label">Liðsstjórn</span>`;
     }
+    } else if (type === "SECOND_YELLOW") {
+    symbol = `
+        <span class="second-yellow-symbol">
+            <span class="event-card-icon yellow-card"></span>
+            <span class="event-card-icon red-card"></span>
+        </span>
+    `;
 
 } else if (type === "RED") {
     symbol = `<span class="event-card-icon red-card"></span>`;
