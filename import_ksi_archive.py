@@ -85,64 +85,64 @@ def parse_officials(report_html):
 
     return officials
 
-COMPETITIONS_2025 = [
+COMPETITIONS_2024 = [
     {
-        "id": 190366,
-        "name": "Besta deild karla 2025",
+        "id": 190265,
+        "name": "Besta deild karla 2024",
         "gender": "Male",
         "type": "Deild",
     },
     {
-        "id": 190371,
-        "name": "Besta deild karla 2025 - Neðri hluti",
+        "id": 190129,
+        "name": "Besta deild karla 2024 - Neðri hluti",
         "gender": "Male",
         "type": "Deild",
     },
     {
-        "id": 190373,
-        "name": "Besta deild karla 2025 - Efri hluti",
+        "id": 190141,
+        "name": "Besta deild karla 2024 - Efri hluti",
         "gender": "Male",
         "type": "Deild",
     },
     {
-        "id": 190359,
-        "name": "Lengjudeild karla 2025",
+        "id": 190134,
+        "name": "Lengjudeild karla 2024",
         "gender": "Male",
         "type": "Deild",
     },
     {
-        "id": 190370,
-        "name": "Lengjudeild karla 2025 - Umspil",
+        "id": 190125,
+        "name": "Lengjudeild karla 2024 - Umspil",
         "gender": "Male",
         "type": "Deild",
     },
     {
-        "id": 190365,
-        "name": "2. deild karla 2025",
+        "id": 190124,
+        "name": "2. deild karla 2024",
         "gender": "Male",
         "type": "Deild",
     },
     {
-        "id": 190372,
-        "name": "Besta deild kvenna 2025",
+        "id": 190133,
+        "name": "Besta deild kvenna 2024",
         "gender": "Female",
         "type": "Deild",
     },
     {
-        "id": 190360,
-        "name": "Besta deild kvenna 2025 - Efri hluti",
+        "id": 190137,
+        "name": "Besta deild kvenna 2024 - Efri hluti",
         "gender": "Female",
         "type": "Deild",
     },
     {
-        "id": 190355,
-        "name": "Besta deild kvenna 2025 - Neðri hluti",
+        "id": 190140,
+        "name": "Besta deild kvenna 2024 - Neðri hluti",
         "gender": "Female",
         "type": "Deild",
     },
     {
-        "id": 190375,
-        "name": "Lengjudeild kvenna 2025",
+        "id": 190136,
+        "name": "Lengjudeild kvenna 2024",
         "gender": "Female",
         "type": "Deild",
     },
@@ -152,7 +152,7 @@ BASE_URL = "https://www.ksi.is/oll-mot/mot"
 
 all_matches_by_competition = []
 
-for competition in COMPETITIONS_2025:
+for competition in COMPETITIONS_2024:
     competition_id = competition["id"]
     competition_name = competition["name"]
 
@@ -343,7 +343,7 @@ for competition_data in all_matches_by_competition:
                 "id": match_id,
                 "date": parse_ksi_date(
                     date_span.get_text(" ", strip=True),
-                    2025
+                    2024
                 ) if date_span else "",
                 "description": f"{home_team} - {away_team}",
                 "competition": competition["name"],
@@ -423,12 +423,12 @@ for index, match in enumerate(parsed_matches, start=1):
         print(f"    ERROR: {error}")
 
 output = {
-    "year": 2025,
+    "year": 2024,
     "games": parsed_matches,
 }
 
 with open(
-    "data/archive-2025-test.json",
+    "data/archive-2024-test.json",
     "w",
     encoding="utf-8"
 ) as file:
@@ -442,7 +442,7 @@ with open(
 print()
 print(
     f"Saved {len(parsed_matches)} matches "
-    f"to data/archive-2025-test.json"
+    f"to data/archive-2024-test.json"
 )       
 from collections import Counter
 

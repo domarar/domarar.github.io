@@ -500,6 +500,17 @@ if (search) {
         return new Date(secondGame.date) - new Date(firstGame.date);
     });
 
+    const archive2024SearchGames = gamesForDay
+    .filter(game => {
+        const gameDate = new Date(game.date);
+
+        return gameDate.getFullYear() === 2024;
+    })
+    .sort((firstGame, secondGame) => {
+        return new Date(secondGame.date) - new Date(firstGame.date);
+    });
+    console.log("2024 search games:", archive2024SearchGames.length);
+
     const upcomingSection = upcomingSearchGames.length
         ? `
             <section class="search-timeline-section">
@@ -574,8 +585,37 @@ if (search) {
     `
     : "";
 
+    const archive2024Section = archive2024SearchGames.length
+    ? `
+        <section class="search-timeline-section">
+
+            <button
+                class="archive-year-toggle"
+                type="button"
+                data-archive-toggle="2024"
+            >
+                Leikir 2024 ↓
+            </button>
+
+            <div
+                class="archive-year-games"
+                data-year="2024"
+                style="display: none;"
+            >
+                ${archive2024SearchGames
+                    .map(createGameCard)
+                    .join("")}
+            </div>
+
+        </section>
+    `
+    : "";
+
     gamesContainer.innerHTML =
-    upcomingSection + olderSection + archive2025Section;
+    upcomingSection +
+    olderSection +
+    archive2025Section +
+    archive2024Section;
     const showMoreButton =
     gamesContainer.querySelector(".show-more-search-games");
 
@@ -618,6 +658,31 @@ if (search) {
                 : "Leikir 2025 ↓";
     });
 } 
+
+const archive2024Toggle =
+    gamesContainer.querySelector(
+        '[data-archive-toggle="2024"]'
+    );
+
+const archive2024Games =
+    gamesContainer.querySelector(
+        '.archive-year-games[data-year="2024"]'
+    );
+
+if (archive2024Toggle && archive2024Games) {
+    archive2024Toggle.addEventListener("click", () => {
+        const isHidden =
+            archive2024Games.style.display === "none";
+
+        archive2024Games.style.display =
+            isHidden ? "block" : "none";
+
+        archive2024Toggle.textContent =
+            isHidden
+                ? "Leikir 2024 ↑"
+                : "Leikir 2024 ↓";
+    });
+}
     return;
 }
   const competitionGroups = {};
@@ -720,7 +785,8 @@ async function loadGames() {
         const [
             upcomingResponse,
             archiveResponse,
-            archive2025Response
+            archive2025Response,
+            archive2024Response
         ] = await Promise.all([
             fetch("data/games.json", {
                 cache: "no-store"
@@ -729,9 +795,14 @@ async function loadGames() {
             fetch("data/archive.json", {
                 cache: "no-store"
             }),
+
             fetch("data/archive-2025.json", {
-    cache: "no-store"
-})
+                cache: "no-store"
+            }),
+
+            fetch("data/archive-2024.json", {
+                cache: "no-store"
+            })
         ]);
 
         if (!upcomingResponse.ok) {
@@ -750,10 +821,16 @@ async function loadGames() {
         `Archive 2025 HTTP error: ${archive2025Response.status}`
     );
 }
+        if (!archive2024Response.ok) {
+    throw new Error(
+        `Archive 2024 HTTP error: ${archive2024Response.status}`
+    );
+}
 
         const upcomingData = await upcomingResponse.json();
         const archiveData = await archiveResponse.json();
         const archive2025Data = await archive2025Response.json();
+        const archive2024Data = await archive2024Response.json();
 
         upcomingGames = Array.isArray(upcomingData.games)
             ? upcomingData.games
@@ -765,6 +842,9 @@ async function loadGames() {
         
             const archive2025Games = Array.isArray(archive2025Data.games)
     ? archive2025Data.games
+    : [];
+            const archive2024Games = Array.isArray(archive2024Data.games)
+    ? archive2024Data.games
     : [];
 
         const gamesById = new Map();
@@ -781,6 +861,12 @@ async function loadGames() {
             }
         });
 
+        archive2024Games.forEach(game => {
+            if (game.id !== null && game.id !== undefined) {
+                gamesById.set(game.id, game);
+            }
+        });
+
         upcomingGames.forEach(game => {
             if (game.id !== null && game.id !== undefined) {
                 gamesById.set(game.id, game);
@@ -788,6 +874,7 @@ async function loadGames() {
         });
 
         allGames = Array.from(gamesById.values());
+
 
         renderGamesForSelectedDay();
 
