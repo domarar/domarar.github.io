@@ -471,18 +471,34 @@ return (
 }
 if (search) {
     const now = new Date();
-
     const upcomingSearchGames = gamesForDay
-        .filter(game => new Date(game.date) >= now)
-        .sort((firstGame, secondGame) => {
-            return new Date(firstGame.date) - new Date(secondGame.date);
-        });
+    .filter(game => new Date(game.date) >= now)
+    .sort((firstGame, secondGame) => {
+        return new Date(firstGame.date) - new Date(secondGame.date);
+    });
 
     const olderSearchGames = gamesForDay
-        .filter(game => new Date(game.date) < now)
-        .sort((firstGame, secondGame) => {
-            return new Date(secondGame.date) - new Date(firstGame.date);
-        });
+    .filter(game => {
+        const gameDate = new Date(game.date);
+
+        return (
+            gameDate < now &&
+            gameDate.getFullYear() === 2026
+        );
+    })
+    .sort((firstGame, secondGame) => {
+        return new Date(secondGame.date) - new Date(firstGame.date);
+    });
+
+    const archive2025SearchGames = gamesForDay
+    .filter(game => {
+        const gameDate = new Date(game.date);
+
+        return gameDate.getFullYear() === 2025;
+    })
+    .sort((firstGame, secondGame) => {
+        return new Date(secondGame.date) - new Date(firstGame.date);
+    });
 
     const upcomingSection = upcomingSearchGames.length
         ? `
@@ -501,7 +517,7 @@ if (search) {
     upcomingSearchGames.length > 2
         ? `
             <button class="show-more-search-games">
-               Sýna fleiri leiki framundan ↓
+               Fleiri leikir framundan ↓
             </button>
 
             <div class="more-search-games" style="display: none;">
@@ -533,9 +549,33 @@ if (search) {
             </section>
         `
         : "";
+    const archive2025Section = archive2025SearchGames.length
+    ? `
+        <section class="search-timeline-section">
+
+            <button
+                class="archive-year-toggle"
+                type="button"
+            >
+                Leikir 2025 ↓
+            </button>
+
+            <div
+                class="archive-year-games"
+                data-year="2025"
+                style="display: none;"
+            >
+                ${archive2025SearchGames
+                    .map(createGameCard)
+                    .join("")}
+            </div>
+
+        </section>
+    `
+    : "";
 
     gamesContainer.innerHTML =
-        upcomingSection + olderSection;
+    upcomingSection + olderSection + archive2025Section;
     const showMoreButton =
     gamesContainer.querySelector(".show-more-search-games");
 
@@ -556,7 +596,28 @@ if (search) {
                 : "Sýna fleiri leiki framundan ↓";
     });
 }
-    
+    const archive2025Toggle =
+    gamesContainer.querySelector(".archive-year-toggle");
+
+    const archive2025Games =
+    gamesContainer.querySelector(
+        '.archive-year-games[data-year="2025"]'
+    );
+
+    if (archive2025Toggle && archive2025Games) {
+    archive2025Toggle.addEventListener("click", () => {
+        const isHidden =
+            archive2025Games.style.display === "none";
+
+        archive2025Games.style.display =
+            isHidden ? "block" : "none";
+
+        archive2025Toggle.textContent =
+            isHidden
+                ? "Leikir 2025 ↑"
+                : "Leikir 2025 ↓";
+    });
+} 
     return;
 }
   const competitionGroups = {};
@@ -658,7 +719,8 @@ async function loadGames() {
     try {
         const [
             upcomingResponse,
-            archiveResponse
+            archiveResponse,
+            archive2025Response
         ] = await Promise.all([
             fetch("data/games.json", {
                 cache: "no-store"
@@ -666,7 +728,10 @@ async function loadGames() {
 
             fetch("data/archive.json", {
                 cache: "no-store"
-            })
+            }),
+            fetch("data/archive-2025.json", {
+    cache: "no-store"
+})
         ]);
 
         if (!upcomingResponse.ok) {
@@ -680,9 +745,15 @@ async function loadGames() {
                 `Archive HTTP error: ${archiveResponse.status}`
             );
         }
+        if (!archive2025Response.ok) {
+    throw new Error(
+        `Archive 2025 HTTP error: ${archive2025Response.status}`
+    );
+}
 
         const upcomingData = await upcomingResponse.json();
         const archiveData = await archiveResponse.json();
+        const archive2025Data = await archive2025Response.json();
 
         upcomingGames = Array.isArray(upcomingData.games)
             ? upcomingData.games
@@ -691,12 +762,22 @@ async function loadGames() {
         archiveGames = Array.isArray(archiveData.games)
             ? archiveData.games
             : [];
+        
+            const archive2025Games = Array.isArray(archive2025Data.games)
+    ? archive2025Data.games
+    : [];
 
         const gamesById = new Map();
 
         archiveGames.forEach(game => {
             if (game.id !== null && game.id !== undefined) {
                 gamesById.set(game.id, game);
+            }
+        });
+
+        archive2025Games.forEach(game => {
+            if (game.id !== null && game.id !== undefined) {
+                 gamesById.set(game.id, game);
             }
         });
 

@@ -1,0 +1,424 @@
+import glob
+import json
+import os
+import urllib.request
+
+from datetime import (
+    date,
+    datetime,
+    timedelta,
+    timezone
+)
+
+endpoint = "https://www.abler.io/comet-backend/graphql"
+
+archive_year = int(
+    os.environ.get("ARCHIVE_YEAR", "2026")
+)
+
+year_start = date(archive_year, 1, 1)
+year_end = date(archive_year, 12, 31)
+
+fixtures_query = """
+query CometMatches(
+$first: Int!,
+$after: String,
+$filter: CometMatchFilterInput,
+$sort: CometMatchSort
+) {
+cometMatches(
+    first: $first,
+    after: $after,
+    filter: $filter,
+    sort: $sort
+) {
+    totalCount
+    edges {
+    node {
+        matchId
+        matchDescription
+        matchDate
+        liveStatus
+        matchStatus
+        homeScore
+        awayScore
+        facilityName
+
+        competition {
+        name
+        category
+        gender
+        competitionType
+        }
+
+        homeTeam {
+        name
+        logo
+        }
+
+        awayTeam {
+        name
+        logo
+        }
+    }
+    }
+}
+}
+"""
+
+officials_query = """
+query MatchesOfficials($matchIds: [Int!]!) {
+matchesOfficials(matchIds: $matchIds) {
+    matchId
+    officials {
+    personId
+    name
+    role
+    orderNumber
+    }
+}
+}
+"""
+
+allowed_competitions = (
+    "Besta deild karla",
+    "Besta deild kvenna",
+    "Lengjudeild karla",
+    "Lengjudeild kvenna",
+    "2. deild karla",
+    "2. deild kvenna",
+    "3. deild karla",
+    "4. deild karla",
+    "Mjólkurbikar karla",
+    "Mjólkurbikar kvenna",
+    "Deildabikar karla",
+    "Deildabikar kvenna",
+    "Gatorade bikarinn 2026"
+)
+
+def send_graphql_request(payload):
+    request = urllib.request.Request(
+        endpoint,
+        data=json.dumps(payload).encode("utf-8"),
+        headers={
+            "Content-Type": "application/json",
+            "User-Agent": "domarar-archive"
+        },
+        method="POST"
+    )
+
+    with urllib.request.urlopen(
+        request,
+        timeout=60
+    ) as response:
+        result = json.load(response)
+
+    if result.get("errors"):
+        raise RuntimeError(
+            "GraphQL error: "
+            + json.dumps(
+                result["errors"],
+                ensure_ascii=False
+            )
+        )
+
+    return result
+
+def chunks(items, size):
+    for index in range(0, len(items), size):
+        yield items[index:index + size]
+
+matches_by_id = {}
+
+window_start = year_start
+
+while window_start <= year_end:
+    window_end = min(
+        window_start + timedelta(days=6),
+        year_end
+    )
+
+    date_from = (
+        f"{window_start.isoformat()}"
+        "T00:00:00.000+00:00"
+    )
+
+    date_to = (
+        f"{window_end.isoformat()}"
+        "T23:59:59.999+00:00"
+    )
+
+    fixtures_payload = {
+        "operationName": "CometMatches",
+        "variables": {
+            "first": 100,
+            "filter": {
+                "categories": ["Adults"],
+                "dateFrom": date_from,
+                "dateTo": date_to
+            },
+            "sort": "NEXT_FIRST"
+        },
+        "query": fixtures_query
+    }
+
+    fixtures_result = send_graphql_request(
+        fixtures_payload
+    )
+
+    comet_matches = (
+        fixtures_result
+        .get("data", {})
+        .get("cometMatches", {})
+    )
+
+    total_count = comet_matches.get(
+        "totalCount",
+        0
+    )
+
+    edges = comet_matches.get(
+        "edges",
+        []
+    )
+
+    if total_count > 100:
+        raise RuntimeError(
+            "More than 100 matches returned "
+            f"between {window_start} and "
+            f"{window_end}."
+        )
+
+    for edge in edges:
+        match = edge.get("node") or {}
+
+        competition = (
+            match.get("competition") or {}
+        )
+
+        competition_name = competition.get(
+            "name",
+            ""
+        )
+
+        if competition.get("category") != "Adults":
+            continue
+
+        if not any(
+            allowed in competition_name
+            for allowed in allowed_competitions
+        ):
+            continue
+
+        match_id = match.get("matchId")
+
+        if match_id is not None:
+            matches_by_id[match_id] = match
+
+    print(
+        f"{window_start} to {window_end}: "
+        f"{len(edges)} API matches, "
+        f"{len(matches_by_id)} accepted total"
+    )
+
+    window_start = (
+        window_end + timedelta(days=1)
+    )
+
+match_ids = sorted(matches_by_id.keys())
+officials_by_match = {}
+
+for match_id_chunk in chunks(match_ids, 100):
+    officials_payload = {
+        "operationName": "MatchesOfficials",
+        "variables": {
+            "matchIds": match_id_chunk
+        },
+        "query": officials_query
+    }
+
+    officials_result = send_graphql_request(
+        officials_payload
+    )
+
+    officials_matches = (
+        officials_result
+        .get("data", {})
+        .get("matchesOfficials", [])
+    )
+
+    for match_officials in officials_matches:
+        match_id = match_officials.get(
+            "matchId"
+        )
+
+        officials = sorted(
+            match_officials.get(
+                "officials"
+            ) or [],
+            key=lambda official: (
+                official.get("orderNumber")
+                if official.get("orderNumber")
+                is not None
+                else 999
+            )
+        )
+
+        officials_by_match[match_id] = [
+            {
+                "personId": official.get(
+                    "personId"
+                ),
+                "name": official.get("name"),
+                "role": official.get("role"),
+                "orderNumber": official.get(
+                    "orderNumber"
+                )
+            }
+            for official in officials
+        ]
+
+games = []
+
+for match_id, match in matches_by_id.items():
+    competition = (
+        match.get("competition") or {}
+    )
+
+    home_team = match.get("homeTeam") or {}
+    away_team = match.get("awayTeam") or {}
+
+    games.append({
+        "id": match_id,
+        "date": match.get("matchDate"),
+        "description": match.get(
+            "matchDescription"
+        ),
+        "competition": competition.get(
+            "name"
+        ),
+        "gender": competition.get("gender"),
+        "competitionType": competition.get(
+            "competitionType"
+        ),
+        "home": home_team.get("name"),
+        "away": away_team.get("name"),
+        "homeLogo": home_team.get("logo"),
+        "awayLogo": away_team.get("logo"),
+        "facility": match.get(
+            "facilityName"
+        ),
+        "status": match.get("matchStatus"),
+        "liveStatus": match.get(
+            "liveStatus"
+        ),
+        "homeScore": match.get("homeScore"),
+        "awayScore": match.get("awayScore"),
+        "officials": officials_by_match.get(
+            match_id,
+            []
+        )
+    })
+
+games.sort(
+    key=lambda game: game.get("date") or ""
+)
+
+year_output = {
+    "updatedAt": datetime.now(
+        timezone.utc
+    ).isoformat(),
+    "year": archive_year,
+    "dateFrom": year_start.isoformat(),
+    "dateTo": year_end.isoformat(),
+    "gameCount": len(games),
+    "games": games
+}
+
+os.makedirs("data", exist_ok=True)
+
+year_filename = (
+    f"data/archive-{archive_year}.json"
+)
+
+with open(
+    year_filename,
+    "w",
+    encoding="utf-8"
+) as file:
+    json.dump(
+        year_output,
+        file,
+        ensure_ascii=False,
+        indent=2
+    )
+
+print(
+    f"Saved {len(games)} matches to "
+    f"{year_filename}"
+)
+
+# =====================================
+# COMBINE EVERY YEAR
+# =====================================
+
+combined_games_by_id = {}
+included_years = []
+
+archive_files = sorted(
+    glob.glob("data/archive-20*.json")
+)
+
+for archive_file in archive_files:
+    with open(
+        archive_file,
+        "r",
+        encoding="utf-8"
+    ) as file:
+        archive_data = json.load(file)
+
+    file_year = archive_data.get("year")
+
+    if file_year is not None:
+        included_years.append(file_year)
+
+    for game in archive_data.get("games", []):
+        game_id = game.get("id")
+
+        if game_id is not None:
+            combined_games_by_id[game_id] = game
+
+combined_games = list(
+    combined_games_by_id.values()
+)
+
+combined_games.sort(
+    key=lambda game: game.get("date") or ""
+)
+
+combined_output = {
+    "updatedAt": datetime.now(
+        timezone.utc
+    ).isoformat(),
+    "years": sorted(set(included_years)),
+    "gameCount": len(combined_games),
+    "games": combined_games
+}
+
+with open(
+    "data/archive.json",
+    "w",
+    encoding="utf-8"
+) as file:
+    json.dump(
+        combined_output,
+        file,
+        ensure_ascii=False,
+        indent=2
+    )
+
+print(
+    f"Combined {len(combined_games)} matches "
+    f"from years "
+    f"{sorted(set(included_years))}"
+)

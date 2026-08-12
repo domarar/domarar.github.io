@@ -361,9 +361,6 @@ padding-right: 38px;
         0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
-    box-shadow: 0 6px 16px rgba(47, 135, 55, 0.30);
-}
-
     .league-title {
       margin: 0 0 10px 6px;
 
@@ -412,33 +409,33 @@ padding-right: 38px;
 
     padding: 24px;
 }
-.show-more-search-games {
-    display: inline-block;
-    width: auto;
+    .show-more-search-games {
+    width: fit-content;
     margin: 8px 0 14px;
-    padding: 7px 10px;
+    padding: 10px 16px;
 
-    border: 1px solid rgba(255, 255, 255, 0.10);
+    background: rgba(76, 175, 80, 0.08);
+    border: 1px solid rgba(76, 175, 80, 0.45);
     border-radius: 10px;
 
-    background: rgba(255, 255, 255, 0.04);
-    color: rgba(255, 255, 255, 0.78);
-
-    font-size: 12px;
-    font-weight: 700;
-    text-align: center;
-
-    text-align: left;
+    color: #8fd694;
+    font-size: 14px;
+    font-weight: 600;
 
     cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
 }
 
-.show-more-search-games:hover {
-    background: rgba(255, 255, 255, 0.07);
+    .show-more-search-games:hover {
+    background: rgba(76, 175, 80, 0.14);
+    border-color: rgba(76, 175, 80, 0.7);
     color: #ffffff;
 }
-.fixture-meta,
-.teams {
+    .fixture-meta,
+    .teams {
     width: 100%;
 }
     .fixture-meta {
@@ -1319,4 +1316,30 @@ padding-right: 38px;
     margin-left: 0px;
     position: relative;
     z-index: 2;
+}
+.archive-year-toggle {
+    width: fit-content;
+    margin-top: -10 px;
+    padding: 10px 16px;
+
+    background: rgba(76, 175, 80, 0.08);
+    border: 1px solid rgba(76, 175, 80, 0.45);
+    border-radius: 10px;
+
+    color: #8fd694;
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+.archive-year-games {
+    margin-top: 14px;
+}
+.archive-year-toggle:hover {
+    background: rgba(76, 175, 80, 0.14);
+    border-color: rgba(76, 175, 80, 0.7);
 }
