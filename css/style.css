@@ -1317,9 +1317,10 @@ padding-right: 38px;
     position: relative;
     z-index: 2;
 }
-.archive-year-toggle {
+.archive-year-toggle,
+.archive-year-collapse {
     width: fit-content;
-    margin-top: -10 px;
+    margin-top: -10px;
     padding: 10px 16px;
 
     background: rgba(76, 175, 80, 0.08);
@@ -1336,10 +1337,79 @@ padding-right: 38px;
         background 0.2s ease,
         border-color 0.2s ease;
 }
+.archive-year-collapse {
+    display: block;
+    margin: 16px 0 6px;
+}
 .archive-year-games {
     margin-top: 14px;
 }
-.archive-year-toggle:hover {
+.archive-year-toggle:hover,
+.archive-year-collapse:hover {
     background: rgba(76, 175, 80, 0.14);
     border-color: rgba(76, 175, 80, 0.7);
+}
+.search-row {
+    position: relative;
+}
+
+.search-suggestions {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+
+    z-index: 50;
+
+    padding: 6px;
+
+    background: rgba(17, 24, 32, 0.96);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 14px;
+
+    box-shadow:
+        0 14px 30px rgba(0, 0, 0, 0.35),
+        0 0 0 1px rgba(76, 175, 80, 0.06);
+
+    backdrop-filter: blur(14px);
+}
+
+.search-suggestion {
+    display: block;
+    width: 100%;
+
+    padding: 11px 13px;
+
+    border: 0;
+    border-radius: 9px;
+
+    background: transparent;
+    color: #f5f5f5;
+
+    font-size: 14px;
+    font-weight: 600;
+    text-align: left;
+
+    cursor: pointer;
+}
+
+.search-suggestion:hover {
+    background: rgba(76, 175, 80, 0.12);
+    color: #8fd694;
+}
+
+.search-suggestion + .search-suggestion {
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+.search-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+
+    background: rgba(0, 0, 0, 0.42);
+}
+
+.search-row {
+    position: relative;
+    z-index: 50;
 }

@@ -7,6 +7,10 @@
 const gamesContainer = document.querySelector("#games-container");
 const dateTabs = document.querySelectorAll(".date-tab");
 const searchInput = document.querySelector("#search-input");
+const searchSuggestions =
+    document.getElementById("search-suggestions");
+const searchBackdrop =
+    document.getElementById("search-backdrop");
 const searchClear = document.querySelector("#search-clear");
 const genderFilters = document.getElementById("gender-filters");
 const genderButtons = document.querySelectorAll(".gender-filter");
@@ -21,6 +25,47 @@ let allGames = [];
 let selectedDayOffset = 0;
 let selectedGender = "all";
 
+function getRefereeSuggestions(value) {
+    const searchText = value
+        .toLowerCase()
+        .trim();
+
+    if (searchText.length < 3) {
+        return [];
+    }
+
+    const names = new Set();
+
+    allGames.forEach(game => {
+        (game.officials || []).forEach(official => {
+            const fullName = (official.name || "").trim();
+
+            if (!fullName) {
+                return;
+            }
+
+            const normalizedFullName = fullName.toLowerCase();
+
+            const firstName = normalizedFullName
+                .split(/\s+/)[0];
+
+            const hasMultipleWords =
+                searchText.includes(" ");
+
+            const matches = hasMultipleWords
+                ? normalizedFullName.startsWith(searchText)
+                : firstName.startsWith(searchText);
+
+            if (matches) {
+                names.add(fullName);
+            }
+        });
+    });
+
+    return Array.from(names)
+        .sort((a, b) => a.localeCompare(b, "is"))
+        .slice(0, 5);
+}
 // =====================================
 // ICELANDIC DATE NAMES
 // =====================================
@@ -579,7 +624,16 @@ if (search) {
                 ${archive2025SearchGames
                     .map(createGameCard)
                     .join("")}
-            </div>
+            
+            <button
+    type="button"
+    class="archive-year-collapse"
+    data-collapse-year="2025"
+>
+    Fela leiki 2025 ↑
+</button>
+
+</div>
 
         </section>
     `
@@ -605,7 +659,15 @@ if (search) {
                 ${archive2024SearchGames
                     .map(createGameCard)
                     .join("")}
-            </div>
+            
+            <button
+    type="button"
+    class="archive-year-collapse"
+    data-collapse-year="2024"
+>
+    Fela leiki 2024 ↑
+</button>
+</div>
 
         </section>
     `
@@ -683,6 +745,36 @@ if (archive2024Toggle && archive2024Games) {
                 : "Leikir 2024 ↓";
     });
 }
+gamesContainer
+    .querySelectorAll(".archive-year-collapse")
+    .forEach(button => {
+        button.addEventListener("click", () => {
+            const year = button.dataset.collapseYear;
+
+            const games = gamesContainer.querySelector(
+                `.archive-year-games[data-year="${year}"]`
+            );
+
+            const toggle = gamesContainer.querySelector(
+                `[data-archive-toggle="${year}"]`
+            );
+
+            if (!games) {
+                return;
+            }
+
+            games.style.display = "none";
+
+            if (toggle) {
+                toggle.textContent = `Leikir ${year} ↓`;
+
+                toggle.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+            }
+        });
+    });
     return;
 }
   const competitionGroups = {};
@@ -913,6 +1005,28 @@ genderButtons.forEach(button => {
 searchInput.addEventListener("input", () => {
     const search = searchInput.value.trim();
   searchClear.hidden = search === "";
+    const suggestions = getRefereeSuggestions(search);
+
+if (suggestions.length === 0) {
+    searchSuggestions.hidden = true;
+    searchSuggestions.innerHTML = "";
+    searchBackdrop.hidden = true;
+} else {
+    searchSuggestions.innerHTML = suggestions
+        .map(name => `
+            <button
+                type="button"
+                class="search-suggestion"
+                data-name="${name}"
+            >
+                ${name}
+            </button>
+        `)
+        .join("");
+
+    searchSuggestions.hidden = false;
+    searchBackdrop.hidden = false;
+}
 
     if (search) {
 
@@ -930,9 +1044,34 @@ searchInput.addEventListener("input", () => {
 
     renderGamesForSelectedDay();
 });
+searchSuggestions.addEventListener("click", event => {
+    const button = event.target.closest(".search-suggestion");
+
+    if (!button) {
+        return;
+    }
+
+    const name = button.dataset.name;
+
+    searchInput.value = name;
+    searchClear.hidden = false;
+
+    searchSuggestions.hidden = true;
+    searchSuggestions.innerHTML = "";
+    searchBackdrop.hidden = true;
+
+    dateTabs.forEach(tab => {
+        tab.classList.remove("active");
+    });
+
+    renderGamesForSelectedDay();
+});
 searchClear.addEventListener("click", () => {
     searchInput.value = "";
     searchClear.hidden = true;
+    searchSuggestions.hidden = true;
+    searchSuggestions.innerHTML = "";
+    searchBackdrop.hidden = true;
 
     renderGamesForSelectedDay();
 
