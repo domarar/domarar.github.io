@@ -375,7 +375,8 @@ const centerText = hasScore
   ${centerText}
 
   ${
-  game.status === "PLAYED"
+  (game.status === "PLAYED" ||
+    (game.homeScore != null && game.awayScore != null))
     ? `<button
          class="match-report-button"
          type="button"
