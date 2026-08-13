@@ -34,7 +34,7 @@ jobs:
           endpoint = "https://www.abler.io/comet-backend/graphql"
 
           today = datetime.now(timezone.utc).date()
-          start_date = today
+          start_date = today - timedelta(days=2)
           end_date = today + timedelta(days=6)
 
           date_from = f"{start_date.isoformat()}T00:00:00.000+00:00"
