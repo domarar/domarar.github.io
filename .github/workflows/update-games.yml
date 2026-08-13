@@ -326,7 +326,7 @@ jobs:
                   continue
 
               home_score = game.get("homeScore")
-away_score = game.get("awayScore")
+              away_score = game.get("awayScore")
 
              if status != "PLAYED" and (home_score is None or away_score is None):
                continue
