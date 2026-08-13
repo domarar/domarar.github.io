@@ -1740,3 +1740,112 @@ padding-right: 38px;
     font-weight: 800;
     color: rgba(255, 255, 255, 0.85);
 }
+@media (max-width: 600px) {
+
+    .referee-profile-overlay {
+        padding: 16px 10px;
+        align-items: flex-start;
+    }
+
+    .referee-profile-card {
+        padding: 14px;
+        border-radius: 14px;
+    }
+
+    .referee-profile-back {
+        padding: 7px 11px;
+        font-size: 13px;
+    }
+
+    .referee-profile-header {
+        gap: 12px;
+        margin-top: 14px;
+    }
+
+    .referee-profile-image {
+        width: 95px;
+        height: 95px;
+        border-radius: 12px;
+    }
+
+    .referee-profile-heading h1 {
+        font-size: 21px;
+        line-height: 1.05;
+    }
+
+    .referee-profile-label {
+        font-size: 11px;
+    }
+
+    .referee-season-card {
+        margin-top: 18px;
+        padding: 12px;
+        border-radius: 14px;
+    }
+
+    .referee-season-card .referee-profile-season {
+        margin-bottom: 12px;
+        font-size: 15px;
+    }
+
+    .referee-profile-stats {
+        gap: 7px;
+    }
+
+    .referee-stat {
+        padding: 9px 6px;
+        min-height: 0;
+    }
+
+    .referee-stat-label {
+        font-size: 11px;
+    }
+
+    .referee-stat-number {
+        font-size: 21px;
+    }
+
+    .referee-event-section {
+        margin-top: 16px;
+    }
+
+    .referee-event-stats {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 7px;
+    }
+
+    .referee-event-stat {
+        padding: 9px 5px;
+        min-height: 82px;
+    }
+
+    .referee-event-label {
+        font-size: 10px;
+        line-height: 1.15;
+    }
+
+    .referee-event-stat strong {
+        font-size: 20px;
+    }
+
+    .referee-event-icon-wrap {
+        height: 18px;
+        margin-bottom: 3px;
+    }
+
+    .referee-competitions {
+        margin-top: 18px;
+    }
+
+    .referee-competition-row {
+        padding: 9px 10px;
+    }
+
+    .referee-competition-name {
+        font-size: 12px;
+    }
+
+    .referee-competition-count {
+        font-size: 14px;
+    }
+}
