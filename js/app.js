@@ -915,7 +915,7 @@ const profileSection = matchedProfile
                 class="referee-profile-button"
                 data-referee-profile="${matchedProfileName}"
             >
-                Skoða dómaraprófíl →
+                Dómaraspjaldið →
             </button>
         </section>
     `
