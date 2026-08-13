@@ -325,8 +325,11 @@ jobs:
               if not match_id:
                   continue
 
-              if status != "PLAYED":
-                  continue
+              home_score = game.get("homeScore")
+away_score = game.get("awayScore")
+
+             if status != "PLAYED" and (home_score is None or away_score is None):
+               continue
 
               report_file = Path(
                   f"data/match-reports/{match_id}.json"
