@@ -1546,6 +1546,7 @@ padding-right: 38px;
 .referee-stat {
     width: 100%;
     min-width: 0;
+    box-sizing: border-box;
     min-height: 46px;
     padding: 8px 14px;
 
@@ -1774,6 +1775,16 @@ padding-right: 38px;
         0 0 16px rgba(76, 175, 80, 0.05);
 }
 @media (max-width: 600px) {
+    .referee-profile-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .referee-stat-label {
+    white-space: normal;
+    text-align: center;
+}
+}
 
     .referee-profile-overlay {
         padding: 16px 10px;
@@ -1919,9 +1930,5 @@ padding-right: 38px;
         font-size: 13px;
     }
 }
-@media (max-width: 600px) {
-    .referee-profile-stats {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-}
+
 
