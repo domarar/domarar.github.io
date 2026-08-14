@@ -486,13 +486,6 @@ const competitionStatsHTML = Object.entries(competitionCounts)
 
         <section class="referee-profile-card">
 
-            <button
-                type="button"
-                class="referee-profile-back"
-            >
-                ← Til baka
-            </button>
-
             <div class="referee-profile-header">
 
                 <img
@@ -516,13 +509,15 @@ const competitionStatsHTML = Object.entries(competitionCounts)
     <div class="referee-profile-season">
     <div>Tímabilið 2026</div>
 
-    <span class="referee-season-total">
-        ${referee2026Games.length} leikir
-    </span>
 </div>
         <div class="referee-profile-stats">
-       ${roleStatsHTML}  
-        </div> 
+    ${roleStatsHTML}
+
+    <div class="referee-season-total-card">
+        <strong>${referee2026Games.length}</strong>
+        <span>Leikir</span>
+    </div>
+</div>
         <div class="referee-event-section">
     <h2>Leikjatölfræði</h2>
     ${eventStatsHTML}
@@ -536,7 +531,14 @@ const competitionStatsHTML = Object.entries(competitionCounts)
         ${competitionStatsHTML}
     </div>
     </div>
-</div>
+    </div>
+    <button
+                type="button"
+                class="referee-profile-back"
+            >
+                ← Til baka
+            </button>
+
     </section>
 
     </div>
