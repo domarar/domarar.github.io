@@ -470,11 +470,11 @@ referee2026Games.forEach(game => {
     "Referee": "Dómari",
     "Dómari": "Dómari",
 
-    "Assistant Referee 1": "AD-1",
-    "Aðstoðardómari 1": "AD-1",
+    "Assistant Referee 1": "Aðstoðardómari 1",
+    "Aðstoðardómari 1": "Aðstoðardómari 1",
 
-    "Assistant Referee 2": "AD-2",
-    "Aðstoðardómari 2": "AD-2",
+    "Assistant Referee 2": "Aðstoðardómari 2",
+    "Aðstoðardómari 2": "Aðstoðardómari 2",
 
     "Fourth Official": "Fjórði dómari",
     "Fjórði dómari": "Fjórði dómari"
