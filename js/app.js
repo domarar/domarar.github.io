@@ -23,6 +23,7 @@ let upcomingGames = [];
 let archiveGames = [];
 let allGames = [];
 let selectedDayOffset = 0;
+let activeDayBeforeSearch = null;
 let selectedGender = "all";
 
 const refereeProfiles = {
@@ -1408,18 +1409,24 @@ if (suggestions.length === 0) {
 }
 
     if (search) {
+    if (activeDayBeforeSearch === null) {
+  activeDayBeforeSearch = [...dateTabs].findIndex(tab =>
+    tab.classList.contains("active")
+  );
+}
 
-        dateTabs.forEach(tab => {
-            tab.classList.remove("active");
-        });
-    } else {
+        } else {
 
-        dateTabs.forEach(tab => {
-            tab.classList.remove("active");
-        });
+  dateTabs.forEach(tab => {
+    tab.classList.remove("active");
+  });
 
-        dateTabs[selectedDayOffset].classList.add("active");
-    }
+  if (activeDayBeforeSearch !== null && activeDayBeforeSearch >= 0) {
+    dateTabs[activeDayBeforeSearch].classList.add("active");
+  }
+
+  activeDayBeforeSearch = null;
+}
 
     renderGamesForSelectedDay();
 });
@@ -1451,6 +1458,16 @@ searchClear.addEventListener("click", () => {
     searchSuggestions.hidden = true;
     searchSuggestions.innerHTML = "";
     searchBackdrop.hidden = true;
+
+    dateTabs.forEach(tab => {
+  tab.classList.remove("active");
+});
+
+if (activeDayBeforeSearch !== null && activeDayBeforeSearch >= 0) {
+  dateTabs[activeDayBeforeSearch].classList.add("active");
+}
+
+activeDayBeforeSearch = null;
 
     renderGamesForSelectedDay();
 
