@@ -41,7 +41,14 @@ const refereeProfiles = {
 
     "Arnar Þór Stefánsson": {
         image: "images/referees/arnar-stefansson-logo.jpg"
-    }
+    },
+    
+    "Pétur Guðmundsson": {
+    image: "images/referees/petur_gudmundsson-logo.jpg"
+},
+"Róbert Þór Guðmundsson": {
+    image: "images/referees/robert_gudmundsson-logo.jpg"
+}
 };
 
 function getRefereeSuggestions(value) {
