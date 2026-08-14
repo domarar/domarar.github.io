@@ -1531,6 +1531,8 @@ let runningAwayScore = 0;
 
 const timelineHtml = matchEvents.map((matchEvent, index) => {
     const minute = matchEvent.displayMinute || "";
+    const isAfterMatch =
+  matchEvent.matchPhase?.fcdName === "AFTER_THE_MATCH" || !minute;
     const type = matchEvent.eventType?.fcdName || "";
     const player = matchEvent.player?.name || "";
     const teamOfficial = matchEvent.teamOfficial?.name || "";
@@ -1569,9 +1571,19 @@ if (
         </div>
     `;
 }
+if (
+  phase === "AFTER_THE_MATCH" &&
+  previousPhase !== "AFTER_THE_MATCH"
+) {
+  phaseMarker = `
+    <div class="timeline-phase-row">
+      <div class="timeline-phase-marker">LEIK LOKIÐ</div>
+    </div>
+  `;
+}
 
     let symbol = "";
-    let text = player;
+    let text = player || teamOfficial;
 
     if (type === "GOAL") {
     symbol = `<span class="goal-ball">⚽</span>`;
@@ -1628,7 +1640,7 @@ if (
         </span>
     `;
 
-} else if (type === "RED") {
+} else if (type === "RED" || type === "EXPULSION") {
     symbol = `<span class="event-card-icon red-card"></span>`;
 
     if (!player && teamOfficial) {
@@ -1659,8 +1671,8 @@ if (
         </div>
 
         <div class="timeline-minute">
-            ${minute}
-        </div>
+    ${isAfterMatch ? "LEIK LOKIÐ" : minute}
+</div>
 
     </div>
 `;
