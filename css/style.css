@@ -1798,10 +1798,6 @@ padding-right: 38px;
         border-radius: 14px;
     }
 
-    .referee-profile-back {
-    margin-top: 28px;
-    margin-bottom: 14px;
-}
     .referee-profile-header {
         gap: 12px;
         margin-top: 14px;
@@ -1823,66 +1819,120 @@ padding-right: 38px;
     }
 
     .referee-season-card {
-    margin-top: 14px;
-    padding: 7px 10px 10px;
-    border-radius: 14px;
-}
-}
+        margin-top: 14px;
+        padding: 7px 10px 10px;
+        border-radius: 14px;
+    }
 
-.referee-season-card .referee-profile-season {
-    margin-top: 0;
-    margin-bottom: 8px;
-    font-size: 14px;
-}
+    .referee-season-card .referee-profile-season {
+        margin-top: 0;
+        margin-bottom: 8px;
+        font-size: 14px;
+        text-align: center;
+    }
 
-.referee-profile-stats {
-    gap: 6px;
-}
+    .referee-profile-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+        align-items: stretch;
+    }
 
-.referee-stat {
-    min-height: 46px;
-    padding: 8px 14px;
+    .referee-stat,
+    .referee-season-total-card {
+        min-height: 46px;
+    }
 
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+    .referee-stat {
+        padding: 7px 8px;
 
-    text-align: left;
-}
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
 
-.referee-stat-label {
-    font-size: 12px;
-    margin: 0;
-}
+        text-align: left;
 
-.referee-stat-number {
-    margin: 0;
-    font-size: 20px;
-}
+        background: rgba(255, 255, 255, 0.035);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 10px;
+    }
+
+    .referee-stat-label {
+        margin: 0;
+        font-size: 10px;
+        line-height: 1.1;
+    }
+
+    .referee-stat-number {
+        margin: 0;
+        font-size: 18px;
+        line-height: 1;
+    }
+
+    .referee-season-total-card {
+        width: auto;
+        margin: 0;
+        padding: 7px 8px;
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+
+        background: rgba(76, 175, 80, 0.07);
+        border: 1px solid rgba(76, 175, 80, 0.38);
+        border-radius: 10px;
+    }
+
+    .referee-season-total-card strong {
+        font-size: 18px;
+        line-height: 1;
+    }
+
+    .referee-season-total-card span {
+        margin: 0;
+        font-size: 8px;
+        line-height: 1;
+        letter-spacing: 0.6px;
+    }
 
     .referee-event-section {
         margin-top: 12px;
     }
 
+    .referee-event-section h2,
+    .referee-competitions h2 {
+        text-align: center;
+    }
+
+    .referee-event-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 7px;
+    }
+
     .referee-event-stat {
-    padding: 8px 6px;
-    min-height: 0;
-}
+        padding: 8px 5px;
+        min-height: 72px;
+        text-align: center;
+    }
 
-.referee-event-label {
-    font-size: 11px;
-}
+    .referee-event-label {
+        font-size: 10px;
+        line-height: 1.15;
+    }
 
-.referee-event-stat strong {
-    margin-top: 3px;
-    font-size: 20px;
-}
+    .referee-event-stat strong {
+        margin-top: 3px;
+        font-size: 20px;
+    }
 
-.referee-event-icon-wrap {
-    height: 18px;
-    margin-bottom: 2px;
-}
+    .referee-event-icon-wrap {
+        height: 18px;
+        margin-bottom: 3px;
+    }
 
     .referee-competitions {
         margin-top: 18px;
@@ -1900,8 +1950,14 @@ padding-right: 38px;
         font-size: 14px;
     }
 
-.referee-event-section h2,
-.referee-competitions h2 {
-    text-align: center;
+    .referee-profile-back {
+        display: block;
+        margin-top: 24px;
+        margin-right: auto;
+        margin-bottom: 14px;
+
+        padding: 7px 11px;
+        font-size: 13px;
+    }
 }
 
