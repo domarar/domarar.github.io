@@ -514,20 +514,14 @@ const competitionStatsHTML = Object.entries(competitionCounts)
             <div class="referee-season-card">
 
     <div class="referee-profile-season">
-        Tímabilið 2026
-    </div>
+    <div>Tímabilið 2026</div>
+
+    <span class="referee-season-total">
+        ${referee2026Games.length} leikir
+    </span>
+</div>
         <div class="referee-profile-stats">
-         ${roleStatsHTML}
-
-             <div class="referee-stat referee-stat-total">
-                 <span class="referee-stat-label">
-                     Samtals
-                 </span>
-
-                <strong class="referee-stat-number">
-                   ${referee2026Games.length}
-                </strong>
-            </div>
+       ${roleStatsHTML}  
         </div> 
         <div class="referee-event-section">
     <h2>Leikjatölfræði</h2>

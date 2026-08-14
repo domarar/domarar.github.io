@@ -1740,6 +1740,20 @@ padding-right: 38px;
     font-weight: 800;
     color: rgba(255, 255, 255, 0.85);
 }
+.referee-season-total {
+    display: block;
+    margin-top: 4px;
+
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 12px;
+    font-weight: 600;
+}
+.referee-profile-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+    gap: 7px;
+}
+
 @media (max-width: 600px) {
 
     .referee-profile-overlay {
@@ -1753,9 +1767,11 @@ padding-right: 38px;
     }
 
     .referee-profile-back {
-        padding: 7px 11px;
-        font-size: 13px;
-    }
+    display: block;
+    margin-top: 14px;
+    margin-right: auto;
+    margin-bottom: 0;
+}
 
     .referee-profile-header {
         gap: 12px;
@@ -1779,11 +1795,13 @@ padding-right: 38px;
 
     .referee-season-card {
     margin-top: 14px;
-    padding: 10px;
+    padding: 7px 10px 10px;
     border-radius: 14px;
+}
 }
 
 .referee-season-card .referee-profile-season {
+    margin-top: 0;
     margin-bottom: 8px;
     font-size: 14px;
 }
@@ -1849,4 +1867,8 @@ padding-right: 38px;
     .referee-competition-count {
         font-size: 14px;
     }
+    
+.referee-event-section h2,
+.referee-competitions h2 {
+    text-align: center;
 }
