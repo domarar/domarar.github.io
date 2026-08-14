@@ -29,6 +29,18 @@ let selectedGender = "all";
 const refereeProfiles = {
     "Guðmundur Halldórsson": {
         image: "images/referees/Gudmundur_Halldorsson-logo.jpg"
+    },
+
+    "Þráinn Jón Elmarsson": {
+        image: "images/referees/þrainn-jon-logo.jpg"
+    },
+
+    "Ronnarong Wongmahadthai": {
+        image: "images/referees/ronnarong-logo.jpg"
+    },
+
+    "Arnar Þór Stefánsson": {
+        image: "images/referees/arnar-stefansson-logo.jpg"
     }
 };
 
