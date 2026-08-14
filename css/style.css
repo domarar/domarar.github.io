@@ -1819,19 +1819,17 @@ padding-right: 38px;
     }
 
     .referee-profile-stats {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 6px;
-        align-items: stretch;
-    }
-
-    .referee-stat,
-    .referee-season-total-card {
-        min-height: 46px;
-    }
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
 
     .referee-stat {
-    padding: 7px 8px;
+    width: 100px;
+    min-width: 100px;
+    height: 64px;
+    padding: 6px;
 
     display: flex;
     flex-direction: column;
@@ -1839,6 +1837,7 @@ padding-right: 38px;
     justify-content: center;
     gap: 3px;
 
+    box-sizing: border-box;
     text-align: center;
 
     background: rgba(255, 255, 255, 0.035);
