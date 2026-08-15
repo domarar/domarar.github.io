@@ -45,10 +45,14 @@ const refereeProfiles = {
     
     "Pétur Guðmundsson": {
     image: "images/referees/petur_gudmundsson-logo.jpg"
-},
-"Róbert Þór Guðmundsson": {
+    },
+
+    "Róbert Þór Guðmundsson": {
     image: "images/referees/robert_gudmundsson-logo.jpg"
-}
+    },
+    "Damian Pawlik": {
+    image: "images/referees/damian_pawlik-logo.jpg"
+},
 };
 
 function getRefereeSuggestions(value) {
@@ -323,22 +327,23 @@ referee2026Reports.forEach(report => {
         }
 
         if (type === "SECOND_YELLOW") {
-    secondYellowCards += 1;
-}
+            secondYellowCards += 1;
+        }
 
-if (type === "RED") {
-    redCards += 1;
-}
+        if (type === "RED") {
+            redCards += 1;
+        }
 
         if (
-    event.matchPhase?.fcdName !== "PEN" &&
-    (
-        type === "PENALTY" ||
-        type === "PENALTY_FAILED"
-    )
-) {
-    penalties += 1;
-}
+            event.matchPhase?.fcdName !== "PEN" &&
+            (
+                type === "PENALTY" ||
+                type === "PENALTY_FAILED"
+            )
+        ) {
+
+            penalties += 1;
+        }
     });
 });
 
