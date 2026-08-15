@@ -947,12 +947,22 @@ const profileSection = matchedProfile
     ? `
         <section class="referee-profile-entry">
             <button
-                type="button"
-                class="referee-profile-button"
-                data-referee-profile="${matchedProfileName}"
-            >
-                Dómaraspjaldið →
-            </button>
+    type="button"
+    class="referee-profile-button"
+    data-referee-profile="${matchedProfileName}"
+>
+    <span class="referee-profile-button-icon">▤</span>
+
+    <span class="referee-profile-button-text">
+        <span class="referee-profile-button-name">
+            ${matchedProfileName}
+        </span>
+
+        <span class="referee-profile-button-subtitle">
+            Leikir og tölfræði
+        </span>
+    </span>
+</button>
         </section>
     `
     : "";
