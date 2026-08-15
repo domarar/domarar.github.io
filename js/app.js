@@ -1846,10 +1846,16 @@ document.addEventListener("touchstart", event => {
 
     // Only allow the closing gesture from the top area of the card.
     // This prevents normal scrolling from accidentally closing it.
-    const modalTop = modal.getBoundingClientRect().top;
-    const touchY = event.touches[0].clientY;
+    const rect = modal.getBoundingClientRect();
+const touchY = event.touches[0].clientY;
 
-    if (touchY - modalTop > 90) return;
+const distanceFromTop = touchY - rect.top;
+const distanceFromBottom = rect.bottom - touchY;
+
+const inTopSwipeArea = distanceFromTop <= 160;
+const inBottomSwipeArea = distanceFromBottom <= 140;
+
+if (!inTopSwipeArea && !inBottomSwipeArea) return;
 
     matchReportTouchStartY = touchY;
     matchReportSwipeY = 0;
