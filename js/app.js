@@ -1519,8 +1519,9 @@ if (closeButton) {
     const overlay = document.getElementById("match-report-overlay");
 
     if (overlay) {
-        overlay.hidden = true;
-    }
+    overlay.hidden = true;
+    document.body.classList.remove("modal-open");
+}
 
     return;
 }
@@ -1820,6 +1821,7 @@ ${penaltyResultHtml}
 `;
 
 overlay.hidden = false;
+document.body.classList.add("modal-open");
         
         
 
