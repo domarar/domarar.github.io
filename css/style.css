@@ -827,6 +827,14 @@ padding-right: 38px;
     .match-report-modal::-webkit-scrollbar {
         display: none;
     }
+    .match-report-modal {
+  transition: transform 0.22s ease;
+  will-change: transform;
+}
+
+.match-report-modal.swiping {
+  transition: none;
+}
 
 }
 

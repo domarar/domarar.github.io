@@ -1830,5 +1830,87 @@ document.body.classList.add("modal-open");
     }
 });
 
+
+// MOBILE SWIPE-UP TO CLOSE MATCH REPORT
+let matchReportTouchStartY = 0;
+let matchReportSwipeY = 0;
+let matchReportIsSwiping = false;
+
+document.addEventListener("touchstart", event => {
+    if (window.innerWidth > 600) return;
+
+    const overlay = document.getElementById("match-report-overlay");
+    const modal = event.target.closest(".match-report-modal");
+
+    if (!overlay || overlay.hidden || !modal) return;
+
+    // Only allow the closing gesture from the top area of the card.
+    // This prevents normal scrolling from accidentally closing it.
+    const modalTop = modal.getBoundingClientRect().top;
+    const touchY = event.touches[0].clientY;
+
+    if (touchY - modalTop > 90) return;
+
+    matchReportTouchStartY = touchY;
+    matchReportSwipeY = 0;
+    matchReportIsSwiping = true;
+
+    modal.classList.add("swiping");
+}, { passive: true });
+
+
+document.addEventListener("touchmove", event => {
+    if (!matchReportIsSwiping) return;
+
+    const modal = document.querySelector(".match-report-modal");
+    if (!modal) return;
+
+    const currentY = event.touches[0].clientY;
+    const deltaY = currentY - matchReportTouchStartY;
+
+    // We only care about an upward swipe
+    if (deltaY >= 0) return;
+
+    matchReportSwipeY = deltaY;
+    modal.style.transform = `translateY(${deltaY}px)`;
+
+    event.preventDefault();
+}, { passive: false });
+
+
+document.addEventListener("touchend", () => {
+    if (!matchReportIsSwiping) return;
+
+    const overlay = document.getElementById("match-report-overlay");
+    const modal = document.querySelector(".match-report-modal");
+
+    matchReportIsSwiping = false;
+
+    if (!modal || !overlay) return;
+
+    modal.classList.remove("swiping");
+
+    if (matchReportSwipeY < -80) {
+        // Swipe was large enough — animate upward and close
+        modal.style.transform = "translateY(-110vh)";
+
+        setTimeout(() => {
+            overlay.hidden = true;
+            modal.style.transform = "";
+            document.body.classList.remove("modal-open");
+        }, 220);
+
+    } else {
+        // Not enough movement — return to original position
+        modal.style.transform = "";
+    }
+
+    matchReportSwipeY = 0;
+});
+
+
+updateDateTabs();
+loadGames();
+
 updateDateTabs();
 loadGames();
