@@ -586,11 +586,13 @@ const competitionStatsHTML = Object.entries(competitionCounts)
 
     </div>
 `;
+document.body.classList.add("modal-open");
 const backButton =
     gamesContainer.querySelector(".referee-profile-back");
 
 if (backButton) {
     backButton.addEventListener("click", () => {
+        document.body.classList.remove("modal-open");
         renderGamesForSelectedDay();
     });
 }
@@ -1912,6 +1914,79 @@ document.addEventListener("touchend", () => {
     }
 
     matchReportSwipeY = 0;
+});
+
+// MOBILE SWIPE-UP TO CLOSE REFEREE PROFILE
+let refereeProfileTouchStartY = 0;
+let refereeProfileSwipeY = 0;
+let refereeProfileIsSwiping = false;
+
+document.addEventListener("touchstart", event => {
+    if (window.innerWidth > 600) return;
+
+    const overlay = event.target.closest(".referee-profile-overlay");
+    const card = event.target.closest(".referee-profile-card");
+
+    if (!overlay || !card) return;
+
+    const rect = card.getBoundingClientRect();
+    const touchY = event.touches[0].clientY;
+
+    const distanceFromTop = touchY - rect.top;
+    const distanceFromBottom = rect.bottom - touchY;
+
+    const inTopSwipeArea = distanceFromTop <= 160;
+    const inBottomSwipeArea = distanceFromBottom <= 140;
+
+    if (!inTopSwipeArea && !inBottomSwipeArea) return;
+
+    refereeProfileTouchStartY = touchY;
+    refereeProfileSwipeY = 0;
+    refereeProfileIsSwiping = true;
+
+    card.classList.add("swiping");
+}, { passive: true });
+
+document.addEventListener("touchmove", event => {
+    if (!refereeProfileIsSwiping) return;
+
+    const card = document.querySelector(".referee-profile-card");
+    if (!card) return;
+
+    const currentY = event.touches[0].clientY;
+    const deltaY = currentY - refereeProfileTouchStartY;
+
+    if (deltaY >= 0) return;
+
+    refereeProfileSwipeY = deltaY;
+    card.style.transform = `translateY(${deltaY}px)`;
+
+    event.preventDefault();
+}, { passive: false });
+
+document.addEventListener("touchend", () => {
+    if (!refereeProfileIsSwiping) return;
+
+    const card = document.querySelector(".referee-profile-card");
+
+    refereeProfileIsSwiping = false;
+
+    if (!card) return;
+
+    card.classList.remove("swiping");
+
+    if (refereeProfileSwipeY < -80) {
+        card.style.transform = "translateY(-110vh)";
+
+        setTimeout(() => {
+            document.body.classList.remove("modal-open");
+            renderGamesForSelectedDay();
+        }, 220);
+    } else {
+        card.style.transform = "";
+    }
+
+    refereeProfileSwipeY = 0;
 });
 
 
