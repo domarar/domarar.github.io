@@ -44,8 +44,6 @@ for game in games_to_process:
 
     print(f"{match_id}: fetching/updating match report...")
 
-    print(f"{match_id}: fetching match report...")
-
     try:
         subprocess.run(
             [
