@@ -2,6 +2,7 @@ import json
 import subprocess
 import time
 from pathlib import Path
+from datetime import datetime, timezone, timedelta
 
 
 ARCHIVE_FILE = Path("data/archive.json")
@@ -30,7 +31,7 @@ played_games = [
 
 print(f"Found {len(played_games)} played archived games.")
 
-
+refresh_cutoff = datetime.now(timezone.utc) - timedelta(days=3)
 games_to_process = played_games
 
 
@@ -40,6 +41,7 @@ for game in games_to_process:
     if not match_id:
         continue
 
+    report_file = REPORTS_FOLDER / f"{match_id}.json"
     report_file = REPORTS_FOLDER / f"{match_id}.json"
 
     print(f"{match_id}: fetching/updating match report...")
