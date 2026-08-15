@@ -53,6 +53,9 @@ const refereeProfiles = {
     "Damian Pawlik": {
     image: "images/referees/damian_pawlik-logo.jpg"
 },
+    "Steinar Stephensen": {
+    image: "images/referees/steinar_stephensen-logo.jpg"
+},
 };
 
 function getRefereeSuggestions(value) {
