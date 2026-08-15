@@ -51,32 +51,66 @@ query KsiMatchSheet($matchId: Int!) {
     lineups {
       home {
         players {
-          roleId
-          personId
-          name
-          shortName
-          shirtNumber
-          starting
-          captain
-          position
-          orderNumber
-          hideProfile
-        }
+  roleId
+  personId
+  name
+  shortName
+  shirtNumber
+  starting
+  captain
+  position
+  orderNumber
+  hideProfile
+
+  events {
+    eventId
+    eventType {
+      fcdName
+    }
+    player {
+      personId
+      hideProfile
+    }
+    player2 {
+      personId
+      name
+      hideProfile
+    }
+    homeTeam
+  }
+}
       }
 
       away {
         players {
-          roleId
-          personId
-          name
-          shortName
-          shirtNumber
-          starting
-          captain
-          position
-          orderNumber
-          hideProfile
-        }
+  roleId
+  personId
+  name
+  shortName
+  shirtNumber
+  starting
+  captain
+  position
+  orderNumber
+  hideProfile
+
+  events {
+    eventId
+    eventType {
+      fcdName
+    }
+    player {
+      personId
+      hideProfile
+    }
+    player2 {
+      personId
+      name
+      hideProfile
+    }
+    homeTeam
+  }
+}
       }
     }
 
