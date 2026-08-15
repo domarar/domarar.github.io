@@ -42,9 +42,7 @@ for game in games_to_process:
 
     report_file = REPORTS_FOLDER / f"{match_id}.json"
 
-    if report_file.exists():
-        print(f"{match_id}: report already exists, skipping")
-        continue
+    print(f"{match_id}: fetching/updating match report...")
 
     print(f"{match_id}: fetching match report...")
 
