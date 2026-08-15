@@ -1,6 +1,6 @@
 {
   "id": 7050869,
-  "liveStatus": "SCHEDULED",
+  "liveStatus": "PLAYED",
   "currentMinute": "FT",
   "dateTimeUTC": 1786809600000,
   "round": "14",
@@ -455,7 +455,24 @@
           "position": null,
           "orderNumber": 3,
           "hideProfile": false,
-          "events": []
+          "events": [
+            {
+              "eventId": 8095670,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 60588,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 82559,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": false
+            }
+          ]
         },
         {
           "roleId": 8090206,
@@ -664,7 +681,7 @@
                 "hideProfile": false
               },
               "player2": {
-                "personId": 60591,
+                "personId": 82559,
                 "name": null,
                 "hideProfile": false
               },
@@ -725,22 +742,6 @@
               },
               "player2": {
                 "personId": 68279,
-                "name": null,
-                "hideProfile": false
-              },
-              "homeTeam": false
-            },
-            {
-              "eventId": 8095670,
-              "eventType": {
-                "fcdName": "SUBSTITUTION"
-              },
-              "player": {
-                "personId": 60588,
-                "hideProfile": false
-              },
-              "player2": {
-                "personId": 60591,
                 "name": null,
                 "hideProfile": false
               },
