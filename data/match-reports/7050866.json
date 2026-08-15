@@ -1,7 +1,7 @@
 {
   "id": 7050866,
-  "liveStatus": "SCHEDULED",
-  "currentMinute": null,
+  "liveStatus": "PLAYED",
+  "currentMinute": "FT",
   "dateTimeUTC": 1786734900000,
   "round": "14",
   "attendance": null,
@@ -23,10 +23,10 @@
     "picture": "135b7edd-e558-4dfe-a1dd-2956ac5a4bf3"
   },
   "homeTeamResult": {
-    "current": 1
+    "current": 2
   },
   "awayTeamResult": {
-    "current": 0
+    "current": 1
   },
   "lineups": {
     "home": {
@@ -41,7 +41,8 @@
           "captain": false,
           "position": "G",
           "orderNumber": 1,
-          "hideProfile": false
+          "hideProfile": false,
+          "events": []
         },
         {
           "roleId": 8083174,
@@ -53,7 +54,21 @@
           "captain": true,
           "position": null,
           "orderNumber": 2,
-          "hideProfile": false
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 8087719,
+              "eventType": {
+                "fcdName": "GOAL"
+              },
+              "player": {
+                "personId": 82548,
+                "hideProfile": false
+              },
+              "player2": null,
+              "homeTeam": true
+            }
+          ]
         },
         {
           "roleId": 8083182,
@@ -65,7 +80,8 @@
           "captain": false,
           "position": null,
           "orderNumber": 3,
-          "hideProfile": false
+          "hideProfile": false,
+          "events": []
         },
         {
           "roleId": 8083180,
@@ -77,7 +93,8 @@
           "captain": false,
           "position": null,
           "orderNumber": 4,
-          "hideProfile": false
+          "hideProfile": false,
+          "events": []
         },
         {
           "roleId": 8083184,
@@ -89,7 +106,8 @@
           "captain": false,
           "position": null,
           "orderNumber": 5,
-          "hideProfile": false
+          "hideProfile": false,
+          "events": []
         },
         {
           "roleId": 8083172,
@@ -101,7 +119,8 @@
           "captain": false,
           "position": null,
           "orderNumber": 6,
-          "hideProfile": false
+          "hideProfile": false,
+          "events": []
         },
         {
           "roleId": 8083164,
@@ -113,7 +132,21 @@
           "captain": false,
           "position": null,
           "orderNumber": 7,
-          "hideProfile": false
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 8088328,
+              "eventType": {
+                "fcdName": "GOAL"
+              },
+              "player": {
+                "personId": 89454,
+                "hideProfile": false
+              },
+              "player2": null,
+              "homeTeam": true
+            }
+          ]
         },
         {
           "roleId": 8083166,
@@ -125,7 +158,8 @@
           "captain": false,
           "position": null,
           "orderNumber": 8,
-          "hideProfile": false
+          "hideProfile": false,
+          "events": []
         },
         {
           "roleId": 8083178,
@@ -137,7 +171,21 @@
           "captain": false,
           "position": null,
           "orderNumber": 9,
-          "hideProfile": false
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 8088386,
+              "eventType": {
+                "fcdName": "YELLOW"
+              },
+              "player": {
+                "personId": 54546,
+                "hideProfile": false
+              },
+              "player2": null,
+              "homeTeam": true
+            }
+          ]
         },
         {
           "roleId": 8083176,
@@ -149,7 +197,25 @@
           "captain": false,
           "position": null,
           "orderNumber": 10,
-          "hideProfile": false
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 8088335,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 55645,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 55405,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": true
+            }
+          ]
         },
         {
           "roleId": 8083170,
@@ -161,7 +227,8 @@
           "captain": false,
           "position": null,
           "orderNumber": 11,
-          "hideProfile": false
+          "hideProfile": false,
+          "events": []
         },
         {
           "roleId": 8083186,
@@ -173,7 +240,8 @@
           "captain": false,
           "position": "G",
           "orderNumber": 12,
-          "hideProfile": false
+          "hideProfile": false,
+          "events": []
         },
         {
           "roleId": 8083198,
@@ -185,7 +253,8 @@
           "captain": false,
           "position": null,
           "orderNumber": 13,
-          "hideProfile": false
+          "hideProfile": false,
+          "events": []
         },
         {
           "roleId": 8083190,
@@ -197,7 +266,8 @@
           "captain": false,
           "position": null,
           "orderNumber": 14,
-          "hideProfile": false
+          "hideProfile": false,
+          "events": []
         },
         {
           "roleId": 8083196,
@@ -209,7 +279,8 @@
           "captain": false,
           "position": null,
           "orderNumber": 15,
-          "hideProfile": false
+          "hideProfile": false,
+          "events": []
         },
         {
           "roleId": 8083192,
@@ -221,7 +292,8 @@
           "captain": false,
           "position": null,
           "orderNumber": 16,
-          "hideProfile": false
+          "hideProfile": false,
+          "events": []
         },
         {
           "roleId": 8083194,
@@ -233,7 +305,25 @@
           "captain": false,
           "position": null,
           "orderNumber": 17,
-          "hideProfile": false
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 8088335,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 55645,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 55405,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": true
+            }
+          ]
         },
         {
           "roleId": 8083188,
@@ -245,7 +335,8 @@
           "captain": false,
           "position": null,
           "orderNumber": 18,
-          "hideProfile": false
+          "hideProfile": false,
+          "events": []
         }
       ]
     },
@@ -261,7 +352,8 @@
           "captain": false,
           "position": "G",
           "orderNumber": 1,
-          "hideProfile": false
+          "hideProfile": false,
+          "events": []
         },
         {
           "roleId": 8082922,
@@ -273,7 +365,8 @@
           "captain": false,
           "position": null,
           "orderNumber": 2,
-          "hideProfile": false
+          "hideProfile": false,
+          "events": []
         },
         {
           "roleId": 8082898,
@@ -285,7 +378,25 @@
           "captain": false,
           "position": null,
           "orderNumber": 3,
-          "hideProfile": false
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 8088353,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 71348,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 72553,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": false
+            }
+          ]
         },
         {
           "roleId": 8082916,
@@ -297,7 +408,25 @@
           "captain": false,
           "position": null,
           "orderNumber": 4,
-          "hideProfile": false
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 8088359,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 55335,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 86556,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": false
+            }
+          ]
         },
         {
           "roleId": 8083476,
@@ -309,7 +438,25 @@
           "captain": false,
           "position": null,
           "orderNumber": 5,
-          "hideProfile": false
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 8088347,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 85790,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 88733,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": false
+            }
+          ]
         },
         {
           "roleId": 8082902,
@@ -321,7 +468,8 @@
           "captain": false,
           "position": null,
           "orderNumber": 6,
-          "hideProfile": false
+          "hideProfile": false,
+          "events": []
         },
         {
           "roleId": 8082912,
@@ -333,7 +481,25 @@
           "captain": false,
           "position": null,
           "orderNumber": 7,
-          "hideProfile": false
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 8088366,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 58112,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 87273,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": false
+            }
+          ]
         },
         {
           "roleId": 8082900,
@@ -345,7 +511,8 @@
           "captain": false,
           "position": null,
           "orderNumber": 8,
-          "hideProfile": false
+          "hideProfile": false,
+          "events": []
         },
         {
           "roleId": 8082918,
@@ -357,7 +524,25 @@
           "captain": false,
           "position": null,
           "orderNumber": 9,
-          "hideProfile": false
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 8088341,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 78088,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 73730,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": false
+            }
+          ]
         },
         {
           "roleId": 8082920,
@@ -369,7 +554,8 @@
           "captain": false,
           "position": null,
           "orderNumber": 10,
-          "hideProfile": false
+          "hideProfile": false,
+          "events": []
         },
         {
           "roleId": 8082930,
@@ -381,7 +567,8 @@
           "captain": true,
           "position": null,
           "orderNumber": 11,
-          "hideProfile": false
+          "hideProfile": false,
+          "events": []
         },
         {
           "roleId": 8082906,
@@ -393,7 +580,8 @@
           "captain": false,
           "position": "G",
           "orderNumber": 12,
-          "hideProfile": false
+          "hideProfile": false,
+          "events": []
         },
         {
           "roleId": 8082910,
@@ -405,7 +593,25 @@
           "captain": false,
           "position": null,
           "orderNumber": 13,
-          "hideProfile": false
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 8088341,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 78088,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 73730,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": false
+            }
+          ]
         },
         {
           "roleId": 8082928,
@@ -417,7 +623,25 @@
           "captain": false,
           "position": null,
           "orderNumber": 14,
-          "hideProfile": false
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 8088366,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 58112,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 87273,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": false
+            }
+          ]
         },
         {
           "roleId": 8082896,
@@ -429,7 +653,37 @@
           "captain": false,
           "position": null,
           "orderNumber": 15,
-          "hideProfile": false
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 8088359,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 55335,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 86556,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": false
+            },
+            {
+              "eventId": 8088395,
+              "eventType": {
+                "fcdName": "GOAL"
+              },
+              "player": {
+                "personId": 55335,
+                "hideProfile": false
+              },
+              "player2": null,
+              "homeTeam": false
+            }
+          ]
         },
         {
           "roleId": 8082924,
@@ -441,7 +695,8 @@
           "captain": false,
           "position": null,
           "orderNumber": 16,
-          "hideProfile": false
+          "hideProfile": false,
+          "events": []
         },
         {
           "roleId": 8083478,
@@ -453,7 +708,25 @@
           "captain": false,
           "position": null,
           "orderNumber": 17,
-          "hideProfile": false
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 8088347,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 85790,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 88733,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": false
+            }
+          ]
         },
         {
           "roleId": 8082908,
@@ -465,7 +738,25 @@
           "captain": false,
           "position": null,
           "orderNumber": 18,
-          "hideProfile": false
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 8088353,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 71348,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 72553,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": false
+            }
+          ]
         }
       ]
     }
@@ -487,6 +778,201 @@
         "hideProfile": false
       },
       "player2": null,
+      "homeTeam": true,
+      "teamOfficial": null
+    },
+    {
+      "eventId": 8088341,
+      "eventType": {
+        "fcdName": "SUBSTITUTION"
+      },
+      "displayMinute": "61'",
+      "orderNumber": 2,
+      "matchPhase": {
+        "fcdName": "SECOND_HALF"
+      },
+      "player": {
+        "personId": 78088,
+        "name": "Rakel Inga Ágústsdóttir",
+        "hideProfile": false
+      },
+      "player2": {
+        "personId": 73730,
+        "name": "Hilda Rún Hafsteinsdóttir",
+        "hideProfile": false
+      },
+      "homeTeam": false,
+      "teamOfficial": null
+    },
+    {
+      "eventId": 8088347,
+      "eventType": {
+        "fcdName": "SUBSTITUTION"
+      },
+      "displayMinute": "61'",
+      "orderNumber": 3,
+      "matchPhase": {
+        "fcdName": "SECOND_HALF"
+      },
+      "player": {
+        "personId": 85790,
+        "name": "Ariela Lewis",
+        "hideProfile": false
+      },
+      "player2": {
+        "personId": 88733,
+        "name": "Alyssa Yana Daily",
+        "hideProfile": false
+      },
+      "homeTeam": false,
+      "teamOfficial": null
+    },
+    {
+      "eventId": 8088328,
+      "eventType": {
+        "fcdName": "GOAL"
+      },
+      "displayMinute": "70'",
+      "orderNumber": 4,
+      "matchPhase": {
+        "fcdName": "SECOND_HALF"
+      },
+      "player": {
+        "personId": 89454,
+        "name": "Alliyah Monica Rowe",
+        "hideProfile": false
+      },
+      "player2": null,
+      "homeTeam": true,
+      "teamOfficial": null
+    },
+    {
+      "eventId": 8088353,
+      "eventType": {
+        "fcdName": "SUBSTITUTION"
+      },
+      "displayMinute": "77'",
+      "orderNumber": 5,
+      "matchPhase": {
+        "fcdName": "SECOND_HALF"
+      },
+      "player": {
+        "personId": 71348,
+        "name": "Elfa Karen Magnúsdóttir",
+        "hideProfile": false
+      },
+      "player2": {
+        "personId": 72553,
+        "name": "Guðrún Þórarinsdóttir",
+        "hideProfile": false
+      },
+      "homeTeam": false,
+      "teamOfficial": null
+    },
+    {
+      "eventId": 8088359,
+      "eventType": {
+        "fcdName": "SUBSTITUTION"
+      },
+      "displayMinute": "77'",
+      "orderNumber": 6,
+      "matchPhase": {
+        "fcdName": "SECOND_HALF"
+      },
+      "player": {
+        "personId": 55335,
+        "name": "Sigurbjörg Diljá Gunnarsdóttir",
+        "hideProfile": false
+      },
+      "player2": {
+        "personId": 86556,
+        "name": "Mia Angelique Ramirez",
+        "hideProfile": false
+      },
+      "homeTeam": false,
+      "teamOfficial": null
+    },
+    {
+      "eventId": 8088366,
+      "eventType": {
+        "fcdName": "SUBSTITUTION"
+      },
+      "displayMinute": "83'",
+      "orderNumber": 7,
+      "matchPhase": {
+        "fcdName": "SECOND_HALF"
+      },
+      "player": {
+        "personId": 58112,
+        "name": "Brynja Arnarsdóttir",
+        "hideProfile": false
+      },
+      "player2": {
+        "personId": 87273,
+        "name": "Olivia Madeline Simmons",
+        "hideProfile": false
+      },
+      "homeTeam": false,
+      "teamOfficial": null
+    },
+    {
+      "eventId": 8088395,
+      "eventType": {
+        "fcdName": "GOAL"
+      },
+      "displayMinute": "85'",
+      "orderNumber": 8,
+      "matchPhase": {
+        "fcdName": "SECOND_HALF"
+      },
+      "player": {
+        "personId": 55335,
+        "name": "Sigurbjörg Diljá Gunnarsdóttir",
+        "hideProfile": false
+      },
+      "player2": null,
+      "homeTeam": false,
+      "teamOfficial": null
+    },
+    {
+      "eventId": 8088386,
+      "eventType": {
+        "fcdName": "YELLOW"
+      },
+      "displayMinute": "89'",
+      "orderNumber": 9,
+      "matchPhase": {
+        "fcdName": "SECOND_HALF"
+      },
+      "player": {
+        "personId": 54546,
+        "name": "Selma Dögg Þorsteinsdóttir",
+        "hideProfile": false
+      },
+      "player2": null,
+      "homeTeam": true,
+      "teamOfficial": null
+    },
+    {
+      "eventId": 8088335,
+      "eventType": {
+        "fcdName": "SUBSTITUTION"
+      },
+      "displayMinute": "90'",
+      "orderNumber": 10,
+      "matchPhase": {
+        "fcdName": "SECOND_HALF"
+      },
+      "player": {
+        "personId": 55645,
+        "name": "Birgitta Lilja Sigurðardóttir",
+        "hideProfile": false
+      },
+      "player2": {
+        "personId": 55405,
+        "name": "Nadía Steinunn Elíasdóttir",
+        "hideProfile": false
+      },
       "homeTeam": true,
       "teamOfficial": null
     }
