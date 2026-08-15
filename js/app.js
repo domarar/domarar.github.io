@@ -331,11 +331,14 @@ if (type === "RED") {
 }
 
         if (
-            type === "PENALTY" ||
-            type === "PENALTY_FAILED"
-        ) {
-            penalties += 1;
-        }
+    event.matchPhase?.fcdName !== "PEN" &&
+    (
+        type === "PENALTY" ||
+        type === "PENALTY_FAILED"
+    )
+) {
+    penalties += 1;
+}
     });
 });
 
