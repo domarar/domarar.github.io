@@ -335,13 +335,7 @@ jobs:
                   f"data/match-reports/{match_id}.json"
               )
 
-              if report_file.exists():
-                  print(
-                      f"Report already exists for {match_id}, skipping"
-                  )
-                  continue
-
-              print(f"Fetching report for match {match_id}")
+              print(f"Fetching/refetching report for match {match_id}")
 
               subprocess.run(
                   [
