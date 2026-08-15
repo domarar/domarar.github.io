@@ -282,44 +282,39 @@ const referee2026CenterGames = referee2026Games.filter(game =>
     )
 );
 
-const referee2026Reports = [];
-console.log(
-    "CENTER REF GAMES:",
-    referee2026CenterGames.length
-);
-console.log(
-    "CENTER REF IDS:",
-    referee2026CenterGames.map(game => game.id)
-);
+const referee2026Reports = await Promise.all(
+    referee2026CenterGames.map(async game => {
+        console.log("PROFILE GAME:", game);
 
-for (const game of referee2026CenterGames) {
-    console.log("PROFILE GAME:", game);
+        try {
+            const response = await fetch(
+                `data/match-reports/${game.id}.json`
+            );
 
-    try {
-        const response = await fetch(
-            `data/match-reports/${game.id}.json`
-        );
+            if (!response.ok) {
+                return null;
+            }
 
-        if (!response.ok) {
-            continue;
+            return await response.json();
+        } catch (error) {
+            console.warn(
+                `Could not load match report for ${game.id}`,
+                error
+            );
+
+            return null;
         }
+    })
+);
 
-        const report = await response.json();
-
-        referee2026Reports.push(report);
-    } catch (error) {
-        console.warn(
-            `Could not load match report for ${game.id}`,
-            error
-        );
-    }
-}
+const validReferee2026Reports =
+    referee2026Reports.filter(Boolean);
 let yellowCards = 0;
 let secondYellowCards = 0;
 let redCards = 0;
 let penalties = 0;
 
-referee2026Reports.forEach(report => {
+validReferee2026Reports.forEach(report => {
     const events = report.events || [];
 
     events.forEach(event => {
@@ -351,7 +346,7 @@ referee2026Reports.forEach(report => {
 });
 
 const reportsWithEvents =
-    referee2026Reports.length;
+    validReferee2026Reports.length;
 
 const yellowCardsPerGame =
     reportsWithEvents > 0
