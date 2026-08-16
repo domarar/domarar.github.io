@@ -2248,10 +2248,20 @@ document.body.classList.add("modal-open");
 });
 
 
-// MOBILE SWIPE-UP TO CLOSE MATCH REPORT
+// ============================================================
+// MOBILE EDGE SWIPE TO CLOSE
+// Top edge    -> swipe DOWN
+// Bottom edge -> swipe UP
+// ============================================================
+
+
+// -----------------------------
+// MATCH REPORT
+// -----------------------------
 let matchReportTouchStartY = 0;
 let matchReportSwipeY = 0;
 let matchReportIsSwiping = false;
+let matchReportSwipeDirection = null;
 
 document.addEventListener("touchstart", event => {
     if (window.innerWidth > 600) return;
@@ -2261,22 +2271,26 @@ document.addEventListener("touchstart", event => {
 
     if (!overlay || overlay.hidden || !modal) return;
 
-    // Only allow the closing gesture from the top area of the card.
-    // This prevents normal scrolling from accidentally closing it.
     const rect = modal.getBoundingClientRect();
-const touchY = event.touches[0].clientY;
+    const touchY = event.touches[0].clientY;
 
-const distanceFromTop = touchY - rect.top;
-const distanceFromBottom = rect.bottom - touchY;
+    const distanceFromTop = touchY - rect.top;
+    const distanceFromBottom = rect.bottom - touchY;
 
-const inTopSwipeArea = distanceFromTop <= 160;
-const inBottomSwipeArea = distanceFromBottom <= 140;
+    const inTopSwipeArea = distanceFromTop <= 160;
+    const inBottomSwipeArea = distanceFromBottom <= 140;
 
-if (!inTopSwipeArea && !inBottomSwipeArea) return;
+    if (!inTopSwipeArea && !inBottomSwipeArea) return;
 
     matchReportTouchStartY = touchY;
     matchReportSwipeY = 0;
     matchReportIsSwiping = true;
+
+    if (inTopSwipeArea) {
+        matchReportSwipeDirection = "down";
+    } else {
+        matchReportSwipeDirection = "up";
+    }
 
     modal.classList.add("swiping");
 }, { passive: true });
@@ -2291,11 +2305,34 @@ document.addEventListener("touchmove", event => {
     const currentY = event.touches[0].clientY;
     const deltaY = currentY - matchReportTouchStartY;
 
-    // We only care about an upward swipe
-    if (deltaY >= 0) return;
+    // TOP: only allow downward movement
+    if (
+        matchReportSwipeDirection === "down" &&
+        deltaY < 0
+    ) {
+        return;
+    }
+
+    // BOTTOM: only allow upward movement
+    if (
+        matchReportSwipeDirection === "up" &&
+        deltaY > 0
+    ) {
+        return;
+    }
 
     matchReportSwipeY = deltaY;
-    modal.style.transform = `translateY(${deltaY}px)`;
+
+    const progress = Math.min(
+        Math.abs(deltaY) / 220,
+        1
+    );
+
+    modal.style.transform =
+        `translateY(${deltaY}px) scale(${1 - progress * 0.018})`;
+
+    modal.style.opacity =
+        `${1 - progress * 0.12}`;
 
     event.preventDefault();
 }, { passive: false });
@@ -2313,34 +2350,74 @@ document.addEventListener("touchend", () => {
 
     modal.classList.remove("swiping");
 
-    if (matchReportSwipeY < -80) {
-        // Swipe was large enough — animate upward and close
-        modal.style.transform = "translateY(-110vh)";
+    const shouldCloseDown =
+        matchReportSwipeDirection === "down" &&
+        matchReportSwipeY > 90;
+
+    const shouldCloseUp =
+        matchReportSwipeDirection === "up" &&
+        matchReportSwipeY < -90;
+
+    if (shouldCloseDown || shouldCloseUp) {
+
+        modal.style.transition =
+            "transform 260ms cubic-bezier(0.22, 1, 0.36, 1), opacity 220ms ease";
+
+        modal.style.transform = shouldCloseDown
+            ? "translateY(110vh) scale(0.98)"
+            : "translateY(-110vh) scale(0.98)";
+
+        modal.style.opacity = "0";
 
         setTimeout(() => {
             overlay.hidden = true;
+
+            modal.style.transition = "";
             modal.style.transform = "";
+            modal.style.opacity = "";
+
             document.body.classList.remove("modal-open");
-        }, 220);
+        }, 260);
 
     } else {
-        // Not enough movement — return to original position
-        modal.style.transform = "";
+
+        modal.style.transition =
+            "transform 280ms cubic-bezier(0.34, 1.35, 0.64, 1), opacity 220ms ease";
+
+        modal.style.transform = "translateY(0) scale(1)";
+        modal.style.opacity = "1";
+
+        setTimeout(() => {
+            modal.style.transition = "";
+            modal.style.transform = "";
+            modal.style.opacity = "";
+        }, 280);
     }
 
     matchReportSwipeY = 0;
+    matchReportSwipeDirection = null;
 });
 
-// MOBILE SWIPE-UP TO CLOSE REFEREE PROFILE
+
+
+// -----------------------------
+// REFEREE PROFILE
+// -----------------------------
 let refereeProfileTouchStartY = 0;
 let refereeProfileSwipeY = 0;
 let refereeProfileIsSwiping = false;
+let refereeProfileSwipeDirection = null;
 
 document.addEventListener("touchstart", event => {
     if (window.innerWidth > 600) return;
 
-    const overlay = event.target.closest(".referee-profile-overlay");
-    const card = event.target.closest(".referee-profile-card");
+    const overlay = event.target.closest(
+    ".referee-profile-overlay, .referee-profile-overlay-v2"
+);
+
+const card = event.target.closest(
+    ".referee-profile-card, .referee-profile-card-v2"
+);
 
     if (!overlay || !card) return;
 
@@ -2359,30 +2436,66 @@ document.addEventListener("touchstart", event => {
     refereeProfileSwipeY = 0;
     refereeProfileIsSwiping = true;
 
+    if (inTopSwipeArea) {
+        refereeProfileSwipeDirection = "down";
+    } else {
+        refereeProfileSwipeDirection = "up";
+    }
+
     card.classList.add("swiping");
 }, { passive: true });
+
 
 document.addEventListener("touchmove", event => {
     if (!refereeProfileIsSwiping) return;
 
-    const card = document.querySelector(".referee-profile-card");
+    const card = document.querySelector(
+    ".referee-profile-card, .referee-profile-card-v2"
+);
     if (!card) return;
 
     const currentY = event.touches[0].clientY;
     const deltaY = currentY - refereeProfileTouchStartY;
 
-    if (deltaY >= 0) return;
+    // TOP: only allow downward movement
+    if (
+        refereeProfileSwipeDirection === "down" &&
+        deltaY < 0
+    ) {
+        return;
+    }
+
+    // BOTTOM: only allow upward movement
+    if (
+        refereeProfileSwipeDirection === "up" &&
+        deltaY > 0
+    ) {
+        return;
+    }
 
     refereeProfileSwipeY = deltaY;
-    card.style.transform = `translateY(${deltaY}px)`;
+
+    const progress = Math.min(
+        Math.abs(deltaY) / 220,
+        1
+    );
+
+    card.style.transform =
+        `translateY(${deltaY}px) scale(${1 - progress * 0.018})`;
+
+    card.style.opacity =
+        `${1 - progress * 0.12}`;
 
     event.preventDefault();
 }, { passive: false });
 
+
 document.addEventListener("touchend", () => {
     if (!refereeProfileIsSwiping) return;
 
-    const card = document.querySelector(".referee-profile-card");
+    const card = document.querySelector(
+    ".referee-profile-card, .referee-profile-card-v2"
+);
 
     refereeProfileIsSwiping = false;
 
@@ -2390,20 +2503,48 @@ document.addEventListener("touchend", () => {
 
     card.classList.remove("swiping");
 
-    if (refereeProfileSwipeY < -80) {
-        card.style.transform = "translateY(-110vh)";
+    const shouldCloseDown =
+        refereeProfileSwipeDirection === "down" &&
+        refereeProfileSwipeY > 90;
+
+    const shouldCloseUp =
+        refereeProfileSwipeDirection === "up" &&
+        refereeProfileSwipeY < -90;
+
+    if (shouldCloseDown || shouldCloseUp) {
+
+        card.style.transition =
+            "transform 260ms cubic-bezier(0.22, 1, 0.36, 1), opacity 220ms ease";
+
+        card.style.transform = shouldCloseDown
+            ? "translateY(110vh) scale(0.98)"
+            : "translateY(-110vh) scale(0.98)";
+
+        card.style.opacity = "0";
 
         setTimeout(() => {
             document.body.classList.remove("modal-open");
             renderGamesForSelectedDay();
-        }, 220);
+        }, 260);
+
     } else {
-        card.style.transform = "";
+
+        card.style.transition =
+            "transform 280ms cubic-bezier(0.34, 1.35, 0.64, 1), opacity 220ms ease";
+
+        card.style.transform = "translateY(0) scale(1)";
+        card.style.opacity = "1";
+
+        setTimeout(() => {
+            card.style.transition = "";
+            card.style.transform = "";
+            card.style.opacity = "";
+        }, 280);
     }
 
     refereeProfileSwipeY = 0;
+    refereeProfileSwipeDirection = null;
 });
-
 
 updateDateTabs();
 loadGames();
