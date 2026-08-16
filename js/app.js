@@ -2157,6 +2157,25 @@ const timelineHtml = matchEvents.map((matchEvent, index) => {
     const isAfterMatch =
   matchEvent.matchPhase?.fcdName === "AFTER_THE_MATCH" || !minute;
     const type = matchEvent.eventType?.fcdName || "";
+    if (
+    type === "END" &&
+    matchEvent.matchPhase?.fcdName === "FIRST_HALF"
+) {
+    return `
+        <div class="timeline-phase-row">
+            <div class="timeline-phase-marker">HT</div>
+        </div>
+    `;
+}
+
+if (
+    type === "START" ||
+    type === "END" ||
+    type === "FULL_TIME"
+) {
+    return "";
+}
+
     const player = matchEvent.player?.name || "";
     const teamOfficial = matchEvent.teamOfficial?.name || "";
     const player2 = matchEvent.player2?.name || "";
@@ -2270,6 +2289,22 @@ if (
         text = `${teamOfficial}<span class="match-report-official-label">Liðsstjórn</span>`;
     }
     } else if (type === "SUBSTITUTION") {
+
+      const supportedTypes = [
+        "GOAL",
+        "OWN_GOAL",
+        "PENALTY",
+        "PENALTY_FAILED",
+        "YELLOW",
+        "SECOND_YELLOW",
+        "RED",
+        "EXPULSION"
+    ];
+
+    if (!supportedTypes.includes(type)) {
+    return phaseMarker || "";
+    }  
+    
     return `
     ${phaseMarker}
 
