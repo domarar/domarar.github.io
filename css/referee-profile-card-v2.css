@@ -138,28 +138,19 @@
 }
 
 
-/* Temporary KSÍ badge */
+/* KSÍ badge logo */
 
-.referee-badge-placeholder-v2 {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    min-width: 34px;
-
-    padding: 4px 7px;
-
-    color: rgba(255, 255, 255, 0.78);
-
-    font-size: 10px;
-    font-weight: 800;
-
-    letter-spacing: 0.08em;
-
-    background: rgba(255, 255, 255, 0.05);
-
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    border-radius: 6px;
+.referee-badge-logo-v2 {
+    display: block;
+    width: 52px;
+    height: auto;
+    object-fit: contain;
+}
+.referee-fifa-badge-v2 {
+    display: block;
+    width: 34px;
+    height: auto;
+    object-fit: contain;
 }
 
 
@@ -198,6 +189,12 @@
     .referee-profile-heading-v2 h1 {
         font-size: 21px;
     }
+    .referee-badge-logo-v2 {
+    width: 54px;
+}
+.referee-fifa-badge-v2 {
+    width: 36px;
+}
 
 }
 .referee-profile-summary-v2 {

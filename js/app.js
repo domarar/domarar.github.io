@@ -55,6 +55,10 @@ const refereeProfiles = {
 },
     "Steinar Stephensen": {
     image: "images/referees/steinar_stephensen-logo.jpg"
+}, 
+    "Helgi Mikael Jónasson": {
+    image: "images/referees/helgi_mikael-logo.jpg",
+    fifa: true
 },
 };
 
@@ -915,10 +919,26 @@ const competitionStatsHTML = Object.entries(competitionCounts)
         <h1>${refereeName}</h1>
 
         <div class="referee-profile-badges-v2">
-            <span class="referee-badge-placeholder-v2">
-                KSÍ
-            </span>
-        </div>
+
+    <img
+        class="referee-badge-logo-v2"
+        src="images/badges/ksi.png"
+        alt="KSÍ"
+    >
+
+    ${
+        profile.fifa
+            ? `
+                <img
+                    class="referee-fifa-badge-v2"
+                    src="images/badges/fifa.png"
+                    alt="FIFA Referee 2026"
+                >
+            `
+            : ""
+    }
+
+</div>
 
     </div>
 
