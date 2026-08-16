@@ -237,3 +237,49 @@
     font-weight: 800;
     line-height: 1;
 }
+.referee-stat-label-mobile {
+    display: none;
+}
+@media (max-width: 600px) {
+
+    .referee-profile-card-v2 .referee-profile-stats {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 0;
+        width: 100%;
+    }
+
+    .referee-profile-card-v2 .referee-stat {
+        width: auto;
+        min-width: 0;
+        height: auto;
+        padding: 8px 2px;
+
+        background: transparent;
+        border: none;
+        border-radius: 0;
+    }
+
+    .referee-profile-card-v2 .referee-stat + .referee-stat {
+        border-left: 1px solid rgba(255, 255, 255, 0.10);
+    }
+
+    .referee-profile-card-v2 .referee-stat-label {
+        font-size: 9px;
+        line-height: 1.1;
+        white-space: nowrap;
+    }
+
+    .referee-profile-card-v2 .referee-stat-number {
+        font-size: 22px;
+        line-height: 1;
+    }
+
+    .referee-profile-card-v2 .referee-stat-label-full {
+        display: none;
+    }
+
+    .referee-profile-card-v2 .referee-stat-label-mobile {
+        display: inline;
+    }
+}

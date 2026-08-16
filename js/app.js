@@ -489,15 +489,23 @@ referee2026Games.forEach(game => {
 const roleStatsHTML = Object.entries(roleCounts)
     .filter(([, count]) => count > 0)
     .map(([role, count]) => `
-        <div class="referee-stat">
-            <span class="referee-stat-label">
-                ${roleLabels[role] || role}
-            </span>
+       <div class="referee-stat">
+    <span class="referee-stat-label referee-stat-label-full">
+        ${roleLabels[role] || role}
+    </span>
 
-            <strong class="referee-stat-number">
-                ${count}
-            </strong>
-        </div>
+    <span class="referee-stat-label referee-stat-label-mobile">
+        ${
+            (roleLabels[role] || role) === "Aðstoðardómari 1" ? "AD1" :
+            (roleLabels[role] || role) === "Aðstoðardómari 2" ? "AD2" :
+            (roleLabels[role] || role)
+        }
+    </span>
+
+    <strong class="referee-stat-number">
+        ${count}
+    </strong>
+</div>
     `)
     .join("");
 const competitionStatsHTML = Object.entries(competitionCounts)
