@@ -237,7 +237,7 @@
     font-weight: 800;
     line-height: 1;
 }
-.referee-stat-label-mobile {
+.referee-profile-card-v2 .referee-summary-label-mobile-v2 {
     display: none;
 }
 
@@ -260,12 +260,12 @@
         border-left: 1px solid rgba(255, 255, 255, 0.10);
     }
 
-    .referee-summary-label-full-v2 {
-        display: none;
-    }
+    .referee-profile-card-v2 .referee-summary-label-full-v2 {
+    display: none;
+}
 
-    .referee-summary-label-mobile-v2 {
-        display: block;
+    .referee-profile-card-v2 .referee-summary-label-mobile-v2 {
+    display: block;
         font-size: 9px;
         line-height: 1.1;
         white-space: nowrap;
