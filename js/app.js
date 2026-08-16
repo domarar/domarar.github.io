@@ -840,17 +840,31 @@ referee2026Games.forEach(game => {
 
 const roleStatsHTML = Object.entries(roleCounts)
     .filter(([, count]) => count > 0)
-    .map(([role, count]) => `
-        <div class="referee-summary-item-v2">
-            <span class="referee-summary-label-v2">
-                ${roleLabels[role] || role}
-            </span>
+    .map(([role, count]) => {
+        const fullLabel = roleLabels[role] || role;
 
-            <strong class="referee-summary-number-v2">
-                ${count}
-            </strong>
-        </div>
-    `)
+        const mobileLabel =
+            fullLabel === "Aðstoðardómari 1" ? "AD1" :
+            fullLabel === "Aðstoðardómari 2" ? "AD2" :
+            fullLabel === "Fjórði dómari" ? "Fjórði" :
+            fullLabel;
+
+        return `
+            <div class="referee-summary-item-v2">
+                <span class="referee-summary-label-v2 referee-summary-label-full-v2">
+                    ${fullLabel}
+                </span>
+
+                <span class="referee-summary-label-v2 referee-summary-label-mobile-v2">
+                    ${mobileLabel}
+                </span>
+
+                <strong class="referee-summary-number-v2">
+                    ${count}
+                </strong>
+            </div>
+        `;
+    })
     .join("");
 const competitionStatsHTML = Object.entries(competitionCounts)
     .sort(([, a], [, b]) => b.total - a.total)

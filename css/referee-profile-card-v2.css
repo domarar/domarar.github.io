@@ -240,46 +240,39 @@
 .referee-stat-label-mobile {
     display: none;
 }
+
 @media (max-width: 600px) {
 
-    .referee-profile-card-v2 .referee-profile-stats {
+    .referee-profile-summary-v2 {
         display: grid;
         grid-template-columns: repeat(5, minmax(0, 1fr));
         gap: 0;
         width: 100%;
+        margin: 10px 0 26px;
     }
 
-    .referee-profile-card-v2 .referee-stat {
-        width: auto;
+    .referee-summary-item-v2 {
         min-width: 0;
-        height: auto;
-        padding: 8px 2px;
-
-        background: transparent;
-        border: none;
-        border-radius: 0;
+        padding: 9px 2px;
     }
 
-    .referee-profile-card-v2 .referee-stat + .referee-stat {
+    .referee-summary-item-v2 + .referee-summary-item-v2 {
         border-left: 1px solid rgba(255, 255, 255, 0.10);
     }
 
-    .referee-profile-card-v2 .referee-stat-label {
-        font-size: 9px;
-        line-height: 1.1;
-        white-space: nowrap;
-    }
-
-    .referee-profile-card-v2 .referee-stat-number {
-        font-size: 22px;
-        line-height: 1;
-    }
-
-    .referee-profile-card-v2 .referee-stat-label-full {
+    .referee-summary-label-full-v2 {
         display: none;
     }
 
-    .referee-profile-card-v2 .referee-stat-label-mobile {
-        display: inline;
+    .referee-summary-label-mobile-v2 {
+        display: block;
+        font-size: 9px;
+        line-height: 1.1;
+        white-space: nowrap;
+        text-align: center;
+    }
+
+    .referee-summary-number-v2 {
+        font-size: 22px;
     }
 }
