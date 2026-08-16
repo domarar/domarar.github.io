@@ -837,8 +837,21 @@ referee2026Games.forEach(game => {
     "Fourth Official": "Fjórði dómari",
     "Fjórði dómari": "Fjórði dómari"
 };
+const roleOrder = [
+    "Dómari",
+    "Referee",
+    "Fjórði dómari",
+    "Fourth Official",
+    "Aðstoðardómari 1",
+    "Assistant Referee 1",
+    "Aðstoðardómari 2",
+    "Assistant Referee 2"
+];
 
 const roleStatsHTML = Object.entries(roleCounts)
+    .sort(([roleA], [roleB]) => {
+        return roleOrder.indexOf(roleA) - roleOrder.indexOf(roleB);
+    })
     .filter(([, count]) => count > 0)
     .map(([role, count]) => {
         const fullLabel = roleLabels[role] || role;
@@ -920,9 +933,13 @@ const competitionStatsHTML = Object.entries(competitionCounts)
     ${roleStatsHTML}
 
     <div class="referee-summary-item-v2">
-        <span class="referee-summary-label-v2">
-            Leikir alls
-        </span>
+        <span class="referee-summary-label-v2 referee-summary-label-full-v2">
+    Leikir alls
+</span>
+
+<span class="referee-summary-label-v2 referee-summary-label-mobile-v2">
+    ALLS
+</span>
 
         <strong class="referee-summary-number-v2">
             ${referee2026Games.length}
