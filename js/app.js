@@ -605,6 +605,11 @@ if (backButton) {
 }
 }
 async function renderRefereeProfileV2(refereeName) {
+
+    gamesContainer.style.transition = "";
+    gamesContainer.style.transform = "";
+    gamesContainer.style.opacity = "";
+    
     const profile = refereeProfiles[refereeName];
 
     if (!profile) {
@@ -1698,10 +1703,156 @@ dateTabs.forEach((tab, index) => {
 
     tab.classList.add("active");
 
+    moveActiveDayIndicator();
+
     renderGamesForSelectedDay();
   });
 });
 
+// =====================================
+// ANIMATED ACTIVE DAY HIGHLIGHT
+// =====================================
+
+const dateTabsContainer = dateTabs[0]?.parentElement;
+
+let activeDayIndicator = null;
+
+if (dateTabsContainer) {
+    activeDayIndicator = document.createElement("div");
+    activeDayIndicator.className = "date-tab-active-indicator";
+
+    dateTabsContainer.style.position = "relative";
+    dateTabsContainer.prepend(activeDayIndicator);
+}
+
+function moveActiveDayIndicator() {
+    if (!activeDayIndicator) return;
+
+    const activeTab = [...dateTabs].find(tab =>
+        tab.classList.contains("active")
+    );
+
+    if (!activeTab) return;
+
+    activeDayIndicator.style.width =
+        `${activeTab.offsetWidth}px`;
+
+    activeDayIndicator.style.height =
+        `${activeTab.offsetHeight}px`;
+
+    activeDayIndicator.style.transform =
+        `translateX(${activeTab.offsetLeft}px)`;
+}
+
+window.addEventListener("resize", moveActiveDayIndicator);
+
+setTimeout(moveActiveDayIndicator, 0);
+
+// =====================================
+// MOBILE SWIPE BETWEEN DAYS
+// Swipe right = previous day
+// Swipe left  = next day
+// =====================================
+
+let daySwipeStartX = 0;
+let daySwipeStartY = 0;
+let daySwipeActive = false;
+
+gamesContainer.addEventListener("touchstart", event => {
+    if (window.innerWidth > 600) return;
+    if (document.body.classList.contains("modal-open")) return;
+
+    daySwipeStartX = event.touches[0].clientX;
+    daySwipeStartY = event.touches[0].clientY;
+    daySwipeActive = true;
+
+    gamesContainer.style.transition = "none";
+}, { passive: true });
+
+
+gamesContainer.addEventListener("touchmove", event => {
+    if (!daySwipeActive) return;
+
+    const currentX = event.touches[0].clientX;
+    const currentY = event.touches[0].clientY;
+
+    const deltaX = currentX - daySwipeStartX;
+    const deltaY = currentY - daySwipeStartY;
+
+    // Leave normal vertical scrolling alone.
+    if (Math.abs(deltaX) <= Math.abs(deltaY) * 1.3) {
+        return;
+    }
+
+    // Very subtle movement only.
+    const dragX = deltaX * 0.18;
+
+    gamesContainer.style.transform =
+        `translateX(${dragX}px)`;
+}, { passive: true });
+
+
+gamesContainer.addEventListener("touchend", event => {
+    if (!daySwipeActive) return;
+
+    daySwipeActive = false;
+
+    const endX = event.changedTouches[0].clientX;
+    const endY = event.changedTouches[0].clientY;
+
+    const deltaX = endX - daySwipeStartX;
+    const deltaY = endY - daySwipeStartY;
+
+    // Always settle smoothly back into place.
+    gamesContainer.style.transition =
+        "transform 220ms cubic-bezier(0.22, 1, 0.36, 1)";
+
+    gamesContainer.style.transform = "translateX(0)";
+
+    setTimeout(() => {
+        gamesContainer.style.transition = "";
+        gamesContainer.style.transform = "";
+    }, 230);
+
+    // Not a deliberate horizontal swipe.
+    if (Math.abs(deltaX) < 70) return;
+    if (Math.abs(deltaX) <= Math.abs(deltaY) * 1.3) return;
+
+    let newOffset = selectedDayOffset;
+
+    // RIGHT = previous
+    if (deltaX > 0) {
+        newOffset -= 1;
+    }
+
+    // LEFT = next
+    if (deltaX < 0) {
+        newOffset += 1;
+    }
+
+    // Stay within visible five-day range.
+    if (newOffset < -2 || newOffset > 2) {
+        return;
+    }
+
+    selectedDayOffset = newOffset;
+
+    searchInput.value = "";
+    searchClear.hidden = true;
+
+    dateTabs.forEach((tab, index) => {
+        const tabOffset = index - 2;
+
+        tab.classList.toggle(
+            "active",
+            tabOffset === selectedDayOffset
+        );
+    });
+
+    moveActiveDayIndicator();
+
+    renderGamesForSelectedDay();
+}, { passive: true });
 
 // =====================================
 // LOAD REAL GAME DATA

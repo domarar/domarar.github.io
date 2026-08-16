@@ -2001,3 +2001,33 @@ body.modal-open {
   overflow: hidden;
   touch-action: none;
 }
+.date-tab-active-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    border-radius: inherit;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(69, 190, 120, 0.95),
+            rgba(30, 135, 85, 0.9)
+        );
+
+    box-shadow:
+        0 8px 24px rgba(30, 160, 95, 0.22);
+
+    transition:
+        transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
+        width 320ms cubic-bezier(0.22, 1, 0.36, 1);
+
+    z-index: 0;
+
+    pointer-events: none;
+}
+
+.date-tab {
+    position: relative;
+    z-index: 1;
+}
