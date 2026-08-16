@@ -67,7 +67,7 @@ function getRefereeSuggestions(value) {
         .toLowerCase()
         .trim();
 
-    if (searchText.length < 3) {
+    if (searchText.length < 1) {
         return [];
     }
 
@@ -609,7 +609,7 @@ async function renderRefereeProfileV2(refereeName) {
     gamesContainer.style.transition = "";
     gamesContainer.style.transform = "";
     gamesContainer.style.opacity = "";
-    
+
     const profile = refereeProfiles[refereeName];
 
     if (!profile) {
