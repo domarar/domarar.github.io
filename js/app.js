@@ -1146,9 +1146,17 @@ const centerText = hasScore
   <div class="fixture-competition-row">
     <span class="fixture-competition-line"></span>
 
-    <div class="fixture-competition">
-      ${cleanCompetitionName(game.competition)}
-    </div>
+    <button
+    class="fixture-competition standings-trigger"
+    type="button"
+    onclick="openStandings(
+        '${cleanCompetitionName(game.competition).replace(/'/g, "\\'")}',
+        '${game.home.replace(/'/g, "\\'")}',
+        '${game.away.replace(/'/g, "\\'")}'
+    )"
+>
+    ${cleanCompetitionName(game.competition)}
+</button>
 
     <span class="fixture-competition-line"></span>
   </div>

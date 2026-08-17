@@ -463,6 +463,10 @@ jobs:
               f"{sorted(set(included_years))}"
           )
           PY
+        
+      - name: Generate 2026 standings
+        run: |
+          python generate_standings.py
 
       - name: Commit updated archive
         run: |
