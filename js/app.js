@@ -60,6 +60,10 @@ const refereeProfiles = {
     image: "images/referees/helgi_mikael-logo.jpg",
     fifa: true
 },
+    "Jóhann Ingi Jónsson": {
+    image: "images/referees/johann_ingi-logo.jpg",
+    fifa: true  
+},
 };
 
 function getRefereeSuggestions(value) {
