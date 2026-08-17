@@ -1366,7 +1366,11 @@ const profileSection = matchedProfile
     class="referee-profile-button"
     data-referee-profile="${matchedProfileName}"
 >
-    <span class="referee-profile-button-icon">▤</span>
+    <img
+    class="referee-profile-button-image"
+    src="${matchedProfile.image}"
+    alt="${matchedProfileName}"
+>
 
     <span class="referee-profile-button-text">
         <span class="referee-profile-button-name">
@@ -1377,6 +1381,7 @@ const profileSection = matchedProfile
             Leikir og tölfræði
         </span>
     </span>
+    <span class="referee-profile-button-chevron">›</span>
 </button>
         </section>
     `
