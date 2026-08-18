@@ -75,9 +75,13 @@ function getRefereeSuggestions(value) {
         return [];
     }
 
-    const names = new Set();
+    const refereeNames = new Set();
+    const teams = new Set();
+    const competitions = new Set();
 
     allGames.forEach(game => {
+
+        // REFEREES
         (game.officials || []).forEach(official => {
             const fullName = (official.name || "").trim();
 
@@ -98,14 +102,81 @@ function getRefereeSuggestions(value) {
                 : firstName.startsWith(searchText);
 
             if (matches) {
-                names.add(fullName);
+                refereeNames.add(fullName);
             }
         });
+
+
+        // TEAMS
+        const home = (game.home || "").trim();
+        const away = (game.away || "").trim();
+
+        [home, away].forEach(team => {
+            if (!team) {
+                return;
+            }
+
+            const normalizedTeam = team.toLowerCase();
+
+            if (normalizedTeam.startsWith(searchText)) {
+                teams.add(team);
+            }
+        });
+
+
+        // COMPETITIONS
+        const competition = (game.competition || "").trim();
+
+        if (competition) {
+            const normalizedCompetition =
+                competition.toLowerCase();
+
+            if (normalizedCompetition.startsWith(searchText)) {
+                competitions.add(competition);
+            }
+        }
     });
 
-    return Array.from(names)
-        .sort((a, b) => a.localeCompare(b, "is"))
-        .slice(0, 5);
+
+    const refereeResults = Array.from(refereeNames)
+        .sort((a, b) => a.localeCompare(b, "is"));
+
+    const teamResults = Array.from(teams)
+        .sort((a, b) => a.localeCompare(b, "is"));
+
+    const competitionResults = Array.from(competitions)
+        .sort((a, b) => a.localeCompare(b, "is"));
+
+
+    // Keep very short searches mainly referee-focused
+    if (searchText.length === 1) {
+        return refereeResults.slice(0, 5);
+    }
+
+
+    const exactTeams = teamResults.filter(
+    team => team.toLowerCase() === searchText
+);
+
+const exactCompetitions = competitionResults.filter(
+    competition => competition.toLowerCase() === searchText
+);
+
+const otherTeams = teamResults.filter(
+    team => team.toLowerCase() !== searchText
+);
+
+const otherCompetitions = competitionResults.filter(
+    competition => competition.toLowerCase() !== searchText
+);
+
+return [
+    ...exactTeams,
+    ...exactCompetitions,
+    ...refereeResults,
+    ...otherTeams,
+    ...otherCompetitions
+].slice(0, 8);
 }
 // =====================================
 // ICELANDIC DATE NAMES
