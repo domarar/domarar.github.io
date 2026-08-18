@@ -71,65 +71,65 @@ const refereeProfiles = {
     "Helgi Mikael Jónasson": {
         image: "images/referees/helgi_mikael-logo.jpg",
         category: "Milliríkjadómari",
-        fifa: true
+        fifaRole: "referee"
     },
 
     "Ívar Orri Kristjánsson": {
         category: "Milliríkjadómari",
-        fifa: true
+        fifaRole: "referee"
     },
 
     "Jóhann Ingi Jónsson": {
         image: "images/referees/johann_ingi-logo.jpg",
         category: "Milliríkjadómari",
-        fifa: true
+        fifaRole: "referee"
     },
 
     "Vilhjálmur Alvar Þórarinsson": {
         category: "Milliríkjadómari",
-        fifa: true
+        fifaRole: "referee"
     },
 
 
     // FIFA ASSISTANT REFEREES
     "Birkir Sigurðarson": {
         category: "Milliríkjaaðstoðardómari",
-        fifa: true
+        fifaRole: "assistant"
     },
 
     "Egill Guðvarður Guðlaugsson": {
         category: "Milliríkjaaðstoðardómari",
-        fifa: true
+        fifaRole: "assistant"
     },
 
     "Eysteinn Hrafnkelsson": {
         category: "Milliríkjaaðstoðardómari",
-        fifa: true
+        fifaRole: "assistant"
     },
 
     "Guðmundur Ingi Bjarnason": {
         category: "Milliríkjaaðstoðardómari",
-        fifa: true
+        fifaRole: "assistant"
     },
 
     "Gylfi Már Sigurðsson": {
         category: "Milliríkjaaðstoðardómari",
-        fifa: true
+        fifaRole: "assistant"
     },
 
     "Kristján Már Ólafs": {
         category: "Milliríkjaaðstoðardómari",
-        fifa: true
+        fifaRole: "assistant"
     },
 
     "Ragnar Þór Bender": {
         category: "Milliríkjaaðstoðardómari",
-        fifa: true
+        fifaRole: "assistant"
     },
 
     "Rúna Kristín Stefánsdóttir": {
         category: "Milliríkjaaðstoðardómari",
-        fifa: true
+        fifaRole: "assistant"
     },
 
 
@@ -1344,16 +1344,24 @@ const competitionStatsHTML = Object.entries(competitionCounts)
     >
 
     ${
-        profile.fifa
-            ? `
-                <img
-                    class="referee-fifa-badge-v2"
-                    src="images/badges/fifa.png"
-                    alt="FIFA Referee 2026"
-                >
-            `
-            : ""
-    }
+    profile.fifaRole === "referee"
+        ? `
+            <img
+                class="referee-fifa-badge-v2"
+                src="images/badges/fifa.png"
+                alt="FIFA Referee 2026"
+            >
+        `
+        : profile.fifaRole === "assistant"
+        ? `
+            <img
+                class="referee-fifa-badge-v2"
+                src="images/badges/fifa-assistant.png"
+                alt="FIFA Assistant Referee 2026"
+            >
+        `
+        : ""
+}
 
 </div>
 
