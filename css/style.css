@@ -2081,7 +2081,7 @@ body.modal-open {
     z-index: 1;
 }
 @media (max-width: 600px) {
-    body {
-        padding-bottom: 50px;
+    footer {
+        display: none !important;
     }
 }
