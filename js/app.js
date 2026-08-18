@@ -1518,6 +1518,117 @@ function createOfficialRows(officials = []) {
     )
     .join("");
 }
+async function updateGameCardResultsFromReports() {
+    const buttons = document.querySelectorAll(".match-report-button");
+
+
+    await Promise.all(
+        [...buttons].map(async button => {
+            const card = button.closest(".fixture-card");
+            const versus = card?.querySelector(".versus");
+            const resultText = card?.querySelector(".fixture-result-text");
+
+
+            if (!card || !versus || !resultText) return;
+
+            const currentText = resultText.textContent.trim();
+
+            const scoreMatch = currentText.match(
+                /^(\d+)\s*-\s*(\d+)$/
+            );
+
+            const scoreMissing = currentText === "VS";
+
+            const scoreTied =
+                scoreMatch &&
+                Number(scoreMatch[1]) === Number(scoreMatch[2]);
+
+            // We only need the report if:
+            // 1. the normal score is missing
+            // 2. OR the game is tied and might have gone to penalties
+            if (!scoreMissing && !scoreTied) {
+                return;
+            }
+
+            const matchId = button.dataset.matchId;
+
+
+            try {
+                const response = await fetch(
+                    `data/match-reports/${matchId}.json`
+                );
+
+                if (!response.ok) return;
+
+                const report = await response.json();
+                
+
+                const homeScore =
+                    report.homeTeamResult?.current;
+
+                const awayScore =
+                    report.awayTeamResult?.current;
+
+                if (
+                    homeScore === null ||
+                    homeScore === undefined ||
+                    awayScore === null ||
+                    awayScore === undefined
+                ) {
+                    return;
+                }
+
+                const events = report.events || [];
+
+                const penaltyEvents = events.filter(
+                    event =>
+                        event.matchPhase?.fcdName === "PEN"
+                );
+
+                const homePenaltyScore =
+                    penaltyEvents.filter(
+                        event =>
+                            event.homeTeam &&
+                            event.eventType?.fcdName ===
+                                "PENALTY_GOAL"
+                    ).length;
+
+                const awayPenaltyScore =
+                    penaltyEvents.filter(
+                        event =>
+                            !event.homeTeam &&
+                            event.eventType?.fcdName ===
+                                "PENALTY_GOAL"
+                    ).length;
+
+                const hasPenaltyShootout =
+                    penaltyEvents.length > 0;
+
+                versus.classList.add("score");
+
+                resultText.innerHTML = `
+                    <div>${homeScore} - ${awayScore}</div>
+
+                    ${
+                        hasPenaltyShootout
+                            ? `
+                                <div class="match-card-penalty-score">
+                                    ${homePenaltyScore} - ${awayPenaltyScore} í vítum
+                                </div>
+                            `
+                            : ""
+                    }
+                `;
+
+            } catch (error) {
+                console.warn(
+                    `Could not update result for ${matchId}`,
+                    error
+                );
+            }
+        })
+    );
+}
 
 
 // =====================================
@@ -1596,7 +1707,7 @@ const centerText = hasScore
           </div>
 
          <div class="versus ${hasScore ? "score" : ""} ${game.status === "PLAYED" ? "has-report" : ""}">
-  ${centerText}
+            <span class="fixture-result-text">${centerText}</span>
 
   ${
   (game.status === "PLAYED" ||
@@ -1943,6 +2054,9 @@ const profileSection = matchedProfile
     olderSection +
     archive2025Section +
     archive2024Section;
+    
+    updateGameCardResultsFromReports();
+
     const showMoreButton =
     gamesContainer.querySelector(".show-more-search-games");
 
@@ -2124,6 +2238,7 @@ const sortedCompetitionEntries = Object.entries(
       `
     )
     .join("");
+updateGameCardResultsFromReports();
 }
 
 
