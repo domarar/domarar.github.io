@@ -192,6 +192,80 @@ return [
     ...otherCompetitions
 ].slice(0, 8);
 }
+
+function isSmartSearchQuestion(value) {
+    const searchText = (value || "")
+        .toLowerCase()
+        .trim();
+
+    return (
+        searchText.startsWith("hvenær ") ||
+        searchText.startsWith("hvenar ")
+    );
+}
+
+function parseSmartSearchQuestion(value) {
+    const text = (value || "").trim();
+
+    const match = text.match(
+        /^hven[æa]r\s+dæmdi\s+(.+?)\s+síðast(?:\s+leik)?\s+hjá\s+(.+?)\??$/i
+    );
+
+    if (!match) {
+        return null;
+    }
+
+    return {
+        referee: match[1].trim(),
+        team: match[2].trim()
+    };
+}
+
+function findLatestRefereeTeamGame(refereeName, teamName) {
+    const refereeSearch = refereeName.toLowerCase().trim();
+    const teamSearch = teamName.toLowerCase().trim();
+
+    const matches = allGames
+        .map(game => {
+            const matchingOfficial = (game.officials || []).find(official => {
+                const name = (official.name || "").toLowerCase().trim();
+                const firstName = name.split(/\s+/)[0];
+
+                if (refereeSearch.includes(" ")) {
+                    return name.startsWith(refereeSearch);
+                }
+
+                return firstName === refereeSearch;
+            });
+
+            if (!matchingOfficial) {
+                return null;
+            }
+
+            const home = (game.home || "").toLowerCase();
+            const away = (game.away || "").toLowerCase();
+
+            const teamMatches =
+                home === teamSearch ||
+                away === teamSearch;
+
+            if (!teamMatches) {
+                return null;
+            }
+
+            return {
+                ...game,
+                smartSearchOfficial: matchingOfficial
+            };
+        })
+        .filter(Boolean);
+
+    matches.sort((a, b) =>
+        new Date(b.date) - new Date(a.date)
+    );
+
+    return matches[0] || null;
+}
 // =====================================
 // ICELANDIC DATE NAMES
 // =====================================
@@ -1310,14 +1384,16 @@ const centerText = hasScore
 // =====================================
 // GROUP AND DISPLAY GAMES
 // =====================================
-function renderGamesForSelectedDay() {
+function renderGamesForSelectedDay(forcedGame = null) {
     const selectedDate = getDateForOffset(selectedDayOffset);
     const selectedDateKey = getDateKey(selectedDate);
 const search = searchInput.value
     .toLowerCase()
     .trim();
 
-const gamesForDay = allGames
+const gamesForDay = forcedGame
+    ? [forcedGame]
+    : allGames
     .filter(game => {
 
         if (search) {
@@ -2095,6 +2171,21 @@ genderButtons.forEach(button => {
 });
 searchInput.addEventListener("input", () => {
     const search = searchInput.value.trim();
+        if (isSmartSearchQuestion(search)) {
+        const parsed = parseSmartSearchQuestion(search);
+
+        if (parsed) {
+            const game = findLatestRefereeTeamGame(
+                parsed.referee,
+                parsed.team
+            );
+
+            if (game) {
+    renderGamesForSelectedDay(game);
+    return;
+}
+        }
+    }
   searchClear.hidden = search === "";
     const suggestions = getRefereeSuggestions(search);
 
