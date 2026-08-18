@@ -2319,7 +2319,8 @@ if (
         "YELLOW",
         "SECOND_YELLOW",
         "RED",
-        "EXPULSION"
+        "EXPULSION",
+        "SUBSTITUTION",
     ];
 
     if (!supportedTypes.includes(type)) {
