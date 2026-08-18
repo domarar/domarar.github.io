@@ -131,9 +131,9 @@ function getRefereeSuggestions(value) {
             const normalizedCompetition =
                 competition.toLowerCase();
 
-            if (normalizedCompetition.startsWith(searchText)) {
-                competitions.add(competition);
-            }
+            if (normalizedCompetition.includes(searchText)) {
+    competitions.add(competition);
+}
         }
     });
 
@@ -145,7 +145,21 @@ function getRefereeSuggestions(value) {
         .sort((a, b) => a.localeCompare(b, "is"));
 
     const competitionResults = Array.from(competitions)
-        .sort((a, b) => a.localeCompare(b, "is"));
+    .sort((a, b) => {
+        const yearA = a.match(/\b20\d{2}\b/);
+        const yearB = b.match(/\b20\d{2}\b/);
+
+        const numericYearA = yearA ? Number(yearA[0]) : 9999;
+        const numericYearB = yearB ? Number(yearB[0]) : 9999;
+
+        // Current/no-year competition first,
+        // then newest seasons first
+        if (numericYearA !== numericYearB) {
+            return numericYearB - numericYearA;
+        }
+
+        return a.localeCompare(b, "is");
+    });
 
 
     // Keep very short searches mainly referee-focused
