@@ -2101,6 +2101,8 @@ body.modal-open {
 @media (min-width: 768px) {
     .bottom-nav {
         display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
 
         width: calc(100% - 40px) !important;
         max-width: 740px !important;
@@ -2115,11 +2117,34 @@ body.modal-open {
     }
 
     .bottom-message strong {
-        font-size: 18px !important;
+        font-size: 14px !important;
     }
 
     .bottom-message span {
         font-size: 12px !important;
         margin-top: 4px !important;
     }
+}
+.bottom-message {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 10px !important;
+    height: 100% !important;
+
+    transform: translateY(-8px) !important;
+}
+
+.bottom-message > div {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+}
+
+.footer-logo {
+    width: 48px !important;
+    height: 48px !important;
+    object-fit: contain;
+    flex-shrink: 0;
 }
