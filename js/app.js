@@ -27,43 +27,286 @@ let activeDayBeforeSearch = null;
 let selectedGender = "all";
 
 const refereeProfiles = {
+
+    // EXISTING PROFILES
     "Guðmundur Halldórsson": {
         image: "images/referees/Gudmundur_Halldorsson-logo.jpg"
     },
 
     "Þráinn Jón Elmarsson": {
-        image: "images/referees/þrainn-jon-logo.jpg"
+        image: "images/referees/þrainn-jon-logo.jpg",
+        category: "Landsdómari"
     },
 
     "Ronnarong Wongmahadthai": {
-        image: "images/referees/ronnarong-logo.jpg"
+        image: "images/referees/ronnarong-logo.jpg",
+        category: "Landsdómari"
     },
 
     "Arnar Þór Stefánsson": {
-        image: "images/referees/arnar-stefansson-logo.jpg"
+        image: "images/referees/arnar-stefansson-logo.jpg",
+        category: "Landsdómari"
     },
-    
+
     "Pétur Guðmundsson": {
-    image: "images/referees/petur_gudmundsson-logo.jpg"
+        image: "images/referees/petur_gudmundsson-logo.jpg",
+        category: "Landsdómari"
     },
 
     "Róbert Þór Guðmundsson": {
-    image: "images/referees/robert_gudmundsson-logo.jpg"
+        image: "images/referees/robert_gudmundsson-logo.jpg",
+        category: "Landsdómari"
     },
+
     "Damian Pawlik": {
-    image: "images/referees/damian_pawlik-logo.jpg"
-},
+        image: "images/referees/damian_pawlik-logo.jpg"
+    },
+
     "Steinar Stephensen": {
-    image: "images/referees/steinar_stephensen-logo.jpg"
-}, 
+        image: "images/referees/steinar_stephensen-logo.jpg"
+    },
+
+
+    // FIFA REFEREES
     "Helgi Mikael Jónasson": {
-    image: "images/referees/helgi_mikael-logo.jpg",
-    fifa: true
-},
+        image: "images/referees/helgi_mikael-logo.jpg",
+        category: "Milliríkjadómari",
+        fifa: true
+    },
+
+    "Ívar Orri Kristjánsson": {
+        category: "Milliríkjadómari",
+        fifa: true
+    },
+
     "Jóhann Ingi Jónsson": {
-    image: "images/referees/johann_ingi-logo.jpg",
-    fifa: true  
-},
+        image: "images/referees/johann_ingi-logo.jpg",
+        category: "Milliríkjadómari",
+        fifa: true
+    },
+
+    "Vilhjálmur Alvar Þórarinsson": {
+        category: "Milliríkjadómari",
+        fifa: true
+    },
+
+
+    // FIFA ASSISTANT REFEREES
+    "Birkir Sigurðarson": {
+        category: "Milliríkjaaðstoðardómari",
+        fifa: true
+    },
+
+    "Egill Guðvarður Guðlaugsson": {
+        category: "Milliríkjaaðstoðardómari",
+        fifa: true
+    },
+
+    "Eysteinn Hrafnkelsson": {
+        category: "Milliríkjaaðstoðardómari",
+        fifa: true
+    },
+
+    "Guðmundur Ingi Bjarnason": {
+        category: "Milliríkjaaðstoðardómari",
+        fifa: true
+    },
+
+    "Gylfi Már Sigurðsson": {
+        category: "Milliríkjaaðstoðardómari",
+        fifa: true
+    },
+
+    "Kristján Már Ólafs": {
+        category: "Milliríkjaaðstoðardómari",
+        fifa: true
+    },
+
+    "Ragnar Þór Bender": {
+        category: "Milliríkjaaðstoðardómari",
+        fifa: true
+    },
+
+    "Rúna Kristín Stefánsdóttir": {
+        category: "Milliríkjaaðstoðardómari",
+        fifa: true
+    },
+
+
+    // LANDSDÓMARAR
+    "Aðalbjörn Heiðar Þorsteinsson": {
+        category: "Landsdómari"
+    },
+
+    "Antoníus Bjarki Halldórsson": {
+        category: "Landsdómari"
+    },
+
+    "Arnar Hólm Einarsson": {
+        category: "Landsdómari"
+    },
+
+    "Arnar Ingi Ingvarsson": {
+        category: "Landsdómari"
+    },
+
+    "Arnór Bjarki Hjaltalín": {
+        category: "Landsdómari"
+    },
+
+    "Arnþór Helgi Gíslason": {
+        category: "Landsdómari"
+    },
+
+    "Atli Haukur Arnarsson": {
+        category: "Landsdómari"
+    },
+
+    "Atli Björn E. Levy": {
+        category: "Landsdómari"
+    },
+
+    "Ásmundur Þór Sveinsson": {
+        category: "Landsdómari"
+    },
+
+    "Bergrós Lilja Unudóttir": {
+        category: "Landsdómari"
+    },
+
+    "Bergvin Fannar Gunnarsson": {
+        category: "Landsdómari"
+    },
+
+    "Birkir Örn Pétursson": {
+        category: "Landsdómari"
+    },
+
+    "Bryngeir Valdimarsson": {
+        category: "Landsdómari"
+    },
+
+    "Brynjar Þór Elvarsson": {
+        category: "Landsdómari"
+    },
+
+    "Daníel Ingi Þórisson": {
+        category: "Landsdómari"
+    },
+
+    "Eðvarð Eðvarðsson": {
+        category: "Landsdómari"
+    },
+
+    "Elías Ingi Árnason": {
+        category: "Landsdómari"
+    },
+
+    "Eydís Ragna Einarsdóttir": {
+        category: "Landsdómari"
+    },
+
+    "Guðmundur Páll Friðbertsson": {
+        category: "Landsdómari"
+    },
+
+    "Guðni Freyr Ingvason": {
+        category: "Landsdómari"
+    },
+
+    "Gunnar Freyr Róbertsson": {
+        category: "Landsdómari"
+    },
+
+    "Gunnar Oddur Hafliðason": {
+        category: "Landsdómari"
+    },
+
+    "Hallgrímur Viðar Arnarson": {
+        category: "Landsdómari"
+    },
+
+    "Hreinn Magnússon": {
+        category: "Landsdómari"
+    },
+
+    "Ingibjörg Garðarsdóttir Briem": {
+        category: "Landsdómari"
+    },
+
+    "Jovan Subic": {
+        category: "Landsdómari"
+    },
+
+    "Kári Mímisson": {
+        category: "Landsdómari"
+    },
+
+    "Kristófer Bergmann": {
+        category: "Landsdómari"
+    },
+
+    "Mikael Ívan Axelsson": {
+        category: "Landsdómari"
+    },
+
+    "Milan Djurovic": {
+        category: "Landsdómari"
+    },
+
+    "Óli Njáll Ingólfsson": {
+        category: "Landsdómari"
+    },
+
+    "Óliver Thanh Tung Vú": {
+        category: "Landsdómari"
+    },
+
+    "Patrik Freyr Guðmundsson": {
+        category: "Landsdómari"
+    },
+
+    "Reynir Ingi Finnsson": {
+        category: "Landsdómari"
+    },
+
+    "Sigurður Hjörtur Þrastarson": {
+        category: "Landsdómari"
+    },
+
+    "Stefán Ragnar Guðlaugsson": {
+        category: "Landsdómari"
+    },
+
+    "Sveinn Arnarsson": {
+        category: "Landsdómari"
+    },
+
+    "Sveinn Ingi Sigurjónsson Waage": {
+        category: "Landsdómari"
+    },
+
+    "Tijana Krstic": {
+        category: "Landsdómari"
+    },
+
+    "Tryggvi Elías Hermannsson": {
+        category: "Landsdómari"
+    },
+
+    "Twana Khalid Ahmed": {
+    image: "images/referees/twana_khalid_ahmed-logo.jpg",
+    category: "Landsdómari"
+    },
+
+    "Þorfinnur Gústaf Þorfinnsson": {
+        category: "Landsdómari"
+    },
+
+    "Þórður Þorsteinsson Þórðarson": {
+        category: "Landsdómari",
+        image: "images/referees/Þórður_Þorsteinsson_Þórðarson-logo.jpg"
+    }
 };
 
 function getRefereeSuggestions(value) {
@@ -704,7 +947,7 @@ const competitionStatsHTML = Object.entries(competitionCounts)
 
                 <img
                     class="referee-profile-image"
-                    src="${profile.image}"
+                    src="${profile.image || 'images/referees/photo-missing.jpg'}"
                     alt="${refereeName}"
                 >
 
@@ -1080,7 +1323,7 @@ const competitionStatsHTML = Object.entries(competitionCounts)
 
     <img
         class="referee-profile-image-v2"
-        src="${profile.image}"
+        src="${profile.image || 'images/referees/photo-missing.jpg'}"
         alt="${refereeName}"
     >
 
@@ -1551,7 +1794,7 @@ const profileSection = matchedProfile
 >
     <img
     class="referee-profile-button-image"
-    src="${matchedProfile.image}"
+    src="${matchedProfile.image || 'images/referees/photo-missing.jpg'}"
     alt="${matchedProfileName}"
 >
 
