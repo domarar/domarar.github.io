@@ -2080,6 +2080,11 @@ body.modal-open {
     position: relative;
     z-index: 1;
 }
+@media (max-width: 767px) {
+    .bottom-nav {
+        display: none !important;
+    }
+}
 @media (min-width: 768px) {
     .bottom-nav {
         display: flex !important;
