@@ -2082,7 +2082,20 @@ body.modal-open {
 }
 @media (max-width: 767px) {
     .bottom-nav {
-        display: none !important;
+        display: flex !important;
+        min-height: 48px !important;
+        height: 48px !important;
+        padding: 6px 12px !important;
+        box-sizing: border-box;
+    }
+
+    .bottom-message strong {
+        font-size: 15px !important;
+    }
+
+    .bottom-message span {
+        font-size: 10px !important;
+        margin-top: 2px !important;
     }
 }
 @media (min-width: 768px) {
@@ -2093,11 +2106,12 @@ body.modal-open {
         max-width: 740px !important;
         left: 50% !important;
         transform: translateX(-50%) !important;
-        box-sizing: border-box;
 
         min-height: 85px !important;
         height: 85px !important;
         padding: 18px 20px !important;
+
+        box-sizing: border-box !important;
     }
 
     .bottom-message strong {
