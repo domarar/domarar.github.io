@@ -224,9 +224,15 @@ function parseSmartSearchQuestion(value) {
 function findLatestRefereeTeamGame(refereeName, teamName) {
     const refereeSearch = refereeName.toLowerCase().trim();
     const teamSearch = teamName.toLowerCase().trim();
+    const now = new Date();
 
     const matches = allGames
         .map(game => {
+            const gameDate = new Date(game.date);
+
+        if (gameDate > now) {
+        return null;
+        }
             const matchingOfficial = (game.officials || []).find(official => {
                 const name = (official.name || "").toLowerCase().trim();
                 const firstName = name.split(/\s+/)[0];
