@@ -1155,7 +1155,11 @@ const centerText = hasScore
         '${game.away.replace(/'/g, "\\'")}'
     )"
 >
-    ${cleanCompetitionName(game.competition)}
+    <span class="standings-trigger-dot"></span>
+    <span class="standings-trigger-text">
+        ${cleanCompetitionName(game.competition)}
+    </span>
+    <span class="standings-trigger-chevron">›</span>
 </button>
 
     <span class="fixture-competition-line"></span>

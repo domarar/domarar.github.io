@@ -214,7 +214,31 @@ body.standings-open {
     color: inherit;
     font: inherit;
 
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
     cursor: pointer;
+}
+
+.standings-trigger-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #42e875;
+    flex-shrink: 0;
+}
+
+.standings-trigger-chevron {
+    font-size: 20px;
+    line-height: 1;
+    opacity: 0.75;
+    transition: transform 0.18s ease, opacity 0.18s ease;
+}
+
+.standings-trigger:hover .standings-trigger-chevron {
+    transform: translateX(2px);
+    opacity: 1;
 }
 
 .standings-trigger:hover {
