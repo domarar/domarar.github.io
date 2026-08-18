@@ -2080,8 +2080,27 @@ body.modal-open {
     position: relative;
     z-index: 1;
 }
-@media (max-width: 600px) {
-    footer {
-        display: none !important;
+@media (min-width: 768px) {
+    .bottom-nav {
+        display: flex !important;
+
+        width: calc(100% - 40px) !important;
+        max-width: 740px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        box-sizing: border-box;
+
+        min-height: 85px !important;
+        height: 85px !important;
+        padding: 18px 20px !important;
+    }
+
+    .bottom-message strong {
+        font-size: 18px !important;
+    }
+
+    .bottom-message span {
+        font-size: 12px !important;
+        margin-top: 4px !important;
     }
 }
