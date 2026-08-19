@@ -1,0 +1,274 @@
+.referee-profile-actions-v2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.referee-share-button {
+    background: rgba(25, 210, 90, 0.08);
+    border: 1px solid rgba(25, 210, 90, 0.35);
+    border-radius: 10px;
+    color: #6ef29a;
+    padding: 8px 14px;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.referee-share-button:hover {
+    background: rgba(25, 210, 90, 0.14);
+}
+.referee-share-card {
+    position: fixed;
+    left: -9999px;
+    top: 0;
+
+    width: 1080px;
+    min-height: 1180px;
+
+    box-sizing: border-box;
+    padding: 64px 72px;
+
+    background: #07140f;
+    color: #ffffff;
+
+    font-family: inherit;
+}
+.referee-share-bottom-brand {
+    margin-top: 34px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+
+    font-size: 24px;
+    font-weight: 800;
+}
+
+.referee-share-bottom-logo {
+    display: block;
+    width: auto;
+    height: 38px;
+    object-fit: contain;
+}
+
+
+.referee-share-header {
+    display: flex;
+    align-items: center;
+    gap: 38px;
+    margin-bottom: 34px;
+}
+
+.referee-share-photo {
+    width: 165px;
+    height: 165px;
+    object-fit: cover;
+    object-position: center;
+    aspect-ratio: 1 / 1;
+    flex-shrink: 0;
+    border-radius: 26px;
+}
+.referee-share-heading h1 {
+    margin: 6px 0 14px;
+    font-size: 46px;
+    line-height: 1.05;
+}
+
+.referee-share-label {
+    color: #67ef8b;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.referee-share-badges {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+}
+
+.referee-share-badges img {
+    max-height: 52px;
+    width: auto;
+}
+
+.referee-share-season {
+    text-align: center;
+    font-size: 26px;
+    font-weight: 800;
+    margin: 26px 0 16px;
+}
+
+
+/* ROLE / GAME COUNTS */
+
+.referee-share-role-stats {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 14px;
+    margin-bottom: 26px;
+}
+
+.referee-share-role-stat {
+    min-width: 120px;
+    text-align: center;
+    padding: 14px 18px;
+
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.025);
+}
+
+.referee-share-role-stat span {
+    display: block;
+    font-size: 15px;
+    opacity: 0.7;
+    margin-bottom: 6px;
+}
+
+.referee-share-role-stat strong {
+    display: block;
+    font-size: 28px;
+    font-weight: 800;
+}
+
+
+/* EVENT STATS */
+
+.referee-share-event-stats {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
+    margin-bottom: 34px;
+}
+
+.referee-share-stat {
+    text-align: center;
+    padding: 20px 10px;
+
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 15px;
+
+    background: rgba(255,255,255,0.035);
+}
+
+.referee-share-stat span {
+    display: block;
+    font-size: 16px;
+    opacity: 0.72;
+    margin-bottom: 8px;
+}
+
+.referee-share-stat strong {
+    display: block;
+    font-size: 32px;
+}
+
+
+/* COMPETITIONS */
+
+.referee-share-competitions {
+    margin-top: 24px;
+}
+
+.referee-share-competitions h2 {
+    text-align: center;
+    font-size: 23px;
+    margin-bottom: 10px;
+}
+
+.referee-share-competition-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 24px;
+    padding: 11px 0;
+
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.referee-share-competition-name {
+    font-size: 16px;
+    opacity: 0.88;
+}
+
+.referee-share-competition-count {
+    font-size: 17px;
+    font-weight: 800;
+}
+
+
+/* FOOTER */
+
+.referee-share-footer {
+    margin-top: 2px;
+    text-align: center;
+    opacity: 0.5;
+    font-size: 16px;
+}
+.referee-share-event-stats {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin-bottom: 40px;
+}
+
+.referee-share-stat {
+    text-align: center;
+    padding: 18px 10px;
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 14px;
+    background: rgba(255,255,255,0.025);
+}
+
+.referee-share-stat span {
+    display: block;
+    font-size: 16px;
+    opacity: 0.72;
+    margin-bottom: 8px;
+}
+
+.referee-share-stat strong {
+    display: block;
+    font-size: 32px;
+}
+.referee-share-stat-icon {
+    height: 24px;
+    margin-bottom: 7px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.share-card-icon {
+    display: inline-block;
+
+    width: 11px;
+    height: 16px;
+
+    border-radius: 2px;
+}
+
+.yellow-card {
+    background: #f5c542;
+}
+
+.red-card {
+    background: #e84545;
+}
+
+.second-yellow-icon {
+    gap: 3px;
+}
+
+.penalty-icon {
+    font-size: 18px;
+    line-height: 1;
+}

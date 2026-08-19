@@ -1384,6 +1384,21 @@ const competitionStatsHTML = Object.entries(competitionCounts)
         </div>
     `)
     .join("");
+    const shareCompetitionStatsHTML = Object.entries(competitionCounts)
+    .sort(([, a], [, b]) => b.total - a.total)
+    .slice(0, 6)
+    .map(([competition, data]) => `
+        <div class="referee-share-competition-row">
+            <span class="referee-share-competition-name">
+                ${competition}
+            </span>
+
+            <strong class="referee-share-competition-count">
+                ${data.total}
+            </strong>
+        </div>
+    `)
+    .join("");
     const competitionStats2025HTML = Object.entries(competitionCounts2025)
     .sort(([, a], [, b]) => b.total - a.total)
     .map(([competition, data]) => `
@@ -1412,6 +1427,28 @@ const competitionStats2024HTML = Object.entries(competitionCounts2024)
             </strong>
         </div>
     `)
+    .join("");
+    const shareRoleStatsHTML = Object.entries(roleCounts)
+    .sort(([roleA], [roleB]) => {
+        return roleOrder.indexOf(roleA) - roleOrder.indexOf(roleB);
+    })
+    .filter(([, count]) => count > 0)
+    .map(([role, count]) => {
+        const fullLabel = roleLabels[role] || role;
+
+        const shareLabel =
+            fullLabel === "Aðstoðardómari 1" ? "AD1" :
+            fullLabel === "Aðstoðardómari 2" ? "AD2" :
+            fullLabel === "Fjórði dómari" ? "Fjórði" :
+            fullLabel;
+
+        return `
+            <div class="referee-share-role-stat">
+                <span>${shareLabel}</span>
+                <strong>${count}</strong>
+            </div>
+        `;
+    })
     .join("");
     gamesContainer.innerHTML = `
     <div class="referee-profile-overlay-v2">
@@ -1535,17 +1572,139 @@ const competitionStats2024HTML = Object.entries(competitionCounts2024)
         ${competitionStats2024HTML}
     </div>
 </div>
-    <button
-                type="button"
-                class="referee-profile-back"
-            >
-                ← Til baka
-            </button>
+    <div class="referee-profile-actions-v2">
 
-    </section>
+    <button
+        type="button"
+        class="referee-profile-back"
+    >
+        ← Til baka
+    </button>
+
+    <button
+        type="button"
+        class="referee-share-button"
+        data-referee-name="${refereeName}"
+    >
+        Deila
+    </button>
+
+</div>
+
+</section>
+
+<div
+    class="referee-share-card"
+    id="referee-share-card"
+    aria-hidden="true"
+>
+    <div class="referee-share-header">
+        <img
+            class="referee-share-photo"
+            src="${profile.image || 'images/referees/photo-missing.jpg'}"
+            alt="${refereeName}"
+        >
+
+        <div class="referee-share-heading">
+            <div class="referee-share-label">
+                DÓMARI
+            </div>
+
+            <h1>${refereeName}</h1>
+
+            <div class="referee-share-badges">
+                <img
+                    src="images/badges/ksi.png"
+                    alt="KSÍ"
+                >
+
+                ${
+                    profile.fifaRole === "referee"
+                        ? `<img src="images/badges/fifa.png" alt="FIFA Referee">`
+                        : profile.fifaRole === "assistant"
+                        ? `<img src="images/badges/fifa-assistant.png" alt="FIFA Assistant Referee">`
+                        : ""
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="referee-share-season">
+        Tímabilið 2026
+    </div>
+
+    <div class="referee-share-role-stats">
+        ${shareRoleStatsHTML}
+    </div>
+
+    <div class="referee-share-event-stats">
+
+        <div class="referee-share-stat">
+    <div class="referee-share-stat-icon">
+        <span class="share-card-icon yellow-card"></span>
+    </div>
+    <span>Gul / leik</span>
+    <strong>${yellowCardsPerGame}</strong>
+</div>
+
+<div class="referee-share-stat">
+    <div class="referee-share-stat-icon">
+        <span class="share-card-icon yellow-card"></span>
+    </div>
+    <span>Gul spjöld</span>
+    <strong>${yellowCards}</strong>
+</div>
+
+<div class="referee-share-stat">
+    <div class="referee-share-stat-icon second-yellow-icon">
+        <span class="share-card-icon yellow-card"></span>
+        <span class="share-card-icon red-card"></span>
+    </div>
+    <span>Seinna gula</span>
+    <strong>${secondYellowCards}</strong>
+</div>
+
+<div class="referee-share-stat">
+    <div class="referee-share-stat-icon">
+        <span class="share-card-icon red-card"></span>
+    </div>
+    <span>Rauð spjöld</span>
+    <strong>${redCards}</strong>
+</div>
+
+<div class="referee-share-stat">
+    <div class="referee-share-stat-icon penalty-icon">⚽</div>
+    <span>Víti</span>
+    <strong>${penalties}</strong>
+</div>
 
     </div>
+
+    <div class="referee-share-competitions">
+        <h2>Keppnir</h2>
+        ${shareCompetitionStatsHTML}
+    </div>
+
+    <div class="referee-share-bottom-brand">
+    <img
+        src="logos/domarinn_logo.png"
+        alt="DÓMARAR"
+        class="referee-share-bottom-logo"
+    >
+    <span>Dómarar</span>
+</div>
+
+    <div class="referee-share-footer">
+        domarar.github.io
+    </div>
+
+</div>
+
+</div>
+
+</div>
 `;
+
 document.body.classList.add("modal-open");
 const backButton =
     gamesContainer.querySelector(".referee-profile-back");
@@ -1580,6 +1739,70 @@ historyToggles.forEach(button => {
                 : `${year} ↓`;
     });
 });
+}
+const shareButton =
+    gamesContainer.querySelector(".referee-share-button");
+
+if (shareButton) {
+    shareButton.addEventListener("click", async () => {
+        const shareCard =
+            document.getElementById("referee-share-card");
+
+        if (!shareCard) return;
+
+        try {
+            shareButton.disabled = true;
+            shareButton.textContent = "Bý til mynd...";
+
+
+            const canvas = await html2canvas(shareCard, {
+                scale: 2,
+                backgroundColor: null,
+                useCORS: true
+            });
+           
+
+            const blob = await new Promise(resolve =>
+                canvas.toBlob(resolve, "image/png")
+            );
+
+            if (!blob) return;
+
+            const file = new File(
+                [blob],
+                `${refereeName}-domarar.png`,
+                { type: "image/png" }
+            );
+
+            if (
+                navigator.canShare &&
+                navigator.canShare({ files: [file] })
+            ) {
+                await navigator.share({
+                    files: [file],
+                    title: refereeName
+                });
+            } else {
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement("a");
+
+                link.href = url;
+                link.download = `${refereeName}-domarar.png`;
+
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+
+                URL.revokeObjectURL(url);
+            }
+
+        } catch (error) {
+            console.error("Could not create share card:", error);
+        } finally {
+            shareButton.disabled = false;
+            shareButton.textContent = "Deila";
+        }
+    });
 }
 function cleanCompetitionName(name = "") {
   return name
@@ -3461,3 +3684,75 @@ loadGames();
 
 updateDateTabs();
 loadGames();
+document.addEventListener("click", async event => {
+    const shareButton =
+        event.target.closest(".referee-share-button");
+
+    if (!shareButton) return;
+
+    console.log("SHARE BUTTON CLICKED");
+
+    const shareCard =
+        document.getElementById("referee-share-card");
+
+    if (!shareCard) {
+        console.error("Share card not found");
+        return;
+    }
+
+    const refereeName =
+        shareButton.dataset.refereeName || "domari";
+
+    try {
+        shareButton.disabled = true;
+        shareButton.textContent = "Bý til mynd...";
+
+        const canvas = await html2canvas(shareCard, {
+            scale: 2,
+            backgroundColor: null,
+            useCORS: true
+        });
+
+        const blob = await new Promise(resolve =>
+            canvas.toBlob(resolve, "image/png")
+        );
+
+        if (!blob) {
+            throw new Error("Could not create PNG");
+        }
+
+        const file = new File(
+            [blob],
+            `${refereeName}-domarar.png`,
+            { type: "image/png" }
+        );
+
+        if (
+            navigator.canShare &&
+            navigator.canShare({ files: [file] })
+        ) {
+            await navigator.share({
+                files: [file],
+                title: refereeName
+            });
+        } else {
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+
+            link.href = url;
+            link.download = `${refereeName}-domarar.png`;
+
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+
+            URL.revokeObjectURL(url);
+        }
+
+    } catch (error) {
+        console.error("Could not create share card:", error);
+    } finally {
+        shareButton.disabled = false;
+        shareButton.textContent = "Deila";
+    }
+});
