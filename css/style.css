@@ -244,32 +244,40 @@ padding-right: 38px;
 }
 
 .gender-filter {
-    border: 1px solid var(--border);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 999px;
-
     padding: 8px 18px;
 
-    background: var(--surface);
-
+    background: rgba(15, 22, 27, 0.72);
     color: var(--muted);
 
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 700;
 
     cursor: pointer;
 
     transition:
-        background 0.2s,
-        color 0.2s,
-        border-color 0.2s;
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+.gender-filter:hover {
+    color: #ffffff;
+    border-color: rgba(76, 217, 100, 0.45);
+    background: rgba(25, 34, 39, 0.9);
 }
 
 .gender-filter.active {
-    background: var(--accent);
-
+    background: rgba(76, 217, 100, 0.12);
     border-color: var(--accent);
-
     color: #ffffff;
+
+    box-shadow:
+        0 0 0 1px rgba(76, 217, 100, 0.08),
+        0 0 14px rgba(76, 217, 100, 0.12);
 }
 
 .gender-filters[hidden] {
