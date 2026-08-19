@@ -65,12 +65,14 @@
 
 .referee-share-photo {
     width: 165px;
-    height: 165px;
+    height: auto;
+    aspect-ratio: 1 / 1;
+
     object-fit: cover;
     object-position: center;
-    aspect-ratio: 1 / 1;
-    flex-shrink: 0;
+
     border-radius: 26px;
+    flex: 0 0 165px;
 }
 .referee-share-heading h1 {
     margin: 6px 0 14px;
@@ -239,7 +241,7 @@
     font-size: 32px;
 }
 .referee-share-stat-icon {
-    height: 24px;
+    height: 28px;
     margin-bottom: 7px;
 
     display: flex;
@@ -250,18 +252,20 @@
 .share-card-icon {
     display: inline-block;
 
-    width: 11px;
-    height: 16px;
+    width: 16px;
+    height: 23px;
 
     border-radius: 2px;
 }
 
 .yellow-card {
-    background: #f5c542;
+    background-color: #ffff00 !important;
+    box-shadow: 0 0 8px rgba(255, 255, 0, 0.55);
 }
 
 .red-card {
-    background: #e84545;
+    background-color: #ff0000 !important;
+    box-shadow: 0 0 8px rgba(255, 0, 0, 0.45);
 }
 
 .second-yellow-icon {
