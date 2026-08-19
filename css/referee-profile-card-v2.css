@@ -273,3 +273,34 @@
         font-size: 22px;
     }
 }
+.referee-history-toggle {
+    width: 100%;
+    background: transparent;
+    border: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.75);
+    padding: 12px 10px;
+    margin: 0;
+    font-size: 13px;
+    font-weight: 700;
+    text-align: left;
+    cursor: pointer;
+}
+
+.referee-history-toggle:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.025);
+}
+
+.referee-history-competitions {
+    padding: 0;
+}
+
+.referee-history-competitions[hidden] {
+    display: none;
+}
+/* HISTORICAL SEASONS — hidden until ready to publish */
+.referee-history-toggle,
+.referee-history-competitions {
+    display: none !important;
+}

@@ -1038,6 +1038,29 @@ async function renderRefereeProfileV2(refereeName) {
         official.name === refereeName
     );
 });
+const referee2025Games = allGames.filter(game => {
+    const gameDate = new Date(game.date);
+
+    if (gameDate.getFullYear() !== 2025) {
+        return false;
+    }
+
+    return (game.officials || []).some(
+        official => official.name === refereeName
+    );
+});
+
+const referee2024Games = allGames.filter(game => {
+    const gameDate = new Date(game.date);
+
+    if (gameDate.getFullYear() !== 2024) {
+        return false;
+    }
+
+    return (game.officials || []).some(
+        official => official.name === refereeName
+    );
+});
 console.log(
     "GUÐMUNDUR ROLES:",
     referee2026Games.map(game => {
@@ -1245,6 +1268,53 @@ referee2026Games.forEach(game => {
             (competitionCounts[competition].roles[official.role] || 0) + 1;
     }
 });
+const competitionCounts2025 = {};
+
+referee2025Games.forEach(game => {
+    const competition = cleanCompetitionName(game.competition);
+
+    if (!competitionCounts2025[competition]) {
+        competitionCounts2025[competition] = {
+            total: 0,
+            roles: {}
+        };
+    }
+
+    const official = (game.officials || []).find(
+        official => official.name === refereeName
+    );
+
+    competitionCounts2025[competition].total += 1;
+
+    if (official) {
+        competitionCounts2025[competition].roles[official.role] =
+            (competitionCounts2025[competition].roles[official.role] || 0) + 1;
+    }
+});
+
+const competitionCounts2024 = {};
+
+referee2024Games.forEach(game => {
+    const competition = cleanCompetitionName(game.competition);
+
+    if (!competitionCounts2024[competition]) {
+        competitionCounts2024[competition] = {
+            total: 0,
+            roles: {}
+        };
+    }
+
+    const official = (game.officials || []).find(
+        official => official.name === refereeName
+    );
+
+    competitionCounts2024[competition].total += 1;
+
+    if (official) {
+        competitionCounts2024[competition].roles[official.role] =
+            (competitionCounts2024[competition].roles[official.role] || 0) + 1;
+    }
+});
     const roleLabels = {
     "Referee": "Dómari",
     "Dómari": "Dómari",
@@ -1301,6 +1371,35 @@ const roleStatsHTML = Object.entries(roleCounts)
     })
     .join("");
 const competitionStatsHTML = Object.entries(competitionCounts)
+    .sort(([, a], [, b]) => b.total - a.total)
+    .map(([competition, data]) => `
+        <div class="referee-competition-row">
+            <span class="referee-competition-name">
+                ${competition}
+            </span>
+
+            <strong class="referee-competition-count">
+                ${data.total}
+            </strong>
+        </div>
+    `)
+    .join("");
+    const competitionStats2025HTML = Object.entries(competitionCounts2025)
+    .sort(([, a], [, b]) => b.total - a.total)
+    .map(([competition, data]) => `
+        <div class="referee-competition-row">
+            <span class="referee-competition-name">
+                ${competition}
+            </span>
+
+            <strong class="referee-competition-count">
+                ${data.total}
+            </strong>
+        </div>
+    `)
+    .join("");
+
+const competitionStats2024HTML = Object.entries(competitionCounts2024)
     .sort(([, a], [, b]) => b.total - a.total)
     .map(([competition, data]) => `
         <div class="referee-competition-row">
@@ -1403,8 +1502,39 @@ const competitionStatsHTML = Object.entries(competitionCounts)
     <div class="referee-competition-table">
         ${competitionStatsHTML}
     </div>
+
+    <button
+        type="button"
+        class="referee-history-toggle"
+        data-year="2025"
+    >
+        2025 ↓
+    </button>
+
+    <div
+        class="referee-history-competitions"
+        data-history-year="2025"
+        hidden
+    >
+        ${competitionStats2025HTML}
     </div>
+
+    <button
+        type="button"
+        class="referee-history-toggle"
+        data-year="2024"
+    >
+        2024 ↓
+    </button>
+
+    <div
+        class="referee-history-competitions"
+        data-history-year="2024"
+        hidden
+    >
+        ${competitionStats2024HTML}
     </div>
+</div>
     <button
                 type="button"
                 class="referee-profile-back"
@@ -1426,6 +1556,30 @@ if (backButton) {
         renderGamesForSelectedDay();
     });
 }
+const historyToggles =
+    gamesContainer.querySelectorAll(".referee-history-toggle");
+
+historyToggles.forEach(button => {
+    button.addEventListener("click", () => {
+        const year = button.dataset.year;
+
+        const section =
+            gamesContainer.querySelector(
+                `.referee-history-competitions[data-history-year="${year}"]`
+            );
+
+        if (!section) return;
+
+        const isHidden = section.hidden;
+
+        section.hidden = !isHidden;
+
+        button.textContent =
+            isHidden
+                ? `${year} ↑`
+                : `${year} ↓`;
+    });
+});
 }
 function cleanCompetitionName(name = "") {
   return name
