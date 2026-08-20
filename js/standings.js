@@ -1,3 +1,82 @@
+const standingsRules = {
+    "Besta deild karla": {
+    markers: [
+        { positions: [1], type: "europe-blue" },
+        { positions: [2, 3], type: "europe-green" },
+        { positions: [11, 12], type: "relegation" }
+    ],
+    legend: [
+        { type: "europe-blue", label: "Meistaradeild" },
+        { type: "europe-green", label: "Sambandsdeild" },
+        { type: "relegation", label: "Lengjudeild" }
+    ]
+},
+
+    "Besta deild kvenna": {
+    markers: [
+        { positions: [9, 10], type: "relegation" }
+    ],
+    legend: [
+        { type: "relegation", label: "Lengjudeild" }
+    ]
+},
+
+    "Lengjudeild karla": {
+    markers: [
+        { positions: [1], type: "promotion" },
+        { positions: [2, 3, 4, 5], type: "playoff" },
+        { positions: [11, 12], type: "relegation" }
+    ],
+    legend: [
+        { type: "promotion", label: "Besta deild" },
+        { type: "playoff", label: "Umspil" },
+        { type: "relegation", label: "2. deild" }
+    ]
+},
+
+    "Lengjudeild kvenna": {
+    markers: [
+        { positions: [1, 2], type: "promotion" },
+        { positions: [9, 10], type: "relegation" }
+    ],
+    legend: [
+        { type: "promotion", label: "Besta deild" },
+        { type: "relegation", label: "2. deild" }
+    ]
+},
+
+    "2. deild karla": {
+    markers: [
+        { positions: [1, 2], type: "promotion" },
+        { positions: [11, 12], type: "relegation" }
+    ],
+    legend: [
+        { type: "promotion", label: "Lengjudeild" },
+        { type: "relegation", label: "3. deild" }
+    ]
+},
+
+    "3. deild karla": {
+    markers: [
+        { positions: [1, 2], type: "promotion" },
+        { positions: [11, 12], type: "relegation" }
+    ],
+    legend: [
+        { type: "promotion", label: "2. deild" },
+        { type: "relegation", label: "4. deild" }
+    ]
+},
+
+    "4. deild karla": {
+    markers: [
+        { positions: [1, 2], type: "promotion" }
+    ],
+    legend: [
+        { type: "promotion", label: "3. deild" }
+    ]
+}
+};
+
 let standingsData = null;
 
 async function loadStandingsData() {
@@ -42,12 +121,22 @@ async function openStandings(competition, homeTeam, awayTeam) {
         closeStandings();
 
         const rowsHTML = table.map(team => {
-            const isHighlighted =
-                team.team === homeTeam ||
-                team.team === awayTeam;
+    const isHighlighted =
+        team.team === homeTeam ||
+        team.team === awayTeam;
 
-            return `
-                <div class="standings-row ${isHighlighted ? "standings-row-highlight" : ""}">
+    const rule = standingsRules[competition];
+
+    const marker = rule?.markers.find(item =>
+        item.positions.includes(team.position)
+    );
+
+    const markerClass = marker
+        ? `standings-position-${marker.type}`
+        : "";
+
+    return `
+                <div class="standings-row ${isHighlighted ? "standings-row-highlight" : ""} ${markerClass}">
                     <div class="standings-position">
                         ${team.position}
                     </div>
@@ -70,6 +159,21 @@ async function openStandings(competition, homeTeam, awayTeam) {
                 </div>
             `;
         }).join("");
+
+        const rule = standingsRules[competition];
+
+const legendHTML = rule?.legend
+    ? `
+        <div class="standings-legend">
+            ${rule.legend.map(item => `
+                <div class="standings-legend-item">
+                    <span class="standings-legend-color standings-legend-${item.type}"></span>
+                    <span>${item.label}</span>
+                </div>
+            `).join("")}
+        </div>
+    `
+    : "";
 
         const overlay = document.createElement("div");
         overlay.className = "standings-overlay";
@@ -107,9 +211,11 @@ async function openStandings(competition, homeTeam, awayTeam) {
                         <div>Stig</div>
                     </div>
 
-                    ${rowsHTML}
+                        ${rowsHTML}
 
-                </div>
+                    </div>
+
+                  ${legendHTML}
 
             </section>
         `;
@@ -193,4 +299,103 @@ document.addEventListener("touchend", () => {
         card.style.transform = "translateY(0)";
         card.style.opacity = "1";
     }
+});
+
+function closeStandingsMenu() {
+    const menu = document.querySelector(".standings-menu-overlay");
+
+    if (!menu) return;
+
+    menu.remove();
+    document.body.classList.remove("standings-menu-open");
+}
+
+function openStandingsMenu() {
+    closeStandingsMenu();
+
+    const competitions = [
+        "Besta deild karla",
+        "Besta deild kvenna",
+        "Lengjudeild karla",
+        "Lengjudeild kvenna",
+        "2. deild karla",
+        "3. deild karla",
+        "4. deild karla"
+    ];
+
+    const overlay = document.createElement("div");
+    overlay.className = "standings-menu-overlay";
+
+    overlay.innerHTML = `
+        <section class="standings-menu-card">
+
+            <div class="standings-menu-header">
+                <div>
+                    <div class="standings-label">
+                        STÖÐUTÖFLUR
+                    </div>
+
+                    <h2>
+                        Veldu deild
+                    </h2>
+                </div>
+
+                <button
+                    class="standings-menu-close"
+                    type="button"
+                    aria-label="Loka"
+                >
+                    ×
+                </button>
+            </div>
+
+            <div class="standings-menu-list">
+                ${competitions.map(competition => `
+                    <button
+                        class="standings-menu-item"
+                        type="button"
+                        data-competition="${competition}"
+                    >
+                        <span>${competition}</span>
+                        <span aria-hidden="true">›</span>
+                    </button>
+                `).join("")}
+            </div>
+
+        </section>
+    `;
+
+    document.body.appendChild(overlay);
+    document.body.classList.add("standings-menu-open");
+
+    overlay
+        .querySelector(".standings-menu-close")
+        .addEventListener("click", closeStandingsMenu);
+
+    overlay.addEventListener("click", event => {
+        if (event.target === overlay) {
+            closeStandingsMenu();
+        }
+    });
+
+    overlay
+        .querySelectorAll(".standings-menu-item")
+        .forEach(button => {
+            button.addEventListener("click", () => {
+                const competition =
+                    button.dataset.competition;
+
+                closeStandingsMenu();
+
+                openStandings(competition);
+            });
+        });
+}
+document.addEventListener("click", event => {
+    const standingsButton =
+        event.target.closest("#standings-main-button");
+
+    if (!standingsButton) return;
+
+    openStandingsMenu();
 });

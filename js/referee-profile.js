@@ -1351,7 +1351,7 @@ historyToggles.forEach(button => {
                 : `${year} ↓`;
     });
 });
-}
+
 const shareButton =
     gamesContainer.querySelector(".referee-share-button");
 
@@ -1415,4 +1415,5 @@ if (shareButton) {
             shareButton.textContent = "Deila";
         }
     });
+}
 }
