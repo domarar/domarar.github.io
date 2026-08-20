@@ -306,7 +306,13 @@ const refereeProfiles = {
     "Þórður Þorsteinsson Þórðarson": {
         category: "Landsdómari",
         image: "images/referees/Þórður_Þorsteinsson_Þórðarson-logo.jpg"
+    },
+
+    "Tómas Wolfgang Meyer": {
+        image: "images/referees/tomas_wolfgang_meyer-logo.jpg",
+    
     }
+
 };
 
 function getRefereeSuggestions(value) {
