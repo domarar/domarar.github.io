@@ -2330,9 +2330,9 @@ box-shadow:
         padding-bottom: 60px !important;
     }
 }
-/* MOBILE — HIDE FOOTER COMPLETELY */
+/* HIDE BOTTOM FOOTER ON MOBILE */
 @media (max-width: 600px) {
-    footer {
+    .bottom-nav {
         display: none !important;
     }
 }
