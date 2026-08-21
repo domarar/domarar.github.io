@@ -1373,16 +1373,36 @@ gamesContainer.addEventListener("touchend", event => {
 // =====================================
 async function loadGames() {
     try {
+        // 1. Load current/upcoming games FIRST
+        const upcomingResponse = await fetch("data/games.json", {
+            cache: "no-store"
+        });
+
+        if (!upcomingResponse.ok) {
+            throw new Error(
+                `Upcoming games HTTP error: ${upcomingResponse.status}`
+            );
+        }
+
+        const upcomingData = await upcomingResponse.json();
+
+        upcomingGames = Array.isArray(upcomingData.games)
+            ? upcomingData.games
+            : [];
+
+        // Make current games available immediately
+        allGames = [...upcomingGames];
+
+        // Render the page NOW
+        renderGamesForSelectedDay();
+
+
+        // 2. Load archive data AFTER first render
         const [
-            upcomingResponse,
             archiveResponse,
             archive2025Response,
             archive2024Response
         ] = await Promise.all([
-            fetch("data/games.json", {
-                cache: "no-store"
-            }),
-
             fetch("data/archive.json", {
                 cache: "no-store"
             }),
@@ -1396,48 +1416,41 @@ async function loadGames() {
             })
         ]);
 
-        if (!upcomingResponse.ok) {
-            throw new Error(
-                `Upcoming games HTTP error: ${upcomingResponse.status}`
-            );
-        }
-
         if (!archiveResponse.ok) {
             throw new Error(
                 `Archive HTTP error: ${archiveResponse.status}`
             );
         }
-        if (!archive2025Response.ok) {
-    throw new Error(
-        `Archive 2025 HTTP error: ${archive2025Response.status}`
-    );
-}
-        if (!archive2024Response.ok) {
-    throw new Error(
-        `Archive 2024 HTTP error: ${archive2024Response.status}`
-    );
-}
 
-        const upcomingData = await upcomingResponse.json();
+        if (!archive2025Response.ok) {
+            throw new Error(
+                `Archive 2025 HTTP error: ${archive2025Response.status}`
+            );
+        }
+
+        if (!archive2024Response.ok) {
+            throw new Error(
+                `Archive 2024 HTTP error: ${archive2024Response.status}`
+            );
+        }
+
         const archiveData = await archiveResponse.json();
         const archive2025Data = await archive2025Response.json();
         const archive2024Data = await archive2024Response.json();
 
-        upcomingGames = Array.isArray(upcomingData.games)
-            ? upcomingData.games
-            : [];
-
         archiveGames = Array.isArray(archiveData.games)
             ? archiveData.games
             : [];
-        
-            const archive2025Games = Array.isArray(archive2025Data.games)
-    ? archive2025Data.games
-    : [];
-            const archive2024Games = Array.isArray(archive2024Data.games)
-    ? archive2024Data.games
-    : [];
 
+        const archive2025Games = Array.isArray(archive2025Data.games)
+            ? archive2025Data.games
+            : [];
+
+        const archive2024Games = Array.isArray(archive2024Data.games)
+            ? archive2024Data.games
+            : [];
+
+        // 3. Merge everything once archives are ready
         const gamesById = new Map();
 
         archiveGames.forEach(game => {
@@ -1448,7 +1461,7 @@ async function loadGames() {
 
         archive2025Games.forEach(game => {
             if (game.id !== null && game.id !== undefined) {
-                 gamesById.set(game.id, game);
+                gamesById.set(game.id, game);
             }
         });
 
@@ -1465,9 +1478,6 @@ async function loadGames() {
         });
 
         allGames = Array.from(gamesById.values());
-
-
-        renderGamesForSelectedDay();
 
     } catch (error) {
         console.error(
