@@ -277,17 +277,19 @@
 }
 @media (max-width: 600px) {
     .vs-card-header {
-        gap: 8px;
-        padding: 12px 10px;
+        grid-template-columns: minmax(0, 1fr) 36px minmax(0, 1fr);
+        gap: 4px;
+        padding: 12px 8px;
     }
 
     .vs-card-team {
-        gap: 6px;
         min-width: 0;
+        gap: 5px;
     }
 
     .vs-card-team-name {
-        font-size: 16px;
+        min-width: 0;
+        font-size: 15px;
         white-space: nowrap;
     }
 }
