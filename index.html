@@ -18,6 +18,7 @@
 <link rel="stylesheet" href="css/referee-profile-card-v2.css?v=1">
 <link rel="stylesheet" href="css/standings.css?v=2">
 <link rel="stylesheet" href="css/referee-share-card.css?v=1">
+<link rel="stylesheet" href="css/menu.css?v=1">
 </head>
 <body>
 
@@ -41,6 +42,17 @@
         </div>
 
       </div>
+
+      <button
+    class="menu-button"
+    id="menuButton"
+    type="button"
+    aria-label="Opna valmynd"
+>
+    <span></span>
+    <span></span>
+    <span></span>
+</button>
 
     </header>
 
@@ -191,6 +203,130 @@
   </div>
 
 </div>
+<!-- DÓMARAR MENU -->
+<div class="menu-overlay" id="menuOverlay">
+
+    <aside class="menu-panel">
+
+        <button
+            class="menu-close"
+            id="menuClose"
+            type="button"
+            aria-label="Loka valmynd"
+        >
+            ×
+        </button>
+
+        <div class="menu-content">
+
+    <div class="menu-header">
+        <img
+            src="logos/domarinn_logo.png"
+            alt="Dómarar logo"
+            class="menu-logo"
+        >
+
+        <div>
+            <h2>DÓMARAR</h2>
+            <p>Leikir og dómarar</p>
+        </div>
+    </div>
+
+    <button
+    class="menu-item"
+    id="aboutMenuButton"
+    type="button"
+>
+    <span>Um Dómarar</span>
+    <span class="menu-arrow">›</span>
+</button>
+    </div>
+
+    <div class="menu-section">
+        <div class="menu-section-title">DÓMGÆSLA</div>
+
+        <button class="menu-item" type="button">
+            <span>Knattspyrnulögin</span>
+            <span class="menu-arrow">›</span>
+        </button>
+
+        <button class="menu-item" type="button">
+            <span>Dómarafréttir KSÍ</span>
+            <span class="menu-arrow">›</span>
+        </button>
+
+        <button class="menu-item" type="button">
+            <span>Dómarasíða KSÍ</span>
+            <span class="menu-arrow">›</span>
+        </button>
+    </div>
+
+    <div class="menu-version">
+        DÓMARAR · Útgáfa 1.0.0
+    </div>
+
+</div>
+
+    </aside>
+
+</div>
+<!-- UM DÓMARAR -->
+<div class="about-overlay" id="aboutOverlay">
+
+    <section class="about-card">
+
+        <button
+            class="about-close"
+            id="aboutClose"
+            type="button"
+            aria-label="Loka Um Dómarar"
+        >
+            ×
+        </button>
+
+        <div class="about-content">
+
+            <h2>Um Dómarar</h2>
+
+            <p>
+                <strong>Dómarar</strong> er verkefni gert til gamans fyrir
+                knattspyrnudómara og aðra sem hafa áhuga á dómgæslu.
+            </p>
+
+            <p>
+                Hugmyndin er fyrst og fremst að gera það einfalt og fljótlegt
+                að skoða leiki dagsins, með algjörum fókus á að sjá hvaða
+                dómarateymi er á hverjum leik.
+            </p>
+
+            <p>
+                Einnig er hægt að skoða næstu leiki, fyrri leiki og kalla fram
+                atvik úr leikskýrslum, ásamt stöðu liða í deildum til að setja
+                komandi leiki í betra samhengi.
+            </p>
+
+            <p>
+                Á síðunni eru aðgengileg gögn frá tímabilunum
+                <strong>2024, 2025 og 2026</strong>.
+            </p>
+
+            <p>
+                <strong>
+                    Dómarar er sjálfstætt verkefni og höfundur setur fram
+                    fyrirvara um áreiðanleika gagnanna. Enda er hann sjálfur tækniheftur með öllu. 
+                </strong>
+            </p>
+
+            <p>
+                Upplýsingar um leiki og dómgæslu byggja á gögnum sem birt eru af KSÍ.
+            </p>
+
+        </div>
+
+    </section>
+
+</div>
 <script src="js/standings.js?v=2"></script>
+<script src="js/menu.js?v=1"></script>
 </body>
 </html>
