@@ -55,7 +55,24 @@
           "position": null,
           "orderNumber": 2,
           "hideProfile": false,
-          "events": []
+          "events": [
+            {
+              "eventId": 8147777,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 62132,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 68186,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": true
+            }
+          ]
         },
         {
           "roleId": 8140215,
@@ -92,6 +109,22 @@
                 "hideProfile": false
               },
               "player2": null,
+              "homeTeam": true
+            },
+            {
+              "eventId": 8147762,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 89954,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 46473,
+                "name": null,
+                "hideProfile": false
+              },
               "homeTeam": true
             }
           ]
@@ -344,7 +377,24 @@
           "position": null,
           "orderNumber": 17,
           "hideProfile": false,
-          "events": []
+          "events": [
+            {
+              "eventId": 8147777,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 62132,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 68186,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": true
+            }
+          ]
         },
         {
           "roleId": 8140235,
@@ -383,7 +433,24 @@
           "position": null,
           "orderNumber": 20,
           "hideProfile": false,
-          "events": []
+          "events": [
+            {
+              "eventId": 8147762,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 89954,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 46473,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": true
+            }
+          ]
         }
       ]
     },
@@ -1139,7 +1206,7 @@
         "fcdName": "GOAL"
       },
       "displayMinute": "90'",
-      "orderNumber": 15,
+      "orderNumber": 17,
       "matchPhase": {
         "fcdName": "SECOND_HALF"
       },
@@ -1176,12 +1243,58 @@
       "teamOfficial": null
     },
     {
+      "eventId": 8147762,
+      "eventType": {
+        "fcdName": "SUBSTITUTION"
+      },
+      "displayMinute": "90+3'",
+      "orderNumber": 15,
+      "matchPhase": {
+        "fcdName": "SECOND_HALF"
+      },
+      "player": {
+        "personId": 89954,
+        "name": "Lauren Adrienne Lapomarda",
+        "hideProfile": false
+      },
+      "player2": {
+        "personId": 46473,
+        "name": "María Dögg Jóhannesdóttir",
+        "hideProfile": false
+      },
+      "homeTeam": true,
+      "teamOfficial": null
+    },
+    {
+      "eventId": 8147777,
+      "eventType": {
+        "fcdName": "SUBSTITUTION"
+      },
+      "displayMinute": "90+3'",
+      "orderNumber": 16,
+      "matchPhase": {
+        "fcdName": "SECOND_HALF"
+      },
+      "player": {
+        "personId": 62132,
+        "name": "Halla Bríet Kristjánsdóttir",
+        "hideProfile": false
+      },
+      "player2": {
+        "personId": 68186,
+        "name": "Angela Mary Helgadóttir",
+        "hideProfile": false
+      },
+      "homeTeam": true,
+      "teamOfficial": null
+    },
+    {
       "eventId": null,
       "eventType": {
         "fcdName": "FULL_TIME"
       },
       "displayMinute": "",
-      "orderNumber": 16,
+      "orderNumber": 18,
       "matchPhase": {
         "fcdName": "SECOND_HALF"
       },
@@ -1196,7 +1309,7 @@
         "fcdName": "YELLOW"
       },
       "displayMinute": null,
-      "orderNumber": 17,
+      "orderNumber": 19,
       "matchPhase": {
         "fcdName": "AFTER_THE_MATCH"
       },
