@@ -107,6 +107,8 @@ function getHeadToHead(homeTeam, awayTeam, gender) {
 
 function openVsCard(homeTeam, awayTeam, homeLogo, awayLogo, gender) {
     closeVsCard();
+    document.body.classList.add("no-scroll");
+
     const homeForm = getTeamForm(homeTeam, gender);
     const awayForm = getTeamForm(awayTeam, gender); 
 
@@ -250,4 +252,5 @@ const headToHeadNote =
 
 function closeVsCard() {
     document.querySelector(".vs-card-overlay")?.remove();
+    document.body.classList.add("no-scroll");
 }
