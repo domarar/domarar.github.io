@@ -603,7 +603,19 @@ const hasScore =
 
 const centerText = hasScore
     ? `${game.homeScore} - ${game.awayScore}`
-    : "VS";
+    : `
+        <button
+            class="vs-button"
+            type="button"
+            data-home="${game.home}"
+            data-away="${game.away}"
+            data-home-logo="${game.homeLogo || ""}"
+            data-away-logo="${game.awayLogo || ""}"
+            data-gender="${game.gender || ""}"
+        >
+            VS
+        </button>
+      `;
   return `
     <article class="fixture-card">
 
