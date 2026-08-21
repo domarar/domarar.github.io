@@ -255,10 +255,22 @@ const headToHeadNote =
 </div>   <!-- closes vs-card -->
 `;
 
-    document.body.appendChild(overlay);
+    document.body.appendChild(
 }
-
 function closeVsCard() {
     document.querySelector(".vs-card-overlay")?.remove();
-    document.body.classList.add("no-scroll");
+
+    if (document.body.dataset.vsScrollY !== undefined) {
+        const scrollY = parseInt(document.body.dataset.vsScrollY || "0", 10);
+
+        document.body.style.position = "";
+        document.body.style.top = "";
+        document.body.style.left = "";
+        document.body.style.right = "";
+        document.body.style.width = "";
+
+        delete document.body.dataset.vsScrollY;
+
+        window.scrollTo(0, scrollY);
+    }
 }
