@@ -107,16 +107,6 @@ function getHeadToHead(homeTeam, awayTeam, gender) {
 
 function openVsCard(homeTeam, awayTeam, homeLogo, awayLogo, gender) {
     closeVsCard();
-    
-    const scrollY = window.scrollY;
-
-document.body.dataset.vsScrollY = scrollY;
-document.body.style.position = "fixed";
-document.body.style.top = `-${scrollY}px`;
-document.body.style.left = "0";
-document.body.style.right = "0";
-document.body.style.width = "100%";
-
     const homeForm = getTeamForm(homeTeam, gender);
     const awayForm = getTeamForm(awayTeam, gender); 
 
@@ -255,22 +245,9 @@ const headToHeadNote =
 </div>   <!-- closes vs-card -->
 `;
 
-    document.body.appendChild(
+    document.body.appendChild(overlay);
 }
+
 function closeVsCard() {
     document.querySelector(".vs-card-overlay")?.remove();
-
-    if (document.body.dataset.vsScrollY !== undefined) {
-        const scrollY = parseInt(document.body.dataset.vsScrollY || "0", 10);
-
-        document.body.style.position = "";
-        document.body.style.top = "";
-        document.body.style.left = "";
-        document.body.style.right = "";
-        document.body.style.width = "";
-
-        delete document.body.dataset.vsScrollY;
-
-        window.scrollTo(0, scrollY);
-    }
 }
