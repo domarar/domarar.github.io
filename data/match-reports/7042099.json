@@ -1,7 +1,7 @@
 {
   "id": 7042099,
-  "liveStatus": "SCHEDULED",
-  "currentMinute": null,
+  "liveStatus": "PLAYED",
+  "currentMinute": "FT",
   "dateTimeUTC": 1787332500000,
   "round": "17",
   "attendance": null,
@@ -112,6 +112,18 @@
           "orderNumber": 5,
           "hideProfile": false,
           "events": [
+            {
+              "eventId": 8146942,
+              "eventType": {
+                "fcdName": "YELLOW"
+              },
+              "player": {
+                "personId": 85065,
+                "hideProfile": false
+              },
+              "player2": null,
+              "homeTeam": true
+            },
             {
               "eventId": 8146712,
               "eventType": {
@@ -1118,12 +1130,31 @@
       "teamOfficial": null
     },
     {
+      "eventId": 8146942,
+      "eventType": {
+        "fcdName": "YELLOW"
+      },
+      "displayMinute": "71'",
+      "orderNumber": 10,
+      "matchPhase": {
+        "fcdName": "SECOND_HALF"
+      },
+      "player": {
+        "personId": 85065,
+        "name": "Sandra Voitane",
+        "hideProfile": false
+      },
+      "player2": null,
+      "homeTeam": true,
+      "teamOfficial": null
+    },
+    {
       "eventId": 8146757,
       "eventType": {
         "fcdName": "SUBSTITUTION"
       },
       "displayMinute": "75'",
-      "orderNumber": 10,
+      "orderNumber": 11,
       "matchPhase": {
         "fcdName": "SECOND_HALF"
       },
@@ -1146,7 +1177,7 @@
         "fcdName": "SUBSTITUTION"
       },
       "displayMinute": "80'",
-      "orderNumber": 11,
+      "orderNumber": 12,
       "matchPhase": {
         "fcdName": "SECOND_HALF"
       },
@@ -1169,7 +1200,7 @@
         "fcdName": "GOAL"
       },
       "displayMinute": "80'",
-      "orderNumber": 12,
+      "orderNumber": 13,
       "matchPhase": {
         "fcdName": "SECOND_HALF"
       },
@@ -1188,7 +1219,7 @@
         "fcdName": "SUBSTITUTION"
       },
       "displayMinute": "86'",
-      "orderNumber": 13,
+      "orderNumber": 14,
       "matchPhase": {
         "fcdName": "SECOND_HALF"
       },
@@ -1211,7 +1242,7 @@
         "fcdName": "SUBSTITUTION"
       },
       "displayMinute": "86'",
-      "orderNumber": 14,
+      "orderNumber": 15,
       "matchPhase": {
         "fcdName": "SECOND_HALF"
       },
@@ -1234,7 +1265,7 @@
         "fcdName": "YELLOW"
       },
       "displayMinute": "88'",
-      "orderNumber": 15,
+      "orderNumber": 16,
       "matchPhase": {
         "fcdName": "SECOND_HALF"
       },
@@ -1253,7 +1284,7 @@
         "fcdName": "YELLOW"
       },
       "displayMinute": "90+1'",
-      "orderNumber": 16,
+      "orderNumber": 17,
       "matchPhase": {
         "fcdName": "SECOND_HALF"
       },
