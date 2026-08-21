@@ -2160,6 +2160,7 @@ body.modal-open {
     #4cd964 0%,
     #2f9e5b 55%,
     #237a48 100%
+    
 );
 
 box-shadow:
@@ -2170,12 +2171,18 @@ box-shadow:
     outline: none;
     border-radius: 14px;
 
+    opacity: 0;
+
     z-index: 0;
     pointer-events: none;
 
     transition:
         transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
         width 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.date-tab-active-indicator.ready {
+    opacity: 1;
 }
 .date-tab {
     position: relative;

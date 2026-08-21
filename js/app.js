@@ -1236,6 +1236,7 @@ if (dateTabsContainer) {
     activeDayIndicator.className = "date-tab-active-indicator";
 
     dateTabsContainer.style.position = "relative";
+
     dateTabsContainer.prepend(activeDayIndicator);
 }
 
@@ -1257,10 +1258,24 @@ function moveActiveDayIndicator() {
     activeDayIndicator.style.transform =
         `translateX(${activeTab.offsetLeft}px)`;
 }
+async function initializeActiveDayIndicator() {
+    if (document.fonts?.ready) {
+        await document.fonts.ready;
+    }
+
+    requestAnimationFrame(() => {
+        moveActiveDayIndicator();
+
+        requestAnimationFrame(() => {
+            activeDayIndicator?.classList.add("ready");
+        });
+    });
+}
+
+initializeActiveDayIndicator();
 
 window.addEventListener("resize", moveActiveDayIndicator);
 
-setTimeout(moveActiveDayIndicator, 0);
 
 // =====================================
 // MOBILE SWIPE BETWEEN DAYS
