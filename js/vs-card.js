@@ -107,7 +107,15 @@ function getHeadToHead(homeTeam, awayTeam, gender) {
 
 function openVsCard(homeTeam, awayTeam, homeLogo, awayLogo, gender) {
     closeVsCard();
-    document.body.classList.add("no-scroll");
+    
+    const scrollY = window.scrollY;
+
+document.body.dataset.vsScrollY = scrollY;
+document.body.style.position = "fixed";
+document.body.style.top = `-${scrollY}px`;
+document.body.style.left = "0";
+document.body.style.right = "0";
+document.body.style.width = "100%";
 
     const homeForm = getTeamForm(homeTeam, gender);
     const awayForm = getTeamForm(awayTeam, gender); 
