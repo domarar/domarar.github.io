@@ -23,7 +23,7 @@
     "picture": "5afa29d4-a7bd-472a-93be-ce649fab8af5"
   },
   "homeTeamResult": {
-    "current": 3
+    "current": 4
   },
   "awayTeamResult": {
     "current": 0
@@ -180,6 +180,18 @@
           "events": [
             {
               "eventId": 8154266,
+              "eventType": {
+                "fcdName": "GOAL"
+              },
+              "player": {
+                "personId": 75167,
+                "hideProfile": false
+              },
+              "player2": null,
+              "homeTeam": true
+            },
+            {
+              "eventId": 8154499,
               "eventType": {
                 "fcdName": "GOAL"
               },
@@ -1100,12 +1112,31 @@
       "teamOfficial": null
     },
     {
+      "eventId": 8154499,
+      "eventType": {
+        "fcdName": "GOAL"
+      },
+      "displayMinute": "60'",
+      "orderNumber": 10,
+      "matchPhase": {
+        "fcdName": "SECOND_HALF"
+      },
+      "player": {
+        "personId": 75167,
+        "name": "Oumar Diouck",
+        "hideProfile": false
+      },
+      "player2": null,
+      "homeTeam": true,
+      "teamOfficial": null
+    },
+    {
       "eventId": 8154249,
       "eventType": {
         "fcdName": "SUBSTITUTION"
       },
       "displayMinute": "77'",
-      "orderNumber": 10,
+      "orderNumber": 11,
       "matchPhase": {
         "fcdName": "SECOND_HALF"
       },
@@ -1128,7 +1159,7 @@
         "fcdName": "SUBSTITUTION"
       },
       "displayMinute": "77'",
-      "orderNumber": 11,
+      "orderNumber": 12,
       "matchPhase": {
         "fcdName": "SECOND_HALF"
       },
@@ -1151,7 +1182,7 @@
         "fcdName": "SUBSTITUTION"
       },
       "displayMinute": "77'",
-      "orderNumber": 12,
+      "orderNumber": 13,
       "matchPhase": {
         "fcdName": "SECOND_HALF"
       },
@@ -1174,7 +1205,7 @@
         "fcdName": "YELLOW"
       },
       "displayMinute": "82'",
-      "orderNumber": 13,
+      "orderNumber": 14,
       "matchPhase": {
         "fcdName": "SECOND_HALF"
       },
@@ -1193,7 +1224,7 @@
         "fcdName": "SUBSTITUTION"
       },
       "displayMinute": "85'",
-      "orderNumber": 14,
+      "orderNumber": 15,
       "matchPhase": {
         "fcdName": "SECOND_HALF"
       },
@@ -1216,7 +1247,7 @@
         "fcdName": "SUBSTITUTION"
       },
       "displayMinute": "85'",
-      "orderNumber": 15,
+      "orderNumber": 16,
       "matchPhase": {
         "fcdName": "SECOND_HALF"
       },
