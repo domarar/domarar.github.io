@@ -82,23 +82,65 @@ function getTeamForm(teamName, gender) {
 function createFormDots(form) {
     let level = 0;
 
-    const points = form.map(item => {
+    let previousResult = null;
 
-        if (item.result === "win") {
-            level += 1;
-        } else if (item.result === "draw") {
-            level -= 0.5;
-        } else if (item.result === "loss") {
-            level -= 1;
-        }
+const points = form.map(item => {
 
-        level = Math.max(-2, Math.min(2, level));
+    let change = 0;
 
-        return {
-            ...item,
-            level
-        };
-    });
+    if (previousResult === null) {
+        if (item.result === "win") change = 0.8;
+        if (item.result === "draw") change = 0;
+        if (item.result === "loss") change = -0.8;
+    }
+
+    else if (previousResult === "win" && item.result === "win") {
+        change = 0.3;
+    }
+
+    else if (previousResult === "win" && item.result === "draw") {
+        change = -0.6;
+    }
+
+    else if (previousResult === "win" && item.result === "loss") {
+        change = -1.2;
+    }
+
+    else if (previousResult === "draw" && item.result === "win") {
+        change = 0.8;
+    }
+
+    else if (previousResult === "draw" && item.result === "draw") {
+        change = 0;
+    }
+
+    else if (previousResult === "draw" && item.result === "loss") {
+        change = -0.8;
+    }
+
+    else if (previousResult === "loss" && item.result === "win") {
+        change = 1.2;
+    }
+
+    else if (previousResult === "loss" && item.result === "draw") {
+        change = 0.6;
+    }
+
+    else if (previousResult === "loss" && item.result === "loss") {
+        change = -0.3;
+    }
+
+    level += change;
+
+    level = Math.max(-2, Math.min(2, level));
+
+    previousResult = item.result;
+
+    return {
+        ...item,
+        level
+    };
+});
 
     return points
         .map((item, index) => {
