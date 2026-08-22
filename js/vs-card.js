@@ -48,30 +48,86 @@ function getTeamForm(teamName, gender) {
             return involvesTeam && hasScore && sameGender;
         })
         .sort((a, b) => new Date(b.date) - new Date(a.date))
-        .slice(0, 3)
+        .slice(0, 5)
         .reverse();
 
     return playedGames.map(game => {
-        const isHome = game.home === teamName;
+    const isHome = game.home === teamName;
 
-        const teamScore = Number(
-            isHome ? game.homeScore : game.awayScore
-        );
+    const teamScore = Number(
+        isHome ? game.homeScore : game.awayScore
+    );
 
-        const opponentScore = Number(
-            isHome ? game.awayScore : game.homeScore
-        );
+    const opponentScore = Number(
+        isHome ? game.awayScore : game.homeScore
+    );
 
-        if (teamScore > opponentScore) return "win";
-        if (teamScore < opponentScore) return "loss";
+    let result;
 
-        return "draw";
-    });
+    if (teamScore > opponentScore) {
+        result = "win";
+    } else if (teamScore < opponentScore) {
+        result = "loss";
+    } else {
+        result = "draw";
+    }
+
+    return {
+        result,
+        date: game.date
+    };
+});
 }
 
 function createFormDots(form) {
-    return form
-        .map(result => `<span class="vs-form-dot ${result}"></span>`)
+    let level = 0;
+
+    const points = form.map(item => {
+
+        if (item.result === "win") {
+            level += 1;
+        } else if (item.result === "draw") {
+            level -= 0.5;
+        } else if (item.result === "loss") {
+            level -= 1;
+        }
+
+        level = Math.max(-2, Math.min(2, level));
+
+        return {
+            ...item,
+            level
+        };
+    });
+
+    return points
+        .map((item, index) => {
+
+            const nextItem = points[index + 1];
+
+            let line = "";
+
+            if (nextItem) {
+                const levelDifference =
+                    nextItem.level - item.level;
+
+                line = `
+                    <span
+                        class="vs-form-line"
+                        style="--level-diff: ${levelDifference};"
+                    ></span>
+                `;
+            }
+
+            return `
+                <span
+                    class="vs-form-dot ${item.result}"
+                    style="--form-level: ${item.level};"
+                >
+                    ${line}
+                </span>
+            `;
+        })
         .join("");
 }
 function getHeadToHead(homeTeam, awayTeam, gender) {
