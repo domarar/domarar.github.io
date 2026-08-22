@@ -170,10 +170,29 @@
     display: flex;
     align-items: center;
     justify-content: center;
-
     gap: 10px;
+    height: 78px;
+    padding-top: 10px;
+}
 
+.vs-form-point {
+    position: relative;
+    width: 20px;
     height: 70px;
+    flex-shrink: 0;
+}
+
+.vs-form-date {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+
+    transform: translateX(-50%);
+
+    color: rgba(255, 255, 255, 0.35);
+    font-size: 9px;
+    font-weight: 500;
+    white-space: nowrap;
 }
 
 .vs-form-dot {
@@ -191,7 +210,6 @@
     transition: transform 250ms ease;
 
     z-index: 2;
-
     overflow: visible;
 }
 .vs-form-dot::after {

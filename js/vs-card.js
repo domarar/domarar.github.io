@@ -161,14 +161,25 @@ const points = form.map(item => {
                 `;
             }
 
-            return `
-                <span
-                    class="vs-form-dot ${item.result}"
-                    style="--form-level: ${item.level};"
-                >
-                    ${line}
-                </span>
-            `;
+            const date = new Date(item.date);
+
+const dateLabel =
+    `${date.getDate()}.${date.getMonth() + 1}`;
+
+return `
+    <span class="vs-form-point">
+        <span
+            class="vs-form-dot ${item.result}"
+            style="--form-level: ${item.level};"
+        >
+            ${line}
+        </span>
+
+        <span class="vs-form-date">
+            ${dateLabel}
+        </span>
+    </span>
+`;
         })
         .join("");
 }
