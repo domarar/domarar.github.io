@@ -942,8 +942,8 @@ const profileSection = matchedProfile
             <section class="search-timeline-section">
 
                 <h2 class="search-section-title">
-                    Eldri leikir
-                </h2>
+    Eldri leikir 2026 (${olderSearchGames.length})
+</h2>
 
                 ${olderSearchGames
                     .map(createGameCard)
