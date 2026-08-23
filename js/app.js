@@ -2387,17 +2387,3 @@ document.addEventListener("click", async event => {
         shareButton.textContent = "Deila";
     }
 });
-
-document.addEventListener("click", (event) => {
-    const toggle = event.target.closest(".search-section-toggle");
-
-    if (!toggle) return;
-
-    const section = toggle.closest(".search-collapsible-section");
-    const content = section.querySelector(".search-section-content");
-
-    const isOpen = toggle.getAttribute("aria-expanded") === "true";
-
-    toggle.setAttribute("aria-expanded", String(!isOpen));
-    content.hidden = isOpen;
-});
