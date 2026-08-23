@@ -941,17 +941,28 @@ const profileSection = matchedProfile
         ? `
             <section class="search-timeline-section">
 
-                <h2 class="search-section-title">
-    Eldri leikir 2026 (${olderSearchGames.length})
-</h2>
+                const olderSection = olderSearchGames.length
+    ? `
+        <section class="search-timeline-section search-collapsible-section">
 
+            <button
+                class="search-section-title search-section-toggle"
+                type="button"
+                aria-expanded="true"
+            >
+                <span>Eldri leikir 2026 (${olderSearchGames.length})</span>
+                <span class="search-section-chevron">⌃</span>
+            </button>
+
+            <div class="search-section-content">
                 ${olderSearchGames
                     .map(createGameCard)
                     .join("")}
+            </div>
 
-            </section>
-        `
-        : "";
+        </section>
+    `
+    : "";
     const archive2025Section = archive2025SearchGames.length
     ? `
         <section class="search-timeline-section">
@@ -2375,4 +2386,18 @@ document.addEventListener("click", async event => {
         shareButton.disabled = false;
         shareButton.textContent = "Deila";
     }
+});
+
+document.addEventListener("click", (event) => {
+    const toggle = event.target.closest(".search-section-toggle");
+
+    if (!toggle) return;
+
+    const section = toggle.closest(".search-collapsible-section");
+    const content = section.querySelector(".search-section-content");
+
+    const isOpen = toggle.getAttribute("aria-expanded") === "true";
+
+    toggle.setAttribute("aria-expanded", String(!isOpen));
+    content.hidden = isOpen;
 });
