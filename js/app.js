@@ -938,10 +938,6 @@ const profileSection = matchedProfile
         : "";
 
     const olderSection = olderSearchGames.length
-        ? `
-            <section class="search-timeline-section">
-
-                const olderSection = olderSearchGames.length
     ? `
         <section class="search-timeline-section search-collapsible-section">
 
@@ -2386,4 +2382,18 @@ document.addEventListener("click", async event => {
         shareButton.disabled = false;
         shareButton.textContent = "Deila";
     }
+});
+
+document.addEventListener("click", (event) => {
+    const toggle = event.target.closest(".search-section-toggle");
+
+    if (!toggle) return;
+
+    const section = toggle.closest(".search-collapsible-section");
+    const content = section.querySelector(".search-section-content");
+
+    const isOpen = toggle.getAttribute("aria-expanded") === "true";
+
+    toggle.setAttribute("aria-expanded", String(!isOpen));
+    content.hidden = isOpen;
 });
