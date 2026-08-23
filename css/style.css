@@ -2339,3 +2339,50 @@ box-shadow:
         display: none !important;
     }
 }
+
+/* =========================================
+   COLLAPSIBLE 2026 SEARCH RESULTS
+   ========================================= */
+
+.search-section-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+
+    width: fit-content;
+
+    padding: 0;
+    margin: 0 0 18px 0;
+
+    border: 0;
+    outline: 0;
+    background: transparent;
+
+    color: inherit;
+    font: inherit;
+
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.search-section-toggle:focus,
+.search-section-toggle:focus-visible {
+    outline: none;
+    box-shadow: none;
+}
+
+.search-section-chevron {
+    display: inline-block;
+
+    font-size: 0.8em;
+    opacity: 0.65;
+
+    transition: transform 180ms ease;
+}
+
+.search-section-toggle[aria-expanded="false"]
+.search-section-chevron {
+    transform: rotate(180deg);
+}
