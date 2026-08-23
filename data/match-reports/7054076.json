@@ -1,6 +1,6 @@
 {
   "id": 7054076,
-  "liveStatus": "SCHEDULED",
+  "liveStatus": "PLAYED",
   "currentMinute": "FT",
   "dateTimeUTC": 1787493600000,
   "round": "19",
@@ -145,6 +145,18 @@
               "eventId": 8159956,
               "eventType": {
                 "fcdName": "YELLOW"
+              },
+              "player": {
+                "personId": 4883,
+                "hideProfile": false
+              },
+              "player2": null,
+              "homeTeam": true
+            },
+            {
+              "eventId": 8160958,
+              "eventType": {
+                "fcdName": "GOAL"
               },
               "player": {
                 "personId": 4883,
@@ -335,18 +347,6 @@
                 "name": null,
                 "hideProfile": false
               },
-              "homeTeam": true
-            },
-            {
-              "eventId": 8159604,
-              "eventType": {
-                "fcdName": "GOAL"
-              },
-              "player": {
-                "personId": 70280,
-                "hideProfile": false
-              },
-              "player2": null,
               "homeTeam": true
             },
             {
@@ -1203,7 +1203,7 @@
       "teamOfficial": null
     },
     {
-      "eventId": 8159604,
+      "eventId": 8160958,
       "eventType": {
         "fcdName": "GOAL"
       },
@@ -1213,8 +1213,8 @@
         "fcdName": "SECOND_HALF"
       },
       "player": {
-        "personId": 70280,
-        "name": "Eggert Örnuson Dagsson",
+        "personId": 4883,
+        "name": "Haukur Ásberg Hilmarsson",
         "hideProfile": false
       },
       "player2": null,

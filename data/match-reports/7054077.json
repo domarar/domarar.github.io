@@ -1,7 +1,7 @@
 {
   "id": 7054077,
   "liveStatus": "SCHEDULED",
-  "currentMinute": null,
+  "currentMinute": "FT",
   "dateTimeUTC": 1787493600000,
   "round": "19",
   "attendance": null,
@@ -579,6 +579,18 @@
               "eventId": 8159861,
               "eventType": {
                 "fcdName": "GOAL"
+              },
+              "player": {
+                "personId": 89392,
+                "hideProfile": false
+              },
+              "player2": null,
+              "homeTeam": false
+            },
+            {
+              "eventId": 8160826,
+              "eventType": {
+                "fcdName": "YELLOW"
               },
               "player": {
                 "personId": 89392,
@@ -1173,7 +1185,7 @@
       "eventType": {
         "fcdName": "YELLOW"
       },
-      "displayMinute": "77'",
+      "displayMinute": "78'",
       "orderNumber": 14,
       "matchPhase": {
         "fcdName": "SECOND_HALF"
@@ -1314,7 +1326,7 @@
       "teamOfficial": null
     },
     {
-      "eventId": 8160040,
+      "eventId": 8160826,
       "eventType": {
         "fcdName": "YELLOW"
       },
@@ -1324,12 +1336,12 @@
         "fcdName": "SECOND_HALF"
       },
       "player": {
-        "personId": 35564,
-        "name": "Sindri Hrafn Jónsson",
+        "personId": 89392,
+        "name": "Thomas Lamaille",
         "hideProfile": false
       },
       "player2": null,
-      "homeTeam": true,
+      "homeTeam": false,
       "teamOfficial": null
     },
     {
