@@ -84,7 +84,33 @@ function renderLawOverview() {
 
     lawsContent.appendChild(overview);
 }
+function getVisibleLawSections(law) {
+    const sections = Array.isArray(law.sections)
+        ? law.sections
+        : [];
 
+    // Only Law 17 contains material after the Laws
+    if (Number(law.number) !== 17) {
+        return sections;
+    }
+
+    const cutoffIndex = sections.findIndex(section => {
+        const text = `
+            ${section.title || ""}
+            ${section.raw_text || ""}
+        `.toLowerCase();
+
+        return text.includes("fifa gæðastaðall");
+    });
+
+    // If we don't find it, leave Law 17 untouched
+    if (cutoffIndex === -1) {
+        return sections;
+    }
+
+    // Stop BEFORE the FIFA quality-standard material
+    return sections.slice(0, cutoffIndex);
+}
 
 // =========================================
 // SINGLE LAW
@@ -101,9 +127,21 @@ function renderSingleLaw(lawNumber) {
 
     if (!law) return;
 
-    const sectionsHtml = law.sections.map(section => {
+    const sectionsHtml = getVisibleLawSections(law).map(section => {
 
         let sectionMainText = section.raw_text;
+        // Stop Law 17 before FIFA appendix / glossary material
+if (Number(law.number) === 17) {
+    const fifaCutoff = sectionMainText.indexOf(
+        "Gæðastaðall FIFA"
+    );
+
+    if (fifaCutoff !== -1) {
+        sectionMainText = sectionMainText
+            .slice(0, fifaCutoff)
+            .trim();
+    }
+}
 
 // If this section has topics,
 // keep only the text BEFORE the first topic.
@@ -498,7 +536,7 @@ function setupLawsSearch() {
                 });
             }
 
-            law.sections.forEach(section => {
+            getVisibleLawSections(law).forEach(section => {
 
                 // SECTION TITLE
                 if (section.title.toLowerCase().includes(query)) {

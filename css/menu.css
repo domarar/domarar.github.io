@@ -351,20 +351,17 @@
    ACTIVE DÓMGÆSLA SECTION
    ========================= */
 
+/* =========================
+   KNATTSPYRNUlÖGIN - ACTIVE
+   ========================= */
+
 .menu-section:has(.menu-item[href="laws.html"]) {
     display: block !important;
 }
 
-.menu-item[href="laws.html"] {
+.menu-section .menu-item[href="laws.html"] {
     display: flex !important;
     text-decoration: none;
-}
-/* =========================
-   HIDE UNFINISHED DÓMGÆSLA ITEMS
-   ========================= */
-
-.menu-section .menu-item[href="laws.html"] {
-    display: flex;
 }
 
 .menu-section button.menu-item {
