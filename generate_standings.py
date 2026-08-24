@@ -1,8 +1,10 @@
 import json
 from pathlib import Path
 from collections import defaultdict
+from datetime import datetime, timezone, timedelta
 
 ARCHIVE_FILE = Path("data/archive-2026.json")
+CURRENT_GAMES_FILE = Path("data/games.json")
 OUTPUT_FILE = Path("data/standings.json")
 
 
@@ -22,23 +24,92 @@ def clean_competition_name(name):
 
 
 def game_should_count(game):
-    status = game.get("status")
     home_score = game.get("homeScore")
     away_score = game.get("awayScore")
+    match_date = game.get("date")
 
-    if status != "PLAYED":
+    # No score available
+    if home_score is None or away_score is None:
         return False
 
-    if home_score is None or away_score is None:
+    # No kickoff time
+    if not match_date:
+        return False
+
+    try:
+        kickoff = datetime.fromisoformat(
+            match_date.replace("Z", "+00:00")
+        )
+    except ValueError:
+        return False
+
+    now = datetime.now(timezone.utc)
+
+    # Never include a match before kickoff
+    if now < kickoff:
         return False
 
     return True
 
+def game_is_live(game):
+    status = game.get("status")
+    home_score = game.get("homeScore")
+    away_score = game.get("awayScore")
+    match_date = game.get("date")
+
+    if home_score is None or away_score is None:
+        return False
+
+    if not match_date:
+        return False
+
+    if status == "PLAYED":
+        return False
+
+    try:
+        kickoff = datetime.fromisoformat(
+            match_date.replace("Z", "+00:00")
+        )
+    except ValueError:
+        return False
+
+    now = datetime.now(timezone.utc)
+
+    return (
+        now >= kickoff
+        and now <= kickoff + timedelta(hours=2, minutes=15)
+    )
+
+def load_all_games():
+    games_by_id = {}
+
+    # Full-season archive
+    if ARCHIVE_FILE.exists():
+        with open(ARCHIVE_FILE, "r", encoding="utf-8") as f:
+            archive_data = json.load(f)
+
+        for game in archive_data.get("games", []):
+            game_id = game.get("id")
+
+            if game_id is not None:
+                games_by_id[game_id] = game
+
+    # Fresh games from the automatic KSÍ update.
+    # These overwrite archive versions of the same match.
+    if CURRENT_GAMES_FILE.exists():
+        with open(CURRENT_GAMES_FILE, "r", encoding="utf-8") as f:
+            current_data = json.load(f)
+
+        for game in current_data.get("games", []):
+            game_id = game.get("id")
+
+            if game_id is not None:
+                games_by_id[game_id] = game
+
+    return list(games_by_id.values())
 
 def generate_standings():
-    with open(ARCHIVE_FILE, "r", encoding="utf-8") as f:
-        data = json.load(f)
-        games = data["games"]
+    games = load_all_games()
 
     competitions = defaultdict(
         lambda: defaultdict(
@@ -50,6 +121,7 @@ def generate_standings():
             }
         )
     )
+    live_teams = defaultdict(set)
 
     for game in games:
 
@@ -68,6 +140,10 @@ def generate_standings():
 
         if not home or not away:
             continue
+
+        if game_is_live(game):
+            live_teams[competition].add(home)
+            live_teams[competition].add(away)
 
         home_team = competitions[competition][home]
         away_team = competitions[competition][away]
@@ -113,6 +189,7 @@ def generate_standings():
                         "goalDifference": goal_difference,
                         "goalsFor": stats["goalsFor"],
                         "points": stats["points"],
+                        "isLive": team_name in live_teams[competition],
                     }
                 )
             

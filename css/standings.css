@@ -493,3 +493,31 @@ body.standings-open {
 body.standings-menu-open {
     overflow: hidden;
 }
+.standings-team {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.standings-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+
+    color: rgba(255, 255, 255, 0.55);
+
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+}
+
+.standings-live-dot {
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+    background: #4cd964;
+
+    box-shadow: 0 0 7px rgba(76, 217, 100, 0.45);
+}

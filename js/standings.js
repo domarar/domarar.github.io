@@ -142,8 +142,15 @@ async function openStandings(competition, homeTeam, awayTeam) {
                     </div>
 
                     <div class="standings-team">
-                        ${team.team}
-                    </div>
+    <span>${team.team}</span>
+
+    ${team.isLive ? `
+        <span class="standings-live">
+            <span class="standings-live-dot"></span>
+            Í GANGI
+        </span>
+    ` : ""}
+</div>
 
                     <div class="standings-played">
                         ${team.played}

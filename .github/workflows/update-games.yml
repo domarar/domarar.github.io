@@ -348,12 +348,18 @@ jobs:
               )
           PY
 
+                PY
+
+      - name: Generate standings
+        run: |
+          python generate_standings.py
+
       - name: Commit updated games and match reports
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add data/games.json data/match-reports/
+          git add data/games.json data/match-reports/ data/standings.json
 
           if git diff --cached --quiet; then
             echo "No game or match report changes"
