@@ -448,14 +448,24 @@ return `
         class="law-section"
         id="${section.id}"
     >
-        <h3>
-            <span>${section.number}.</span>
-            ${section.title}
-        </h3>
+        <button
+            class="law-section-toggle"
+            type="button"
+            aria-expanded="false"
+        >
+            <h3>
+                <span>${section.number}.</span>
+                ${section.title}
+            </h3>
 
-        ${contentHtml}
+            <span class="law-section-chevron">⌄</span>
+        </button>
 
-        ${topicsHtml}
+        <div class="law-section-body">
+            ${contentHtml}
+
+            ${topicsHtml}
+        </div>
     </section>
 `;
     }).join("");
@@ -507,7 +517,49 @@ return `
             });
         });
     }
+const sectionToggles = document.querySelectorAll(
+    ".law-section-toggle"
+);
 
+sectionToggles.forEach(toggle => {
+    toggle.addEventListener("click", () => {
+
+        if (window.innerWidth > 600) return;
+
+        const section = toggle.closest(".law-section");
+
+        if (!section) return;
+
+        const wasOpen = section.classList.contains("is-open");
+
+        document
+            .querySelectorAll(".law-section.is-open")
+            .forEach(openSection => {
+                openSection.classList.remove("is-open");
+
+                const openToggle =
+                    openSection.querySelector(
+                        ".law-section-toggle"
+                    );
+
+                if (openToggle) {
+                    openToggle.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+                }
+            });
+
+        if (!wasOpen) {
+            section.classList.add("is-open");
+
+            toggle.setAttribute(
+                "aria-expanded",
+                "true"
+            );
+        }
+    });
+});
     window.scrollTo({
         top: 0,
         behavior: "smooth"
