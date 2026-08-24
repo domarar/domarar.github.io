@@ -191,6 +191,7 @@ const refereeProfiles = {
     },
 
     "Gunnar Oddur Hafliðason": {
+        image: "images/referees/gunnar_oddur_hafliðason-logo.jpg",
         category: "Landsdómari"
     },
 
