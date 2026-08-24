@@ -317,11 +317,26 @@ topicLines.forEach(line => {
     }
 
     // Normal prose
-    if (topicParagraphBuffer) {
-        topicParagraphBuffer += " " + line;
-    } else {
-        topicParagraphBuffer = line;
-    }
+    if (!topicParagraphBuffer) {
+    topicParagraphBuffer = line;
+    return;
+}
+
+const previousEndsSentence =
+    /[.!?]["”’)]?$/.test(topicParagraphBuffer);
+
+const nextLooksLikeNewSentence =
+    /^[A-ZÁÉÍÓÚÝÞÆÖ]/.test(line);
+
+if (
+    previousEndsSentence &&
+    nextLooksLikeNewSentence
+) {
+    cleanedTopicLines.push(topicParagraphBuffer);
+    topicParagraphBuffer = line;
+} else {
+    topicParagraphBuffer += " " + line;
+}
 });
 
 if (topicCurrentBullet) {
