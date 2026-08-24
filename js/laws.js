@@ -198,20 +198,21 @@ let currentBullet = "";
 
 lines.forEach(line => {
 
-    // Blank line = finish whatever we're building
-    if (!line) {
+    // Blank extracted PDF line
+if (!line) {
 
-        if (currentBullet) {
-            bulletItems.push(currentBullet);
-            currentBullet = "";
-        }
-
-        flushParagraph();
-        flushBullets();
+    // If we're inside a bullet, ignore the blank line.
+    // PDF extraction can insert these inside one bullet.
+    if (currentBullet) {
         return;
     }
 
-    // New bullet starts
+    flushParagraph();
+    flushBullets();
+    return;
+}
+
+    // New bullet
     if (line.startsWith("•")) {
 
         flushParagraph();
@@ -224,19 +225,54 @@ lines.forEach(line => {
         return;
     }
 
-    // Continue existing bullet
+    // Continue bullet, or return to normal prose
     if (currentBullet) {
-        currentBullet += " " + line;
+
+        const bulletEndsSentence =
+            /[.!?]["”’)]?$/.test(currentBullet);
+
+        const nextLooksLikeNewParagraph =
+            /^[A-ZÁÉÍÓÚÝÞÆÖ]/.test(line);
+
+        if (
+            bulletEndsSentence &&
+            nextLooksLikeNewParagraph
+        ) {
+            bulletItems.push(currentBullet);
+            currentBullet = "";
+
+            flushBullets();
+
+            paragraphBuffer = line;
+        } else {
+            currentBullet += " " + line;
+        }
+
         return;
     }
 
     // Normal paragraph text
     flushBullets();
 
-    if (paragraphBuffer) {
-        paragraphBuffer += " " + line;
-    } else {
+    if (!paragraphBuffer) {
         paragraphBuffer = line;
+        return;
+    }
+
+    const previousEndsSentence =
+        /[.!?]["”’)]?$/.test(paragraphBuffer);
+
+    const nextLooksLikeNewSentence =
+        /^[A-ZÁÉÍÓÚÝÞÆÖ]/.test(line);
+
+    if (
+        previousEndsSentence &&
+        nextLooksLikeNewSentence
+    ) {
+        flushParagraph();
+        paragraphBuffer = line;
+    } else {
+        paragraphBuffer += " " + line;
     }
 });
 
@@ -253,31 +289,48 @@ function renderTopic(topic) {
         .filter(Boolean);
 
     const cleanedTopicLines = [];
-    let topicParagraphBuffer = "";
+let topicParagraphBuffer = "";
+let topicCurrentBullet = "";
 
-    topicLines.forEach(line => {
+topicLines.forEach(line => {
 
-        if (line.startsWith("•")) {
-
-            if (topicParagraphBuffer) {
-                cleanedTopicLines.push(topicParagraphBuffer);
-                topicParagraphBuffer = "";
-            }
-
-            cleanedTopicLines.push(line);
-            return;
-        }
+    // New bullet
+    if (line.startsWith("•")) {
 
         if (topicParagraphBuffer) {
-            topicParagraphBuffer += " " + line;
-        } else {
-            topicParagraphBuffer = line;
+            cleanedTopicLines.push(topicParagraphBuffer);
+            topicParagraphBuffer = "";
         }
-    });
 
-    if (topicParagraphBuffer) {
-        cleanedTopicLines.push(topicParagraphBuffer);
+        if (topicCurrentBullet) {
+            cleanedTopicLines.push("• " + topicCurrentBullet);
+        }
+
+        topicCurrentBullet = line.replace(/^•\s*/, "");
+        return;
     }
+
+    // Continue current bullet
+    if (topicCurrentBullet) {
+        topicCurrentBullet += " " + line;
+        return;
+    }
+
+    // Normal prose
+    if (topicParagraphBuffer) {
+        topicParagraphBuffer += " " + line;
+    } else {
+        topicParagraphBuffer = line;
+    }
+});
+
+if (topicCurrentBullet) {
+    cleanedTopicLines.push("• " + topicCurrentBullet);
+}
+
+if (topicParagraphBuffer) {
+    cleanedTopicLines.push(topicParagraphBuffer);
+}
 
     let topicHtml = "";
     let topicBullets = [];
