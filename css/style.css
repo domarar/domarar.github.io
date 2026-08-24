@@ -2386,3 +2386,97 @@ box-shadow:
 .search-section-chevron {
     transform: rotate(180deg);
 }
+
+/* =========================================
+   SEARCH YEAR SECTIONS
+========================================= */
+
+.search-year-toggle {
+    width: 100%;
+    min-height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 16px;
+
+    border: 1px solid rgba(76, 217, 100, 0.22);
+    border-radius: 14px;
+
+    background: rgba(14, 25, 29, 0.78);
+
+    color: #ffffff;
+
+    cursor: pointer;
+
+    transition:
+        background 180ms ease,
+        border-color 180ms ease,
+        box-shadow 180ms ease,
+        transform 180ms ease;
+}
+
+.search-year-toggle:hover {
+    border-color: rgba(76, 217, 100, 0.45);
+    background: rgba(18, 32, 36, 0.9);
+}
+
+.search-year-toggle.is-open {
+    border-color: rgba(76, 217, 100, 0.5);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(29, 74, 49, 0.72),
+            rgba(14, 31, 28, 0.88)
+        );
+
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.18),
+        0 0 18px rgba(76, 217, 100, 0.06);
+}
+
+.search-year-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.search-year-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 28px;
+    height: 24px;
+
+    padding: 0 8px;
+
+    border-radius: 999px;
+
+    background: rgba(255, 255, 255, 0.08);
+
+    color: rgba(255, 255, 255, 0.68);
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.search-year-chevron {
+    color: #4cd964;
+
+    font-size: 18px;
+    line-height: 1;
+}
+
+.search-year-games {
+    margin-top: 14px;
+}
+
+.search-timeline-section + .search-timeline-section {
+    margin-top: 14px;
+}

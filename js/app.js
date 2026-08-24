@@ -942,15 +942,25 @@ const profileSection = matchedProfile
         <section class="search-timeline-section search-collapsible-section">
 
             <button
-                class="search-section-title search-section-toggle"
+                class="search-year-toggle is-open"
                 type="button"
+                data-search-year-toggle="2026"
                 aria-expanded="true"
             >
-                <span>Eldri leikir 2026 (${olderSearchGames.length})</span>
-                <span class="search-section-chevron">⌃</span>
+                <span class="search-year-label">
+                    2026
+                    <span class="search-year-count">
+                        ${olderSearchGames.length}
+                    </span>
+                </span>
+
+                <span class="search-year-chevron">⌃</span>
             </button>
 
-            <div class="search-section-content">
+            <div
+                class="search-year-games"
+                data-search-year="2026"
+            >
                 ${olderSearchGames
                     .map(createGameCard)
                     .join("")}
@@ -959,69 +969,70 @@ const profileSection = matchedProfile
         </section>
     `
     : "";
-    const archive2025Section = archive2025SearchGames.length
+
+const archive2025Section = archive2025SearchGames.length
     ? `
         <section class="search-timeline-section">
 
             <button
-                class="archive-year-toggle"
+                class="search-year-toggle"
                 type="button"
+                data-search-year-toggle="2025"
+                aria-expanded="false"
             >
-                Leikir 2025 ↓
+                <span class="search-year-label">
+                    2025
+                    <span class="search-year-count">
+                        ${archive2025SearchGames.length}
+                    </span>
+                </span>
+
+                <span class="search-year-chevron">⌄</span>
             </button>
 
             <div
-                class="archive-year-games"
-                data-year="2025"
+                class="search-year-games"
+                data-search-year="2025"
                 style="display: none;"
             >
                 ${archive2025SearchGames
                     .map(createGameCard)
                     .join("")}
-            
-            <button
-    type="button"
-    class="archive-year-collapse"
-    data-collapse-year="2025"
->
-    Fela leiki 2025 ↑
-</button>
-
-</div>
+            </div>
 
         </section>
     `
     : "";
 
-    const archive2024Section = archive2024SearchGames.length
+const archive2024Section = archive2024SearchGames.length
     ? `
         <section class="search-timeline-section">
 
             <button
-                class="archive-year-toggle"
+                class="search-year-toggle"
                 type="button"
-                data-archive-toggle="2024"
+                data-search-year-toggle="2024"
+                aria-expanded="false"
             >
-                Leikir 2024 ↓
+                <span class="search-year-label">
+                    2024
+                    <span class="search-year-count">
+                        ${archive2024SearchGames.length}
+                    </span>
+                </span>
+
+                <span class="search-year-chevron">⌄</span>
             </button>
 
             <div
-                class="archive-year-games"
-                data-year="2024"
+                class="search-year-games"
+                data-search-year="2024"
                 style="display: none;"
             >
                 ${archive2024SearchGames
                     .map(createGameCard)
                     .join("")}
-            
-            <button
-    type="button"
-    class="archive-year-collapse"
-    data-collapse-year="2024"
->
-    Fela leiki 2024 ↑
-</button>
-</div>
+            </div>
 
         </section>
     `
@@ -1056,83 +1067,44 @@ const profileSection = matchedProfile
                 : "Sýna fleiri leiki framundan ↓";
     });
 }
-    const archive2025Toggle =
-    gamesContainer.querySelector(".archive-year-toggle");
+    const searchYearToggles =
+    gamesContainer.querySelectorAll("[data-search-year-toggle]");
 
-    const archive2025Games =
-    gamesContainer.querySelector(
-        '.archive-year-games[data-year="2025"]'
-    );
+searchYearToggles.forEach(toggle => {
+    toggle.addEventListener("click", () => {
+        const year = toggle.dataset.searchYearToggle;
 
-    if (archive2025Toggle && archive2025Games) {
-    archive2025Toggle.addEventListener("click", () => {
-        const isHidden =
-            archive2025Games.style.display === "none";
-
-        archive2025Games.style.display =
-            isHidden ? "block" : "none";
-
-        archive2025Toggle.textContent =
-            isHidden
-                ? "Leikir 2025 ↑"
-                : "Leikir 2025 ↓";
-    });
-} 
-
-const archive2024Toggle =
-    gamesContainer.querySelector(
-        '[data-archive-toggle="2024"]'
-    );
-
-const archive2024Games =
-    gamesContainer.querySelector(
-        '.archive-year-games[data-year="2024"]'
-    );
-
-if (archive2024Toggle && archive2024Games) {
-    archive2024Toggle.addEventListener("click", () => {
-        const isHidden =
-            archive2024Games.style.display === "none";
-
-        archive2024Games.style.display =
-            isHidden ? "block" : "none";
-
-        archive2024Toggle.textContent =
-            isHidden
-                ? "Leikir 2024 ↑"
-                : "Leikir 2024 ↓";
-    });
-}
-gamesContainer
-    .querySelectorAll(".archive-year-collapse")
-    .forEach(button => {
-        button.addEventListener("click", () => {
-            const year = button.dataset.collapseYear;
-
-            const games = gamesContainer.querySelector(
-                `.archive-year-games[data-year="${year}"]`
+        const games =
+            gamesContainer.querySelector(
+                `[data-search-year="${year}"]`
             );
 
-            const toggle = gamesContainer.querySelector(
-                `[data-archive-toggle="${year}"]`
-            );
+        if (!games) return;
 
-            if (!games) {
-                return;
-            }
+        const isOpen =
+            toggle.getAttribute("aria-expanded") === "true";
 
-            games.style.display = "none";
+        games.style.display =
+            isOpen ? "none" : "block";
 
-            if (toggle) {
-                toggle.textContent = `Leikir ${year} ↓`;
+        toggle.setAttribute(
+            "aria-expanded",
+            isOpen ? "false" : "true"
+        );
 
-                toggle.scrollIntoView({
-                    behavior: "smooth",
-                    block: "center"
-                });
-            }
-        });
+        toggle.classList.toggle("is-open", !isOpen);
+
+        const chevron =
+            toggle.querySelector(".search-year-chevron");
+
+        if (chevron) {
+            chevron.textContent =
+                isOpen ? "⌄" : "⌃";
+        }
     });
+});
+
+
 const profileButton =
     gamesContainer.querySelector(".referee-profile-button");
 
