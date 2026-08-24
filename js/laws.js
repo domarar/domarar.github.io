@@ -495,6 +495,16 @@ return `
                 </h2>
 
             </header>
+            ${law.intro ? `
+    <div class="law-intro">
+        ${law.intro
+            .split("\n")
+            .map(paragraph => `
+                <p>${paragraph.trim()}</p>
+            `)
+            .join("")}
+    </div>
+` : ""}
 
             <div class="law-sections">
                 ${sectionsHtml}
