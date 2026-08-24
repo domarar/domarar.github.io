@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 /* =========================================
    LAWS PAGE BASE
 ========================================= */
@@ -666,12 +667,18 @@ body {
    UNIFIED LAW TEXT
 ========================================= */
 
+.law-section-body {
+    font-family: "Inter", sans-serif;
+}
+
 .law-section p,
 .law-topic-content p {
+    font-family: "Inter", sans-serif;
     font-size: 16px;
-    line-height: 1.65;
-    letter-spacing: 0;
-    color: rgba(255, 255, 255, 0.82);
+    font-weight: 400;
+    line-height: 1.75;
+    letter-spacing: -0.01em;
+    color: rgba(255, 255, 255, 0.84);
 }
 
 .law-topic-content p {
@@ -684,9 +691,11 @@ body {
 
 .law-bullet-list li,
 .law-topic .law-bullet-list li {
+    font-family: "Inter", sans-serif;
     font-size: 16px;
-    line-height: 1.65;
-    letter-spacing: 0;
+    font-weight: 400;
+    line-height: 1.75;
+    letter-spacing: -0.01em;
 }
 
 /* =========================================
