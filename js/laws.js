@@ -63,7 +63,7 @@ function renderLawOverview() {
 
         button.innerHTML = `
             <div class="law-overview-number">
-                ${String(law.number).padStart(2, "0")}
+                ${law.number}
             </div>
 
             <div class="law-overview-title">
@@ -483,7 +483,7 @@ return `
             <header class="single-law-header">
 
                 <div class="single-law-number">
-                    ${String(law.number).padStart(2, "0")}
+                    ${law.number}
                 </div>
 
                 <div class="single-law-label">
