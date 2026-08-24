@@ -359,11 +359,23 @@
     display: block !important;
 }
 
-.menu-section .menu-item[href="laws.html"] {
-    display: flex !important;
-    text-decoration: none;
-}
 
 .menu-section button.menu-item {
     display: none;
+}
+/* =========================
+   UNFINISHED MENU ITEMS
+   ========================= */
+
+.menu-item-unfinished {
+    display: none !important;
+}
+/* Remove link styling from menu links */
+a.menu-item,
+a.menu-item:link,
+a.menu-item:visited,
+a.menu-item:hover,
+a.menu-item:focus,
+a.menu-item:active {
+    text-decoration: none !important;
 }
