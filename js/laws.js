@@ -1497,7 +1497,15 @@ function setupLawsSearch() {
     const resultsBox =
         document.querySelector("#lawsSearchResults");
 
-    if (!searchInput || !resultsBox) return;
+    const clearButton =
+        document.querySelector("#lawsSearchClear");
+
+    if (!searchInput || !resultsBox || !clearButton) return;
+
+    const updateClearButton = () => {
+        clearButton.hidden =
+            searchInput.value.length === 0;
+    };
 
     const resetSearch = () => {
         lawsSearchState.query = "";
@@ -1511,7 +1519,17 @@ function setupLawsSearch() {
         removeLawsSearchHighlights();
     };
 
+    const clearSearch = () => {
+        searchInput.value = "";
+
+        resetSearch();
+        updateClearButton();
+        renderLawOverview();
+    };
+
     searchInput.addEventListener("input", () => {
+        updateClearButton();
+
         const query = searchInput.value
             .trim()
             .toLowerCase();
@@ -1540,21 +1558,31 @@ function setupLawsSearch() {
         );
     });
 
+    clearButton.addEventListener("click", () => {
+        clearSearch();
+        searchInput.focus();
+    });
+
     searchInput.addEventListener("keydown", event => {
         if (
             event.key === "Enter" &&
             lawsSearchState.results.length > 0
         ) {
             event.preventDefault();
+
             resultsBox.style.display = "none";
             openLawsSearchResult(0);
         }
 
         if (event.key === "Escape") {
-            searchInput.value = "";
-            resetSearch();
+            event.preventDefault();
+
+            clearSearch();
+            searchInput.focus();
         }
     });
+
+    updateClearButton();
 }
 
 
