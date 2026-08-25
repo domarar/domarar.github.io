@@ -36,7 +36,17 @@ print(f"PDF pages: {len(reader.pages)}")
 all_text = []
 
 for page_number, page in enumerate(reader.pages, start=1):
-    text = page.extract_text() or ""
+    try:
+        # Layout mode preserves the horizontal indentation that distinguishes
+        # parent bullets from nested bullets in the official PDF.
+        text = page.extract_text(
+            extraction_mode="layout"
+        ) or ""
+    except TypeError as error:
+        raise RuntimeError(
+            "This converter requires a current pypdf version with "
+            "layout extraction support. Run: py -m pip install -U pypdf"
+        ) from error
 
     all_text.append(
         f"\n\n===== PAGE {page_number} =====\n\n{text}"
@@ -75,7 +85,7 @@ print("----- FOUND LAWS -----")
 print()
 
 law_pattern = re.compile(
-    r"(?m)^(\d{1,2})\.\s*grein\s*-\s*(.+)$"
+    r"(?m)^[ \t]*(\d{1,2})\.\s*grein\s*-\s*(.+)$"
 )
 
 matches = list(law_pattern.finditer(full_text))
@@ -93,7 +103,7 @@ for index, match in enumerate(matches):
     else:
         end = len(full_text)
 
-    raw_text = full_text[start:end].strip()
+    raw_text = full_text[start:end].strip("\r\n")
 
     laws.append({
         "number": law_number,
@@ -139,7 +149,7 @@ print(JSON_PATH)
 
 def split_sections(raw_text, law_number):
     section_pattern = re.compile(
-        r"(?m)^(\d{1,2})\.\s+([^\n]+)$"
+        r"(?m)^[ \t]*(\d{1,2})\.\s+([^\n]+)$"
     )
 
     section_matches = list(
@@ -159,7 +169,7 @@ def split_sections(raw_text, law_number):
         else:
             end = len(raw_text)
 
-        section_text = raw_text[start:end].strip()
+        section_text = raw_text[start:end].strip("\r\n")
 
         sections.append({
             "number": section_number,
@@ -310,22 +320,24 @@ def starts_lowercase(text):
 
 
 def get_bullet(line):
-    stripped = str(line).lstrip()
+    expanded = str(line).replace("\t", "    ")
+    stripped = expanded.lstrip(" ")
+    indent = len(expanded) - len(stripped)
 
     if re.match(r"^•\s*", stripped):
-        return 1, "•", re.sub(r"^•\s*", "", stripped).strip()
+        return 1, "•", re.sub(r"^•\s*", "", stripped).strip(), indent
 
     if re.match(r"^[✓✔]\s*", stripped):
         marker = stripped[0]
-        return 2, marker, re.sub(r"^[✓✔]\s*", "", stripped).strip()
+        return 2, marker, re.sub(r"^[✓✔]\s*", "", stripped).strip(), indent
 
     if re.match(r"^[○◦]\s*", stripped):
         marker = stripped[0]
-        return 2, marker, re.sub(r"^[○◦]\s*", "", stripped).strip()
+        return 2, marker, re.sub(r"^[○◦]\s*", "", stripped).strip(), indent
 
     # The PDF sometimes extracts a hollow sub-bullet as a plain letter o.
     if re.match(r"^o\s+", stripped):
-        return 2, "○", re.sub(r"^o\s+", "", stripped).strip()
+        return 2, "○", re.sub(r"^o\s+", "", stripped).strip(), indent
 
     return None
 
@@ -334,6 +346,7 @@ def build_content_blocks(raw_text):
     blocks = []
     paragraph_lines = []
     current_list = None
+    list_base_indent = None
 
     def flush_paragraph():
         nonlocal paragraph_lines
@@ -350,12 +363,13 @@ def build_content_blocks(raw_text):
         paragraph_lines = []
 
     def flush_list():
-        nonlocal current_list
+        nonlocal current_list, list_base_indent
 
         if current_list and current_list["items"]:
             blocks.append(current_list)
 
         current_list = None
+        list_base_indent = None
 
     def ensure_list():
         nonlocal current_list
@@ -418,9 +432,17 @@ def build_content_blocks(raw_text):
         bullet = get_bullet(raw_line)
 
         if bullet:
-            level, marker, text = bullet
+            marker_level, marker, text, indent = bullet
             flush_paragraph()
             law_list = ensure_list()
+
+            if list_base_indent is None:
+                list_base_indent = indent
+
+            level = 2 if (
+                marker_level == 2
+                or indent >= list_base_indent + 2
+            ) else 1
 
             if level == 1:
                 law_list["items"].append({
@@ -482,7 +504,7 @@ def split_topics(section_text, topic_titles):
 
     for title in topic_titles:
         pattern = re.compile(
-            rf"(?m)^{re.escape(title)}\s*$"
+            rf"(?m)^[ \t]*{re.escape(title)}\s*$"
         )
 
         match = pattern.search(section_text)
@@ -508,7 +530,7 @@ def split_topics(section_text, topic_titles):
         else:
             end = len(section_text)
 
-        topic_text = section_text[start:end].strip()
+        topic_text = section_text[start:end].strip("\r\n")
 
         topics.append({
             "id": f"law-12-topic-{index + 1}",
@@ -664,7 +686,7 @@ for law in laws:
             )
 
             if fifa_cutoff != -1:
-                section_main_text = section_main_text[:fifa_cutoff].strip()
+                section_main_text = section_main_text[:fifa_cutoff].rstrip()
 
         topics = section.get("topics", [])
 
@@ -676,7 +698,7 @@ for law in laws:
             if first_topic_position != -1:
                 section_main_text = section_main_text[
                     :first_topic_position
-                ].strip()
+                ].rstrip()
 
         section["blocks"] = build_content_blocks(
             section_main_text
