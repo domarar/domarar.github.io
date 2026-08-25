@@ -251,10 +251,10 @@ function stripBulletMarker(line) {
 
 function renderLawContent(rawText, structuredBlocks = null) {
     if (Array.isArray(structuredBlocks)) {
-        return structuredBlocks
-            .map(renderLawBlock)
-            .join("");
-    }
+    return structuredBlocks
+        .map(renderLawBlock)
+        .join("");
+}
 
     if (!rawText) return "";
 
@@ -475,7 +475,7 @@ function renderLawContent(rawText, structuredBlocks = null) {
     flushList();
 
     return blocks.map(renderLawBlock).join("");
-}
+    }
 
 function renderLawBlock(block) {
     if (block.type === "heading") {
