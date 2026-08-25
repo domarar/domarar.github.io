@@ -1595,10 +1595,14 @@ if (scrollTarget) {
         scrollTarget.getBoundingClientRect().top +
         window.scrollY;
 
+    const isStandalone =
+    window.matchMedia("(display-mode: standalone)").matches ||
+    window.navigator.standalone === true;
+
     const position =
-        window.innerWidth <= 768
-            ? window.innerHeight * 0.56
-            : window.innerHeight * 0.5;
+    window.innerWidth <= 768
+        ? window.innerHeight * (isStandalone ? 0.64 : 0.56)
+        : window.innerHeight * 0.5;
 
     window.scrollTo({
         top: Math.max(0, targetTop - position),
