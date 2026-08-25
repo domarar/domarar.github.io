@@ -1,8 +1,50 @@
 // =========================================
-// LAWS OF THE GAME
+// DÓMARAR — LAWS OF THE GAME
+// CLEAN REBUILD
 // =========================================
 
 let lawsData = null;
+
+
+// =========================================
+// CONFIG
+// =========================================
+
+const LAW_INTERNAL_HEADINGS = new Set([
+    "Aðferð",
+    "Meginreglur",
+    "Framkvæmd",
+    "Opinber mót",
+    "Aðrir leikir",
+    "Framlenging",
+    "Endurteknar skiptingar",
+    "Varanlegar viðbótarskiptingar vegna heilahristings",
+    "Höfuðbúnaður",
+    "Rafræn samskipti",
+    "Rafrænn búnaður til mælinga á frammistöðu og staðsetningum (EPTS)",
+    "Rafræn búnaður til mælinga á frammistöðu og staðsetningum (EPTS)",
+    "Annar búnaður",
+    "Meiðsli",
+    "Utanaðkomandi truflun",
+    "Brot og refsiákvæði",
+    "Boltinn fer í markið",
+    "Óbein aukaspyrna – merkjagjöf",
+    "Óbein aukaspyrna - merkjagjöf",
+    "Túlkun lagagreinarinnar",
+    "Leikbrot sem leiða til brottvísunar",
+    "Háð neðangreindum ákvæðum skal hvort lið fyrir sig taka fimm spyrnur",
+    "Innskiptingar og brottrekstrar á meðan á vítaspyrnukeppni stendur"
+]);
+
+const LAW_SECONDARY_HEADINGS = new Set([
+    "Áður en vítaspyrnukeppnin hefst",
+    "Á meðan á vítaspyrnukeppninni stendur"
+]);
+
+
+// =========================================
+// LOAD
+// =========================================
 
 async function loadLaws() {
     const lawsContent = document.querySelector(".laws-content");
@@ -11,8 +53,8 @@ async function loadLaws() {
 
     try {
         const response = await fetch(
-    "data/laws/laws-2026-27-is-structured.json"
-);
+            "data/laws/laws-2026-27-is-structured.json"
+        );
 
         if (!response.ok) {
             throw new Error("Could not load Laws data");
@@ -42,7 +84,7 @@ async function loadLaws() {
 
 
 // =========================================
-// LAW OVERVIEW
+// OVERVIEW
 // =========================================
 
 function renderLawOverview() {
@@ -84,12 +126,17 @@ function renderLawOverview() {
 
     lawsContent.appendChild(overview);
 }
+
+
+// =========================================
+// VISIBLE SECTIONS
+// =========================================
+
 function getVisibleLawSections(law) {
     const sections = Array.isArray(law.sections)
         ? law.sections
         : [];
 
-    // Only Law 17 contains material after the Laws
     if (Number(law.number) !== 17) {
         return sections;
     }
@@ -103,316 +150,508 @@ function getVisibleLawSections(law) {
         return text.includes("fifa gæðastaðall");
     });
 
-    // If we don't find it, leave Law 17 untouched
     if (cutoffIndex === -1) {
         return sections;
     }
 
-    // Stop BEFORE the FIFA quality-standard material
     return sections.slice(0, cutoffIndex);
 }
 
+
 // =========================================
-// SINGLE LAW
+// TEXT HELPERS
 // =========================================
 
-function renderSingleLaw(lawNumber) {
-    const lawsContent = document.querySelector(".laws-content");
+function escapeLawHtml(value) {
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+}
 
-    if (!lawsContent || !lawsData) return;
+function normalizeLawLine(line) {
+    return String(line ?? "")
+        .replace(/\r/g, "")
+        .replace(/\u00a0/g, " ")
+        .trim();
+}
 
-    const law = lawsData.laws.find(
-        item => item.number === lawNumber
+function stripFinalPeriod(text) {
+    return text.replace(/\.$/, "").trim();
+}
+
+function isInternalHeading(line) {
+    const clean = stripFinalPeriod(line);
+
+    return (
+        LAW_INTERNAL_HEADINGS.has(line) ||
+        LAW_INTERNAL_HEADINGS.has(clean)
     );
+}
 
-    if (!law) return;
+function isSecondaryHeading(line) {
+    const clean = stripFinalPeriod(line);
 
-    const sectionsHtml = getVisibleLawSections(law).map(section => {
-
-        let sectionMainText = section.raw_text;
-        // Stop Law 17 before FIFA appendix / glossary material
-if (Number(law.number) === 17) {
-    const fifaCutoff = sectionMainText.indexOf(
-        "Gæðastaðall FIFA"
+    return (
+        LAW_SECONDARY_HEADINGS.has(line) ||
+        LAW_SECONDARY_HEADINGS.has(clean)
     );
+}
 
-    if (fifaCutoff !== -1) {
-        sectionMainText = sectionMainText
-            .slice(0, fifaCutoff)
-            .trim();
+function looksLikeNote(line) {
+    return /^\*/.test(line);
+}
+
+function getBulletMarker(line) {
+    const trimmed = line.trimStart();
+
+    if (/^•\s*/.test(trimmed)) {
+        return { level: 1, marker: "•" };
     }
-}
 
-// If this section has topics,
-// keep only the text BEFORE the first topic.
-if (
-    Array.isArray(section.topics) &&
-    section.topics.length > 0
-) {
-    const firstTopicTitle = section.topics[0].title;
-
-    const topicPosition = sectionMainText.indexOf(
-        firstTopicTitle
-    );
-
-    if (topicPosition !== -1) {
-        sectionMainText = sectionMainText
-            .slice(0, topicPosition)
-            .trim();
+    if (/^[✓✔]\s*/.test(trimmed)) {
+        return { level: 2, marker: "✓" };
     }
+
+    if (/^[○◦]\s*/.test(trimmed)) {
+        return { level: 2, marker: "○" };
+    }
+
+    return null;
 }
 
-const lines = sectionMainText
-    .split("\n")
-    .map(line => line.trim());
-
-let contentHtml = "";
-let bulletItems = [];
-let paragraphBuffer = "";
-
-function flushParagraph() {
-    if (!paragraphBuffer) return;
-
-    contentHtml += `
-        <p>${paragraphBuffer}</p>
-    `;
-
-    paragraphBuffer = "";
+function stripBulletMarker(line) {
+    return line
+        .trimStart()
+        .replace(/^•\s*/, "")
+        .replace(/^[✓✔]\s*/, "")
+        .replace(/^[○◦]\s*/, "")
+        .trim();
 }
 
-function flushBullets() {
-    if (bulletItems.length === 0) return;
 
-    contentHtml += `
-        <ul class="law-bullet-list">
-            ${bulletItems
-                .map(item => `<li>${item}</li>`)
-                .join("")}
-        </ul>
-    `;
+// =========================================
+// CONTENT RENDERER
+// =========================================
 
-    bulletItems = [];
-}
+function renderLawContent(rawText, structuredBlocks = null) {
+    if (Array.isArray(structuredBlocks)) {
+        return structuredBlocks
+            .map(renderLawBlock)
+            .join("");
+    }
 
-let currentBullet = "";
+    if (!rawText) return "";
 
-lines.forEach(line => {
+    const sourceLines = String(rawText)
+        .split("\n")
+        .map(line => line.replace(/\r/g, ""));
 
-    // Blank extracted PDF line
-if (!line) {
+    const blocks = [];
 
-    // If we're inside a bullet, ignore the blank line.
-    // PDF extraction can insert these inside one bullet.
-    if (currentBullet) {
-        return;
+    let paragraphLines = [];
+    let currentList = null;
+    let hadBlankLine = false;
+
+    function endsWithSentencePunctuation(text) {
+        return /[.!?…]$/.test(String(text).trim());
+    }
+
+    function startsWithLowercase(text) {
+        return /^[a-záðéíóúýþæö]/.test(String(text).trim());
+    }
+
+    function flushParagraph() {
+        if (!paragraphLines.length) return;
+
+        const text = paragraphLines
+            .map(normalizeLawLine)
+            .filter(Boolean)
+            .join(" ")
+            .replace(/\s+/g, " ")
+            .trim();
+
+        if (text) {
+            blocks.push({
+                type: "paragraph",
+                text
+            });
+        }
+
+        paragraphLines = [];
+    }
+
+    function flushList() {
+        if (!currentList || !currentList.items.length) {
+            currentList = null;
+            return;
+        }
+
+        blocks.push(currentList);
+        currentList = null;
+    }
+
+    function ensureList() {
+        if (!currentList) {
+            currentList = {
+                type: "list",
+                items: []
+            };
+        }
+
+        return currentList;
+    }
+
+    function addMainBullet(text) {
+        flushParagraph();
+
+        const list = ensureList();
+
+        list.items.push({
+            text,
+            children: []
+        });
+    }
+
+    function addChildBullet(text, marker) {
+        flushParagraph();
+
+        const list = ensureList();
+
+        if (!list.items.length) {
+            list.items.push({
+                text,
+                children: []
+            });
+            return;
+        }
+
+        list.items[list.items.length - 1].children.push({
+            text,
+            marker
+        });
+    }
+
+    function getLastListEntry() {
+        if (!currentList?.items?.length) return null;
+
+        const mainItem =
+            currentList.items[currentList.items.length - 1];
+
+        if (mainItem.children?.length) {
+            return mainItem.children[
+                mainItem.children.length - 1
+            ];
+        }
+
+        return mainItem;
+    }
+
+    function appendToLastListEntry(text) {
+        const entry = getLastListEntry();
+
+        if (!entry) return false;
+
+        entry.text = `${entry.text} ${text}`
+            .replace(/\s+/g, " ")
+            .trim();
+
+        return true;
+    }
+
+    for (let i = 0; i < sourceLines.length; i++) {
+        const rawLine = sourceLines[i];
+        const line = normalizeLawLine(rawLine);
+
+        if (!line) {
+            // PDF extraction often inserts blank lines between wrapped lines.
+            // Remember the gap, but do not create a paragraph automatically.
+            hadBlankLine = true;
+            continue;
+        }
+
+        if (isSecondaryHeading(line)) {
+            flushParagraph();
+            flushList();
+
+            blocks.push({
+                type: "secondary-heading",
+                text: line
+            });
+
+            hadBlankLine = false;
+            continue;
+        }
+
+        if (isInternalHeading(line)) {
+            flushParagraph();
+            flushList();
+
+            blocks.push({
+                type: "heading",
+                text: line
+            });
+
+            hadBlankLine = false;
+            continue;
+        }
+
+        if (looksLikeNote(line)) {
+            flushParagraph();
+            flushList();
+
+            blocks.push({
+                type: "note",
+                text: line
+            });
+
+            hadBlankLine = false;
+            continue;
+        }
+
+        const bullet = getBulletMarker(rawLine);
+
+        if (bullet) {
+            const text = stripBulletMarker(rawLine);
+
+            if (bullet.level === 1) {
+                addMainBullet(text);
+            } else {
+                addChildBullet(text, bullet.marker);
+            }
+
+            hadBlankLine = false;
+            continue;
+        }
+
+        // A wrapped bullet can continue on the following unmarked PDF line.
+        if (currentList) {
+            const entry = getLastListEntry();
+            const continuesBullet =
+                entry &&
+                (!endsWithSentencePunctuation(entry.text) ||
+                    startsWithLowercase(line));
+
+            if (continuesBullet) {
+                appendToLastListEntry(line);
+                hadBlankLine = false;
+                continue;
+            }
+
+            flushList();
+        }
+
+        // Preserve genuine paragraph breaks without trusting every PDF gap.
+        if (
+            paragraphLines.length > 0 &&
+            endsWithSentencePunctuation(
+                paragraphLines[paragraphLines.length - 1]
+            ) &&
+            !startsWithLowercase(line)
+        ) {
+            flushParagraph();
+        }
+
+        paragraphLines.push(line);
+        hadBlankLine = false;
     }
 
     flushParagraph();
-    flushBullets();
-    return;
+    flushList();
+
+    return blocks.map(renderLawBlock).join("");
 }
 
-    // New bullet
-    if (line.startsWith("•")) {
-
-        flushParagraph();
-
-        if (currentBullet) {
-            bulletItems.push(currentBullet);
-        }
-
-        currentBullet = line.replace(/^•\s*/, "");
-        return;
+function renderLawBlock(block) {
+    if (block.type === "heading") {
+        return `
+            <h4 class="law-inline-heading">
+                ${escapeLawHtml(block.text)}
+            </h4>
+        `;
     }
 
-    // Continue bullet, or return to normal prose
-    if (currentBullet) {
-
-        const bulletEndsSentence =
-            /[.!?]["”’)]?$/.test(currentBullet);
-
-        const nextLooksLikeNewParagraph =
-            /^[A-ZÁÉÍÓÚÝÞÆÖ]/.test(line);
-
-        if (
-            bulletEndsSentence &&
-            nextLooksLikeNewParagraph
-        ) {
-            bulletItems.push(currentBullet);
-            currentBullet = "";
-
-            flushBullets();
-
-            paragraphBuffer = line;
-        } else {
-            currentBullet += " " + line;
-        }
-
-        return;
+    if (block.type === "secondary-heading") {
+        return `
+            <h5 class="law-inline-subheading">
+                ${escapeLawHtml(block.text)}
+            </h5>
+        `;
     }
 
-    // Normal paragraph text
-    flushBullets();
-
-    if (!paragraphBuffer) {
-        paragraphBuffer = line;
-        return;
+    if (block.type === "note") {
+        return `
+            <p class="law-note">
+                ${escapeLawHtml(block.text)}
+            </p>
+        `;
     }
 
-    const previousEndsSentence =
-        /[.!?]["”’)]?$/.test(paragraphBuffer);
-
-    const nextLooksLikeNewSentence =
-        /^[A-ZÁÉÍÓÚÝÞÆÖ]/.test(line);
-
-    if (
-        previousEndsSentence &&
-        nextLooksLikeNewSentence
-    ) {
-        flushParagraph();
-        paragraphBuffer = line;
-    } else {
-        paragraphBuffer += " " + line;
-    }
-});
-
-if (currentBullet) {
-    bulletItems.push(currentBullet);
-}
-
-flushParagraph();
-flushBullets();
-function renderTopic(topic) {
-    const topicLines = topic.raw_text
-        .split("\n")
-        .map(line => line.trim())
-        .filter(Boolean);
-
-    const cleanedTopicLines = [];
-let topicParagraphBuffer = "";
-let topicCurrentBullet = "";
-
-topicLines.forEach(line => {
-
-    // New bullet
-    if (line.startsWith("•")) {
-
-        if (topicParagraphBuffer) {
-            cleanedTopicLines.push(topicParagraphBuffer);
-            topicParagraphBuffer = "";
-        }
-
-        if (topicCurrentBullet) {
-            cleanedTopicLines.push("• " + topicCurrentBullet);
-        }
-
-        topicCurrentBullet = line.replace(/^•\s*/, "");
-        return;
-    }
-
-    // Continue current bullet
-    if (topicCurrentBullet) {
-        topicCurrentBullet += " " + line;
-        return;
-    }
-
-    // Normal prose
-    if (!topicParagraphBuffer) {
-    topicParagraphBuffer = line;
-    return;
-}
-
-const previousEndsSentence =
-    /[.!?]["”’)]?$/.test(topicParagraphBuffer);
-
-const nextLooksLikeNewSentence =
-    /^[A-ZÁÉÍÓÚÝÞÆÖ]/.test(line);
-
-if (
-    previousEndsSentence &&
-    nextLooksLikeNewSentence
-) {
-    cleanedTopicLines.push(topicParagraphBuffer);
-    topicParagraphBuffer = line;
-} else {
-    topicParagraphBuffer += " " + line;
-}
-});
-
-if (topicCurrentBullet) {
-    cleanedTopicLines.push("• " + topicCurrentBullet);
-}
-
-if (topicParagraphBuffer) {
-    cleanedTopicLines.push(topicParagraphBuffer);
-}
-
-    let topicHtml = "";
-    let topicBullets = [];
-
-    function flushTopicBullets() {
-        if (topicBullets.length === 0) return;
-
-        topicHtml += `
+    if (block.type === "list") {
+        return `
             <ul class="law-bullet-list">
-                ${topicBullets
-                    .map(item => `<li>${item}</li>`)
-                    .join("")}
+                ${block.items.map(renderLawListItem).join("")}
             </ul>
         `;
-
-        topicBullets = [];
     }
 
-    cleanedTopicLines.forEach(line => {
-        if (line.startsWith("•")) {
-            topicBullets.push(
-                line.replace(/^•\s*/, "")
-            );
-        } else {
-            flushTopicBullets();
+    return `
+        <p>${escapeLawHtml(block.text)}</p>
+    `;
+}
 
-            topicHtml += `
-                <p>${line}</p>
-            `;
-        }
-    });
+function renderLawListItem(item) {
+    const childrenHtml = item.children?.length
+        ? `
+            <ul class="law-sub-bullet-list">
+                ${item.children
+                    .map(child => `
+                        <li data-marker="${escapeLawHtml(child.marker)}">
+                            ${escapeLawHtml(child.text)}
+                        </li>
+                    `)
+                    .join("")}
+            </ul>
+        `
+        : "";
 
-    flushTopicBullets();
+    return `
+        <li>
+            ${escapeLawHtml(item.text)}
+            ${childrenHtml}
+        </li>
+    `;
+}
+
+
+// =========================================
+// TOPICS
+// =========================================
+
+function renderTopic(topic) {
     return `
         <div
             class="law-topic"
             id="${topic.id}"
         >
             <h4 class="law-topic-title">
-                ${topic.title}
+                ${escapeLawHtml(topic.title)}
             </h4>
 
             <div class="law-topic-content">
-                ${topicHtml}
+                ${renderLawContent(topic.raw_text, topic.blocks)}
             </div>
         </div>
     `;
 }
-        const topicsHtml = Array.isArray(section.topics)
-    ? section.topics
-        .map(topic => renderTopic(topic))
-        .join("")
-    : "";
-if (
-    section.type === "table" &&
-    section.table
-) {
-    const tableHeaders = section.table.headers
-        .map(header => `<th>${header}</th>`)
+
+function renderTopicGroup(parentTopic, subtopics) {
+    const subtopicsHtml = subtopics
+        .map(subtopic => `
+            <div
+                class="law-subtopic"
+                id="${subtopic.id}"
+            >
+                <h5 class="law-subtopic-title">
+                    ${escapeLawHtml(subtopic.title)}
+                </h5>
+
+                <div class="law-topic-content">
+                    ${renderLawContent(subtopic.raw_text, subtopic.blocks)}
+                </div>
+            </div>
+        `)
         .join("");
 
-    const tableRows = section.table.rows
+    return `
+        <div
+            class="law-topic law-topic-group"
+            id="${parentTopic.id}"
+        >
+            <h4 class="law-topic-title">
+                ${escapeLawHtml(parentTopic.title)}
+            </h4>
+
+            <div class="law-topic-content">
+                ${renderLawContent(parentTopic.raw_text, parentTopic.blocks)}
+            </div>
+
+            <div class="law-subtopics">
+                ${subtopicsHtml}
+            </div>
+        </div>
+    `;
+}
+
+function renderTopics(law, section) {
+    if (!Array.isArray(section.topics)) {
+        return "";
+    }
+
+    const topics = section.topics;
+    let html = "";
+
+    for (let i = 0; i < topics.length; i++) {
+        const topic = topics[i];
+
+        const normalizedTitle =
+            stripFinalPeriod(topic.title.trim());
+
+        const isTeamOfficialsParent =
+            Number(law.number) === 12 &&
+            normalizedTitle === "Forráðamenn liðs";
+
+        if (!isTeamOfficialsParent) {
+            html += renderTopic(topic);
+            continue;
+        }
+
+        const childTitles = new Set([
+            "Tiltal",
+            "Áminning",
+            "Brottvísun"
+        ]);
+
+        const subtopics = [];
+        let j = i + 1;
+
+        while (j < topics.length) {
+            const childTitle =
+                stripFinalPeriod(topics[j].title.trim());
+
+            if (!childTitles.has(childTitle)) {
+                break;
+            }
+
+            subtopics.push(topics[j]);
+            j++;
+        }
+
+        html += renderTopicGroup(topic, subtopics);
+
+        i = j - 1;
+    }
+
+    return html;
+}
+
+
+// =========================================
+// TABLE
+// =========================================
+
+function renderLawTable(section) {
+    const headers = section.table.headers
+        .map(header => `<th>${escapeLawHtml(header)}</th>`)
+        .join("");
+
+    const rows = section.table.rows
         .map(row => `
             <tr>
-                <td>${row.label}</td>
-                <td>${row.goal.replace(/\n/g, "<br>")}</td>
-                <td>${row.no_goal.replace(/\n/g, "<br>")}</td>
+                <td>${escapeLawHtml(row.label)}</td>
+                <td>${escapeLawHtml(row.goal).replace(/\n/g, "<br>")}</td>
+                <td>${escapeLawHtml(row.no_goal).replace(/\n/g, "<br>")}</td>
             </tr>
         `)
         .join("");
@@ -424,51 +663,133 @@ if (
         >
             <h3>
                 <span>${section.number}.</span>
-                ${section.title}
+                ${escapeLawHtml(section.title)}
             </h3>
 
             <div class="law-table-wrap">
                 <table class="law-table">
                     <thead>
-                        <tr>
-                            ${tableHeaders}
-                        </tr>
+                        <tr>${headers}</tr>
                     </thead>
 
                     <tbody>
-                        ${tableRows}
+                        ${rows}
                     </tbody>
                 </table>
             </div>
         </section>
     `;
 }
-return `
-    <section
-        class="law-section"
-        id="${section.id}"
-    >
-        <button
-            class="law-section-toggle"
-            type="button"
-            aria-expanded="false"
-        >
-            <h3>
-                <span>${section.number}.</span>
-                ${section.title}
-            </h3>
 
-            <span class="law-section-chevron">⌄</span>
-        </button>
 
-        <div class="law-section-body">
-            ${contentHtml}
+// =========================================
+// SINGLE LAW
+// =========================================
 
-            ${topicsHtml}
-        </div>
-    </section>
-`;
-    }).join("");
+function renderSingleLaw(lawNumber) {
+    const lawsContent = document.querySelector(".laws-content");
+
+    if (!lawsContent || !lawsData) return;
+
+    const law = lawsData.laws.find(
+        item => Number(item.number) === Number(lawNumber)
+    );
+
+    if (!law) return;
+
+    const sectionsHtml = getVisibleLawSections(law)
+        .map(section => {
+            let sectionMainText = section.raw_text || "";
+
+            if (Number(law.number) === 17) {
+                const fifaCutoff =
+                    sectionMainText.indexOf("Gæðastaðall FIFA");
+
+                if (fifaCutoff !== -1) {
+                    sectionMainText =
+                        sectionMainText
+                            .slice(0, fifaCutoff)
+                            .trim();
+                }
+            }
+
+            if (
+                Array.isArray(section.topics) &&
+                section.topics.length > 0
+            ) {
+                const firstTopicTitle =
+                    section.topics[0].title;
+
+                const topicPosition =
+                    sectionMainText.indexOf(firstTopicTitle);
+
+                if (topicPosition !== -1) {
+                    sectionMainText =
+                        sectionMainText
+                            .slice(0, topicPosition)
+                            .trim();
+                }
+            }
+
+            if (
+                section.type === "table" &&
+                section.table
+            ) {
+                return renderLawTable(section);
+            }
+
+            const contentHtml =
+                renderLawContent(
+                    sectionMainText,
+                    section.blocks
+                );
+
+            const topicsHtml =
+                renderTopics(law, section);
+
+            return `
+                <section
+                    class="law-section"
+                    id="${section.id}"
+                >
+                    <button
+                        class="law-section-toggle"
+                        type="button"
+                        aria-expanded="false"
+                    >
+                        <h3>
+                            <span>${section.number}.</span>
+                            ${escapeLawHtml(section.title)}
+                        </h3>
+
+                        <span class="law-section-chevron">
+                            ⌄
+                        </span>
+                    </button>
+
+                    <div class="law-section-body">
+                        ${contentHtml}
+                        ${topicsHtml}
+                    </div>
+                </section>
+            `;
+        })
+        .join("");
+
+    const introHtml = law.intro
+        ? `
+            <div class="law-intro">
+                ${String(law.intro)
+                    .split("\n")
+                    .map(paragraph => normalizeLawLine(paragraph))
+                    .filter(Boolean)
+                    .map(paragraph => `
+                        <p>${escapeLawHtml(paragraph)}</p>
+                    `)
+                    .join("")}
+            </div>
+        `
+        : "";
 
     lawsContent.innerHTML = `
         <div class="single-law">
@@ -491,20 +812,12 @@ return `
                 </div>
 
                 <h2>
-                    ${law.title}
+                    ${escapeLawHtml(law.title)}
                 </h2>
 
             </header>
-            ${law.intro ? `
-    <div class="law-intro">
-        ${law.intro
-            .split("\n")
-            .map(paragraph => `
-                <p>${paragraph.trim()}</p>
-            `)
-            .join("")}
-    </div>
-` : ""}
+
+            ${introHtml}
 
             <div class="law-sections">
                 ${sectionsHtml}
@@ -513,9 +826,22 @@ return `
         </div>
     `;
 
-    const backButton = document.querySelector(
-        ".laws-back-button"
-    );
+    setupSingleLawEvents();
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+// =========================================
+// SINGLE LAW EVENTS
+// =========================================
+
+function setupSingleLawEvents() {
+    const backButton =
+        document.querySelector(".laws-back-button");
 
     if (backButton) {
         backButton.addEventListener("click", () => {
@@ -527,54 +853,56 @@ return `
             });
         });
     }
-const sectionToggles = document.querySelectorAll(
-    ".law-section-toggle"
-);
 
-sectionToggles.forEach(toggle => {
-    toggle.addEventListener("click", () => {
+    document
+        .querySelectorAll(".law-section-toggle")
+        .forEach(toggle => {
+            toggle.addEventListener("click", () => {
+                if (window.innerWidth > 600) return;
 
-        if (window.innerWidth > 600) return;
+                const section =
+                    toggle.closest(".law-section");
 
-        const section = toggle.closest(".law-section");
+                if (!section) return;
 
-        if (!section) return;
+                const wasOpen =
+                    section.classList.contains("is-open");
 
-        const wasOpen = section.classList.contains("is-open");
+                document
+                    .querySelectorAll(".law-section.is-open")
+                    .forEach(openSection => {
+                        openSection.classList.remove("is-open");
 
-        document
-            .querySelectorAll(".law-section.is-open")
-            .forEach(openSection => {
-                openSection.classList.remove("is-open");
+                        const openToggle =
+                            openSection.querySelector(
+                                ".law-section-toggle"
+                            );
 
-                const openToggle =
-                    openSection.querySelector(
-                        ".law-section-toggle"
-                    );
+                        if (openToggle) {
+                            openToggle.setAttribute(
+                                "aria-expanded",
+                                "false"
+                            );
+                        }
+                    });
 
-                if (openToggle) {
-                    openToggle.setAttribute(
+                if (!wasOpen) {
+                    section.classList.add("is-open");
+
+                    toggle.setAttribute(
                         "aria-expanded",
-                        "false"
+                        "true"
                     );
                 }
             });
-
-        if (!wasOpen) {
-            section.classList.add("is-open");
-
-            toggle.setAttribute(
-                "aria-expanded",
-                "true"
-            );
-        }
-    });
-});
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
+        });
 }
+
+
+// =========================================
+// SEARCH HELPERS
+// =========================================
+
 function getSearchSnippet(text, query) {
     if (!text) return "";
 
@@ -584,6 +912,7 @@ function getSearchSnippet(text, query) {
     if (index === -1) return "";
 
     const start = Math.max(0, index - 55);
+
     const end = Math.min(
         text.length,
         index + query.length + 85
@@ -604,6 +933,7 @@ function getSearchSnippet(text, query) {
 
     return snippet;
 }
+
 function getSearchVariants(query) {
     const variants = [query];
 
@@ -620,23 +950,29 @@ function getSearchVariants(query) {
         "10": "tíu"
     };
 
-    Object.entries(numberWords).forEach(([number, word]) => {
-        if (query.includes(number)) {
-            variants.push(
-                query.replace(number, word)
-            );
-        }
-    });
+    Object.entries(numberWords)
+        .forEach(([number, word]) => {
+            if (query.includes(number)) {
+                variants.push(
+                    query.replace(number, word)
+                );
+            }
+        });
 
     return [...new Set(variants)];
 }
+
+
 // =========================================
-// LAWS SEARCH
+// SEARCH
 // =========================================
 
 function setupLawsSearch() {
-    const searchInput = document.querySelector("#lawsSearch");
-    const resultsBox = document.querySelector("#lawsSearchResults");
+    const searchInput =
+        document.querySelector("#lawsSearch");
+
+    const resultsBox =
+        document.querySelector("#lawsSearchResults");
 
     if (!searchInput || !resultsBox) return;
 
@@ -644,7 +980,9 @@ function setupLawsSearch() {
         const query = searchInput.value
             .trim()
             .toLowerCase();
-            const searchVariants = getSearchVariants(query);
+
+        const searchVariants =
+            getSearchVariants(query);
 
         if (query.length < 2) {
             resultsBox.innerHTML = "";
@@ -656,8 +994,11 @@ function setupLawsSearch() {
 
         lawsData.laws.forEach(law => {
 
-            // LAW TITLE
-            if (law.title.toLowerCase().includes(query)) {
+            if (
+                law.title
+                    .toLowerCase()
+                    .includes(query)
+            ) {
                 results.push({
                     lawNumber: law.number,
                     targetId: null,
@@ -666,67 +1007,71 @@ function setupLawsSearch() {
                 });
             }
 
-            getVisibleLawSections(law).forEach(section => {
+            getVisibleLawSections(law)
+                .forEach(section => {
 
-                // SECTION TITLE
-                if (section.title.toLowerCase().includes(query)) {
+                    if (
+                        section.title
+                            .toLowerCase()
+                            .includes(query)
+                    ) {
+                        results.push({
+                            lawNumber: law.number,
+                            targetId: section.id,
+                            type: `Grein ${law.number}`,
+                            title: section.title
+                        });
+                    }
+
+                    if (Array.isArray(section.topics)) {
+                        section.topics
+                            .forEach(topic => {
+
+                                if (
+                                    topic.title
+                                        .toLowerCase()
+                                        .includes(query)
+                                ) {
+                                    results.push({
+                                        lawNumber: law.number,
+                                        targetId: topic.id,
+                                        type: `Grein ${law.number}`,
+                                        title: topic.title
+                                    });
+                                }
+                            });
+                    }
+
+                    const sectionText =
+                        section.raw_text?.toLowerCase() || "";
+
+                    const matchingQuery =
+                        searchVariants.find(
+                            variant =>
+                                sectionText.includes(variant)
+                        );
+
+                    if (!matchingQuery) return;
+
+                    const alreadyFound =
+                        results.some(result =>
+                            result.lawNumber === law.number &&
+                            result.targetId === section.id
+                        );
+
+                    if (alreadyFound) return;
+
                     results.push({
                         lawNumber: law.number,
                         targetId: section.id,
                         type: `Grein ${law.number}`,
-                        title: section.title
+                        title: section.title,
+                        matchText: getSearchSnippet(
+                            section.raw_text,
+                            matchingQuery
+                        )
                     });
-                }
-
-                // TOPICS
-                if (Array.isArray(section.topics)) {
-                    section.topics.forEach(topic => {
-
-                        if (
-                            topic.title
-                                .toLowerCase()
-                                .includes(query)
-                        ) {
-                            results.push({
-                                lawNumber: law.number,
-                                targetId: topic.id,
-                                type: `Grein ${law.number}`,
-                                title: topic.title
-                            });
-                        }
-
-                    });
-                }
-                // FULL TEXT
-const sectionText =
-    section.raw_text?.toLowerCase() || "";
-
-const matchingQuery = searchVariants.find(
-    variant => sectionText.includes(variant)
-);
-
-if (matchingQuery) {
-
-    const alreadyFound = results.some(result =>
-        result.lawNumber === law.number &&
-        result.targetId === section.id
-    );
-
-    if (!alreadyFound) {
-        results.push({
-            lawNumber: law.number,
-            targetId: section.id,
-            type: `Grein ${law.number}`,
-            title: section.title,
-            matchText: getSearchSnippet(
-                section.raw_text,
-                matchingQuery
-            )
-        });
-    }
-}
-
-            });
+                });
         });
 
         renderLawsSearchResults(results);
@@ -734,10 +1079,13 @@ if (matchingQuery) {
 }
 
 
+// =========================================
+// SEARCH RESULTS
+// =========================================
+
 function renderLawsSearchResults(results) {
-    const resultsBox = document.querySelector(
-        "#lawsSearchResults"
-    );
+    const resultsBox =
+        document.querySelector("#lawsSearchResults");
 
     if (!resultsBox) return;
 
@@ -762,22 +1110,22 @@ function renderLawsSearchResults(results) {
                 data-target="${result.targetId || ""}"
             >
                 <span class="laws-search-result-type">
-                    ${result.type}
+                    ${escapeLawHtml(result.type)}
                 </span>
 
                 <div class="laws-search-result-main">
 
-    <span class="laws-search-result-title">
-        ${result.title}
-    </span>
+                    <span class="laws-search-result-title">
+                        ${escapeLawHtml(result.title)}
+                    </span>
 
-    ${result.matchText ? `
-        <span class="laws-search-result-snippet">
-            ${result.matchText}
-        </span>
-    ` : ""}
+                    ${result.matchText ? `
+                        <span class="laws-search-result-snippet">
+                            ${escapeLawHtml(result.matchText)}
+                        </span>
+                    ` : ""}
 
-</div>
+                </div>
 
                 <span class="laws-search-result-arrow">
                     →
@@ -793,9 +1141,8 @@ function renderLawsSearchResults(results) {
         .forEach(button => {
 
             button.addEventListener("click", () => {
-                const lawNumber = Number(
-                    button.dataset.law
-                );
+                const lawNumber =
+                    Number(button.dataset.law);
 
                 const targetId =
                     button.dataset.target;
@@ -805,9 +1152,7 @@ function renderLawsSearchResults(results) {
                 if (targetId) {
                     setTimeout(() => {
                         const target =
-                            document.getElementById(
-                                targetId
-                            );
+                            document.getElementById(targetId);
 
                         if (target) {
                             target.scrollIntoView({
@@ -820,9 +1165,14 @@ function renderLawsSearchResults(results) {
 
                 resultsBox.style.display = "none";
             });
-
         });
 }
+
+
+// =========================================
+// START
+// =========================================
+
 loadLaws().then(() => {
     setupLawsSearch();
 });
