@@ -12,7 +12,10 @@ let lawsData = null;
 
 const LAW_INTERNAL_HEADINGS = new Set([
     "Aðferð",
+    "Til öryggis",
     "Meginreglur",
+    "Meginreglur fyrir MLT",
+    "Forskrift fyrir og kröfur til MLT",
     "Framkvæmd",
     "Opinber mót",
     "Aðrir leikir",
@@ -24,6 +27,8 @@ const LAW_INTERNAL_HEADINGS = new Set([
     "Rafrænn búnaður til mælinga á frammistöðu og staðsetningum (EPTS)",
     "Rafræn búnaður til mælinga á frammistöðu og staðsetningum (EPTS)",
     "Annar búnaður",
+    "Hagnaður",
+    "Agarefsingar",
     "Meiðsli",
     "Utanaðkomandi truflun",
     "Brot og refsiákvæði",
@@ -32,8 +37,9 @@ const LAW_INTERNAL_HEADINGS = new Set([
     "Óbein aukaspyrna - merkjagjöf",
     "Túlkun lagagreinarinnar",
     "Leikbrot sem leiða til brottvísunar",
+    "Ef, eftir töku vítaspyrnu",
     "Háð neðangreindum ákvæðum skal hvort lið fyrir sig taka fimm spyrnur",
-    "Innskiptingar og brottrekstrar á meðan á vítaspyrnukeppni stendur"
+    "Innáskiptingar og brottrekstrar á meðan á vítaspyrnukeppni stendur"
 ]);
 
 const LAW_SECONDARY_HEADINGS = new Set([
@@ -178,7 +184,7 @@ function normalizeLawLine(line) {
 }
 
 function stripFinalPeriod(text) {
-    return text.replace(/\.$/, "").trim();
+    return text.replace(/[.:]+$/, "").trim();
 }
 
 function isInternalHeading(line) {
@@ -488,6 +494,36 @@ function renderLawBlock(block) {
         `;
     }
 
+    if (block.type === "dimension-table") {
+        const rows = Array.isArray(block.rows)
+            ? block.rows
+            : [];
+
+        return `
+            <div class="law-table-wrap law-dimension-table-wrap">
+                <table class="law-table law-dimension-table">
+                    <tbody>
+                        ${rows.map(row => `
+                            <tr>
+                                <th rowspan="2" scope="rowgroup">
+                                    ${escapeLawHtml(row.label)}
+                                </th>
+
+                                <td>minnst</td>
+                                <td>${escapeLawHtml(row.minimum)}</td>
+                            </tr>
+
+                            <tr>
+                                <td>mest</td>
+                                <td>${escapeLawHtml(row.maximum)}</td>
+                            </tr>
+                        `).join("")}
+                    </tbody>
+                </table>
+            </div>
+        `;
+    }
+
     if (block.type === "list") {
         return `
             <ul class="law-bullet-list">
@@ -779,14 +815,10 @@ function renderSingleLaw(lawNumber) {
     const introHtml = law.intro
         ? `
             <div class="law-intro">
-                ${String(law.intro)
-                    .split("\n")
-                    .map(paragraph => normalizeLawLine(paragraph))
-                    .filter(Boolean)
-                    .map(paragraph => `
-                        <p>${escapeLawHtml(paragraph)}</p>
-                    `)
-                    .join("")}
+                ${renderLawContent(
+                    law.intro,
+                    law.intro_blocks
+                )}
             </div>
         `
         : "";
