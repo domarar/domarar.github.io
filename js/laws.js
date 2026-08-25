@@ -799,7 +799,65 @@ function renderLawBottomNavigation(lawNumber) {
     `;
 }
 
+function renderLawDesktopNavigator(currentLawNumber) {
+    if (!lawsData || !Array.isArray(lawsData.laws)) {
+        return "";
+    }
 
+    const navigationItems = lawsData.laws
+        .map(law => {
+            const isCurrent =
+                Number(law.number) ===
+                Number(currentLawNumber);
+
+            return `
+                <button
+                    class="law-desktop-nav-button${
+                        isCurrent ? " is-active" : ""
+                    }"
+                    type="button"
+                    data-law-number="${law.number}"
+                    ${
+                        isCurrent
+                            ? 'aria-current="page"'
+                            : ""
+                    }
+                >
+                    <span class="law-desktop-nav-number">
+                        ${law.number}
+                    </span>
+
+                    <span class="law-desktop-nav-title">
+                        ${escapeLawHtml(law.title)}
+                    </span>
+                </button>
+            `;
+        })
+        .join("");
+
+    return `
+        <aside
+            class="law-desktop-navigator"
+            aria-label="Knattspyrnulögin"
+        >
+            <div class="law-desktop-navigator-inner">
+
+                <div class="law-desktop-nav-heading">
+                    Knattspyrnulögin
+                </div>
+
+                <div class="law-desktop-nav-subheading">
+                    Greinar 1–17
+                </div>
+
+                <div class="law-desktop-nav-list">
+                    ${navigationItems}
+                </div>
+
+            </div>
+        </aside>
+    `;
+}
 // =========================================
 // SINGLE LAW
 // =========================================
@@ -906,6 +964,8 @@ function renderSingleLaw(lawNumber, options = {}) {
         : "";
 
     lawsContent.innerHTML = `
+        ${renderLawDesktopNavigator(law.number)}
+
         <div class="single-law">
 
             <button
@@ -945,11 +1005,23 @@ function renderSingleLaw(lawNumber, options = {}) {
     setupSingleLawEvents();
 
     if (options.scrollToTop !== false) {
+    if (window.innerWidth >= 1450) {
+        const readingTop =
+            lawsContent.getBoundingClientRect().top +
+            window.scrollY -
+            20;
+
+        window.scrollTo({
+            top: Math.max(0, readingTop),
+            behavior: "auto"
+        });
+    } else {
         window.scrollTo({
             top: 0,
             behavior: "smooth"
         });
     }
+}
 }
 
 
@@ -997,7 +1069,45 @@ function setupSingleLawEvents() {
                 renderSingleLaw(targetLawNumber);
             });
         });
+    document
+    .querySelectorAll(".law-desktop-nav-button")
+    .forEach(button => {
+        button.addEventListener("click", () => {
+            const targetLawNumber = Number(
+                button.dataset.lawNumber
+            );
 
+            if (!Number.isFinite(targetLawNumber)) {
+                return;
+            }
+
+            lawsSearchState.currentIndex = -1;
+            renderSingleLaw(targetLawNumber);
+        });
+    });
+
+const desktopNavigator =
+    document.querySelector(
+        ".law-desktop-navigator-inner"
+    );
+
+const activeDesktopNavButton =
+    document.querySelector(
+        ".law-desktop-nav-button.is-active"
+    );
+
+if (
+    desktopNavigator &&
+    activeDesktopNavButton &&
+    desktopNavigator.clientHeight > 0
+) {
+    desktopNavigator.scrollTop = Math.max(
+        0,
+        activeDesktopNavButton.offsetTop -
+            desktopNavigator.clientHeight / 2 +
+            activeDesktopNavButton.offsetHeight / 2
+    );
+}
     document
         .querySelectorAll(".law-section-toggle")
         .forEach(toggle => {
