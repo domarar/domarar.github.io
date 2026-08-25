@@ -5,6 +5,13 @@
 
 let lawsData = null;
 
+const lawsSearchState = {
+    query: "",
+    variants: [],
+    results: [],
+    currentIndex: -1
+};
+
 
 // =========================================
 // CONFIG
@@ -124,6 +131,7 @@ function renderLawOverview() {
         `;
 
         button.addEventListener("click", () => {
+            lawsSearchState.currentIndex = -1;
             renderSingleLaw(law.number);
         });
 
@@ -719,10 +727,84 @@ function renderLawTable(section) {
 
 
 // =========================================
+// LAW-TO-LAW NAVIGATION
+// =========================================
+
+function renderLawBottomNavigation(lawNumber) {
+    const laws = Array.isArray(lawsData?.laws)
+        ? lawsData.laws
+        : [];
+
+    const currentIndex = laws.findIndex(
+        law => Number(law.number) === Number(lawNumber)
+    );
+
+    if (currentIndex === -1) return "";
+
+    const previousLaw = laws[currentIndex - 1] || null;
+    const nextLaw = laws[currentIndex + 1] || null;
+
+    const previousHtml = previousLaw
+        ? `
+            <button
+                class="law-bottom-nav-button law-bottom-nav-previous"
+                type="button"
+                data-law-number="${previousLaw.number}"
+            >
+                <span class="law-bottom-nav-direction">
+                    ← Fyrri grein
+                </span>
+
+                <span class="law-bottom-nav-title">
+                    ${previousLaw.number}. ${escapeLawHtml(previousLaw.title)}
+                </span>
+            </button>
+        `
+        : `<span class="law-bottom-nav-spacer" aria-hidden="true"></span>`;
+
+    const nextHtml = nextLaw
+        ? `
+            <button
+                class="law-bottom-nav-button law-bottom-nav-next"
+                type="button"
+                data-law-number="${nextLaw.number}"
+            >
+                <span class="law-bottom-nav-direction">
+                    Næsta grein →
+                </span>
+
+                <span class="law-bottom-nav-title">
+                    ${nextLaw.number}. ${escapeLawHtml(nextLaw.title)}
+                </span>
+            </button>
+        `
+        : `<span class="law-bottom-nav-spacer" aria-hidden="true"></span>`;
+
+    return `
+        <nav
+            class="law-bottom-navigation"
+            aria-label="Fletta á milli knattspyrnulaga"
+        >
+            ${previousHtml}
+
+            <button
+                class="law-bottom-overview-button"
+                type="button"
+            >
+                Allar greinar
+            </button>
+
+            ${nextHtml}
+        </nav>
+    `;
+}
+
+
+// =========================================
 // SINGLE LAW
 // =========================================
 
-function renderSingleLaw(lawNumber) {
+function renderSingleLaw(lawNumber, options = {}) {
     const lawsContent = document.querySelector(".laws-content");
 
     if (!lawsContent || !lawsData) return;
@@ -855,15 +937,19 @@ function renderSingleLaw(lawNumber) {
                 ${sectionsHtml}
             </div>
 
+            ${renderLawBottomNavigation(law.number)}
+
         </div>
     `;
 
     setupSingleLawEvents();
 
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
+    if (options.scrollToTop !== false) {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    }
 }
 
 
@@ -872,19 +958,45 @@ function renderSingleLaw(lawNumber) {
 // =========================================
 
 function setupSingleLawEvents() {
+    const showLawOverview = () => {
+        lawsSearchState.currentIndex = -1;
+        renderLawOverview();
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    };
+
     const backButton =
         document.querySelector(".laws-back-button");
 
     if (backButton) {
-        backButton.addEventListener("click", () => {
-            renderLawOverview();
+        backButton.addEventListener("click", showLawOverview);
+    }
 
-            window.scrollTo({
-                top: 0,
-                behavior: "smooth"
+    const bottomOverviewButton =
+        document.querySelector(".law-bottom-overview-button");
+
+    if (bottomOverviewButton) {
+        bottomOverviewButton.addEventListener(
+            "click",
+            showLawOverview
+        );
+    }
+
+    document
+        .querySelectorAll(".law-bottom-nav-button")
+        .forEach(button => {
+            button.addEventListener("click", () => {
+                const targetLawNumber = Number(
+                    button.dataset.lawNumber
+                );
+
+                lawsSearchState.currentIndex = -1;
+                renderSingleLaw(targetLawNumber);
             });
         });
-    }
 
     document
         .querySelectorAll(".law-section-toggle")
@@ -994,6 +1106,385 @@ function getSearchVariants(query) {
     return [...new Set(variants)];
 }
 
+function escapeSearchRegExp(value) {
+    return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function getFirstMatchingVariant(text, variants) {
+    const lowerText = String(text || "").toLowerCase();
+
+    return variants.find(
+        variant => lowerText.includes(variant)
+    ) || "";
+}
+
+function renderHighlightedSearchText(value, variants) {
+    const text = String(value || "");
+
+    if (!variants.length) {
+        return escapeLawHtml(text);
+    }
+
+    const pattern = new RegExp(
+        `(${variants
+            .slice()
+            .sort((a, b) => b.length - a.length)
+            .map(escapeSearchRegExp)
+            .join("|")})`,
+        "gi"
+    );
+
+    return text
+        .split(pattern)
+        .map((part, index) => {
+            const escapedPart = escapeLawHtml(part);
+
+            if (index % 2 === 0) {
+                return escapedPart;
+            }
+
+            return `
+                <mark class="laws-search-highlight">
+                    ${escapedPart}
+                </mark>
+            `;
+        })
+        .join("");
+}
+
+function getSectionMainSearchText(section) {
+    let sectionText = String(section.raw_text || "");
+
+    if (
+        Array.isArray(section.topics) &&
+        section.topics.length > 0
+    ) {
+        const firstTopicTitle = section.topics[0].title;
+        const topicPosition = sectionText.indexOf(firstTopicTitle);
+
+        if (topicPosition !== -1) {
+            sectionText = sectionText.slice(0, topicPosition);
+        }
+    }
+
+    return sectionText;
+}
+
+function buildLawsSearchResults(query, variants) {
+    const results = [];
+    const resultKeys = new Set();
+
+    const addResult = result => {
+        const key = `${result.lawNumber}:${result.targetId || "law"}`;
+
+        if (resultKeys.has(key)) return;
+
+        resultKeys.add(key);
+        results.push(result);
+    };
+
+    lawsData.laws.forEach(law => {
+        const lawTitleMatch = getFirstMatchingVariant(
+            law.title,
+            variants
+        );
+
+        const lawIntroMatch = getFirstMatchingVariant(
+            law.intro,
+            variants
+        );
+
+        if (lawTitleMatch || lawIntroMatch) {
+            addResult({
+                lawNumber: law.number,
+                targetId: null,
+                type: "Grein",
+                title: `${law.number}. ${law.title}`,
+                matchText: lawIntroMatch
+                    ? getSearchSnippet(law.intro, lawIntroMatch)
+                    : ""
+            });
+        }
+
+        getVisibleLawSections(law)
+            .forEach(section => {
+                const sectionTitleMatch =
+                    getFirstMatchingVariant(
+                        section.title,
+                        variants
+                    );
+
+                const sectionMainText =
+                    getSectionMainSearchText(section);
+
+                const sectionTextMatch =
+                    getFirstMatchingVariant(
+                        sectionMainText,
+                        variants
+                    );
+
+                if (sectionTitleMatch || sectionTextMatch) {
+                    addResult({
+                        lawNumber: law.number,
+                        targetId: section.id,
+                        type: `Grein ${law.number}`,
+                        title: `${section.number}. ${section.title}`,
+                        matchText: sectionTextMatch
+                            ? getSearchSnippet(
+                                sectionMainText,
+                                sectionTextMatch
+                            )
+                            : ""
+                    });
+                }
+
+                if (!Array.isArray(section.topics)) return;
+
+                section.topics.forEach(topic => {
+                    const topicTitleMatch =
+                        getFirstMatchingVariant(
+                            topic.title,
+                            variants
+                        );
+
+                    const topicTextMatch =
+                        getFirstMatchingVariant(
+                            topic.raw_text,
+                            variants
+                        );
+
+                    if (!topicTitleMatch && !topicTextMatch) {
+                        return;
+                    }
+
+                    addResult({
+                        lawNumber: law.number,
+                        targetId: topic.id,
+                        type: `Grein ${law.number}`,
+                        title: topic.title,
+                        matchText: topicTextMatch
+                            ? getSearchSnippet(
+                                topic.raw_text,
+                                topicTextMatch
+                            )
+                            : ""
+                    });
+                });
+            });
+    });
+
+    return results;
+}
+
+function removeLawsSearchHighlights() {
+    document
+        .querySelectorAll("mark.laws-search-highlight")
+        .forEach(mark => {
+            mark.replaceWith(
+                document.createTextNode(mark.textContent || "")
+            );
+        });
+
+    document
+        .querySelectorAll(".laws-search-navigator")
+        .forEach(navigator => navigator.remove());
+}
+
+function applyLawsSearchHighlights(root, variants) {
+    if (!root || !variants.length) return [];
+
+    const patternSource = variants
+        .slice()
+        .sort((a, b) => b.length - a.length)
+        .map(escapeSearchRegExp)
+        .join("|");
+
+    if (!patternSource) return [];
+
+    const testPattern = new RegExp(patternSource, "i");
+    const splitPattern = new RegExp(`(${patternSource})`, "gi");
+
+    const walker = document.createTreeWalker(
+        root,
+        NodeFilter.SHOW_TEXT,
+        {
+            acceptNode(node) {
+                const parent = node.parentElement;
+
+                if (!parent || !node.nodeValue?.trim()) {
+                    return NodeFilter.FILTER_REJECT;
+                }
+
+                if (
+                    parent.closest(
+                        ".laws-search-navigator, " +
+                        ".law-bottom-navigation, " +
+                        ".laws-back-button, mark"
+                    )
+                ) {
+                    return NodeFilter.FILTER_REJECT;
+                }
+
+                return testPattern.test(node.nodeValue)
+                    ? NodeFilter.FILTER_ACCEPT
+                    : NodeFilter.FILTER_REJECT;
+            }
+        }
+    );
+
+    const matchingTextNodes = [];
+
+    while (walker.nextNode()) {
+        matchingTextNodes.push(walker.currentNode);
+    }
+
+    matchingTextNodes.forEach(textNode => {
+        const fragment = document.createDocumentFragment();
+
+        textNode.nodeValue
+            .split(splitPattern)
+            .forEach((part, index) => {
+                if (!part) return;
+
+                if (index % 2 === 0) {
+                    fragment.appendChild(
+                        document.createTextNode(part)
+                    );
+                    return;
+                }
+
+                const mark = document.createElement("mark");
+                mark.className = "laws-search-highlight";
+                mark.textContent = part;
+                fragment.appendChild(mark);
+            });
+
+        textNode.replaceWith(fragment);
+    });
+
+    return [
+        ...root.querySelectorAll("mark.laws-search-highlight")
+    ];
+}
+
+function renderActiveSearchNavigator() {
+    const singleLaw = document.querySelector(".single-law");
+
+    if (!singleLaw || lawsSearchState.currentIndex < 0) return;
+
+    const total = lawsSearchState.results.length;
+    const position = lawsSearchState.currentIndex + 1;
+
+    const navigator = document.createElement("div");
+    navigator.className = "laws-search-navigator";
+    navigator.innerHTML = `
+        <button
+            class="laws-search-nav-button laws-search-nav-previous"
+            type="button"
+            aria-label="Fyrri leitarniðurstaða"
+            ${position === 1 ? "disabled" : ""}
+        >
+            ←
+        </button>
+
+        <div class="laws-search-nav-status">
+            <span class="laws-search-nav-query">
+                „${escapeLawHtml(lawsSearchState.query)}“
+            </span>
+
+            <span>
+                Niðurstaða ${position} af ${total}
+            </span>
+        </div>
+
+        <button
+            class="laws-search-nav-button laws-search-nav-next"
+            type="button"
+            aria-label="Næsta leitarniðurstaða"
+            ${position === total ? "disabled" : ""}
+        >
+            →
+        </button>
+    `;
+
+    const backButton = singleLaw.querySelector(".laws-back-button");
+
+    if (backButton) {
+        backButton.insertAdjacentElement("afterend", navigator);
+    } else {
+        singleLaw.prepend(navigator);
+    }
+
+    navigator
+        .querySelector(".laws-search-nav-previous")
+        ?.addEventListener("click", () => {
+            openLawsSearchResult(
+                lawsSearchState.currentIndex - 1
+            );
+        });
+
+    navigator
+        .querySelector(".laws-search-nav-next")
+        ?.addEventListener("click", () => {
+            openLawsSearchResult(
+                lawsSearchState.currentIndex + 1
+            );
+        });
+}
+
+function openLawsSearchResult(resultIndex) {
+    const result = lawsSearchState.results[resultIndex];
+
+    if (!result) return;
+
+    lawsSearchState.currentIndex = resultIndex;
+
+    renderSingleLaw(
+        result.lawNumber,
+        { scrollToTop: false }
+    );
+
+    renderActiveSearchNavigator();
+
+    requestAnimationFrame(() => {
+        const lawsContent =
+            document.querySelector(".laws-content");
+
+        const highlights = applyLawsSearchHighlights(
+            lawsContent,
+            lawsSearchState.variants
+        );
+
+        const target = result.targetId
+            ? document.getElementById(result.targetId)
+            : document.querySelector(".single-law-header");
+
+        const section = target?.closest(".law-section");
+
+        if (section) {
+            section.classList.add("is-open");
+
+            section
+                .querySelector(".law-section-toggle")
+                ?.setAttribute("aria-expanded", "true");
+        }
+
+        const targetHighlight =
+            target?.querySelector("mark.laws-search-highlight") ||
+            highlights[0] ||
+            null;
+
+        if (targetHighlight) {
+            targetHighlight.classList.add("is-current");
+        }
+
+        (targetHighlight || target)?.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+    });
+}
+
 
 // =========================================
 // SEARCH
@@ -1008,6 +1499,18 @@ function setupLawsSearch() {
 
     if (!searchInput || !resultsBox) return;
 
+    const resetSearch = () => {
+        lawsSearchState.query = "";
+        lawsSearchState.variants = [];
+        lawsSearchState.results = [];
+        lawsSearchState.currentIndex = -1;
+
+        resultsBox.innerHTML = "";
+        resultsBox.style.display = "none";
+
+        removeLawsSearchHighlights();
+    };
+
     searchInput.addEventListener("input", () => {
         const query = searchInput.value
             .trim()
@@ -1017,96 +1520,40 @@ function setupLawsSearch() {
             getSearchVariants(query);
 
         if (query.length < 2) {
-            resultsBox.innerHTML = "";
-            resultsBox.style.display = "none";
+            resetSearch();
             return;
         }
 
-        const results = [];
+        const results = buildLawsSearchResults(
+            query,
+            searchVariants
+        );
 
-        lawsData.laws.forEach(law => {
+        lawsSearchState.query = query;
+        lawsSearchState.variants = searchVariants;
+        lawsSearchState.results = results;
+        lawsSearchState.currentIndex = -1;
 
-            if (
-                law.title
-                    .toLowerCase()
-                    .includes(query)
-            ) {
-                results.push({
-                    lawNumber: law.number,
-                    targetId: null,
-                    type: "Grein",
-                    title: law.title
-                });
-            }
+        renderLawsSearchResults(
+            results,
+            searchVariants
+        );
+    });
 
-            getVisibleLawSections(law)
-                .forEach(section => {
+    searchInput.addEventListener("keydown", event => {
+        if (
+            event.key === "Enter" &&
+            lawsSearchState.results.length > 0
+        ) {
+            event.preventDefault();
+            resultsBox.style.display = "none";
+            openLawsSearchResult(0);
+        }
 
-                    if (
-                        section.title
-                            .toLowerCase()
-                            .includes(query)
-                    ) {
-                        results.push({
-                            lawNumber: law.number,
-                            targetId: section.id,
-                            type: `Grein ${law.number}`,
-                            title: section.title
-                        });
-                    }
-
-                    if (Array.isArray(section.topics)) {
-                        section.topics
-                            .forEach(topic => {
-
-                                if (
-                                    topic.title
-                                        .toLowerCase()
-                                        .includes(query)
-                                ) {
-                                    results.push({
-                                        lawNumber: law.number,
-                                        targetId: topic.id,
-                                        type: `Grein ${law.number}`,
-                                        title: topic.title
-                                    });
-                                }
-                            });
-                    }
-
-                    const sectionText =
-                        section.raw_text?.toLowerCase() || "";
-
-                    const matchingQuery =
-                        searchVariants.find(
-                            variant =>
-                                sectionText.includes(variant)
-                        );
-
-                    if (!matchingQuery) return;
-
-                    const alreadyFound =
-                        results.some(result =>
-                            result.lawNumber === law.number &&
-                            result.targetId === section.id
-                        );
-
-                    if (alreadyFound) return;
-
-                    results.push({
-                        lawNumber: law.number,
-                        targetId: section.id,
-                        type: `Grein ${law.number}`,
-                        title: section.title,
-                        matchText: getSearchSnippet(
-                            section.raw_text,
-                            matchingQuery
-                        )
-                    });
-                });
-        });
-
-        renderLawsSearchResults(results);
+        if (event.key === "Escape") {
+            searchInput.value = "";
+            resetSearch();
+        }
     });
 }
 
@@ -1115,7 +1562,7 @@ function setupLawsSearch() {
 // SEARCH RESULTS
 // =========================================
 
-function renderLawsSearchResults(results) {
+function renderLawsSearchResults(results, variants) {
     const resultsBox =
         document.querySelector("#lawsSearchResults");
 
@@ -1132,14 +1579,21 @@ function renderLawsSearchResults(results) {
         return;
     }
 
-    resultsBox.innerHTML = results
-        .slice(0, 8)
-        .map(result => `
+    const resultLabel = results.length === 1
+        ? "1 niðurstaða"
+        : `${results.length} niðurstöður`;
+
+    resultsBox.innerHTML = `
+        <div class="laws-search-results-header">
+            ${resultLabel}
+        </div>
+
+        <div class="laws-search-results-list">
+            ${results.map((result, index) => `
             <button
                 class="laws-search-result"
                 type="button"
-                data-law="${result.lawNumber}"
-                data-target="${result.targetId || ""}"
+                data-result-index="${index}"
             >
                 <span class="laws-search-result-type">
                     ${escapeLawHtml(result.type)}
@@ -1148,12 +1602,18 @@ function renderLawsSearchResults(results) {
                 <div class="laws-search-result-main">
 
                     <span class="laws-search-result-title">
-                        ${escapeLawHtml(result.title)}
+                        ${renderHighlightedSearchText(
+                            result.title,
+                            variants
+                        )}
                     </span>
 
                     ${result.matchText ? `
                         <span class="laws-search-result-snippet">
-                            ${escapeLawHtml(result.matchText)}
+                            ${renderHighlightedSearchText(
+                                result.matchText,
+                                variants
+                            )}
                         </span>
                     ` : ""}
 
@@ -1163,8 +1623,9 @@ function renderLawsSearchResults(results) {
                     →
                 </span>
             </button>
-        `)
-        .join("");
+            `).join("")}
+        </div>
+    `;
 
     resultsBox.style.display = "block";
 
@@ -1173,28 +1634,11 @@ function renderLawsSearchResults(results) {
         .forEach(button => {
 
             button.addEventListener("click", () => {
-                const lawNumber =
-                    Number(button.dataset.law);
+                const resultIndex = Number(
+                    button.dataset.resultIndex
+                );
 
-                const targetId =
-                    button.dataset.target;
-
-                renderSingleLaw(lawNumber);
-
-                if (targetId) {
-                    setTimeout(() => {
-                        const target =
-                            document.getElementById(targetId);
-
-                        if (target) {
-                            target.scrollIntoView({
-                                behavior: "smooth",
-                                block: "start"
-                            });
-                        }
-                    }, 50);
-                }
-
+                openLawsSearchResult(resultIndex);
                 resultsBox.style.display = "none";
             });
         });

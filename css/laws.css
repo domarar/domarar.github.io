@@ -51,10 +51,10 @@ body {
 
     background:
         linear-gradient(
-            rgba(4, 12, 8, 0.86),
-            rgba(4, 12, 8, 0.91)
+            rgba(4, 12, 8, 0.78),
+            rgba(4, 12, 8, 0.88)
         ),
-        url("../images/backgrounds/background-photo.jpg");
+        url("../images/backgrounds/backround-photo.jpg");
 
     background-size: cover;
     background-position: center;
@@ -478,9 +478,19 @@ body {
 
 .single-law {
     width: 100%;
-    max-width: var(--law-content-width);
+    max-width: 900px;
 
     margin: 0 auto;
+
+    padding: 38px 46px 46px;
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 22px;
+
+    background: rgba(25, 30, 28, 0.985);
+
+    box-shadow:
+        0 28px 70px rgba(0, 0, 0, 0.34);
 }
 
 
@@ -1421,4 +1431,329 @@ body {
 .law-bullet-list > li {
     margin-bottom: 6px;
     line-height: 1.55;
+}
+
+
+/* =========================================
+   SEARCH — RESULT COUNT, NAVIGATION,
+   AND MATCH HIGHLIGHTING
+========================================= */
+
+.laws-search-results-header {
+    position: sticky;
+    z-index: 2;
+    top: 0;
+
+    padding: 10px 16px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+
+    background: rgba(6, 17, 11, 0.99);
+
+    color: rgba(255, 255, 255, 0.52);
+
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.laws-search-results-list {
+    max-height: min(62vh, 520px);
+
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.laws-search-highlight {
+    padding: 1px 2px;
+
+    border-radius: 3px;
+
+    background: rgba(76, 217, 100, 0.90);
+
+    color: #061009;
+
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+}
+
+.laws-search-highlight.is-current {
+    background: #ffe08a;
+
+    box-shadow:
+        0 0 0 2px rgba(255, 224, 138, 0.22);
+}
+
+.laws-search-navigator {
+    position: sticky;
+    z-index: 20;
+    top: 12px;
+
+    display: grid;
+    grid-template-columns: 46px minmax(0, 1fr) 46px;
+    align-items: center;
+
+    gap: 10px;
+
+    margin: 0 0 24px;
+    padding: 9px;
+
+    border: 1px solid rgba(76, 217, 100, 0.25);
+    border-radius: 14px;
+
+    background: rgba(5, 15, 9, 0.97);
+
+    box-shadow:
+        0 12px 32px rgba(0, 0, 0, 0.34);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.laws-search-nav-button {
+    appearance: none;
+    -webkit-appearance: none;
+
+    width: 46px;
+    height: 42px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: 1px solid rgba(76, 217, 100, 0.24);
+    border-radius: 10px;
+
+    background: rgba(76, 217, 100, 0.06);
+
+    color: var(--law-green);
+
+    font-family: inherit;
+    font-size: 21px;
+    font-weight: 800;
+
+    cursor: pointer;
+}
+
+.laws-search-nav-button:hover:not(:disabled) {
+    border-color: rgba(76, 217, 100, 0.52);
+    background: rgba(76, 217, 100, 0.12);
+}
+
+.laws-search-nav-button:disabled {
+    opacity: 0.28;
+    cursor: default;
+}
+
+.laws-search-nav-status {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 3px;
+
+    color: rgba(255, 255, 255, 0.56);
+
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.laws-search-nav-query {
+    overflow: hidden;
+
+    width: 100%;
+
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 800;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.law-section,
+.law-topic,
+.single-law-header,
+.laws-search-highlight {
+    scroll-margin-top: 100px;
+}
+
+
+/* =========================================
+   BOTTOM LAW NAVIGATION
+========================================= */
+
+.law-bottom-navigation {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: stretch;
+
+    gap: 12px;
+
+    margin-top: 34px;
+    padding-top: 28px;
+
+    border-top: 1px solid var(--law-border);
+}
+
+.law-bottom-nav-button,
+.law-bottom-overview-button {
+    appearance: none;
+    -webkit-appearance: none;
+
+    min-height: 74px;
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 13px;
+
+    background: rgba(255, 255, 255, 0.025);
+
+    color: #ffffff;
+
+    font-family: inherit;
+
+    cursor: pointer;
+
+    transition:
+        border-color 160ms ease,
+        background 160ms ease,
+        transform 160ms ease;
+}
+
+.law-bottom-nav-button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    gap: 6px;
+
+    padding: 13px 15px;
+}
+
+.law-bottom-nav-previous {
+    align-items: flex-start;
+    text-align: left;
+}
+
+.law-bottom-nav-next {
+    align-items: flex-end;
+    text-align: right;
+}
+
+.law-bottom-nav-direction {
+    color: var(--law-green);
+
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.law-bottom-nav-title {
+    color: rgba(255, 255, 255, 0.88);
+
+    font-size: 14px;
+    font-weight: 750;
+    line-height: 1.35;
+}
+
+.law-bottom-overview-button {
+    min-width: 126px;
+
+    padding: 13px 17px;
+
+    color: rgba(255, 255, 255, 0.70);
+
+    font-size: 13px;
+    font-weight: 750;
+}
+
+.law-bottom-nav-button:hover,
+.law-bottom-overview-button:hover {
+    transform: translateY(-2px);
+
+    border-color: rgba(76, 217, 100, 0.38);
+    background: rgba(76, 217, 100, 0.07);
+}
+
+.law-bottom-nav-spacer {
+    display: block;
+}
+
+
+/* =========================================
+   NEW READING CARD — MOBILE
+========================================= */
+
+@media (max-width: 700px) {
+
+    .single-law {
+        padding: 22px 16px 26px;
+
+        border-radius: 16px;
+    }
+
+    .laws-search-results-list {
+        max-height: 60vh;
+    }
+
+    .laws-search-navigator {
+        top: 8px;
+
+        grid-template-columns: 42px minmax(0, 1fr) 42px;
+
+        gap: 7px;
+
+        margin-bottom: 19px;
+        padding: 7px;
+
+        border-radius: 12px;
+    }
+
+    .laws-search-nav-button {
+        width: 42px;
+        height: 40px;
+    }
+
+    .laws-search-nav-status {
+        font-size: 11px;
+    }
+
+    .laws-search-nav-query {
+        font-size: 13px;
+    }
+
+    .law-bottom-navigation {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+
+        gap: 9px;
+
+        margin-top: 27px;
+        padding-top: 23px;
+    }
+
+    .law-bottom-nav-button {
+        min-height: 82px;
+
+        padding: 12px;
+    }
+
+    .law-bottom-overview-button {
+        grid-column: 1 / -1;
+        grid-row: 2;
+
+        min-height: 48px;
+    }
+
+    .law-bottom-nav-title {
+        font-size: 13px;
+    }
+
 }
