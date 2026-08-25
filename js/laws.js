@@ -1591,18 +1591,43 @@ function openLawsSearchResult(resultIndex) {
         const scrollTarget = targetHighlight || target;
 
 if (scrollTarget) {
+    const isStandalone =
+        window.matchMedia("(display-mode: standalone)").matches ||
+        window.navigator.standalone === true;
+
+    const position =
+        window.innerWidth <= 768
+            ? window.innerHeight * (isStandalone ? 0.64 : 0.56)
+            : window.innerHeight * 0.5;
+
+    if (isStandalone && window.innerWidth <= 768) {
+        const singleLaw =
+            document.querySelector(".single-law");
+
+        if (singleLaw) {
+            const scrollSpace =
+                document.createElement("div");
+
+            scrollSpace.className =
+                "laws-search-scroll-space";
+
+            scrollSpace.setAttribute(
+                "aria-hidden",
+                "true"
+            );
+
+            scrollSpace.style.height =
+                `${Math.ceil(
+                    window.innerHeight - position + 24
+                )}px`;
+
+            singleLaw.append(scrollSpace);
+        }
+    }
+
     const targetTop =
         scrollTarget.getBoundingClientRect().top +
         window.scrollY;
-
-    const isStandalone =
-    window.matchMedia("(display-mode: standalone)").matches ||
-    window.navigator.standalone === true;
-
-    const position =
-    window.innerWidth <= 768
-        ? window.innerHeight * (isStandalone ? 0.72 : 0.56)
-        : window.innerHeight * 0.5;
 
     window.scrollTo({
         top: Math.max(0, targetTop - position),
