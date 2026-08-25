@@ -1588,12 +1588,26 @@ function openLawsSearchResult(resultIndex) {
             targetHighlight.classList.add("is-current");
         }
 
-        (targetHighlight || target)?.scrollIntoView({
-            behavior: "smooth",
-            block: "center"
-        });
+        const scrollTarget = targetHighlight || target;
+
+if (scrollTarget) {
+    const targetTop =
+        scrollTarget.getBoundingClientRect().top +
+        window.scrollY;
+
+    const position =
+        window.innerWidth <= 768
+            ? window.innerHeight * 0.56
+            : window.innerHeight * 0.5;
+
+    window.scrollTo({
+        top: Math.max(0, targetTop - position),
+        behavior: "smooth"
     });
 }
+    });
+}
+
 
 
 // =========================================
