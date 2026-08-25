@@ -1601,7 +1601,7 @@ if (scrollTarget) {
 
     const position =
     window.innerWidth <= 768
-        ? window.innerHeight * (isStandalone ? 0.64 : 0.56)
+        ? window.innerHeight * (isStandalone ? 0.72 : 0.56)
         : window.innerHeight * 0.5;
 
     window.scrollTo({
