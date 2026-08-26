@@ -58,6 +58,10 @@
     padding: 20px;
 
     background: rgba(3, 12, 10, 0.48);
+    
+
+    backdrop-filter: blur(10px)
+    -webkit-backdrop-filter: blur(10px)
 }
 
 .vs-card {
