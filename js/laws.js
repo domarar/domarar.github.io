@@ -7,6 +7,127 @@ let lawsData = null;
 
 const LAWS_DESKTOP_BREAKPOINT = 1450;
 
+const LAWS_THEME_STORAGE_KEY =
+    "domarar-laws-theme";
+
+function getSavedLawsTheme() {
+    try {
+        return localStorage.getItem(
+            LAWS_THEME_STORAGE_KEY
+        ) === "light"
+            ? "light"
+            : "dark";
+    } catch {
+        return "dark";
+    }
+}
+
+function updateLawsThemeToggle(button) {
+    const currentTheme =
+        document.documentElement.dataset.lawsTheme ||
+        "dark";
+
+    const isLight = currentTheme === "light";
+
+    button.classList.toggle(
+        "is-light",
+        isLight
+    );
+
+    button.setAttribute(
+        "aria-pressed",
+        String(isLight)
+    );
+
+    const label = isLight
+        ? "Skipta yfir í dökkt útlit"
+        : "Skipta yfir í ljóst útlit";
+
+    button.setAttribute("aria-label", label);
+    button.title = label;
+}
+
+function applyLawsTheme(
+    theme,
+    savePreference = false
+) {
+    const safeTheme =
+        theme === "light"
+            ? "light"
+            : "dark";
+
+    document.documentElement.dataset.lawsTheme =
+        safeTheme;
+
+    if (savePreference) {
+        try {
+            localStorage.setItem(
+                LAWS_THEME_STORAGE_KEY,
+                safeTheme
+            );
+        } catch {
+            // The theme still works without storage.
+        }
+    }
+
+    document
+        .querySelectorAll(".laws-theme-toggle")
+        .forEach(button => {
+            updateLawsThemeToggle(button);
+        });
+}
+
+function createLawsThemeToggle() {
+    const button =
+        document.createElement("button");
+
+    button.className = "laws-theme-toggle";
+    button.type = "button";
+
+    button.innerHTML = `
+        <span
+            class="laws-theme-icon laws-theme-sun"
+            aria-hidden="true"
+        >
+            ☀
+        </span>
+
+        <span
+            class="laws-theme-switch"
+            aria-hidden="true"
+        >
+            <span class="laws-theme-switch-thumb"></span>
+        </span>
+
+        <span
+            class="laws-theme-icon laws-theme-moon"
+            aria-hidden="true"
+        >
+            ☾
+        </span>
+    `;
+
+    button.addEventListener("click", () => {
+        const currentTheme =
+            document.documentElement
+                .dataset.lawsTheme ||
+            "dark";
+
+        applyLawsTheme(
+            currentTheme === "dark"
+                ? "light"
+                : "dark",
+            true
+        );
+    });
+
+    updateLawsThemeToggle(button);
+
+    return button;
+}
+
+applyLawsTheme(getSavedLawsTheme());
+
 const LAWS_INTRODUCTION = {
     title: "Knattspyrnulögin",
     edition: "2026–2027",
@@ -52,16 +173,42 @@ function restoreLawsSearchHost() {
 }
 
 function updateLawsSearchPlacement() {
-    const lawsSearch = document.querySelector(".laws-search");
-    const searchSlot = document.querySelector(
-        ".single-law-search-slot"
-    );
+    const lawsSearch =
+        document.querySelector(".laws-search");
+
+    const searchSlot =
+        document.querySelector(
+            ".single-law-search-slot"
+        );
+
+    const existingThemeToggle =
+        document.querySelector(
+            ".laws-theme-toggle"
+        );
 
     if (!lawsSearch) return;
 
-    if (isDesktopLawsLayout() && searchSlot) {
+    if (
+        isDesktopLawsLayout() &&
+        searchSlot
+    ) {
         searchSlot.appendChild(lawsSearch);
+
+        if (existingThemeToggle) {
+            searchSlot.appendChild(
+                existingThemeToggle
+            );
+        } else {
+            searchSlot.appendChild(
+                createLawsThemeToggle()
+            );
+        }
+
         return;
+    }
+
+    if (existingThemeToggle) {
+        existingThemeToggle.remove();
     }
 
     restoreLawsSearchHost();
