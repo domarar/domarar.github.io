@@ -5,76 +5,12 @@
 
 let lawsData = null;
 
-const LAWS_DESKTOP_BREAKPOINT = 1450;
-
-const LAWS_INTRODUCTION = {
-    title: "Knattspyrnulögin",
-    edition: "2026–2027",
-    paragraphs: [
-        "Í þessu hefti er að finna íslenska þýðingu á knattspyrnulögunum 2026–2027.",
-        "Breytingar þær sem Alþjóðanefnd knattspyrnusambanda (IFAB) gerir á knattspyrnulögunum hverju sinni taka alla jafna ekki gildi fyrr en 1. júlí ár hvert, en að fenginni heimild IFAB tók stjórn KSÍ þá ákvörðun að nýja útgáfa laganna skyldi gilda á Íslandi allt frá upphafi keppni í Bestu deildarinnar 10. apríl 2026.",
-        "Í þessu hefti er eingöngu um að ræða íslenska þýðingu á sjálfum texta laganna og því fylgja hér ekki ýmsar skýringarmyndir o.þ.h. sem finna má í upprunalegu ensku útgáfunni. Því vísast beint til ensku útgáfunnar vegna þeirra. Til einföldunar er í þessu hefti einnig sleppt öllum ákvæðum laganna sem snúa að vídeó-aðstoðardómgæslu (VAR). Einnig er sleppt þeirri forskrift sem tilgreind er í inngangi knattspyrnulaganna um framkvæmd varanlegra viðbótarskiptinga vegna heilahristings, enda ákvað stjórn KSÍ að það heimildarákvæði muni ekki gilda á Íslandi á þessu keppnistímabili.",
-        "Á vef KSÍ undir flipanum \"dómaramál\" er einnig að finna ensku útgáfu knattspyrnulaganna ásamt íslensku ítarefni. Sérstök athygli er vakin á nýjum verklagsreglum sem teljast óaðskiljanlegur hluti af lögunum um 1) Samstarf fyrirliða og dómara, 2) Tafir við markspyrnur og innköst, 3) Tafir við meiðsli og 4) Tafir við skiptingar.",
-        "Komi í ljós að sú íslenska þýðing sem hér birtist, eða annað íslenskt kynningarefni um lögin, feli í sér einhverjar misfellur eða villur í þýðingu er það enska útgáfa laganna sem gildir."
-    ]
-};
-
 const lawsSearchState = {
     query: "",
     variants: [],
     results: [],
     currentIndex: -1
 };
-
-
-// =========================================
-// RESPONSIVE HOME / SEARCH PLACEMENT
-// =========================================
-
-function isDesktopLawsLayout() {
-    return window.innerWidth >= LAWS_DESKTOP_BREAKPOINT;
-}
-
-function restoreLawsSearchHost() {
-    const lawsSearch = document.querySelector(".laws-search");
-    const lawsContent = document.querySelector(".laws-content");
-
-    if (
-        lawsSearch &&
-        lawsContent &&
-        lawsContent.contains(lawsSearch)
-    ) {
-        lawsContent.insertAdjacentElement(
-            "beforebegin",
-            lawsSearch
-        );
-    }
-}
-
-function updateLawsSearchPlacement() {
-    const lawsSearch = document.querySelector(".laws-search");
-    const searchSlot = document.querySelector(
-        ".single-law-search-slot"
-    );
-
-    if (!lawsSearch) return;
-
-    if (isDesktopLawsLayout() && searchSlot) {
-        searchSlot.appendChild(lawsSearch);
-        return;
-    }
-
-    restoreLawsSearchHost();
-}
-
-function renderLawsHome() {
-    if (isDesktopLawsLayout()) {
-        renderLawsIntroduction();
-        return;
-    }
-
-    renderLawOverview();
-}
 
 
 // =========================================
@@ -145,7 +81,7 @@ async function loadLaws() {
             edition.textContent = lawsData.edition || "";
         }
 
-        renderLawsHome();
+        renderLawOverview();
 
     } catch (error) {
         console.error("Laws error:", error);
@@ -168,8 +104,6 @@ function renderLawOverview() {
     const lawsContent = document.querySelector(".laws-content");
 
     if (!lawsContent || !lawsData) return;
-
-    restoreLawsSearchHost();
 
     lawsContent.innerHTML = "";
 
@@ -205,89 +139,6 @@ function renderLawOverview() {
     });
 
     lawsContent.appendChild(overview);
-}
-
-
-// =========================================
-// INTRODUCTION — DESKTOP HOME
-// =========================================
-
-function renderLawsIntroduction() {
-    const lawsContent = document.querySelector(".laws-content");
-
-    if (!lawsContent || !lawsData) return;
-
-    restoreLawsSearchHost();
-
-    const paragraphsHtml = LAWS_INTRODUCTION.paragraphs
-        .map(paragraph => `
-            <p>${escapeLawHtml(paragraph)}</p>
-        `)
-        .join("");
-
-    lawsContent.innerHTML = `
-        ${renderLawDesktopNavigator("introduction")}
-
-        <article class="single-law laws-introduction">
-
-            <div class="single-law-search-slot"></div>
-
-            <a
-                class="laws-back-button laws-introduction-site-link"
-                href="index.html"
-            >
-                ← Til baka á forsíðu
-            </a>
-
-            <header class="single-law-header laws-introduction-header">
-
-                <div class="single-law-label">
-                    INNGANGUR
-                </div>
-
-                <h2>
-                    ${escapeLawHtml(LAWS_INTRODUCTION.title)}
-                </h2>
-
-                <div class="laws-introduction-edition">
-                    ${escapeLawHtml(LAWS_INTRODUCTION.edition)}
-                </div>
-
-            </header>
-
-            <div class="laws-introduction-content">
-                ${paragraphsHtml}
-
-                <footer class="laws-introduction-footer">
-                    <p>
-                        Reykjavík, 8. júlí 2026<br>
-                        <strong>Dómaranefnd KSÍ</strong>
-                    </p>
-
-                    <p class="laws-introduction-source">
-                        Heimild:
-                        <a
-                            href="https://www.ksi.is/felagslid/domaramal/"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            Dómaranefnd KSÍ – Knattspyrnulögin
-                            2026/27, íslenskur texti án VAR
-                        </a>
-                    </p>
-                </footer>
-            </div>
-
-        </article>
-    `;
-
-    updateLawsSearchPlacement();
-    setupLawDesktopNavigatorEvents();
-
-    window.scrollTo({
-        top: 0,
-        behavior: "auto"
-    });
 }
 
 
@@ -890,10 +741,6 @@ function renderLawBottomNavigation(lawNumber) {
 
     if (currentIndex === -1) return "";
 
-    const overviewLabel = isDesktopLawsLayout()
-        ? "Inngangur"
-        : "Allar greinar";
-
     const previousLaw = laws[currentIndex - 1] || null;
     const nextLaw = laws[currentIndex + 1] || null;
 
@@ -944,7 +791,7 @@ function renderLawBottomNavigation(lawNumber) {
                 class="law-bottom-overview-button"
                 type="button"
             >
-                ${overviewLabel}
+                Allar greinar
             </button>
 
             ${nextHtml}
@@ -957,33 +804,7 @@ function renderLawDesktopNavigator(currentLawNumber) {
         return "";
     }
 
-    const introductionIsCurrent =
-        currentLawNumber === "introduction";
-
-    const introductionItem = `
-        <button
-            class="law-desktop-nav-button law-desktop-nav-introduction${
-                introductionIsCurrent ? " is-active" : ""
-            }"
-            type="button"
-            data-view="introduction"
-            ${
-                introductionIsCurrent
-                    ? 'aria-current="page"'
-                    : ""
-            }
-        >
-            <span class="law-desktop-nav-number">
-                i
-            </span>
-
-            <span class="law-desktop-nav-title">
-                Inngangur
-            </span>
-        </button>
-    `;
-
-    const lawItems = lawsData.laws
+    const navigationItems = lawsData.laws
         .map(law => {
             const isCurrent =
                 Number(law.number) ===
@@ -1014,9 +835,6 @@ function renderLawDesktopNavigator(currentLawNumber) {
         })
         .join("");
 
-    const navigationItems =
-        introductionItem + lawItems;
-
     return `
         <aside
             class="law-desktop-navigator"
@@ -1029,7 +847,7 @@ function renderLawDesktopNavigator(currentLawNumber) {
                 </div>
 
                 <div class="law-desktop-nav-subheading">
-                    Inngangur og greinar 1–17
+                    Greinar 1–17
                 </div>
 
                 <div class="law-desktop-nav-list">
@@ -1048,8 +866,6 @@ function renderSingleLaw(lawNumber, options = {}) {
     const lawsContent = document.querySelector(".laws-content");
 
     if (!lawsContent || !lawsData) return;
-
-    restoreLawsSearchHost();
 
     const law = lawsData.laws.find(
         item => Number(item.number) === Number(lawNumber)
@@ -1152,8 +968,6 @@ function renderSingleLaw(lawNumber, options = {}) {
 
         <div class="single-law">
 
-            <div class="single-law-search-slot"></div>
-
             <button
                 class="laws-back-button"
                 type="button"
@@ -1188,7 +1002,6 @@ function renderSingleLaw(lawNumber, options = {}) {
         </div>
     `;
 
-    updateLawsSearchPlacement();
     setupSingleLawEvents();
 
     if (options.scrollToTop !== false) {
@@ -1213,66 +1026,13 @@ function renderSingleLaw(lawNumber, options = {}) {
 
 
 // =========================================
-// DESKTOP NAVIGATOR EVENTS
-// =========================================
-
-function setupLawDesktopNavigatorEvents() {
-    document
-        .querySelectorAll(".law-desktop-nav-button")
-        .forEach(button => {
-            button.addEventListener("click", () => {
-                if (button.dataset.view === "introduction") {
-                    lawsSearchState.currentIndex = -1;
-                    renderLawsIntroduction();
-                    return;
-                }
-
-                const targetLawNumber = Number(
-                    button.dataset.lawNumber
-                );
-
-                if (!Number.isFinite(targetLawNumber)) {
-                    return;
-                }
-
-                lawsSearchState.currentIndex = -1;
-                renderSingleLaw(targetLawNumber);
-            });
-        });
-
-    const desktopNavigator =
-        document.querySelector(
-            ".law-desktop-navigator-inner"
-        );
-
-    const activeDesktopNavButton =
-        document.querySelector(
-            ".law-desktop-nav-button.is-active"
-        );
-
-    if (
-        desktopNavigator &&
-        activeDesktopNavButton &&
-        desktopNavigator.clientHeight > 0
-    ) {
-        desktopNavigator.scrollTop = Math.max(
-            0,
-            activeDesktopNavButton.offsetTop -
-                desktopNavigator.clientHeight / 2 +
-                activeDesktopNavButton.offsetHeight / 2
-        );
-    }
-}
-
-
-// =========================================
 // SINGLE LAW EVENTS
 // =========================================
 
 function setupSingleLawEvents() {
-    const showLawsHome = () => {
+    const showLawOverview = () => {
         lawsSearchState.currentIndex = -1;
-        renderLawsHome();
+        renderLawOverview();
 
         window.scrollTo({
             top: 0,
@@ -1284,7 +1044,7 @@ function setupSingleLawEvents() {
         document.querySelector(".laws-back-button");
 
     if (backButton) {
-        backButton.addEventListener("click", showLawsHome);
+        backButton.addEventListener("click", showLawOverview);
     }
 
     const bottomOverviewButton =
@@ -1293,7 +1053,7 @@ function setupSingleLawEvents() {
     if (bottomOverviewButton) {
         bottomOverviewButton.addEventListener(
             "click",
-            showLawsHome
+            showLawOverview
         );
     }
 
@@ -1309,7 +1069,45 @@ function setupSingleLawEvents() {
                 renderSingleLaw(targetLawNumber);
             });
         });
-    setupLawDesktopNavigatorEvents();
+    document
+    .querySelectorAll(".law-desktop-nav-button")
+    .forEach(button => {
+        button.addEventListener("click", () => {
+            const targetLawNumber = Number(
+                button.dataset.lawNumber
+            );
+
+            if (!Number.isFinite(targetLawNumber)) {
+                return;
+            }
+
+            lawsSearchState.currentIndex = -1;
+            renderSingleLaw(targetLawNumber);
+        });
+    });
+
+const desktopNavigator =
+    document.querySelector(
+        ".law-desktop-navigator-inner"
+    );
+
+const activeDesktopNavButton =
+    document.querySelector(
+        ".law-desktop-nav-button.is-active"
+    );
+
+if (
+    desktopNavigator &&
+    activeDesktopNavButton &&
+    desktopNavigator.clientHeight > 0
+) {
+    desktopNavigator.scrollTop = Math.max(
+        0,
+        activeDesktopNavButton.offsetTop -
+            desktopNavigator.clientHeight / 2 +
+            activeDesktopNavButton.offsetHeight / 2
+    );
+}
     document
         .querySelectorAll(".law-section-toggle")
         .forEach(toggle => {
@@ -1793,16 +1591,6 @@ function openLawsSearchResult(resultIndex) {
         const scrollTarget = targetHighlight || target;
 
 if (scrollTarget) {
-
-        if (isDesktopLawsLayout()) {
-        scrollTarget.scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-            inline: "nearest"
-        });
-
-        return;
-    }
     const isStandalone =
         window.matchMedia("(display-mode: standalone)").matches ||
         window.navigator.standalone === true;
@@ -1889,7 +1677,7 @@ function setupLawsSearch() {
 
         resetSearch();
         updateClearButton();
-        renderLawsHome();
+        renderLawOverview();
     };
 
     searchInput.addEventListener("input", () => {
@@ -2042,37 +1830,6 @@ function renderLawsSearchResults(results, variants) {
 // START
 // =========================================
 
-function setupLawsResponsiveLayout() {
-    let desktopLayoutWasActive = isDesktopLawsLayout();
-
-    window.addEventListener("resize", () => {
-        const desktopLayoutIsActive = isDesktopLawsLayout();
-
-        if (
-            desktopLayoutIsActive ===
-            desktopLayoutWasActive
-        ) {
-            return;
-        }
-
-        desktopLayoutWasActive = desktopLayoutIsActive;
-
-        const isHomeView = Boolean(
-            document.querySelector(
-                ".laws-introduction, .laws-overview"
-            )
-        );
-
-        if (isHomeView) {
-            renderLawsHome();
-            return;
-        }
-
-        updateLawsSearchPlacement();
-    });
-}
-
 loadLaws().then(() => {
     setupLawsSearch();
-    setupLawsResponsiveLayout();
 });

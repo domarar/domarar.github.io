@@ -593,10 +593,6 @@ body {
     transform: translateX(-2px);
 }
 
-.laws-introduction-site-link {
-    text-decoration: none;
-}
-
 
 /* =========================================
    13. LAW HEADER
@@ -642,91 +638,6 @@ body {
 
     line-height: 1.08;
     letter-spacing: -0.025em;
-}
-
-
-/* =========================================
-   INTRODUCTION
-========================================= */
-
-.single-law-search-slot:empty {
-    display: none;
-}
-
-.laws-introduction-header {
-    margin-bottom: 26px;
-}
-
-.laws-introduction-header .single-law-label {
-    margin-top: 0;
-
-    color: var(--law-green);
-}
-
-.laws-introduction-header h2 {
-    margin-top: 10px;
-}
-
-.laws-introduction-edition {
-    margin-top: 10px;
-
-    color: rgba(255, 255, 255, 0.52);
-
-    font-size: 16px;
-    font-weight: 750;
-    letter-spacing: 0.04em;
-}
-
-.laws-introduction-content {
-    max-width: 780px;
-}
-
-.laws-introduction-content > p {
-    margin: 0 0 20px;
-
-    color: var(--law-text-soft);
-
-    font-size: var(--law-body-size);
-    font-weight: 400;
-    line-height: var(--law-body-line);
-}
-
-.laws-introduction-footer {
-    margin-top: 34px;
-    padding-top: 26px;
-
-    border-top: 1px solid var(--law-border);
-}
-
-.laws-introduction-footer p {
-    margin: 0;
-
-    color: rgba(255, 255, 255, 0.72);
-
-    font-size: 14px;
-    line-height: 1.65;
-}
-
-.laws-introduction-footer strong {
-    color: #ffffff;
-}
-
-.laws-introduction-footer .laws-introduction-source {
-    margin-top: 18px;
-
-    color: rgba(255, 255, 255, 0.40);
-
-    font-size: 12px;
-}
-
-.laws-introduction-source a {
-    color: rgba(255, 255, 255, 0.58);
-    text-decoration-color: rgba(76, 217, 100, 0.38);
-    text-underline-offset: 3px;
-}
-
-.laws-introduction-source a:hover {
-    color: var(--law-green);
 }
 
 
@@ -1945,74 +1856,26 @@ body::before {
 
 @media (min-width: 1450px) {
 
-    html,
-body {
-    height: 100%;
-    overflow: hidden;
-}
-
-.laws-page {
-    height: 100vh;
-    padding: 20px 0;
-}
-
-    .laws-page > .laws-home-link,
-    .laws-page > .laws-header {
-        display: none;
-    }
-
     .laws-content {
-    position: relative;
-
-    height: calc(100vh - 40px);
-}
-    .single-law {
-    height: 100%;
-    max-height: 100%;
-
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-}
-    .single-law::-webkit-scrollbar {
-    display: none;
-}
-
-    .single-law-search-slot:not(:empty) {
-        display: block;
-    }
-
-    .single-law-search-slot .laws-search {
-        width: 100%;
-        max-width: none;
-
-        margin: 0 0 30px;
-    }
-
-    .single-law-search-slot + .laws-back-button {
-        margin-bottom: 30px;
+        position: relative;
     }
 
     .law-desktop-navigator {
-    position: fixed;
-    z-index: 10;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: calc(50% - 698px);
 
-    top: 20px;
-    bottom: 20px;
-    left: calc(50% - 698px);
+        display: block;
 
-    display: block;
-
-    width: 220px;
-}
+        width: 220px;
+    }
 
     .law-desktop-navigator-inner {
-    position: relative;
+        position: sticky;
+        top: 20px;
 
-    height: 100%;
-    max-height: none;
+        max-height: calc(100vh - 40px);
 
         padding: 16px 12px;
 
@@ -2103,15 +1966,6 @@ body {
 
         background: rgba(76, 217, 100, 0.11);
         color: #ffffff;
-    }
-
-    .law-desktop-nav-introduction {
-        margin-bottom: 7px;
-    }
-
-    .law-desktop-nav-introduction
-    .law-desktop-nav-number {
-        text-transform: uppercase;
     }
 
     .law-desktop-nav-number {
