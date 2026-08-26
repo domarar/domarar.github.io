@@ -2129,5 +2129,90 @@ body {
         font-weight: 650;
         line-height: 1.35;
     }
+    .law-desktop-nav-group {
+    display: flex;
+    flex-direction: column;
+}
 
+.law-desktop-subsections {
+    display: flex;
+    flex-direction: column;
+
+    gap: 2px;
+
+    margin: 3px 0 8px 34px;
+    padding: 3px 0 4px 9px;
+
+    border-left:
+        1px solid rgba(76, 217, 100, 0.20);
+}
+
+.law-desktop-subsection-button {
+    appearance: none;
+    -webkit-appearance: none;
+
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+
+    gap: 5px;
+
+    padding: 6px 7px;
+
+    border: 0;
+    border-radius: 7px;
+
+    background: transparent;
+    color: rgba(255, 255, 255, 0.46);
+
+    font-family: inherit;
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        color 150ms ease,
+        background 150ms ease;
+}
+
+.law-desktop-subsection-button:hover {
+    background: rgba(76, 217, 100, 0.055);
+    color: rgba(255, 255, 255, 0.86);
+}
+
+.law-desktop-subsection-button.is-current {
+    background: rgba(76, 217, 100, 0.10);
+    color: #ffffff;
+}
+
+.law-desktop-subsection-number {
+    color: rgba(76, 217, 100, 0.72);
+
+    font-size: 10px;
+    font-weight: 900;
+    line-height: 1.4;
+}
+
+.law-desktop-subsection-title {
+    min-width: 0;
+
+    font-size: 10.5px;
+    font-weight: 650;
+    line-height: 1.35;
+}
+
+.law-desktop-navigator-inner {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.law-desktop-navigator-inner::-webkit-scrollbar {
+    display: none;
+}
+.law-desktop-nav-group.is-collapsed
+.law-desktop-subsections {
+    display: none;
+}
 }

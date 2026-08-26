@@ -989,33 +989,74 @@ function renderLawDesktopNavigator(currentLawNumber) {
                 Number(law.number) ===
                 Number(currentLawNumber);
 
+            const sections = isCurrent
+                ? getVisibleLawSections(law)
+                : [];
+
+            const sectionItems = sections
+                .map((section, index) => `
+                    <button
+                        class="law-desktop-subsection-button${
+                            index === 0
+                                ? " is-current"
+                                : ""
+                        }"
+                        type="button"
+                        data-target-id="${escapeLawHtml(
+                            section.id
+                        )}"
+                    >
+                        <span class="law-desktop-subsection-number">
+                            ${escapeLawHtml(section.number)}.
+                        </span>
+
+                        <span class="law-desktop-subsection-title">
+                            ${escapeLawHtml(section.title)}
+                        </span>
+                    </button>
+                `)
+                .join("");
+
             return `
-                <button
-                    class="law-desktop-nav-button${
-                        isCurrent ? " is-active" : ""
+                <div
+                    class="law-desktop-nav-group${
+                        isCurrent ? " is-expanded" : ""
                     }"
-                    type="button"
-                    data-law-number="${law.number}"
+                >
+                    <button
+                        class="law-desktop-nav-button${
+                            isCurrent ? " is-active" : ""
+                        }"
+                        type="button"
+                        data-law-number="${law.number}"
+                        ${
+                            isCurrent
+                                ? 'aria-current="page"'
+                                : ""
+                        }
+                    >
+                        <span class="law-desktop-nav-number">
+                            ${law.number}
+                        </span>
+
+                        <span class="law-desktop-nav-title">
+                            ${escapeLawHtml(law.title)}
+                        </span>
+                    </button>
+
                     ${
-                        isCurrent
-                            ? 'aria-current="page"'
+                        isCurrent && sectionItems
+                            ? `
+                                <div class="law-desktop-subsections">
+                                    ${sectionItems}
+                                </div>
+                            `
                             : ""
                     }
-                >
-                    <span class="law-desktop-nav-number">
-                        ${law.number}
-                    </span>
-
-                    <span class="law-desktop-nav-title">
-                        ${escapeLawHtml(law.title)}
-                    </span>
-                </button>
+                </div>
             `;
         })
         .join("");
-
-    const navigationItems =
-        introductionItem + lawItems;
 
     return `
         <aside
@@ -1033,7 +1074,8 @@ function renderLawDesktopNavigator(currentLawNumber) {
                 </div>
 
                 <div class="law-desktop-nav-list">
-                    ${navigationItems}
+                    ${introductionItem}
+                    ${lawItems}
                 </div>
 
             </div>
@@ -1221,11 +1263,38 @@ function setupLawDesktopNavigatorEvents() {
         .querySelectorAll(".law-desktop-nav-button")
         .forEach(button => {
             button.addEventListener("click", () => {
-                if (button.dataset.view === "introduction") {
+                if (
+                    button.dataset.view ===
+                    "introduction"
+                ) {
                     lawsSearchState.currentIndex = -1;
                     renderLawsIntroduction();
                     return;
                 }
+
+                if (button.classList.contains("is-active")) {
+    const navGroup =
+        button.closest(".law-desktop-nav-group");
+
+    const subsections =
+        navGroup?.querySelector(
+            ".law-desktop-subsections"
+        );
+
+    if (!navGroup || !subsections) return;
+
+    const isCollapsed =
+        navGroup.classList.toggle(
+            "is-collapsed"
+        );
+
+    button.setAttribute(
+        "aria-expanded",
+        String(!isCollapsed)
+    );
+
+    return;
+}
 
                 const targetLawNumber = Number(
                     button.dataset.lawNumber
@@ -1239,6 +1308,48 @@ function setupLawDesktopNavigatorEvents() {
                 renderSingleLaw(targetLawNumber);
             });
         });
+
+    const subsectionButtons = [
+        ...document.querySelectorAll(
+            ".law-desktop-subsection-button"
+        )
+    ];
+
+    subsectionButtons.forEach(button => {
+        button.addEventListener("click", () => {
+            const targetId =
+                button.dataset.targetId;
+
+            const target =
+                document.getElementById(targetId);
+
+            const singleLaw =
+                document.querySelector(".single-law");
+
+            if (!target || !singleLaw) return;
+
+            subsectionButtons.forEach(item => {
+                item.classList.remove("is-current");
+                item.removeAttribute("aria-current");
+            });
+
+            button.classList.add("is-current");
+            button.setAttribute(
+                "aria-current",
+                "location"
+            );
+
+            const targetTop =
+                target.getBoundingClientRect().top -
+                singleLaw.getBoundingClientRect().top +
+                singleLaw.scrollTop;
+
+            singleLaw.scrollTo({
+                top: Math.max(0, targetTop - 20),
+                behavior: "smooth"
+            });
+        });
+    });
 
     const desktopNavigator =
         document.querySelector(
@@ -1257,11 +1368,82 @@ function setupLawDesktopNavigatorEvents() {
     ) {
         desktopNavigator.scrollTop = Math.max(
             0,
-            activeDesktopNavButton.offsetTop -
-                desktopNavigator.clientHeight / 2 +
-                activeDesktopNavButton.offsetHeight / 2
+            activeDesktopNavButton.offsetTop - 64
         );
     }
+
+    const singleLaw =
+        document.querySelector(".single-law");
+
+    const trackedSections = subsectionButtons
+        .map(button => {
+            const section =
+                document.getElementById(
+                    button.dataset.targetId
+                );
+
+            return section
+                ? { button, section }
+                : null;
+        })
+        .filter(Boolean);
+
+    if (!singleLaw || trackedSections.length === 0) {
+        return;
+    }
+
+    const updateCurrentSection = () => {
+        const cardTop =
+            singleLaw.getBoundingClientRect().top;
+
+        const readingLine =
+            cardTop +
+            Math.min(
+                180,
+                singleLaw.clientHeight * 0.30
+            );
+
+        let currentSection = trackedSections[0];
+
+        trackedSections.forEach(item => {
+            if (
+                item.section
+                    .getBoundingClientRect()
+                    .top <= readingLine
+            ) {
+                currentSection = item;
+            }
+        });
+
+        subsectionButtons.forEach(button => {
+            const isCurrent =
+                button === currentSection.button;
+
+            button.classList.toggle(
+                "is-current",
+                isCurrent
+            );
+
+            if (isCurrent) {
+                button.setAttribute(
+                    "aria-current",
+                    "location"
+                );
+            } else {
+                button.removeAttribute(
+                    "aria-current"
+                );
+            }
+        });
+    };
+
+    singleLaw.addEventListener(
+        "scroll",
+        updateCurrentSection,
+        { passive: true }
+    );
+
+    requestAnimationFrame(updateCurrentSection);
 }
 
 
