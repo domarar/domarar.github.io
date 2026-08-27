@@ -2483,3 +2483,87 @@ box-shadow:
 .search-timeline-section + .search-timeline-section {
     margin-top: 14px;
 }
+/* =========================================
+   MOBILE FIXED DÓMARAR HEADER
+========================================= */
+
+@media (max-width: 767px) {
+
+    .app {
+        padding-top:
+            max(
+                24px,
+                calc(env(safe-area-inset-top) + 8px)
+            );
+    }
+
+        .topbar {
+        position: sticky;
+        top: max(8px, env(safe-area-inset-top));
+        z-index: 100;
+
+        isolation: isolate;
+
+        min-height: 52px;
+
+        margin-bottom: 18px;
+        padding: 0;
+
+        border: 0;
+        border-radius: 0;
+
+        background: transparent;
+        box-shadow: none;
+
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+    .topbar::before {
+    content: "";
+
+    position: absolute;
+    top: -80px;
+    right: 50%;
+    bottom: -10px;
+
+    width: 100vw;
+
+    z-index: -1;
+
+    transform: translateX(50%);
+
+    background:
+        linear-gradient(
+            rgba(2, 8, 7, 0.94),
+            rgba(2, 8, 7, 0.94)
+        ),
+        url("../images/backgrounds/backround-photo.jpg");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+
+    pointer-events: none;
+}
+
+    .topbar .brand {
+        gap: 10px;
+    }
+
+    .topbar .brand-logo,
+    .topbar .brand-logo img {
+        width: 44px;
+        height: 44px;
+
+        border-radius: 13px;
+    }
+
+    .topbar .brand h1 {
+        font-size: 21px;
+    }
+
+    .topbar .brand p {
+        display: none;
+    }
+}
