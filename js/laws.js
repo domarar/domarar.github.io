@@ -126,6 +126,26 @@ function createLawsThemeToggle() {
     return button;
 }
 
+function ensureMobileLawsThemeToggle() {
+    if (window.innerWidth > 700) return;
+
+    const mobileThemeSlot =
+        document.querySelector(".laws-mobile-theme-slot");
+
+    if (!mobileThemeSlot) return;
+
+    let themeToggle =
+        document.querySelector(".laws-theme-toggle");
+
+    if (!themeToggle) {
+        themeToggle = createLawsThemeToggle();
+    }
+
+    if (themeToggle.parentElement !== mobileThemeSlot) {
+        mobileThemeSlot.appendChild(themeToggle);
+    }
+}
+
 applyLawsTheme(getSavedLawsTheme());
 
 const LAWS_INTRODUCTION = {
@@ -181,6 +201,11 @@ function updateLawsSearchPlacement() {
             ".single-law-search-slot"
         );
 
+    const mobileSearchSlot =
+    document.querySelector(
+        ".mobile-law-search-slot"
+    );
+
     const existingThemeToggle =
         document.querySelector(
             ".laws-theme-toggle"
@@ -208,10 +233,10 @@ function updateLawsSearchPlacement() {
     }
 
     if (existingThemeToggle) {
-        existingThemeToggle.remove();
-    }
+    existingThemeToggle.remove();
+}
 
-    restoreLawsSearchHost();
+restoreLawsSearchHost();
 }
 
 function renderLawsHome() {
@@ -318,6 +343,13 @@ function renderLawOverview() {
 
     restoreLawsSearchHost();
 
+    const mobileOverviewButton =
+    document.querySelector(".laws-mobile-overview-button");
+
+if (mobileOverviewButton) {
+    mobileOverviewButton.hidden = true;
+}
+
     lawsContent.innerHTML = "";
 
     const overview = document.createElement("div");
@@ -352,7 +384,14 @@ function renderLawOverview() {
     });
 
     lawsContent.appendChild(overview);
+
+updateLawsSearchPlacement();
+ensureMobileLawsThemeToggle();
 }
+
+
+// =========================================
+// INTRODUCTION — DESKTOP HOME
 
 
 // =========================================
@@ -1056,8 +1095,12 @@ function renderLawBottomNavigation(lawNumber) {
                 </span>
 
                 <span class="law-bottom-nav-title">
-                    ${previousLaw.number}. ${escapeLawHtml(previousLaw.title)}
-                </span>
+    ${previousLaw.number}. ${escapeLawHtml(previousLaw.title)}
+</span>
+
+<span class="law-bottom-nav-mobile-title">
+    ← ${previousLaw.number} · ${escapeLawHtml(previousLaw.title)}
+</span>
             </button>
         `
         : `<span class="law-bottom-nav-spacer" aria-hidden="true"></span>`;
@@ -1074,8 +1117,12 @@ function renderLawBottomNavigation(lawNumber) {
                 </span>
 
                 <span class="law-bottom-nav-title">
-                    ${nextLaw.number}. ${escapeLawHtml(nextLaw.title)}
-                </span>
+    ${nextLaw.number}. ${escapeLawHtml(nextLaw.title)}
+</span>
+
+<span class="law-bottom-nav-mobile-title">
+    ${nextLaw.number} · ${escapeLawHtml(nextLaw.title)} →
+</span>
             </button>
         `
         : `<span class="law-bottom-nav-spacer" aria-hidden="true"></span>`;
@@ -1341,14 +1388,14 @@ function renderSingleLaw(lawNumber, options = {}) {
 
         <div class="single-law">
 
-            <div class="single-law-search-slot"></div>
+    <div class="single-law-search-slot"></div>
 
-            <button
-                class="laws-back-button"
-                type="button"
-            >
-                ← Knattspyrnulögin
-            </button>
+    <button
+        class="laws-back-button"
+        type="button"
+    >
+        ← Knattspyrnulögin
+    </button>
 
             <header class="single-law-header">
 
@@ -1378,6 +1425,7 @@ function renderSingleLaw(lawNumber, options = {}) {
     `;
 
     updateLawsSearchPlacement();
+    ensureMobileLawsThemeToggle();
     setupSingleLawEvents();
 
     if (options.scrollToTop !== false) {
@@ -1615,6 +1663,14 @@ function setupSingleLawEvents() {
     if (backButton) {
         backButton.addEventListener("click", showLawsHome);
     }
+
+   const mobileOverviewButton =
+    document.querySelector(".laws-mobile-overview-button");
+
+if (mobileOverviewButton) {
+    mobileOverviewButton.hidden = false;
+    mobileOverviewButton.onclick = showLawsHome;
+}
 
     const bottomOverviewButton =
         document.querySelector(".law-bottom-overview-button");
@@ -2119,62 +2175,87 @@ function openLawsSearchResult(resultIndex) {
             targetHighlight.classList.add("is-current");
         }
 
-        const scrollTarget = targetHighlight || target;
+                const scrollTarget = targetHighlight || target;
 
-if (scrollTarget) {
+        if (scrollTarget) {
 
-        if (isDesktopLawsLayout()) {
-        scrollTarget.scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-            inline: "nearest"
-        });
+            if (isDesktopLawsLayout()) {
+                scrollTarget.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center",
+                    inline: "nearest"
+                });
 
-        return;
-    }
-    const isStandalone =
-        window.matchMedia("(display-mode: standalone)").matches ||
-        window.navigator.standalone === true;
+                return;
+            }
 
-    const position =
-        window.innerWidth <= 768
-            ? window.innerHeight * (isStandalone ? 0.64 : 0.56)
-            : window.innerHeight * 0.5;
+            /* Phone: .single-law is the scroll container */
+            if (window.innerWidth <= 700) {
+                const singleLaw =
+                    document.querySelector(".single-law");
 
-    if (isStandalone && window.innerWidth <= 768) {
-        const singleLaw =
-            document.querySelector(".single-law");
+                if (!singleLaw) return;
 
-        if (singleLaw) {
-            const scrollSpace =
-                document.createElement("div");
+                const isStandalone =
+                    window.matchMedia(
+                        "(display-mode: standalone)"
+                    ).matches ||
+                    window.navigator.standalone === true;
 
-            scrollSpace.className =
-                "laws-search-scroll-space";
+                const position =
+                    singleLaw.clientHeight *
+                    (isStandalone ? 0.64 : 0.56);
 
-            scrollSpace.setAttribute(
-                "aria-hidden",
-                "true"
-            );
+                const scrollSpace =
+                    document.createElement("div");
 
-            scrollSpace.style.height =
-                `${Math.ceil(
-                    window.innerHeight - position + 24
-                )}px`;
+                scrollSpace.className =
+                    "laws-search-scroll-space";
 
-            singleLaw.append(scrollSpace);
+                scrollSpace.setAttribute(
+                    "aria-hidden",
+                    "true"
+                );
+
+                scrollSpace.style.height =
+                    `${Math.ceil(
+                        singleLaw.clientHeight -
+                        position +
+                        24
+                    )}px`;
+
+                singleLaw.append(scrollSpace);
+
+                const targetTop =
+                    scrollTarget.getBoundingClientRect().top -
+                    singleLaw.getBoundingClientRect().top +
+                    singleLaw.scrollTop;
+
+                singleLaw.scrollTo({
+                    top: Math.max(
+                        0,
+                        targetTop - position
+                    ),
+                    behavior: "smooth"
+                });
+
+                return;
+            }
+
+            /* Tablet and smaller desktop layouts */
+            const targetTop =
+                scrollTarget.getBoundingClientRect().top +
+                window.scrollY;
+
+            window.scrollTo({
+                top: Math.max(
+                    0,
+                    targetTop -
+                    window.innerHeight * 0.5
+                ),
+                behavior: "smooth"
+            });
         }
-    }
-
-    const targetTop =
-        scrollTarget.getBoundingClientRect().top +
-        window.scrollY;
-
-    window.scrollTo({
-        top: Math.max(0, targetTop - position),
-        behavior: "smooth"
-    });
-}
     });
 }
 
