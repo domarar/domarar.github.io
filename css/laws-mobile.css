@@ -1299,3 +1299,17 @@ body::before {
         display: none !important;
     }
 }
+@media (max-width: 1449px) {
+    html[data-laws-theme="light"] body::before {
+    background:
+        linear-gradient(
+            rgba(70, 84, 74, 0.58),
+            rgba(52, 66, 56, 0.70)
+        ),
+        url("../images/backgrounds/backround-photo.jpg");
+
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    }
+}
