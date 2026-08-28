@@ -2486,3 +2486,46 @@ loadLaws().then(() => {
     setupLawsSearch();
     setupLawsResponsiveLayout();
 });
+(function preventMobileLawBounce() {
+    const scroller = document.querySelector(".laws-content");
+
+    if (!scroller) return;
+
+    let touchStartY = 0;
+
+    scroller.addEventListener(
+        "touchstart",
+        event => {
+            touchStartY = event.touches[0].clientY;
+        },
+        { passive: true }
+    );
+
+    scroller.addEventListener(
+        "touchmove",
+        event => {
+            const currentY = event.touches[0].clientY;
+            const maxScroll =
+                scroller.scrollHeight - scroller.clientHeight;
+
+            const cannotScroll = maxScroll <= 1;
+
+            const pullingPastTop =
+                scroller.scrollTop <= 0 &&
+                currentY > touchStartY;
+
+            const pullingPastBottom =
+                scroller.scrollTop >= maxScroll - 1 &&
+                currentY < touchStartY;
+
+            if (
+                cannotScroll ||
+                pullingPastTop ||
+                pullingPastBottom
+            ) {
+                event.preventDefault();
+            }
+        },
+        { passive: false }
+    );
+})();

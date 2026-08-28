@@ -582,17 +582,68 @@ body::before {
         gap: 7px;
     }
 
+    @media (max-width: 700px) {
+
     .law-overview-card {
-        min-height: 58px;
+        position: relative;
 
-        grid-template-columns: 34px minmax(0, 1fr) 18px;
+        min-height: 60px;
 
-        gap: 9px;
+        grid-template-columns: 36px minmax(0, 1fr) 20px;
 
-        padding: 10px 13px;
+        gap: 10px;
 
-        border-radius: 11px;
+        padding: 11px 14px;
+
+        overflow: hidden;
+
+        border:
+            1px solid rgba(76, 217, 100, 0.16);
+
+        border-radius: 12px;
+
+        background:
+            linear-gradient(
+                135deg,
+                rgba(76, 217, 100, 0.055),
+                rgba(7, 18, 13, 0.82) 46%
+            );
+
+        box-shadow:
+            inset 3px 0 0 rgba(76, 217, 100, 0.58),
+            0 5px 14px rgba(0, 0, 0, 0.12);
+
+        transition:
+            transform 140ms ease,
+            border-color 140ms ease,
+            background 140ms ease;
     }
+
+    .law-overview-card:active {
+        transform: scale(0.985);
+
+        border-color: rgba(76, 217, 100, 0.34);
+
+        background:
+            linear-gradient(
+                135deg,
+                rgba(76, 217, 100, 0.11),
+                rgba(7, 18, 13, 0.90) 48%
+            );
+    }
+
+    .law-overview-number {
+        color: var(--law-green);
+
+        font-size: 16px;
+        font-weight: 900;
+    }
+
+    .law-overview-arrow {
+        color: rgba(76, 217, 100, 0.72);
+        font-size: 18px;
+    }
+}
 
     .law-overview-number {
         font-size: 16px;
@@ -708,15 +759,36 @@ body::before {
         font-size: 14px;
     }
 
+    html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
+}
+
+body {
+    position: fixed;
+    inset: 0;
+
+    width: 100%;
+    height: 100dvh;
+
+    overflow: hidden;
+    overscroll-behavior: none;
+}
+
     .laws-content {
         flex: 1 1 auto;
         min-height: 0;
 
         overflow-y: auto;
-        overscroll-behavior: contain;
+        overscroll-behavior: none;
+        -webkit-overflow-scrolling: touch;
 
         scrollbar-width: none;
         -ms-overflow-style: none;
+
+        
     }
 
     .laws-content::-webkit-scrollbar {
@@ -1079,7 +1151,13 @@ body::before {
     html[data-laws-theme="light"] .law-overview-card {
         border-color: rgba(20, 40, 26, 0.12);
 
-        background: rgba(247, 250, 247, 0.94);
+        background: linear-gradient(
+    90deg,
+    rgba(247, 250, 247, 1) 0%,
+    rgba(247, 250, 247, 0.96) 28%,
+    rgba(247, 250, 247, 0.78) 58%,
+    rgba(247, 250, 247, 0.39) 100%
+) !important;
 
         color: #172019;
     }
@@ -1148,6 +1226,57 @@ body::before {
         color: rgba(20, 31, 23, 0.58);
     }
 
+}
+@media (max-width: 700px) {
+
+    html[data-laws-theme="light"] .law-overview-card {
+        border-color: rgba(23, 138, 58, 0.22);
+
+        background:
+            linear-gradient(
+                90deg,
+                rgba(23, 138, 58, 0.18) 0%,
+                rgba(23, 138, 58, 0.10) 16%,
+                rgba(244, 249, 245, 0.98) 52%,
+                rgba(250, 252, 250, 1) 100%
+            );
+
+        color: #172019;
+
+        box-shadow:
+            inset 3px 0 0 rgba(23, 138, 58, 0.72),
+            0 5px 14px rgba(20, 40, 26, 0.10);
+    }
+
+    html[data-laws-theme="light"] .law-overview-card:active {
+        transform: scale(0.985);
+
+        border-color: rgba(23, 138, 58, 0.38);
+
+        background:
+    linear-gradient(
+        90deg,
+        rgba(247, 250, 247, 1) 0%,
+        rgba(247, 250, 247, 0.96) 28%,
+        rgba(247, 250, 247, 0.80) 55%,
+        rgba(247, 250, 247, 0.46) 78%,
+        rgba(247, 250, 247, 0.18) 100%
+    );
+    }
+
+    html[data-laws-theme="light"] .law-overview-number {
+        color: #0b5f27;
+        font-weight: 950;
+    }
+
+    html[data-laws-theme="light"] .law-overview-title {
+        color: #172019;
+        font-weight: 750;
+    }
+
+    html[data-laws-theme="light"] .law-overview-arrow {
+        color: #178a3a;
+    }
 }
 /* =========================================
    PHONE HEADER BUTTON FIX

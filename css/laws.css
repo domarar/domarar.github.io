@@ -433,7 +433,13 @@ body {
     border: 1px solid var(--law-border);
     border-radius: 15px;
 
-    background: rgba(7, 18, 13, 0.84);
+    background: linear-gradient(
+    90deg,
+    rgba(7, 18, 13, 1) 0%,
+    rgba(7, 18, 13, 0.96) 28%,
+    rgba(7, 18, 13, 0.78) 58%,
+    rgba(7, 18, 13, 0.39) 100%
+) !important;
 
     color: #ffffff;
 
