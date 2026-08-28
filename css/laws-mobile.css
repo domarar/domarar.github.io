@@ -196,6 +196,38 @@ body::before {
 
 @media (max-width: 600px) {
 
+    .law-section {
+        margin-bottom: 10px;
+
+        padding: 0;
+
+        border: 1px solid rgba(76, 217, 100, 0.22);
+        border-radius: 14px;
+
+        background: linear-gradient(
+            105deg,
+            rgba(11, 31, 20, 0.84),
+            rgba(15, 25, 20, 0.72)
+        );
+
+        box-shadow:
+            inset 3px 0 0 rgba(76, 217, 100, 0.56),
+            0 8px 22px rgba(0, 0, 0, 0.10);
+
+        transition:
+            border-color 180ms ease,
+            background 180ms ease,
+            box-shadow 180ms ease;
+    }
+
+    .law-section:last-child {
+        margin-bottom: 0;
+    }
+
+    .law-section:first-child {
+        border-top: 1px solid rgba(76, 217, 100, 0.22);
+    }
+
     .law-section-toggle {
         display: flex;
 
@@ -203,6 +235,10 @@ body::before {
         justify-content: space-between;
 
         gap: 14px;
+
+        min-height: 74px;
+
+        padding: 17px 17px 17px 20px;
 
         cursor: pointer;
     }
@@ -220,7 +256,7 @@ body::before {
 
         flex: 0 0 auto;
 
-        color: rgba(255, 255, 255, 0.48);
+        color: rgba(76, 217, 100, 0.82);
 
         font-size: 22px;
 
@@ -233,15 +269,67 @@ body::before {
     .law-section-body {
         display: none;
 
-        padding-top: 18px;
+        padding: 2px 20px 22px;
+
+        border-top: 1px solid rgba(76, 217, 100, 0.12);
     }
 
     .law-section.is-open .law-section-body {
         display: block;
     }
 
+    .law-section.is-open {
+        border-color: rgba(76, 217, 100, 0.34);
+
+        background: linear-gradient(
+            105deg,
+            rgba(12, 34, 22, 0.90),
+            rgba(20, 29, 24, 0.82)
+        );
+
+        box-shadow:
+            inset 3px 0 0 rgba(76, 217, 100, 0.72),
+            0 10px 26px rgba(0, 0, 0, 0.14);
+    }
+
     .law-section.is-open .law-section-chevron {
         transform: rotate(180deg);
+    }
+
+    html[data-laws-theme="light"] .law-section {
+        border-color: rgba(23, 138, 58, 0.18);
+
+        background: linear-gradient(
+            105deg,
+            rgba(230, 241, 232, 0.94),
+            rgba(246, 249, 246, 0.82)
+        );
+
+        box-shadow:
+            inset 3px 0 0 rgba(23, 138, 58, 0.48),
+            0 8px 20px rgba(18, 35, 22, 0.07);
+    }
+
+    html[data-laws-theme="light"] .law-section:first-child {
+        border-top-color: rgba(23, 138, 58, 0.18);
+    }
+
+    html[data-laws-theme="light"] .law-section-chevron {
+        color: rgba(23, 138, 58, 0.76);
+    }
+
+    html[data-laws-theme="light"] .law-section-body {
+        border-top-color: rgba(23, 138, 58, 0.12);
+    }
+
+    html[data-laws-theme="light"] .law-section.is-open {
+        border-color: rgba(23, 138, 58, 0.28);
+
+        background: linear-gradient(
+            105deg,
+            rgba(224, 238, 227, 0.98),
+            rgba(245, 249, 246, 0.92)
+        );
     }
 
 }
@@ -804,7 +892,9 @@ body {
 
     .single-law {
         height: 100%;
+        min-height: 0;
         max-width: none;
+        max-height: 100%;
 
         margin: 0;
 
@@ -814,6 +904,8 @@ body {
 
         overflow-y: auto;
         overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-y;
 
         scrollbar-width: none;
         -ms-overflow-style: none;
@@ -832,8 +924,17 @@ body {
     }
 
     .single-law-header {
-        margin-bottom: 10px;
-        padding-bottom: 16px;
+        margin: -2px -2px 12px;
+
+        padding: 16px 14px 18px;
+
+        border-radius: 12px 12px 0 0;
+
+        background: radial-gradient(
+            circle at 92% 12%,
+            rgba(76, 217, 100, 0.12),
+            transparent 52%
+        );
     }
 
     .single-law-number {
@@ -850,6 +951,14 @@ body {
 
         font-size: 27px;
         line-height: 1.08;
+    }
+
+    html[data-laws-theme="light"] .single-law-header {
+        background: radial-gradient(
+            circle at 92% 12%,
+            rgba(23, 138, 58, 0.10),
+            transparent 52%
+        );
     }
 
 }

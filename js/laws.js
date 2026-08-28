@@ -2487,35 +2487,41 @@ loadLaws().then(() => {
     setupLawsResponsiveLayout();
 });
 (function preventMobileLawBounce() {
-    const scroller = document.querySelector(".laws-content");
+    const lawsContent = document.querySelector(".laws-content");
 
-    if (!scroller) return;
+    if (!lawsContent) return;
 
     let touchStartY = 0;
+    let activeScroller = lawsContent;
 
-    scroller.addEventListener(
+    lawsContent.addEventListener(
         "touchstart",
         event => {
             touchStartY = event.touches[0].clientY;
+
+            activeScroller =
+                event.target.closest(".single-law") ||
+                lawsContent;
         },
         { passive: true }
     );
 
-    scroller.addEventListener(
+    lawsContent.addEventListener(
         "touchmove",
         event => {
             const currentY = event.touches[0].clientY;
             const maxScroll =
-                scroller.scrollHeight - scroller.clientHeight;
+                activeScroller.scrollHeight -
+                activeScroller.clientHeight;
 
             const cannotScroll = maxScroll <= 1;
 
             const pullingPastTop =
-                scroller.scrollTop <= 0 &&
+                activeScroller.scrollTop <= 0 &&
                 currentY > touchStartY;
 
             const pullingPastBottom =
-                scroller.scrollTop >= maxScroll - 1 &&
+                activeScroller.scrollTop >= maxScroll - 1 &&
                 currentY < touchStartY;
 
             if (
