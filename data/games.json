@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-28T13:52:50.549884+00:00",
+  "updatedAt": "2026-08-28T20:34:24.511990+00:00",
   "date": "2026-08-28",
   "dateFrom": "2026-08-26",
   "dateTo": "2026-09-03",
@@ -301,7 +301,7 @@
       "awayLogo": "https://comet.ksi.is/file?id=7debf8ed-b411-4dbb-9647-1c4bd140ecf7",
       "facility": "PEPSI völlurinn",
       "status": "SCHEDULED",
-      "liveStatus": null,
+      "liveStatus": "NA",
       "homeScore": null,
       "awayScore": null,
       "officials": [
@@ -342,7 +342,7 @@
       "awayLogo": "https://comet.ksi.is/file?id=f12cdfbd-f638-42e4-8639-e668c256e98d",
       "facility": "tekk VÖLLURINN",
       "status": "SCHEDULED",
-      "liveStatus": null,
+      "liveStatus": "NA",
       "homeScore": null,
       "awayScore": null,
       "officials": [
@@ -363,6 +363,12 @@
           "name": "Bryngeir Valdimarsson",
           "role": "Aðstoðardómari 2",
           "orderNumber": 3
+        },
+        {
+          "personId": 9194,
+          "name": "Þórður Georg Lárusson",
+          "role": "Dómaraeftirlitsmaður",
+          "orderNumber": 4
         }
       ]
     },
@@ -378,8 +384,8 @@
       "facility": "BIRTU völlurinn",
       "status": "SCHEDULED",
       "liveStatus": null,
-      "homeScore": null,
-      "awayScore": null,
+      "homeScore": 2,
+      "awayScore": 1,
       "officials": [
         {
           "personId": 83403,
@@ -413,8 +419,8 @@
       "facility": "Akraneshöllin",
       "status": "SCHEDULED",
       "liveStatus": null,
-      "homeScore": null,
-      "awayScore": null,
+      "homeScore": 1,
+      "awayScore": 0,
       "officials": [
         {
           "personId": 30463,
@@ -1135,6 +1141,12 @@
           "name": "Reynir Ingi Finnsson",
           "role": "Fjórði dómari",
           "orderNumber": 4
+        },
+        {
+          "personId": 28000,
+          "name": "Þorsteinn Ólafs",
+          "role": "Dómaraeftirlitsmaður",
+          "orderNumber": 5
         }
       ]
     },
@@ -1287,6 +1299,12 @@
           "name": "Birgir Ágúst Andrésson",
           "role": "Aðstoðardómari 1",
           "orderNumber": 2
+        },
+        {
+          "personId": 70484,
+          "name": "Sverrir Ragnar Ólafsson",
+          "role": "Aðstoðardómari 2",
+          "orderNumber": 3
         }
       ]
     },

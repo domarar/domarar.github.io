@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-28T15:38:44.393163+00:00",
+  "updatedAt": "2026-08-28T20:35:18.650604+00:00",
   "year": 2026,
   "dateFrom": "2026-01-01",
   "dateTo": "2026-12-31",
@@ -38008,7 +38008,7 @@
       "awayLogo": "https://comet.ksi.is/file?id=7debf8ed-b411-4dbb-9647-1c4bd140ecf7",
       "facility": "PEPSI völlurinn",
       "status": "SCHEDULED",
-      "liveStatus": null,
+      "liveStatus": "NA",
       "homeScore": null,
       "awayScore": null,
       "officials": [
@@ -38051,7 +38051,7 @@
       "awayLogo": "https://comet.ksi.is/file?id=f12cdfbd-f638-42e4-8639-e668c256e98d",
       "facility": "tekk VÖLLURINN",
       "status": "SCHEDULED",
-      "liveStatus": null,
+      "liveStatus": "NA",
       "homeScore": null,
       "awayScore": null,
       "officials": [
@@ -38072,13 +38072,19 @@
           "name": "Bryngeir Valdimarsson",
           "role": "Aðstoðardómari 2",
           "orderNumber": 3
+        },
+        {
+          "personId": 9194,
+          "name": "Þórður Georg Lárusson",
+          "role": "Dómaraeftirlitsmaður",
+          "orderNumber": 4
         }
       ]
     },
     {
       "id": 7050875,
       "date": "2026-08-28T19:15:00.000Z",
-      "description": "Haukar - KR -:-",
+      "description": "Haukar - KR 2:1",
       "competition": "Íslandsmót KSÍ - Lengjudeild kvenna 2026",
       "gender": "Female",
       "competitionType": "Meistaraflokkur kvenna",
@@ -38089,8 +38095,8 @@
       "facility": "BIRTU völlurinn",
       "status": "SCHEDULED",
       "liveStatus": null,
-      "homeScore": null,
-      "awayScore": null,
+      "homeScore": 2,
+      "awayScore": 1,
       "officials": [
         {
           "personId": 83403,
@@ -38115,7 +38121,7 @@
     {
       "id": 7053315,
       "date": "2026-08-28T19:15:00.000Z",
-      "description": "Kári - Þróttur V. -:-",
+      "description": "Kári - Þróttur V. 1:0",
       "competition": "Íslandsmót KSÍ - 2. deild karla 2026",
       "gender": "Male",
       "competitionType": "Meistaraflokkur karla",
@@ -38126,8 +38132,8 @@
       "facility": "Akraneshöllin",
       "status": "SCHEDULED",
       "liveStatus": null,
-      "homeScore": null,
-      "awayScore": null,
+      "homeScore": 1,
+      "awayScore": 0,
       "officials": [
         {
           "personId": 30463,
@@ -38884,6 +38890,12 @@
           "name": "Reynir Ingi Finnsson",
           "role": "Fjórði dómari",
           "orderNumber": 4
+        },
+        {
+          "personId": 28000,
+          "name": "Þorsteinn Ólafs",
+          "role": "Dómaraeftirlitsmaður",
+          "orderNumber": 5
         }
       ]
     },
