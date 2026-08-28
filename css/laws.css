@@ -1871,6 +1871,22 @@ body {
     color: rgba(25, 34, 28, 0.32);
 }
 }
+@media (min-width: 1450px) {
+    .single-law-search-slot {
+        position: sticky;
+        top: 0;
+        z-index: 30;
+
+        background: transparent;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    .laws-search-navigator {
+    top: 66px;
+}
+}
+
 /* =========================================
    DESKTOP DAY THEME
 ========================================= */
