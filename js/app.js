@@ -895,7 +895,7 @@ const profileSection = matchedProfile
         </span>
 
         <span class="referee-profile-button-subtitle">
-            Leikir og tölfræði
+            Leikir og tölfræðiac
         </span>
     </span>
     <span class="referee-profile-button-chevron">›</span>

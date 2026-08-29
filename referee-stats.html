@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="is">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Hverjir dæma hvar? · Dómarar</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=1">
+  <link rel="stylesheet" href="css/style.css?v=38">
+  <link rel="stylesheet" href="css/menu.css?v=1">
+  <link rel="stylesheet" href="css/referee-stats.css?v=2">
+</head>
+<body class="referee-stats-page">
+  <main class="app stats-app">
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Dómarar forsíða">
+        <div class="brand-logo">
+          <img src="logos/domarinn_logo.png" alt="Dómarar logo" width="52" height="52">
+        </div>
+        <div><h1>DÓMARAR</h1><p>Leikir og dómarar</p></div>
+      </a>
+      <button class="menu-button" id="menuButton" type="button" aria-label="Opna valmynd" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </header>
+
+
+    <header class="stats-heading">
+      <p class="stats-eyebrow">TÖLFRÆÐI</p>
+      <h2>Hverjir dæma hvar?</h2>
+      <p>Leikir sumarsins eftir deildum og hlutverkum.</p>
+    </header>
+
+
+    <section class="stats-filters" aria-label="Síur">
+      <div class="stats-filter-row">
+        <div class="stats-year-tabs" id="statsYearTabs" aria-label="Tímabil"></div>
+        <label class="stats-select-wrap">
+          <span class="sr-only">Veldu deild</span>
+          <select id="statsLeagueSelect"></select>
+        </label>
+      </div>
+      <div class="stats-role-tabs" id="statsRoleTabs" aria-label="Hlutverk">
+        <button class="is-active" type="button" data-role="referees">Dómari</button>
+        <button type="button" data-role="assistants">AD</button>
+        <button type="button" data-role="fourthOfficials">Fjórði</button>
+        <button type="button" data-role="topTen">TOPP 10</button>
+      </div>
+    </section>
+
+
+    <section class="stats-ranking-card" aria-live="polite">
+      <div class="stats-ranking-head">
+        <h3 id="statsRankingTitle">Sæki tölfræði…</h3>
+        <p id="statsCoverage"></p>
+      </div>
+      <div id="statsRanking" class="stats-ranking"></div>
+    </section>
+  </main>
+
+
+  <div class="menu-overlay" id="menuOverlay">
+    <aside class="menu-panel">
+      <button class="menu-close" id="menuClose" type="button" aria-label="Loka valmynd">×</button>
+      <div class="menu-content">
+        <div class="menu-header">
+          <img src="logos/domarinn_logo.png" alt="Dómarar logo" class="menu-logo">
+          <div><h2>DÓMARAR</h2><p>Leikir og dómarar</p></div>
+        </div>
+        <a class="menu-item" href="index.html"><span>Leikir</span><span class="menu-arrow">›</span></a>
+        <a class="menu-item is-current" href="referee-stats.html" aria-current="page"><span>Hverjir dæma hvar?</span><span class="menu-arrow">›</span></a>
+        <a class="menu-item" href="laws.html"><span>Knattspyrnulögin</span><span class="menu-arrow">›</span></a>
+
+        <div class="menu-version">DÓMARAR · Tölfræði</div>
+      </div>
+    </aside>
+  </div>
+
+ <script src="js/referee-profile.js?v=1"></script>
+<script src="js/referee-stats.js?v=1"></script>
+</body>
+</html>
+</body>
+</html>
