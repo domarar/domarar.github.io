@@ -192,7 +192,6 @@ def build_statistics(archive_path, reports_dir):
         leagues.sort(key=lambda item: preferred.get(item["name"], 999))
 
     return {
-        "generatedAt": datetime.now(timezone.utc).isoformat(),
         "methodology": {
             "appearances": "Played matches only; referee and assistant roles counted separately.",
             "yellow": "YELLOW events.",
