@@ -1,10 +1,10 @@
 {
   "id": 7042101,
-  "liveStatus": "RUNNING",
-  "currentMinute": "85'",
+  "liveStatus": "PLAYED",
+  "currentMinute": "FT",
   "dateTimeUTC": 1788019200000,
   "round": "18",
-  "attendance": null,
+  "attendance": 237,
   "competition": {
     "id": 7025645,
     "name": "Besta deild kvenna 2026"
@@ -108,6 +108,18 @@
           "orderNumber": 6,
           "hideProfile": false,
           "events": [
+            {
+              "eventId": 8206328,
+              "eventType": {
+                "fcdName": "YELLOW"
+              },
+              "player": {
+                "personId": 56034,
+                "hideProfile": false
+              },
+              "player2": null,
+              "homeTeam": true
+            },
             {
               "eventId": 8205968,
               "eventType": {
@@ -486,7 +498,24 @@
           "position": null,
           "orderNumber": 6,
           "hideProfile": false,
-          "events": []
+          "events": [
+            {
+              "eventId": 8206264,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 62132,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 81559,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": false
+            }
+          ]
         },
         {
           "roleId": 8203285,
@@ -585,7 +614,24 @@
           "position": null,
           "orderNumber": 11,
           "hideProfile": false,
-          "events": []
+          "events": [
+            {
+              "eventId": 8206258,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 77578,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 89322,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": false
+            }
+          ]
         },
         {
           "roleId": 8203281,
@@ -641,7 +687,24 @@
           "position": null,
           "orderNumber": 14,
           "hideProfile": false,
-          "events": []
+          "events": [
+            {
+              "eventId": 8206258,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 77578,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 89322,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": false
+            }
+          ]
         },
         {
           "roleId": 8203279,
@@ -680,7 +743,24 @@
           "position": null,
           "orderNumber": 17,
           "hideProfile": false,
-          "events": []
+          "events": [
+            {
+              "eventId": 8206264,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 62132,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 81559,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": false
+            }
+          ]
         },
         {
           "roleId": 8203277,
@@ -775,12 +855,31 @@
       "teamOfficial": null
     },
     {
+      "eventId": 8206328,
+      "eventType": {
+        "fcdName": "YELLOW"
+      },
+      "displayMinute": "59'",
+      "orderNumber": 4,
+      "matchPhase": {
+        "fcdName": "SECOND_HALF"
+      },
+      "player": {
+        "personId": 56034,
+        "name": "Björg Gunnlaugsdóttir",
+        "hideProfile": false
+      },
+      "player2": null,
+      "homeTeam": true,
+      "teamOfficial": null
+    },
+    {
       "eventId": 8205932,
       "eventType": {
         "fcdName": "SUBSTITUTION"
       },
       "displayMinute": "60'",
-      "orderNumber": 4,
+      "orderNumber": 5,
       "matchPhase": {
         "fcdName": "SECOND_HALF"
       },
@@ -803,7 +902,7 @@
         "fcdName": "SUBSTITUTION"
       },
       "displayMinute": "60'",
-      "orderNumber": 5,
+      "orderNumber": 6,
       "matchPhase": {
         "fcdName": "SECOND_HALF"
       },
@@ -821,12 +920,31 @@
       "teamOfficial": null
     },
     {
+      "eventId": 8206309,
+      "eventType": {
+        "fcdName": "YELLOW"
+      },
+      "displayMinute": "60'",
+      "orderNumber": 7,
+      "matchPhase": {
+        "fcdName": "SECOND_HALF"
+      },
+      "player": null,
+      "player2": null,
+      "homeTeam": true,
+      "teamOfficial": {
+        "personId": 6433,
+        "name": "Gísli Þór Einarsson",
+        "shortName": "Gísli Þór E."
+      }
+    },
+    {
       "eventId": 8205968,
       "eventType": {
         "fcdName": "SUBSTITUTION"
       },
       "displayMinute": "62'",
-      "orderNumber": 6,
+      "orderNumber": 8,
       "matchPhase": {
         "fcdName": "SECOND_HALF"
       },
@@ -849,7 +967,7 @@
         "fcdName": "SUBSTITUTION"
       },
       "displayMinute": "68'",
-      "orderNumber": 7,
+      "orderNumber": 9,
       "matchPhase": {
         "fcdName": "SECOND_HALF"
       },
@@ -872,7 +990,7 @@
         "fcdName": "SUBSTITUTION"
       },
       "displayMinute": "85'",
-      "orderNumber": 8,
+      "orderNumber": 10,
       "matchPhase": {
         "fcdName": "SECOND_HALF"
       },
@@ -895,7 +1013,7 @@
         "fcdName": "YELLOW"
       },
       "displayMinute": "87'",
-      "orderNumber": 9,
+      "orderNumber": 11,
       "matchPhase": {
         "fcdName": "SECOND_HALF"
       },
@@ -906,6 +1024,67 @@
       },
       "player2": null,
       "homeTeam": true,
+      "teamOfficial": null
+    },
+    {
+      "eventId": 8206258,
+      "eventType": {
+        "fcdName": "SUBSTITUTION"
+      },
+      "displayMinute": "90+2'",
+      "orderNumber": 12,
+      "matchPhase": {
+        "fcdName": "SECOND_HALF"
+      },
+      "player": {
+        "personId": 77578,
+        "name": "Birgitta Rún Finnbogadóttir",
+        "hideProfile": false
+      },
+      "player2": {
+        "personId": 89322,
+        "name": "Erin Flurey",
+        "hideProfile": false
+      },
+      "homeTeam": false,
+      "teamOfficial": null
+    },
+    {
+      "eventId": 8206264,
+      "eventType": {
+        "fcdName": "SUBSTITUTION"
+      },
+      "displayMinute": "90+2'",
+      "orderNumber": 13,
+      "matchPhase": {
+        "fcdName": "SECOND_HALF"
+      },
+      "player": {
+        "personId": 62132,
+        "name": "Halla Bríet Kristjánsdóttir",
+        "hideProfile": false
+      },
+      "player2": {
+        "personId": 81559,
+        "name": "Hildur Anna Birgisdóttir",
+        "hideProfile": false
+      },
+      "homeTeam": false,
+      "teamOfficial": null
+    },
+    {
+      "eventId": null,
+      "eventType": {
+        "fcdName": "FULL_TIME"
+      },
+      "displayMinute": "",
+      "orderNumber": 14,
+      "matchPhase": {
+        "fcdName": "SECOND_HALF"
+      },
+      "player": null,
+      "player2": null,
+      "homeTeam": null,
       "teamOfficial": null
     }
   ]
