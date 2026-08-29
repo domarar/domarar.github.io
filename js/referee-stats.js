@@ -255,3 +255,37 @@ els.ranking.addEventListener("click", event => {
 });
 
 start();
+(() => {
+    const isStandalone =
+        window.matchMedia("(display-mode: standalone)").matches ||
+        window.navigator.standalone === true;
+
+    if (!isStandalone) return;
+
+    document.addEventListener("click", event => {
+        const link = event.target.closest("a[href]");
+
+        if (
+            !link ||
+            link.hasAttribute("download") ||
+            (link.target && link.target !== "_self")
+        ) {
+            return;
+        }
+
+        const url = new URL(
+            link.getAttribute("href"),
+            window.location.href
+        );
+
+        if (
+            url.origin !== window.location.origin ||
+            !["http:", "https:"].includes(url.protocol)
+        ) {
+            return;
+        }
+
+        event.preventDefault();
+        window.location.assign(url.href);
+    });
+})();
