@@ -679,7 +679,11 @@ const centerText = hasScore
             <span class="fixture-result-text">${centerText}</span>
 
   ${
-  game.date?.startsWith("2026") &&
+  (
+    game.date?.startsWith("2026") ||
+    game.date?.startsWith("2025") ||
+    game.date?.startsWith("2024")
+) &&
 (
     game.status === "PLAYED" ||
     (game.homeScore != null && game.awayScore != null)
