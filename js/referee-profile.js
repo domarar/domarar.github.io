@@ -577,7 +577,17 @@ const competitionStatsHTML = Object.entries(competitionCounts)
             <div class="referee-season-card">
 
     <div class="referee-profile-season">
-    <div>Tímabilið 2026</div>
+    <label class="referee-profile-season-select">
+        <span>Tímabilið</span>
+
+        <select id="refereeSeasonSelect">
+            <option value="2026">2026</option>
+            <option value="2025">2025</option>
+            <option value="2024">2024</option>
+            <option value="all">Öll tímabil</option>
+        </select>
+    </label>
+</div>
 
 </div>
         <div class="referee-profile-stats">
@@ -629,7 +639,7 @@ if (backButton) {
     });
 }
 }
-async function renderRefereeProfileV2(refereeName) {
+async function renderRefereeProfileV2(refereeName, selectedSeason = "2026") {
 
     gamesContainer.style.transition = "";
     gamesContainer.style.transform = "";
@@ -674,6 +684,22 @@ const referee2024Games = allGames.filter(game => {
         official => official.name === refereeName
     );
 });
+const refereeAllGames = [
+    ...referee2026Games,
+    ...referee2025Games,
+    ...referee2024Games
+];
+
+const selectedRefereeGames =
+    selectedSeason === "2025"
+        ? referee2025Games
+        : selectedSeason === "2024"
+        ? referee2024Games
+        : selectedSeason === "all"
+        ? refereeAllGames
+        : referee2026Games;
+
+
 console.log(
     "GUÐMUNDUR ROLES:",
     referee2026Games.map(game => {
@@ -684,15 +710,18 @@ console.log(
         return official?.role;
     })
 );
-const referee2026CenterGames = referee2026Games.filter(game =>
+const refereeCenterGames = selectedRefereeGames.filter(game =>
     (game.officials || []).some(official =>
         official.name === refereeName &&
-        official.role === "Dómari"
+        (
+            official.role === "Dómari" ||
+            official.role === "Referee"
+        )
     )
 );
 
-const referee2026Reports = await Promise.all(
-    referee2026CenterGames.map(async game => {
+const refereeReports = await Promise.all(
+    refereeCenterGames.map(async game => {
         console.log("PROFILE GAME:", game);
 
         try {
@@ -716,14 +745,14 @@ const referee2026Reports = await Promise.all(
     })
 );
 
-const validReferee2026Reports =
-    referee2026Reports.filter(Boolean);
+const validRefereeReports =
+    refereeReports.filter(Boolean);
 let yellowCards = 0;
 let secondYellowCards = 0;
 let redCards = 0;
 let penalties = 0;
 
-validReferee2026Reports.forEach(report => {
+validRefereeReports.forEach(report => {
     const events = report.events || [];
 
     events.forEach(event => {
@@ -755,7 +784,7 @@ validReferee2026Reports.forEach(report => {
 });
 
 const reportsWithEvents =
-    validReferee2026Reports.length;
+    validRefereeReports.length;
 
 const yellowCardsPerGame =
     reportsWithEvents > 0
@@ -763,7 +792,7 @@ const yellowCardsPerGame =
         : "–";
 const roleCounts = {};
 
-referee2026Games.forEach(game => {
+selectedRefereeGames.forEach(game => {
     const official = (game.officials || []).find(
         official => official.name === refereeName
     );
@@ -772,8 +801,19 @@ referee2026Games.forEach(game => {
         return;
     }
 
-    roleCounts[official.role] =
-        (roleCounts[official.role] || 0) + 1;
+    const normalizedRole =
+        official.role === "Referee"
+            ? "Dómari"
+            : official.role === "Fourth Official"
+            ? "Fjórði dómari"
+            : official.role === "Assistant Referee 1"
+            ? "Aðstoðardómari 1"
+            : official.role === "Assistant Referee 2"
+            ? "Aðstoðardómari 2"
+            : official.role;
+
+    roleCounts[normalizedRole] =
+        (roleCounts[normalizedRole] || 0) + 1;
 });
 
 const eventStatsHTML = `
@@ -860,7 +900,7 @@ const eventStatsHTML = `
 `;
 const competitionCounts = {};
 
-referee2026Games.forEach(game => {
+selectedRefereeGames.forEach(game => {
     const competition = cleanCompetitionName(game.competition);
 
     if (!competitionCounts[competition]) {
@@ -1120,8 +1160,16 @@ const competitionStats2024HTML = Object.entries(competitionCounts2024)
             <div class="referee-season-card">
 
     <div class="referee-profile-season">
-    <div>Tímabilið 2026</div>
+    <label class="referee-profile-season-select">
+        <span>Tímabilið</span>
 
+        <select id="refereeSeasonSelect">
+            <option value="2026">2026</option>
+            <option value="2025">2025</option>
+            <option value="2024">2024</option>
+            <option value="all">Öll tímabil</option>
+        </select>
+    </label>
 </div>
         <div class="referee-profile-summary-v2">
     ${roleStatsHTML}
@@ -1136,7 +1184,7 @@ const competitionStats2024HTML = Object.entries(competitionCounts2024)
 </span>
 
         <strong class="referee-summary-number-v2">
-            ${referee2026Games.length}
+            ${selectedRefereeGames.length}
         </strong>
     </div>
 </div>
@@ -1317,6 +1365,20 @@ const competitionStats2024HTML = Object.entries(competitionCounts2024)
 
 </div>
 `;
+
+const seasonSelect =
+    gamesContainer.querySelector("#refereeSeasonSelect");
+
+if (seasonSelect) {
+    seasonSelect.value = selectedSeason;
+
+    seasonSelect.addEventListener("change", () => {
+        renderRefereeProfileV2(
+            refereeName,
+            seasonSelect.value
+        );
+    });
+}
 
 document.body.classList.add("modal-open");
 const backButton =
