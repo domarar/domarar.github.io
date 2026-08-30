@@ -1,5 +1,5 @@
 const state = { data: null, year: null, league: null, role: "referees", openName: null };
-const V1_YEARS = ["2026", "2025"];
+const V1_YEARS = ["2026", "2025", "2024"];
 const els = {
   years: document.getElementById("statsYearTabs"),
   league: document.getElementById("statsLeagueSelect"),
