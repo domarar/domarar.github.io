@@ -689,13 +689,13 @@ const centerText = hasScore
     (game.homeScore != null && game.awayScore != null)
 )
     ? `<button
-         class="match-report-button"
-         type="button"
-         data-match-id="${game.id}"
-       >
-         Leikskýrsla
-       </button>`
-    : ""
+    class="match-report-button"
+    type="button"
+    data-match-id="${game.id}"
+>
+    Leikskýrsla <span class="match-report-arrow">→</span>
+</button>`
+: ""
 }
 </div>
           <div class="team">
