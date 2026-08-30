@@ -1,7 +1,7 @@
 const state = { data: null, year: null, league: null, role: "referees", openName: null };
 const V1_YEARS = ["2026", "2025", "2024"];
 const els = {
-  years: document.getElementById("statsYearTabs"),
+  years: document.getElementById("statsYearSelect"),
   league: document.getElementById("statsLeagueSelect"),
   roles: document.getElementById("statsRoleTabs"),
   title: document.getElementById("statsRankingTitle"),
@@ -135,8 +135,20 @@ function detailHtml(person, league) {
 }
 
 function renderYears() {
-  const years = V1_YEARS.filter(year => state.data.seasons[year]);
-  els.years.innerHTML = years.map(year => `<button type="button" data-year="${year}" class="${year === state.year ? "is-active" : ""}">${year}</button>`).join("");
+    const years = V1_YEARS.filter(
+        year => state.data.seasons[year]
+    );
+
+    els.years.innerHTML = years
+        .map(year => `
+            <option
+                value="${year}"
+                ${year === state.year ? "selected" : ""}
+            >
+                ${year}
+            </option>
+        `)
+        .join("");
 }
 
 function renderLeagues() {
@@ -240,7 +252,9 @@ async function start() {
   }
 }
 
-els.years.addEventListener("click", event => { const button = event.target.closest("[data-year]"); if (button) selectYear(button.dataset.year); });
+els.years.addEventListener("change", () => {
+    selectYear(els.years.value);
+});
 els.league.addEventListener("change", () => { state.league = els.league.value; state.openName = null; renderRanking(); });
 els.roles.addEventListener("click", event => {
   const button = event.target.closest("[data-role]"); if (!button) return;
