@@ -2,6 +2,7 @@
 <html lang="is">
 <head>
     <meta charset="UTF-8">
+
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0, viewport-fit=cover"
@@ -15,7 +16,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#07110c">
 
-    <title>Lög leiksins | Dómarar</title>
+    <title>Knattspyrnulögin | DÓMARAR</title>
 
     <link
         rel="apple-touch-icon"
@@ -28,48 +29,81 @@
         content="Lög leiksins"
     >
 
-    <link rel="stylesheet" href="css/laws.css?v=11">
+    <link rel="stylesheet" href="css/menu.css?v=1">
+    <link rel="stylesheet" href="css/laws.css?v=2">
     <link rel="stylesheet" href="css/laws-mobile.css?v=2">
-    
 </head>
 
 <body>
 
-    <main class="laws-page">
+<main class="laws-app">
 
-    <div class="laws-mobile-header">
+    <header class="topbar">
+        <div class="brand">
 
-        <div class="laws-mobile-header-top">
+            <div class="brand-logo">
+                <img
+                    src="logos/domarinn_logo.png"
+                    alt="Dómarar logo"
+                    width="52"
+                    height="52"
+                >
+            </div>
 
-            <div class="laws-mobile-header-top">
+            <div class="brand-copy">
+                <h1>DÓMARAR</h1>
+                <p>Leikir og dómarar</p>
+            </div>
 
-    <a class="laws-home-link" href="index.html">
-        ← Dómarar
-    </a>
-
-    <div class="laws-mobile-theme-slot"></div>
-
-    <button
-        class="laws-mobile-overview-button"
-        type="button"
-        hidden
-    >
-        Knattspyrnulögin
-    </button>
-
-</div>
         </div>
 
-        <div class="laws-search">
+        <button
+            class="menu-button"
+            id="menuButton"
+            type="button"
+            aria-label="Opna valmynd"
+        >
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </header>
 
-            <div class="laws-search-box">
-                <span class="laws-search-icon">⌕</span>
+
+    <div class="laws-shell">
+
+        <section
+            class="laws-heading"
+            id="lawsHeading"
+        >
+            <div class="laws-heading-copy">
+
+                <h2>
+                    Knattspyrnulögin
+                    <span>2026/27</span>
+                </h2>
+
+            </div>
+        </section>
+
+
+        <section class="laws-search-area">
+
+            <div class="laws-search">
+
+                <span
+                    class="laws-search-icon"
+                    aria-hidden="true"
+                >
+                    ⌕
+                </span>
 
                 <input
                     type="search"
                     id="lawsSearch"
-                    placeholder="Leita í knattspyrnulögunum..."
+                    placeholder="Leita í lögunum..."
                     autocomplete="off"
+                    spellcheck="false"
                 >
 
                 <button
@@ -81,43 +115,120 @@
                 >
                     ×
                 </button>
+
             </div>
 
             <div
                 class="laws-search-results"
                 id="lawsSearchResults"
+                hidden
             ></div>
 
-        </div>
+        </section>
+
+
+        <section
+            class="laws-content"
+            id="lawsContent"
+        >
+        </section>
 
     </div>
 
-    <header class="laws-header">
-        <div class="laws-eyebrow">DÓMARAR</div>
-
-        <h1>Knattspyrnulögin</h1>
-
-        <p class="laws-edition">
-            2026/27
-        </p>
-    </header>
-
-    <section class="laws-content">
-
-        <div class="laws-test-card">
-            <span>12</span>
-            <h2>Leikbrot og óviðeigandi hegðun</h2>
-
-            <p>
-                Laws module is working.
-            </p>
-        </div>
-
-    </section>
-
 </main>
 
-    <script src="js/laws.js?v=7"></script>
+
+<div
+    class="menu-overlay"
+    id="menuOverlay"
+>
+
+    <aside class="menu-panel">
+
+        <button
+            class="menu-close"
+            id="menuClose"
+            type="button"
+            aria-label="Loka valmynd"
+        >
+            ×
+        </button>
+
+        <div class="menu-content">
+
+            <div class="menu-header">
+
+                <img
+                    src="logos/domarinn_logo.png"
+                    alt="Dómarar logo"
+                    class="menu-logo"
+                >
+
+                <div>
+                    <h2>DÓMARAR</h2>
+                    <p>Leikir og dómarar</p>
+                </div>
+
+            </div>
+
+
+            <a
+                class="menu-item"
+                href="index.html"
+            >
+                <span>Dómarar forsíða</span>
+                <span class="menu-arrow">›</span>
+            </a>
+
+
+            <a
+                class="menu-item"
+                href="referee-stats.html"
+            >
+                <span>Hverjir dæma hvar?</span>
+                <span class="menu-arrow">›</span>
+            </a>
+
+
+            <a
+                class="menu-item"
+                href="laws.html"
+            >
+                <span>Knattspyrnulögin</span>
+                <span class="menu-arrow">›</span>
+            </a>
+
+
+            <button
+                class="menu-item menu-item-unfinished"
+                type="button"
+            >
+                <span>Dómarafréttir KSÍ</span>
+                <span class="menu-arrow">›</span>
+            </button>
+
+
+            <button
+                class="menu-item menu-item-unfinished"
+                type="button"
+            >
+                <span>Dómarasíða KSÍ</span>
+                <span class="menu-arrow">›</span>
+            </button>
+
+        </div>
+
+
+        <div class="menu-version">
+            DÓMARAR · Útgáfa 1.0.0
+        </div>
+
+    </aside>
+
+</div>
+
+
+<script src="js/laws.js?v=2"></script>
 
 </body>
 </html>
