@@ -243,7 +243,11 @@ const homeWinner = homeScore > awayScore;
 const awayWinner = awayScore > homeScore;
 
         return `
-            <div class="vs-card-h2h-match">
+    <button
+        type="button"
+        class="vs-card-h2h-match"
+        data-match-id="${game.id}"
+    >
                 <div class="vs-card-h2h-date">
                     ${formattedDate}
                 </div>
@@ -263,7 +267,7 @@ const awayWinner = awayScore > homeScore;
                         <img src="${game.awayLogo || ""}" alt="${game.away}">
                     </div>
                 </div>
-            </div>
+            </button>
         `;
     })
     .join("");
@@ -357,9 +361,260 @@ const headToHeadNote =
 `;
 
     document.body.appendChild(overlay);
-}
 
+overlay.querySelectorAll(".vs-card-h2h-match").forEach(button => {
+    button.addEventListener("click", () => {
+        const matchId = button.dataset.matchId;
+
+        if (!matchId) {
+            return;
+        }
+
+        openPreviousMatchCard(matchId);
+    });
+});
+}
 function closeVsCard() {
     document.querySelector(".vs-card-overlay")?.remove();
     document.body.classList.remove("vs-card-open");
+}
+async function openPreviousMatchCard(matchId) {
+    const game = [
+    ...(allGames || []),
+    ...(archiveGames || [])
+].find(
+    game => String(game.id) === String(matchId)
+);
+
+    if (!game) {
+        console.warn("Previous match not found:", matchId);
+        return;
+    }
+
+    const gameDate = new Date(game.date);
+
+    const formattedDate = gameDate.toLocaleDateString("is-IS", {
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+    });
+
+    const previousOverlay = document.createElement("div");
+    previousOverlay.className = "previous-match-overlay";
+
+    previousOverlay.innerHTML = `
+        <div class="previous-match-card">
+
+            <button
+                type="button"
+                class="previous-match-close"
+                aria-label="Loka"
+            >
+                ×
+            </button>
+
+            <div class="previous-match-competition">
+                ${game.competition || ""}
+            </div>
+
+            <div class="previous-match-date">
+                ${formattedDate}
+            </div>
+
+            <div class="previous-match-teams">
+
+                <div class="previous-match-team">
+                    <img
+                        src="${game.homeLogo || ""}"
+                        alt="${game.home || ""}"
+                    >
+                    <strong>${game.home || ""}</strong>
+                </div>
+
+                <div class="previous-match-score">
+                    ${game.homeScore ?? "–"} - ${game.awayScore ?? "–"}
+                </div>
+
+                <div class="previous-match-team">
+                    <img
+                        src="${game.awayLogo || ""}"
+                        alt="${game.away || ""}"
+                    >
+                    <strong>${game.away || ""}</strong>
+                </div>
+
+            </div>
+
+            <div class="previous-match-venue">
+                ${game.facility || ""}
+            </div>
+
+            <div class="previous-match-officials">
+                ${(game.officials || []).map(official => `
+                    <div class="previous-match-official-row">
+                        <span>${official.role || ""}</span>
+                        <strong>${official.name || ""}</strong>
+                    </div>
+                `).join("")}
+            </div>
+
+            <div class="previous-match-events">
+                <h3>ATVIK LEIKS</h3>
+
+                <div class="previous-match-events-list">
+                    Sæki atvik…
+                </div>
+            </div>
+
+        </div>
+    `;
+
+    document.body.appendChild(previousOverlay);
+
+    const eventsList =
+    previousOverlay.querySelector(".previous-match-events-list");
+
+try {
+    const response = await fetch(
+        `data/match-reports/${game.id}.json`
+    );
+
+    if (!response.ok) {
+        throw new Error("Match report not found");
+    }
+
+    const report = await response.json();
+
+    const supportedTypes = [
+        "GOAL",
+        "OWN_GOAL",
+        "PENALTY",
+        "PENALTY_FAILED",
+        "YELLOW",
+        "SECOND_YELLOW",
+        "RED",
+        "EXPULSION"
+    ];
+
+    const importantEvents = (report.events || []).filter(event =>
+        supportedTypes.includes(
+            event.eventType?.fcdName || ""
+        )
+    );
+
+    if (!importantEvents.length) {
+        eventsList.innerHTML = `
+            <div class="previous-match-no-events">
+                Engin skráð atvik
+            </div>
+        `;
+    } else {
+        eventsList.innerHTML = importantEvents.map(event => {
+            const type =
+                event.eventType?.fcdName || "";
+
+            const minute =
+                event.displayMinute || "";
+
+            const player =
+                event.player?.name || "";
+
+            const team =
+                event.homeTeam
+                    ? game.home
+                    : game.away;
+
+            let icon = "";
+            let text = player;
+
+            if (type === "GOAL") {
+                icon = "⚽";
+            }
+
+            if (type === "OWN_GOAL") {
+                icon = "⚽";
+                text = `${player} · sjálfsmark`;
+            }
+
+            if (type === "PENALTY") {
+                icon = "⚽";
+                text = `${player} · víti`;
+            }
+
+            if (type === "PENALTY_FAILED") {
+                icon = "✕";
+                text = `${player} · víti misnotað`;
+            }
+
+            if (type === "YELLOW") {
+                icon = `
+                    <span class="event-card-icon yellow-card"></span>
+                `;
+            }
+
+            if (type === "SECOND_YELLOW") {
+                icon = `
+                    <span class="second-yellow-symbol">
+                        <span class="event-card-icon yellow-card"></span>
+                        <span class="event-card-icon red-card"></span>
+                    </span>
+                `;
+            }
+
+            if (
+                type === "RED" ||
+                type === "EXPULSION"
+            ) {
+                icon = `
+                    <span class="event-card-icon red-card"></span>
+                `;
+            }
+
+            return `
+                <div class="previous-match-event-row ${event.homeTeam ? "home" : "away"}">
+
+                    <div class="previous-match-event-side">
+    <span class="previous-match-event-icon">
+        ${icon}
+    </span>
+
+    <strong>${text || team}</strong>
+</div>
+
+<div class="previous-match-event-minute">
+    ${minute}
+</div>
+
+<div class="previous-match-event-side">
+    <span class="previous-match-event-icon">
+        ${icon}
+    </span>
+
+    <strong>${text || team}</strong>
+</div>
+
+                </div>
+            `;
+        }).join("");
+    }
+
+} catch (error) {
+    console.warn(
+        "Could not load previous match events:",
+        error
+    );
+
+    eventsList.innerHTML = `
+        <div class="previous-match-no-events">
+            Engin leikskýrsla tiltæk
+        </div>
+    `;
+}
+
+    const closeButton =
+        previousOverlay.querySelector(".previous-match-close");
+
+    closeButton?.addEventListener("click", () => {
+        previousOverlay.remove();
+    });
 }
