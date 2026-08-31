@@ -184,7 +184,7 @@ els.coverage.textContent = isReferee && coverage.available
     : state.role === "assistants"
       ? "Aðstoðardómari 1 og 2 teljast saman."
       : state.role === "fourthOfficials"
-        ? "Fjórða dómarahlutverkið er talið sérstaklega."
+        ? "Fjórði dómari / varadómari er í Bestu deildum karla og kvenna."
         : "Öll hlutverk lögð saman · 10 leikjahæstu dómararnir.";
   if (!people.length) {
     els.ranking.innerHTML = '<p class="stats-empty">Engar upplýsingar fundust.</p>';
