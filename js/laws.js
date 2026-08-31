@@ -278,38 +278,39 @@ function renderSingleLaw(
 
     lawsContent.innerHTML = `
 
-        ${renderTopNavigation(
+    ${renderTopNavigation(
+        previousLaw,
+        nextLaw
+    )}
+
+    <article class="single-law">
+
+        <header class="single-law-header">
+
+            <h2>
+                <span class="single-law-title-number">
+                    ${escapeHtml(law.number)}.
+                </span>
+
+                ${escapeHtml(law.title)}
+            </h2>
+
+        </header>
+
+        ${introHtml}
+
+        <div class="law-sections">
+            ${sectionsHtml}
+        </div>
+
+        ${renderBottomNavigation(
             previousLaw,
             nextLaw
         )}
 
-        <article class="single-law">
-
-            <header class="single-law-header">
-
-                <h2>
-                    <span class="single-law-title-number">
-                        ${escapeHtml(law.number)}.
-                    </span>
-
-                    ${escapeHtml(law.title)}
-                </h2>
-
-            </header>
-
-            ${introHtml}
-
-            <div class="law-sections">
-                ${sectionsHtml}
-            </div>
-
-            ${renderBottomNavigation(
-                previousLaw,
-                nextLaw
-            )}
-
-        </article>
-    `;
+    </article>
+`;
+    
 
     setupLawNavigation();
 

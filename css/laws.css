@@ -759,8 +759,12 @@ body.is-reading-law .laws-heading {
 
     overflow-x: auto;
 
-    border: 1px solid var(--law-border);
-    border-radius: 12px;
+    border: 1px solid rgba(90, 150, 110, 0.30);
+    border-radius: 14px;
+
+    background: rgba(7, 16, 13, 0.72);
+
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.18);
 }
 
 .law-table {
@@ -772,30 +776,48 @@ body.is-reading-law .laws-heading {
 
 .law-table th,
 .law-table td {
-    padding: 14px 16px;
+    padding: 18px 20px;
 
+    border-right: 1px solid rgba(255, 255, 255, 0.07);
     border-bottom: 1px solid rgba(255, 255, 255, 0.07);
 
-    color: rgba(255, 255, 255, 0.74);
+    color: rgba(255, 255, 255, 0.84);
 
     font-size: 14px;
-    line-height: 1.5;
+    line-height: 1.55;
 
     text-align: left;
     vertical-align: top;
 }
 
+.law-table th:last-child,
+.law-table td:last-child {
+    border-right: none;
+}
+
 .law-table th {
     color: #ffffff;
 
-    font-size: 12px;
     font-weight: 800;
+    font-size: 15px;
 
-    background: rgba(76, 217, 100, 0.045);
+    background:
+        linear-gradient(
+            180deg,
+            rgba(24, 78, 47, 0.98) 0%,
+            rgba(14, 55, 34, 0.98) 100%
+        );
+
+    border-bottom: 1px solid rgba(76, 220, 123, 0.55);
+}
+
+.law-table td:first-child {
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.96);
 }
 
 .law-table tr:last-child td {
-    border-bottom: 0;
+    border-bottom: none;
 }
 
 /* =========================================
