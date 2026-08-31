@@ -73,9 +73,19 @@ function getTeamForm(teamName, gender) {
     }
 
     return {
-        result,
-        date: game.date
-    };
+    result,
+    date: game.date,
+
+    opponent: isHome ? game.away : game.home,
+
+    home: game.home,
+    away: game.away,
+
+    homeScore: game.homeScore,
+    awayScore: game.awayScore,
+
+    matchId: game.id ?? game.matchId ?? null
+};
 });
 }
 
@@ -154,11 +164,14 @@ const points = form.map(item => {
                     nextItem.level - item.level;
 
                 line = `
-                    <span
-                        class="vs-form-line"
-                        style="--level-diff: ${levelDifference};"
-                    ></span>
-                `;
+    <span
+        class="vs-form-line"
+        style="
+            --level-diff: ${levelDifference};
+            --form-level: ${item.level};
+        "
+    ></span>
+`;
             }
 
             const date = new Date(item.date);
@@ -166,14 +179,26 @@ const points = form.map(item => {
 const dateLabel =
     `${date.getDate()}.${date.getMonth() + 1}`;
 
+const fullDateLabel =
+    date.toLocaleDateString("is-IS");
+
+const scoreLabel =
+    `${item.home} ${item.homeScore} – ${item.awayScore} ${item.away}`;
+
 return `
-    <span class="vs-form-point">
+    <span
+        class="vs-form-point"
+        data-tooltip="${scoreLabel}"
+    >
+        ${line}
+
         <span
             class="vs-form-dot ${item.result}"
             style="--form-level: ${item.level};"
-        >
-            ${line}
-        </span>
+            data-match-id="${item.matchId ?? ""}"
+            role="button"
+            tabindex="0"
+        ></span>
 
         <span class="vs-form-date">
             ${dateLabel}
@@ -362,7 +387,9 @@ const headToHeadNote =
 
     document.body.appendChild(overlay);
 
-overlay.querySelectorAll(".vs-card-h2h-match").forEach(button => {
+overlay.querySelectorAll(
+    ".vs-card-h2h-match, .vs-form-dot[data-match-id]"
+).forEach(button => {
     button.addEventListener("click", () => {
         const matchId = button.dataset.matchId;
 

@@ -642,3 +642,135 @@ body.vs-card-open {
         background: rgba(69, 212, 131, 0.55);
     }
 }
+/* Previous H2H matches - make them feel clickable */
+.vs-card-h2h-match {
+    position: relative;
+
+    width: 100%;
+    padding: 9px 30px 9px 8px;
+
+    border-radius: 10px;
+
+    transition:
+        background-color 0.16s ease,
+        transform 0.12s ease;
+}
+
+/* Small arrow = more information */
+.vs-card-h2h-match::after {
+    content: "›";
+
+    position: absolute;
+    right: 9px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    color: rgba(255, 255, 255, 0.38);
+
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+/* Desktop */
+@media (hover: hover) {
+    .vs-card-h2h-match:hover {
+        background: rgba(255, 255, 255, 0.045);
+        cursor: pointer;
+    }
+
+    .vs-card-h2h-match:hover::after {
+        color: rgba(255, 255, 255, 0.75);
+    }
+}
+
+/* Phone tap */
+.vs-card-h2h-match:active {
+    background: rgba(255, 255, 255, 0.07);
+    transform: scale(0.985);
+}
+/* Interactive form results */
+
+.vs-form-point {
+    position: relative;
+}
+
+.vs-form-dot {
+    position: relative;
+    z-index: 2;
+    cursor: pointer;
+}
+
+.vs-form-line {
+    position: absolute;
+
+    left: 50%;
+    top: 10px;
+
+    width: 30px;
+    height: 1px;
+
+    background: rgba(255, 255, 255, 0.25);
+
+    transform-origin: left center;
+
+    transform:
+        translateY(calc(var(--form-level) * -12px))
+        rotate(calc(var(--level-diff) * -26deg));
+
+    z-index: 1;
+
+    pointer-events: none;
+}
+
+/* Match result tooltip */
+
+.vs-form-point::after {
+    content: attr(data-tooltip);
+
+    position: absolute;
+
+    left: 50%;
+    bottom: calc(100% + 8px);
+
+    transform: translateX(-50%) translateY(3px);
+
+    padding: 6px 9px;
+
+    background: #182326;
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    border-radius: 8px;
+
+    color: #fff;
+
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1;
+
+    white-space: nowrap;
+
+    opacity: 0;
+    visibility: hidden;
+
+    pointer-events: none;
+
+    z-index: 20;
+
+    transition:
+        opacity 0.14s ease,
+        transform 0.14s ease,
+        visibility 0.14s ease;
+}
+
+
+@media (hover: hover) and (pointer: fine) {
+
+    .vs-form-point:has(.vs-form-dot:hover)::after,
+    .vs-form-point:has(.vs-form-dot:focus-visible)::after {
+        opacity: 1;
+        visibility: visible;
+
+        transform: translateX(-50%) translateY(0);
+    }
+
+}
