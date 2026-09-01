@@ -2537,8 +2537,8 @@ box-shadow:
 }
 
 .gender-dropdown-button {
-    width: 116px;
-    height: 40px;
+    width: 124px;
+    height: 42px;
 
     display: grid;
     grid-template-columns: 1fr 18px;
@@ -2546,15 +2546,15 @@ box-shadow:
 
     padding: 0 14px 0 18px;
 
-    border: 1px solid rgba(76, 217, 100, 0.32);
-    border-radius: 999px;
+    border: 1px solid rgba(76, 217, 100, 0.22);
+    border-radius: 14px;
 
-    background: rgba(10, 18, 16, 0.82);
+    background: rgba(6, 16, 14, 0.45);
     color: #ffffff;
 
     font: inherit;
-    font-size: 14px;
-    font-weight: 800;
+    font-size: 13px;
+    font-weight: 700;
 
     cursor: pointer;
 }
@@ -2569,8 +2569,8 @@ box-shadow:
 
     justify-self: end;
 
-    border-right: 2px solid #4cd964;
-    border-bottom: 2px solid #4cd964;
+    border-right: 2px solid rgba(76, 217, 100, 0.65);
+    border-bottom: 2px solid rgba(76, 217, 100, 0.65);
 
     transform:
         translateY(-2px)
