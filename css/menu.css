@@ -15,6 +15,14 @@
     padding: 0;
 
     cursor: pointer;
+
+    transition:
+        background 160ms ease;
+}
+
+.menu-button:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 10px;
 }
 
 .menu-button span {
@@ -23,6 +31,11 @@
 
     background: #ffffff;
     border-radius: 999px;
+
+    transition: background 160ms ease;
+}
+.menu-button:hover span {
+    background: #4cd964;
 }
 /* =========================
    DÓMARAR SIDE MENU

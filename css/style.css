@@ -2641,3 +2641,42 @@ box-shadow:
     background: rgba(76, 217, 100, 0.16);
     color: #4cd964;
 }
+.gender-dropdown-button {
+    transition:
+        background 160ms ease,
+        border-color 160ms ease,
+        transform 160ms ease;
+}
+
+.gender-dropdown-button:hover {
+    background: rgba(76, 217, 100, 0.08);
+    border-color: rgba(76, 217, 100, 0.45);
+}
+.date-tab {
+    transition:
+        background 160ms ease,
+        border-color 160ms ease;
+}
+
+.date-tab:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(76, 217, 100, 0.28);
+}
+.date-tab.active:hover {
+    background: inherit;
+    border-color: inherit;
+}
+.search-box {
+    transition:
+        background 160ms ease,
+        border-color 160ms ease;
+}
+
+.search-box:hover {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(76, 217, 100, 0.24);
+}
+.search-box:focus-within {
+    border-color: rgba(76, 217, 100, 0.5);
+    background: rgba(76, 217, 100, 0.035);
+}
