@@ -2658,13 +2658,14 @@ box-shadow:
         border-color 160ms ease;
 }
 
-.date-tab:hover {
+.date-tab:not(.active):hover {
     background: rgba(255, 255, 255, 0.04);
     border-color: rgba(76, 217, 100, 0.28);
 }
 .date-tab.active:hover {
-    background: inherit;
-    border-color: inherit;
+    background: #4cd964;
+    border-color: #4cd964;
+    color: #fff;
 }
 .search-box {
     transition:
