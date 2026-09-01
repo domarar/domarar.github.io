@@ -95,34 +95,52 @@
 
 <div class="top-controls-row">
 
+    <div class="gender-dropdown" id="gender-dropdown">
+
+    <button
+        class="gender-dropdown-button"
+        id="gender-dropdown-button"
+        type="button"
+        aria-haspopup="listbox"
+        aria-expanded="false"
+    >
+        <span id="gender-dropdown-label">Allt</span>
+
+        <span class="gender-dropdown-arrow"></span>
+    </button>
+
     <div
-        id="gender-filters"
-        class="gender-filters"
+        class="gender-dropdown-menu"
+        id="gender-dropdown-menu"
+        role="listbox"
+        hidden
     >
         <button
-            class="gender-filter active"
-            data-gender="all"
+            class="gender-dropdown-option active"
             type="button"
+            data-gender="all"
         >
             Allt
         </button>
 
         <button
-            class="gender-filter"
-            data-gender="Male"
+            class="gender-dropdown-option"
             type="button"
+            data-gender="Male"
         >
             Karlar
         </button>
 
         <button
-            class="gender-filter"
-            data-gender="Female"
+            class="gender-dropdown-option"
             type="button"
+            data-gender="Female"
         >
             Konur
         </button>
     </div>
+
+</div>
 
     <button
     class="standings-main-button"

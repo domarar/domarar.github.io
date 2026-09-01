@@ -12,8 +12,15 @@ const searchSuggestions =
 const searchBackdrop =
     document.getElementById("search-backdrop");
 const searchClear = document.querySelector("#search-clear");
-const genderFilters = document.getElementById("gender-filters");
-const genderButtons = document.querySelectorAll(".gender-filter");
+const genderDropdown = document.getElementById("gender-dropdown");
+const genderDropdownButton =
+    document.getElementById("gender-dropdown-button");
+const genderDropdownMenu =
+    document.getElementById("gender-dropdown-menu");
+const genderDropdownLabel =
+    document.getElementById("gender-dropdown-label");
+const genderDropdownOptions =
+    document.querySelectorAll(".gender-dropdown-option");
 
 // =====================================
 // APP STATE
@@ -1508,18 +1515,51 @@ async function loadGames() {
 // =====================================
 // START APP
 // =====================================
-genderButtons.forEach(button => {
-    button.addEventListener("click", () => {
-        selectedGender = button.dataset.gender;
+genderDropdownButton.addEventListener("click", event => {
+    event.stopPropagation();
 
-        genderButtons.forEach(item => {
+    const isOpen = genderDropdown.classList.toggle("open");
+
+    genderDropdownMenu.hidden = !isOpen;
+    genderDropdownButton.setAttribute(
+        "aria-expanded",
+        String(isOpen)
+    );
+});
+
+genderDropdownOptions.forEach(option => {
+    option.addEventListener("click", () => {
+        selectedGender = option.dataset.gender;
+
+        genderDropdownLabel.textContent =
+            option.textContent.trim();
+
+        genderDropdownOptions.forEach(item => {
             item.classList.remove("active");
         });
 
-        button.classList.add("active");
+        option.classList.add("active");
+
+        genderDropdown.classList.remove("open");
+        genderDropdownMenu.hidden = true;
+        genderDropdownButton.setAttribute(
+            "aria-expanded",
+            "false"
+        );
 
         renderGamesForSelectedDay();
     });
+});
+
+document.addEventListener("click", event => {
+    if (!genderDropdown.contains(event.target)) {
+        genderDropdown.classList.remove("open");
+        genderDropdownMenu.hidden = true;
+        genderDropdownButton.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+    }
 });
 searchInput.addEventListener("input", () => {
     const search = searchInput.value.trim();

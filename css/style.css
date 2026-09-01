@@ -2526,3 +2526,118 @@ box-shadow:
 .search-timeline-section + .search-timeline-section {
     margin-top: 14px;
 }
+/* =========================================
+   GENDER DROPDOWN
+========================================= */
+
+.gender-dropdown {
+    position: relative;
+    display: inline-block;
+    z-index: 30;
+}
+
+.gender-dropdown-button {
+    width: 116px;
+    height: 40px;
+
+    display: grid;
+    grid-template-columns: 1fr 18px;
+    align-items: center;
+
+    padding: 0 14px 0 18px;
+
+    border: 1px solid rgba(76, 217, 100, 0.32);
+    border-radius: 999px;
+
+    background: rgba(10, 18, 16, 0.82);
+    color: #ffffff;
+
+    font: inherit;
+    font-size: 14px;
+    font-weight: 800;
+
+    cursor: pointer;
+}
+
+.gender-dropdown-button > span:first-child {
+    text-align: center;
+}
+
+.gender-dropdown-arrow {
+    width: 7px;
+    height: 7px;
+
+    justify-self: end;
+
+    border-right: 2px solid #4cd964;
+    border-bottom: 2px solid #4cd964;
+
+    transform:
+        translateY(-2px)
+        rotate(45deg);
+
+    transition: transform 160ms ease;
+}
+
+.gender-dropdown.open .gender-dropdown-arrow {
+    transform:
+        translateY(2px)
+        rotate(225deg);
+}
+
+.gender-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 7px);
+    left: 0;
+
+    width: 116px;
+
+    padding: 6px;
+
+    border: 1px solid rgba(76, 217, 100, 0.28);
+    border-radius: 14px;
+
+    background: rgba(8, 19, 16, 0.97);
+
+    box-shadow:
+        0 12px 28px rgba(0, 0, 0, 0.38),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    overflow: hidden;
+}
+
+.gender-dropdown-option {
+    width: 100%;
+    min-height: 36px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 12px;
+
+    border: 0;
+    border-radius: 9px;
+
+    background: transparent;
+    color: rgba(255, 255, 255, 0.78);
+
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: left;
+
+    cursor: pointer;
+}
+
+.gender-dropdown-option:hover {
+    background: rgba(76, 217, 100, 0.10);
+    color: #ffffff;
+}
+
+.gender-dropdown-option.active {
+    background: rgba(76, 217, 100, 0.16);
+    color: #4cd964;
+}
