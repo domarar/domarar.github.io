@@ -113,18 +113,6 @@
           "hideProfile": false,
           "events": [
             {
-              "eventId": 8248821,
-              "eventType": {
-                "fcdName": "GOAL"
-              },
-              "player": {
-                "personId": 6728,
-                "hideProfile": false
-              },
-              "player2": null,
-              "homeTeam": true
-            },
-            {
               "eventId": 8248919,
               "eventType": {
                 "fcdName": "SUBSTITUTION"
@@ -153,7 +141,20 @@
           "position": null,
           "orderNumber": 6,
           "hideProfile": false,
-          "events": []
+          "events": [
+            {
+              "eventId": 8253700,
+              "eventType": {
+                "fcdName": "GOAL"
+              },
+              "player": {
+                "personId": 36572,
+                "hideProfile": false
+              },
+              "player2": null,
+              "homeTeam": true
+            }
+          ]
         },
         {
           "roleId": 8242654,
@@ -1215,7 +1216,7 @@
       "teamOfficial": null
     },
     {
-      "eventId": 8248821,
+      "eventId": 8253700,
       "eventType": {
         "fcdName": "GOAL"
       },
@@ -1225,8 +1226,8 @@
         "fcdName": "SECOND_HALF"
       },
       "player": {
-        "personId": 6728,
-        "name": "Sigurður Hrannar Þorsteinsson",
+        "personId": 36572,
+        "name": "Daði Snær Ingason",
         "hideProfile": false
       },
       "player2": null,
