@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-05T12:38:01.243873+00:00",
+  "updatedAt": "2026-09-05T15:31:00.174304+00:00",
   "date": "2026-09-05",
   "dateFrom": "2026-09-03",
   "dateTo": "2026-09-11",
@@ -294,10 +294,10 @@
       "homeLogo": "https://comet.ksi.is/file?id=04772e1f-0323-4dee-821c-88809b2499d4",
       "awayLogo": "https://comet.ksi.is/file?id=2b0071a0-382c-4b6e-9ab3-175184715a01",
       "facility": "Akraneshöllin",
-      "status": "SCHEDULED",
+      "status": "PLAYED",
       "liveStatus": null,
-      "homeScore": null,
-      "awayScore": null,
+      "homeScore": 1,
+      "awayScore": 3,
       "officials": [
         {
           "personId": 82156,
@@ -331,8 +331,8 @@
       "facility": "Knatthús Hauka",
       "status": "SCHEDULED",
       "liveStatus": "NA",
-      "homeScore": null,
-      "awayScore": null,
+      "homeScore": 1,
+      "awayScore": 4,
       "officials": [
         {
           "personId": 37295,
@@ -570,7 +570,7 @@
       "awayLogo": "https://comet.ksi.is/file?id=5afa29d4-a7bd-472a-93be-ce649fab8af5",
       "facility": "Vivaldivöllurinn",
       "status": "SCHEDULED",
-      "liveStatus": null,
+      "liveStatus": "NA",
       "homeScore": null,
       "awayScore": null,
       "officials": [
@@ -653,8 +653,8 @@
       "facility": "Malbikstöðin að Varmá",
       "status": "SCHEDULED",
       "liveStatus": null,
-      "homeScore": null,
-      "awayScore": null,
+      "homeScore": 1,
+      "awayScore": 3,
       "officials": [
         {
           "personId": 27663,
@@ -677,47 +677,6 @@
         {
           "personId": 30550,
           "name": "Halldór Breiðfjörð Jóhannsson",
-          "role": "Dómaraeftirlitsmaður",
-          "orderNumber": 4
-        }
-      ]
-    },
-    {
-      "id": 7053322,
-      "date": "2026-09-05T14:00:00.000Z",
-      "competition": "Íslandsmót KSÍ - 2. deild karla 2026",
-      "gender": "Male",
-      "home": "KFG",
-      "away": "Víkingur Ó.",
-      "homeLogo": "https://comet.ksi.is/file?id=76b6e443-3453-4458-a1e3-1133c69005b8",
-      "awayLogo": "https://comet.ksi.is/file?id=f905d614-ec58-4a20-af4d-502aff02ac99",
-      "facility": "Miðgarður",
-      "status": "SCHEDULED",
-      "liveStatus": "NA",
-      "homeScore": null,
-      "awayScore": null,
-      "officials": [
-        {
-          "personId": 67442,
-          "name": "Hreinn Magnússon",
-          "role": "Dómari",
-          "orderNumber": 1
-        },
-        {
-          "personId": 10426,
-          "name": "Margeir Valur Sigurðsson",
-          "role": "Aðstoðardómari 1",
-          "orderNumber": 2
-        },
-        {
-          "personId": 70082,
-          "name": "Elías Baldvinsson",
-          "role": "Aðstoðardómari 2",
-          "orderNumber": 3
-        },
-        {
-          "personId": 8455,
-          "name": "Bergur Þór Steingrímsson",
           "role": "Dómaraeftirlitsmaður",
           "orderNumber": 4
         }
@@ -775,9 +734,9 @@
       "awayLogo": "https://comet.ksi.is/file?id=136d36fc-4974-41ee-b024-5619d18c5459",
       "facility": "Nesfisk-völlurinn",
       "status": "SCHEDULED",
-      "liveStatus": null,
-      "homeScore": null,
-      "awayScore": null,
+      "liveStatus": "NA",
+      "homeScore": 3,
+      "awayScore": 1,
       "officials": [
         {
           "personId": 37518,
@@ -835,6 +794,47 @@
       ]
     },
     {
+      "id": 7053322,
+      "date": "2026-09-05T14:15:00.000Z",
+      "competition": "Íslandsmót KSÍ - 2. deild karla 2026",
+      "gender": "Male",
+      "home": "KFG",
+      "away": "Víkingur Ó.",
+      "homeLogo": "https://comet.ksi.is/file?id=76b6e443-3453-4458-a1e3-1133c69005b8",
+      "awayLogo": "https://comet.ksi.is/file?id=f905d614-ec58-4a20-af4d-502aff02ac99",
+      "facility": "Miðgarður",
+      "status": "SCHEDULED",
+      "liveStatus": null,
+      "homeScore": null,
+      "awayScore": null,
+      "officials": [
+        {
+          "personId": 67442,
+          "name": "Hreinn Magnússon",
+          "role": "Dómari",
+          "orderNumber": 1
+        },
+        {
+          "personId": 10426,
+          "name": "Margeir Valur Sigurðsson",
+          "role": "Aðstoðardómari 1",
+          "orderNumber": 2
+        },
+        {
+          "personId": 70082,
+          "name": "Elías Baldvinsson",
+          "role": "Aðstoðardómari 2",
+          "orderNumber": 3
+        },
+        {
+          "personId": 8455,
+          "name": "Bergur Þór Steingrímsson",
+          "role": "Dómaraeftirlitsmaður",
+          "orderNumber": 4
+        }
+      ]
+    },
+    {
       "id": 7054091,
       "date": "2026-09-05T14:30:00.000Z",
       "competition": "Íslandsmót KSÍ - 3. deild karla 2026",
@@ -846,8 +846,8 @@
       "facility": "Fagrilundur - gervigras",
       "status": "SCHEDULED",
       "liveStatus": null,
-      "homeScore": null,
-      "awayScore": null,
+      "homeScore": 1,
+      "awayScore": 0,
       "officials": [
         {
           "personId": 15502,
@@ -915,7 +915,7 @@
       "awayLogo": "https://comet.ksi.is/file?id=f9e13ccb-cfd8-4d26-a479-b41230900197",
       "facility": "Hásteinsvöllur",
       "status": "SCHEDULED",
-      "liveStatus": null,
+      "liveStatus": "NA",
       "homeScore": null,
       "awayScore": null,
       "officials": [
@@ -997,7 +997,7 @@
       "awayLogo": "https://comet.ksi.is/file?id=82b4a290-6bf0-414a-b292-bb11b2c884a6",
       "facility": "Sauðárkróksvöllur",
       "status": "SCHEDULED",
-      "liveStatus": null,
+      "liveStatus": "NA",
       "homeScore": null,
       "awayScore": null,
       "officials": [
