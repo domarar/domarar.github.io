@@ -111,10 +111,16 @@ function closeStandings() {
 async function openStandings(competition, homeTeam, awayTeam) {
     try {
         const data = await loadStandingsData();
-        const table = data[competition];
+
+        const standingsCompetition = competition
+            .replace("Íslandsmót KSÍ - ", "")
+            .replace(/\s20\d{2}(?=\s-|$)/, "")
+            .trim();
+
+        const table = data[standingsCompetition];
 
         if (!table) {
-            console.warn("No standings found for:", competition);
+            console.warn("No standings found for:", standingsCompetition);
             return;
         }
 
@@ -125,7 +131,7 @@ async function openStandings(competition, homeTeam, awayTeam) {
         team.team === homeTeam ||
         team.team === awayTeam;
 
-    const rule = standingsRules[competition];
+    const rule = standingsRules[standingsCompetition];
 
     const marker = rule?.markers.find(item =>
         item.positions.includes(team.position)
@@ -167,7 +173,7 @@ async function openStandings(competition, homeTeam, awayTeam) {
             `;
         }).join("");
 
-        const rule = standingsRules[competition];
+        const rule = standingsRules[standingsCompetition];
 
 const legendHTML = rule?.legend
     ? `
@@ -321,14 +327,16 @@ function openStandingsMenu() {
     closeStandingsMenu();
 
     const competitions = [
-        "Besta deild karla",
-        "Besta deild kvenna",
-        "Lengjudeild karla",
-        "Lengjudeild kvenna",
-        "2. deild karla",
-        "3. deild karla",
-        "4. deild karla"
-    ];
+    "Besta deild karla - Efri hluti",
+    "Besta deild karla - Neðri hluti",
+    "Besta deild karla",
+    "Besta deild kvenna",
+    "Lengjudeild karla",
+    "Lengjudeild kvenna",
+    "2. deild karla",
+    "3. deild karla",
+    "4. deild karla"
+];
 
     const overlay = document.createElement("div");
     overlay.className = "standings-menu-overlay";
