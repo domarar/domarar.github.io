@@ -1,0 +1,973 @@
+{
+  "id": 754331,
+  "liveStatus": "PLAYED",
+  "currentMinute": "FT",
+  "dateTimeUTC": 1685293200000,
+  "round": "9",
+  "attendance": 443,
+  "competition": {
+    "id": 190224,
+    "name": "Íslandsmót KSÍ - Besta deild karla 2023"
+  },
+  "facility": {
+    "name": "Würth völlurinn"
+  },
+  "homeTeam": {
+    "id": 5386,
+    "name": "Fylkir",
+    "picture": "f2d584bb-41ff-4c03-a12d-9629d6acab02"
+  },
+  "awayTeam": {
+    "id": 5388,
+    "name": "ÍBV",
+    "picture": "5aa260ce-3bfa-4377-b4ee-3595207efc3a"
+  },
+  "homeTeamResult": {
+    "current": 2
+  },
+  "awayTeamResult": {
+    "current": 1
+  },
+  "lineups": {
+    "home": {
+      "players": [
+        {
+          "roleId": 4954635,
+          "personId": 50964,
+          "name": "Ólafur Kristófer Helgason",
+          "shortName": "Ólafur Kristófer H.",
+          "shirtNumber": 1,
+          "starting": true,
+          "captain": false,
+          "position": "G",
+          "orderNumber": 1,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 4954647,
+          "personId": 65066,
+          "name": "Arnór Gauti Jónsson",
+          "shortName": "Arnór Gauti J.",
+          "shirtNumber": 4,
+          "starting": true,
+          "captain": false,
+          "position": null,
+          "orderNumber": 2,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 4954650,
+          "personId": 34702,
+          "name": "Orri Sveinn Segatta",
+          "shortName": "Orri Sveinn S.",
+          "shirtNumber": 5,
+          "starting": true,
+          "captain": false,
+          "position": null,
+          "orderNumber": 3,
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 5981672,
+              "eventType": {
+                "fcdName": "GOAL"
+              },
+              "player": {
+                "personId": 34702,
+                "hideProfile": false
+              },
+              "player2": null,
+              "homeTeam": true
+            },
+            {
+              "eventId": 6167543,
+              "eventType": {
+                "fcdName": "YELLOW"
+              },
+              "player": {
+                "personId": 34702,
+                "hideProfile": false
+              },
+              "player2": null,
+              "homeTeam": true
+            }
+          ]
+        },
+        {
+          "roleId": 4954659,
+          "personId": 21054,
+          "name": "Ragnar Bragi Sveinsson",
+          "shortName": "Ragnar Bragi S.",
+          "shirtNumber": 8,
+          "starting": true,
+          "captain": true,
+          "position": null,
+          "orderNumber": 4,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 4954652,
+          "personId": 3076,
+          "name": "Pétur Bjarnason",
+          "shortName": "Pétur B.",
+          "shirtNumber": 9,
+          "starting": true,
+          "captain": false,
+          "position": null,
+          "orderNumber": 5,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 4954645,
+          "personId": 42793,
+          "name": "Þórður Gunnar Hafþórsson",
+          "shortName": "Þórður Gunnar H.",
+          "shirtNumber": 11,
+          "starting": true,
+          "captain": false,
+          "position": null,
+          "orderNumber": 6,
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 6518548,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 39294,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 42793,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": true
+            }
+          ]
+        },
+        {
+          "roleId": 4954656,
+          "personId": 66546,
+          "name": "Emil Ásmundsson",
+          "shortName": "Emil Á.",
+          "shirtNumber": 16,
+          "starting": true,
+          "captain": false,
+          "position": null,
+          "orderNumber": 7,
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 6518547,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 77278,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 66546,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": true
+            }
+          ]
+        },
+        {
+          "roleId": 4954657,
+          "personId": 12416,
+          "name": "Birkir Eyþórsson",
+          "shortName": "Birkir E.",
+          "shirtNumber": 17,
+          "starting": true,
+          "captain": false,
+          "position": null,
+          "orderNumber": 8,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 4954648,
+          "personId": 37608,
+          "name": "Nikulás Val Gunnarsson",
+          "shortName": "Nikulás Val G.",
+          "shirtNumber": 18,
+          "starting": true,
+          "captain": false,
+          "position": null,
+          "orderNumber": 9,
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 6167544,
+              "eventType": {
+                "fcdName": "YELLOW"
+              },
+              "player": {
+                "personId": 37608,
+                "hideProfile": false
+              },
+              "player2": null,
+              "homeTeam": true
+            }
+          ]
+        },
+        {
+          "roleId": 4954655,
+          "personId": 8702,
+          "name": "Arnór Breki Ásþórsson",
+          "shortName": "Arnór Breki Á.",
+          "shirtNumber": 27,
+          "starting": true,
+          "captain": false,
+          "position": null,
+          "orderNumber": 10,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 4954640,
+          "personId": 43406,
+          "name": "Óskar Borgþórsson",
+          "shortName": "Óskar B.",
+          "shirtNumber": 77,
+          "starting": true,
+          "captain": false,
+          "position": null,
+          "orderNumber": 11,
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 5981671,
+              "eventType": {
+                "fcdName": "GOAL"
+              },
+              "player": {
+                "personId": 43406,
+                "hideProfile": false
+              },
+              "player2": null,
+              "homeTeam": true
+            }
+          ]
+        },
+        {
+          "roleId": 4954654,
+          "personId": 9550,
+          "name": "Jón Ívan Rivine",
+          "shortName": "Jón Ívan R.",
+          "shirtNumber": 12,
+          "starting": false,
+          "captain": false,
+          "position": "G",
+          "orderNumber": 12,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 4954631,
+          "personId": 54618,
+          "name": "Frosti Brynjólfsson",
+          "shortName": "Frosti B.",
+          "shirtNumber": 6,
+          "starting": false,
+          "captain": false,
+          "position": null,
+          "orderNumber": 13,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 4954646,
+          "personId": 39294,
+          "name": "Benedikt Daríus Garðarsson",
+          "shortName": "Benedikt Daríus G.",
+          "shirtNumber": 10,
+          "starting": false,
+          "captain": false,
+          "position": null,
+          "orderNumber": 14,
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 6518548,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 39294,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 42793,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": true
+            }
+          ]
+        },
+        {
+          "roleId": 4954637,
+          "personId": 52178,
+          "name": "Stefán Gísli Stefánsson",
+          "shortName": "Stefán Gísli S.",
+          "shirtNumber": 13,
+          "starting": false,
+          "captain": false,
+          "position": null,
+          "orderNumber": 15,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 4954639,
+          "personId": 46935,
+          "name": "Axel Máni Guðbjörnsson",
+          "shortName": "Axel Máni G.",
+          "shirtNumber": 15,
+          "starting": false,
+          "captain": false,
+          "position": null,
+          "orderNumber": 16,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 4954644,
+          "personId": 77278,
+          "name": "Ómar Björn Stefánsson",
+          "shortName": "Ómar Björn S.",
+          "shirtNumber": 22,
+          "starting": false,
+          "captain": false,
+          "position": null,
+          "orderNumber": 17,
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 6518547,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 77278,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 66546,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": true
+            }
+          ]
+        },
+        {
+          "roleId": 4954638,
+          "personId": 76557,
+          "name": "Þóroddur Víkingsson",
+          "shortName": "Þóroddur V.",
+          "shirtNumber": 25,
+          "starting": false,
+          "captain": false,
+          "position": null,
+          "orderNumber": 18,
+          "hideProfile": false,
+          "events": []
+        }
+      ]
+    },
+    "away": {
+      "players": [
+        {
+          "roleId": 4954629,
+          "personId": 80889,
+          "name": "Guy Smit",
+          "shortName": "Guy S.",
+          "shirtNumber": 12,
+          "starting": true,
+          "captain": false,
+          "position": "G",
+          "orderNumber": 1,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 4954641,
+          "personId": 77293,
+          "name": "Sigurður Arnar Magnússon",
+          "shortName": "Sigurður Arnar M.",
+          "shirtNumber": 2,
+          "starting": true,
+          "captain": false,
+          "position": null,
+          "orderNumber": 2,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 4954642,
+          "personId": 43814,
+          "name": "Felix Örn Friðriksson",
+          "shortName": "Felix Örn F.",
+          "shirtNumber": 3,
+          "starting": true,
+          "captain": false,
+          "position": null,
+          "orderNumber": 3,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 4954636,
+          "personId": 47459,
+          "name": "Nökkvi Már Nökkvason",
+          "shortName": "Nökkvi Már N.",
+          "shirtNumber": 4,
+          "starting": true,
+          "captain": false,
+          "position": null,
+          "orderNumber": 4,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 4954651,
+          "personId": 81399,
+          "name": "Sverrir Páll Hjaltested",
+          "shortName": "Sverrir Páll H.",
+          "shirtNumber": 9,
+          "starting": true,
+          "captain": false,
+          "position": null,
+          "orderNumber": 5,
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 6518545,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 83009,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 81399,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": false
+            }
+          ]
+        },
+        {
+          "roleId": 4954634,
+          "personId": 51678,
+          "name": "Arnar Breki Gunnarsson",
+          "shortName": "Arnar Breki G.",
+          "shirtNumber": 14,
+          "starting": true,
+          "captain": false,
+          "position": null,
+          "orderNumber": 6,
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 6167545,
+              "eventType": {
+                "fcdName": "YELLOW"
+              },
+              "player": {
+                "personId": 51678,
+                "hideProfile": false
+              },
+              "player2": null,
+              "homeTeam": false
+            },
+            {
+              "eventId": 6518544,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 84394,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 51678,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": false
+            }
+          ]
+        },
+        {
+          "roleId": 4954649,
+          "personId": 32554,
+          "name": "Eyþór Daði Kjartansson",
+          "shortName": "Eyþór Daði K.",
+          "shirtNumber": 18,
+          "starting": true,
+          "captain": false,
+          "position": null,
+          "orderNumber": 7,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 4954658,
+          "personId": 21256,
+          "name": "Alex Freyr Hilmarsson",
+          "shortName": "Alex Freyr H.",
+          "shirtNumber": 25,
+          "starting": true,
+          "captain": false,
+          "position": null,
+          "orderNumber": 8,
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 5981673,
+              "eventType": {
+                "fcdName": "GOAL"
+              },
+              "player": {
+                "personId": 21256,
+                "hideProfile": false
+              },
+              "player2": null,
+              "homeTeam": false
+            }
+          ]
+        },
+        {
+          "roleId": 4954626,
+          "personId": 84393,
+          "name": "Richard King",
+          "shortName": "Richard K.",
+          "shirtNumber": 26,
+          "starting": true,
+          "captain": false,
+          "position": null,
+          "orderNumber": 9,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 4954653,
+          "personId": 9752,
+          "name": "Halldór Jón Sigurður Þórðarson",
+          "shortName": "Halldór Jón S.",
+          "shirtNumber": 28,
+          "starting": true,
+          "captain": false,
+          "position": null,
+          "orderNumber": 10,
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 6518546,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 58497,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 9752,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": false
+            }
+          ]
+        },
+        {
+          "roleId": 4954628,
+          "personId": 84102,
+          "name": "Elvis Okello Bwomono",
+          "shortName": "Elvis Okello B.",
+          "shirtNumber": 42,
+          "starting": true,
+          "captain": false,
+          "position": null,
+          "orderNumber": 11,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 4954633,
+          "personId": 47836,
+          "name": "Jón Kristinn Elíasson",
+          "shortName": "Jón Kristinn E.",
+          "shirtNumber": 1,
+          "starting": false,
+          "captain": false,
+          "position": null,
+          "orderNumber": 12,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 4954630,
+          "personId": 55219,
+          "name": "Guðjón Ernir Hrafnkelsson",
+          "shortName": "Guðjón Ernir H.",
+          "shirtNumber": 7,
+          "starting": false,
+          "captain": false,
+          "position": null,
+          "orderNumber": 13,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 4954627,
+          "personId": 83009,
+          "name": "Filip Valencic",
+          "shortName": "Filip V.",
+          "shirtNumber": 10,
+          "starting": false,
+          "captain": false,
+          "position": null,
+          "orderNumber": 14,
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 6518545,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 83009,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 81399,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": false
+            }
+          ]
+        },
+        {
+          "roleId": 4954625,
+          "personId": 84394,
+          "name": "Dwayne Atkinson",
+          "shortName": "Dwayne A.",
+          "shirtNumber": 13,
+          "starting": false,
+          "captain": false,
+          "position": null,
+          "orderNumber": 15,
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 6518544,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 84394,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 51678,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": false
+            }
+          ]
+        },
+        {
+          "roleId": 4954632,
+          "personId": 58497,
+          "name": "Oliver Heiðarsson",
+          "shortName": "Oliver H.",
+          "shirtNumber": 17,
+          "starting": false,
+          "captain": false,
+          "position": null,
+          "orderNumber": 16,
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 6518546,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 58497,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 9752,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": false
+            }
+          ]
+        },
+        {
+          "roleId": 4954643,
+          "personId": 70512,
+          "name": "Breki Ómarsson",
+          "shortName": "Breki Ó.",
+          "shirtNumber": 19,
+          "starting": false,
+          "captain": false,
+          "position": null,
+          "orderNumber": 17,
+          "hideProfile": false,
+          "events": []
+        }
+      ]
+    }
+  },
+  "events": [
+    {
+      "eventId": 5981673,
+      "eventType": {
+        "fcdName": "GOAL"
+      },
+      "displayMinute": "10'",
+      "orderNumber": 1,
+      "matchPhase": {
+        "fcdName": "FIRST_HALF"
+      },
+      "player": {
+        "personId": 21256,
+        "name": "Alex Freyr Hilmarsson",
+        "hideProfile": false
+      },
+      "player2": null,
+      "homeTeam": false,
+      "teamOfficial": null
+    },
+    {
+      "eventId": 6518546,
+      "eventType": {
+        "fcdName": "SUBSTITUTION"
+      },
+      "displayMinute": "24'",
+      "orderNumber": 2,
+      "matchPhase": {
+        "fcdName": "FIRST_HALF"
+      },
+      "player": {
+        "personId": 58497,
+        "name": "Oliver Heiðarsson",
+        "hideProfile": false
+      },
+      "player2": {
+        "personId": 9752,
+        "name": "Halldór Jón Sigurður Þórðarson",
+        "hideProfile": false
+      },
+      "homeTeam": false,
+      "teamOfficial": null
+    },
+    {
+      "eventId": 5981672,
+      "eventType": {
+        "fcdName": "GOAL"
+      },
+      "displayMinute": "30'",
+      "orderNumber": 3,
+      "matchPhase": {
+        "fcdName": "FIRST_HALF"
+      },
+      "player": {
+        "personId": 34702,
+        "name": "Orri Sveinn Segatta",
+        "hideProfile": false
+      },
+      "player2": null,
+      "homeTeam": true,
+      "teamOfficial": null
+    },
+    {
+      "eventId": 6167545,
+      "eventType": {
+        "fcdName": "YELLOW"
+      },
+      "displayMinute": "36'",
+      "orderNumber": 4,
+      "matchPhase": {
+        "fcdName": "FIRST_HALF"
+      },
+      "player": {
+        "personId": 51678,
+        "name": "Arnar Breki Gunnarsson",
+        "hideProfile": false
+      },
+      "player2": null,
+      "homeTeam": false,
+      "teamOfficial": null
+    },
+    {
+      "eventId": 5981671,
+      "eventType": {
+        "fcdName": "GOAL"
+      },
+      "displayMinute": "54'",
+      "orderNumber": 5,
+      "matchPhase": {
+        "fcdName": "SECOND_HALF"
+      },
+      "player": {
+        "personId": 43406,
+        "name": "Óskar Borgþórsson",
+        "hideProfile": false
+      },
+      "player2": null,
+      "homeTeam": true,
+      "teamOfficial": null
+    },
+    {
+      "eventId": 6518548,
+      "eventType": {
+        "fcdName": "SUBSTITUTION"
+      },
+      "displayMinute": "57'",
+      "orderNumber": 6,
+      "matchPhase": {
+        "fcdName": "SECOND_HALF"
+      },
+      "player": {
+        "personId": 39294,
+        "name": "Benedikt Daríus Garðarsson",
+        "hideProfile": false
+      },
+      "player2": {
+        "personId": 42793,
+        "name": "Þórður Gunnar Hafþórsson",
+        "hideProfile": false
+      },
+      "homeTeam": true,
+      "teamOfficial": null
+    },
+    {
+      "eventId": 6167544,
+      "eventType": {
+        "fcdName": "YELLOW"
+      },
+      "displayMinute": "58'",
+      "orderNumber": 7,
+      "matchPhase": {
+        "fcdName": "SECOND_HALF"
+      },
+      "player": {
+        "personId": 37608,
+        "name": "Nikulás Val Gunnarsson",
+        "hideProfile": false
+      },
+      "player2": null,
+      "homeTeam": true,
+      "teamOfficial": null
+    },
+    {
+      "eventId": 6518547,
+      "eventType": {
+        "fcdName": "SUBSTITUTION"
+      },
+      "displayMinute": "81'",
+      "orderNumber": 8,
+      "matchPhase": {
+        "fcdName": "SECOND_HALF"
+      },
+      "player": {
+        "personId": 77278,
+        "name": "Ómar Björn Stefánsson",
+        "hideProfile": false
+      },
+      "player2": {
+        "personId": 66546,
+        "name": "Emil Ásmundsson",
+        "hideProfile": false
+      },
+      "homeTeam": true,
+      "teamOfficial": null
+    },
+    {
+      "eventId": 6518544,
+      "eventType": {
+        "fcdName": "SUBSTITUTION"
+      },
+      "displayMinute": "83'",
+      "orderNumber": 9,
+      "matchPhase": {
+        "fcdName": "SECOND_HALF"
+      },
+      "player": {
+        "personId": 84394,
+        "name": "Dwayne Atkinson",
+        "hideProfile": false
+      },
+      "player2": {
+        "personId": 51678,
+        "name": "Arnar Breki Gunnarsson",
+        "hideProfile": false
+      },
+      "homeTeam": false,
+      "teamOfficial": null
+    },
+    {
+      "eventId": 6518545,
+      "eventType": {
+        "fcdName": "SUBSTITUTION"
+      },
+      "displayMinute": "83'",
+      "orderNumber": 10,
+      "matchPhase": {
+        "fcdName": "SECOND_HALF"
+      },
+      "player": {
+        "personId": 83009,
+        "name": "Filip Valencic",
+        "hideProfile": false
+      },
+      "player2": {
+        "personId": 81399,
+        "name": "Sverrir Páll Hjaltested",
+        "hideProfile": false
+      },
+      "homeTeam": false,
+      "teamOfficial": null
+    },
+    {
+      "eventId": 6167543,
+      "eventType": {
+        "fcdName": "YELLOW"
+      },
+      "displayMinute": "87'",
+      "orderNumber": 11,
+      "matchPhase": {
+        "fcdName": "SECOND_HALF"
+      },
+      "player": {
+        "personId": 34702,
+        "name": "Orri Sveinn Segatta",
+        "hideProfile": false
+      },
+      "player2": null,
+      "homeTeam": true,
+      "teamOfficial": null
+    }
+  ]
+}

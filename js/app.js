@@ -653,10 +653,11 @@ const centerText = hasScore
     class="fixture-competition standings-trigger"
     type="button"
     onclick="openStandings(
-        '${cleanCompetitionName(game.competition).replace(/'/g, "\\'")}',
-        '${game.home.replace(/'/g, "\\'")}',
-        '${game.away.replace(/'/g, "\\'")}'
-    )"
+    '${cleanCompetitionName(game.competition).replace(/'/g, "\\'")}',
+    '${game.home.replace(/'/g, "\\'")}',
+    '${game.away.replace(/'/g, "\\'")}',
+    '${new Date(game.date).getFullYear()}'
+)"
 >
     <span class="standings-trigger-dot"></span>
     <span class="standings-trigger-text">
@@ -689,7 +690,8 @@ const centerText = hasScore
   (
     game.date?.startsWith("2026") ||
     game.date?.startsWith("2025") ||
-    game.date?.startsWith("2024")
+    game.date?.startsWith("2024") ||
+    game.date?.startsWith("2023")
 ) &&
 (
     game.status === "PLAYED" ||
@@ -877,6 +879,18 @@ if (search) {
     });
     console.log("2024 search games:", archive2024SearchGames.length);
     
+const archive2023SearchGames = gamesForDay
+    .filter(game => {
+        const gameDate = new Date(game.date);
+
+        return gameDate.getFullYear() === 2023;
+    })
+    .sort((firstGame, secondGame) => {
+        return new Date(secondGame.date) - new Date(firstGame.date);
+    });
+
+console.log("2023 search games:", archive2023SearchGames);
+
     const matchedProfileName =
     Object.keys(refereeProfiles).find(name =>
         name.toLowerCase() === search.toLowerCase()
@@ -1049,12 +1063,48 @@ const archive2024Section = archive2024SearchGames.length
     `
     : "";
 
+    const archive2023Section = archive2023SearchGames.length
+    ? `
+        <section class="search-timeline-section">
+
+            <button
+                class="search-year-toggle"
+                type="button"
+                data-search-year-toggle="2023"
+                aria-expanded="false"
+            >
+                <span class="search-year-label">
+                    2023
+                    <span class="search-year-count">
+                        ${archive2023SearchGames.length}
+                    </span>
+                </span>
+
+                <span class="search-year-chevron">⌄</span>
+            </button>
+
+            <div
+                class="search-year-games"
+                data-search-year="2023"
+                style="display: none;"
+            >
+                ${archive2023SearchGames
+                    .map(createGameCard)
+                    .join("")}
+            </div>
+
+        </section>
+    `
+    : "";
+
     gamesContainer.innerHTML =
     profileSection +
     upcomingSection +
     olderSection +
     archive2025Section +
-    archive2024Section;
+    archive2024Section +
+    archive2023Section;
+    
     
     updateGameCardResultsFromReports();
 
@@ -1416,10 +1466,11 @@ async function loadGames() {
 
         // 2. Load archive data AFTER first render
         const [
-            archiveResponse,
-            archive2025Response,
-            archive2024Response
-        ] = await Promise.all([
+    archiveResponse,
+    archive2025Response,
+    archive2024Response,
+    archive2023Response
+] = await Promise.all([
             fetch("data/archive.json", {
                 cache: "no-store"
             }),
@@ -1429,6 +1480,9 @@ async function loadGames() {
             }),
 
             fetch("data/archive-2024.json", {
+                cache: "no-store"
+            }),
+            fetch("data/archive-2023.json", {
                 cache: "no-store"
             })
         ]);
@@ -1451,10 +1505,16 @@ async function loadGames() {
             );
         }
 
+        if (!archive2023Response.ok) {
+    throw new Error(
+        `Archive 2023 HTTP error: ${archive2023Response.status}`
+    );
+}
+
         const archiveData = await archiveResponse.json();
         const archive2025Data = await archive2025Response.json();
         const archive2024Data = await archive2024Response.json();
-
+        const archive2023Data = await archive2023Response.json();
         archiveGames = Array.isArray(archiveData.games)
             ? archiveData.games
             : [];
@@ -1466,6 +1526,10 @@ async function loadGames() {
         const archive2024Games = Array.isArray(archive2024Data.games)
             ? archive2024Data.games
             : [];
+
+        const archive2023Games = Array.isArray(archive2023Data.games)
+    ? archive2023Data.games
+    : [];
 
         // 3. Merge everything once archives are ready
         const gamesById = new Map();
@@ -1487,6 +1551,12 @@ async function loadGames() {
                 gamesById.set(game.id, game);
             }
         });
+
+        archive2023Games.forEach(game => {
+    if (game.id !== null && game.id !== undefined) {
+        gamesById.set(game.id, game);
+    }
+});
 
         upcomingGames.forEach(game => {
             if (game.id !== null && game.id !== undefined) {

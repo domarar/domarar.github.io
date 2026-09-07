@@ -581,11 +581,12 @@ const competitionStatsHTML = Object.entries(competitionCounts)
         <span>Tímabilið</span>
 
         <select id="refereeSeasonSelect">
-            <option value="2026">2026</option>
-            <option value="2025">2025</option>
-            <option value="2024">2024</option>
-            <option value="all">Öll tímabil</option>
-        </select>
+    <option value="2026">2026</option>
+    <option value="2025">2025</option>
+    <option value="2024">2024</option>
+    <option value="2023">2023</option>
+    <option value="all">Öll tímabil</option>
+</select>
     </label>
 </div>
 
@@ -684,10 +685,24 @@ const referee2024Games = allGames.filter(game => {
         official => official.name === refereeName
     );
 });
+
+const referee2023Games = allGames.filter(game => {
+    const gameDate = new Date(game.date);
+
+    if (gameDate.getFullYear() !== 2023) {
+        return false;
+    }
+
+    return (game.officials || []).some(
+        official => official.name === refereeName
+    );
+});
+
 const refereeAllGames = [
     ...referee2026Games,
     ...referee2025Games,
-    ...referee2024Games
+    ...referee2024Games,
+    ...referee2023Games
 ];
 
 const selectedRefereeGames =
@@ -695,6 +710,8 @@ const selectedRefereeGames =
         ? referee2025Games
         : selectedSeason === "2024"
         ? referee2024Games
+        : selectedSeason === "2023"
+        ? referee2023Games
         : selectedSeason === "all"
         ? refereeAllGames
         : referee2026Games;
@@ -968,6 +985,30 @@ referee2024Games.forEach(game => {
             (competitionCounts2024[competition].roles[official.role] || 0) + 1;
     }
 });
+
+const competitionCounts2023 = {};
+
+referee2023Games.forEach(game => {
+    const competition = cleanCompetitionName(game.competition);
+
+    if (!competitionCounts2023[competition]) {
+        competitionCounts2023[competition] = {
+            total: 0,
+            roles: {}
+        };
+    }
+
+    const official = (game.officials || []).find(
+        official => official.name === refereeName
+    );
+
+    competitionCounts2023[competition].total += 1;
+
+    if (official) {
+        competitionCounts2023[competition].roles[official.role] =
+            (competitionCounts2023[competition].roles[official.role] || 0) + 1;
+    }
+});
     const roleLabels = {
     "Referee": "Dómari",
     "Dómari": "Dómari",
@@ -1081,6 +1122,21 @@ const competitionStats2024HTML = Object.entries(competitionCounts2024)
         </div>
     `)
     .join("");
+
+const competitionStats2023HTML = Object.entries(competitionCounts2023)
+    .sort(([, a], [, b]) => b.total - a.total)
+    .map(([competition, data]) => `
+        <div class="referee-competition-row">
+            <span class="referee-competition-name">
+                ${competition}
+            </span>
+
+            <strong class="referee-competition-count">
+                ${data.total}
+            </strong>
+        </div>
+    `)
+    .join("");
     const shareRoleStatsHTML = Object.entries(roleCounts)
     .sort(([roleA], [roleB]) => {
         return roleOrder.indexOf(roleA) - roleOrder.indexOf(roleB);
@@ -1164,11 +1220,12 @@ const competitionStats2024HTML = Object.entries(competitionCounts2024)
         <span>Tímabilið</span>
 
         <select id="refereeSeasonSelect">
-            <option value="2026">2026</option>
-            <option value="2025">2025</option>
-            <option value="2024">2024</option>
-            <option value="all">Öll tímabil</option>
-        </select>
+    <option value="2026">2026</option>
+    <option value="2025">2025</option>
+    <option value="2024">2024</option>
+    <option value="2023">2023</option>
+    <option value="all">Öll tímabil</option>
+</select>
     </label>
 </div>
         <div class="referee-profile-summary-v2">
@@ -1232,6 +1289,22 @@ const competitionStats2024HTML = Object.entries(competitionCounts2024)
     >
         ${competitionStats2024HTML}
     </div>
+
+    <button
+    type="button"
+    class="referee-history-toggle"
+    data-year="2023"
+>
+    2023 ↓
+</button>
+
+<div
+    class="referee-history-competitions"
+    data-history-year="2023"
+    hidden
+>
+    ${competitionStats2023HTML}
+</div>
 </div>
     <div class="referee-profile-actions-v2">
 

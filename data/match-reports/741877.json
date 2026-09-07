@@ -1,0 +1,942 @@
+{
+  "id": 741877,
+  "liveStatus": "PLAYED",
+  "currentMinute": "FT",
+  "dateTimeUTC": 1694718900000,
+  "round": "2",
+  "attendance": 210,
+  "competition": {
+    "id": 190172,
+    "name": "Besta deild kvenna 2023 - Efri hluti"
+  },
+  "facility": {
+    "name": "Samsungvöllurinn"
+  },
+  "homeTeam": {
+    "id": 5982,
+    "name": "Stjarnan",
+    "picture": "d588827d-21f1-42d7-83c9-15dd8ab4d294"
+  },
+  "awayTeam": {
+    "id": 5361,
+    "name": "Valur",
+    "picture": "ba78e821-0820-4358-bd59-8b3b5a96c1f4"
+  },
+  "homeTeamResult": {
+    "current": 1
+  },
+  "awayTeamResult": {
+    "current": 0
+  },
+  "lineups": {
+    "home": {
+      "players": [
+        {
+          "roleId": 3063020,
+          "personId": 75357,
+          "name": "Erin Katrina Mcleod",
+          "shortName": "Erin Katrina M.",
+          "shirtNumber": 83,
+          "starting": true,
+          "captain": false,
+          "position": "G",
+          "orderNumber": 1,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 3063044,
+          "personId": 6765,
+          "name": "Arna Dís Arnþórsdóttir",
+          "shortName": "Arna Dís A.",
+          "shirtNumber": 3,
+          "starting": true,
+          "captain": false,
+          "position": null,
+          "orderNumber": 2,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 3063050,
+          "personId": 31154,
+          "name": "Gunnhildur Yrsa Jónsdóttir",
+          "shortName": "Gunnhildur Yrsa J.",
+          "shirtNumber": 5,
+          "starting": true,
+          "captain": false,
+          "position": null,
+          "orderNumber": 3,
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 6304892,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 41982,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 31154,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": true
+            }
+          ]
+        },
+        {
+          "roleId": 3063042,
+          "personId": 4730,
+          "name": "Ingibjörg Lúcía Ragnarsdóttir",
+          "shortName": "Ingibjörg Lúcía R.",
+          "shirtNumber": 8,
+          "starting": true,
+          "captain": false,
+          "position": null,
+          "orderNumber": 4,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 3063038,
+          "personId": 36753,
+          "name": "Andrea Mist Pálsdóttir",
+          "shortName": "Andrea Mist P.",
+          "shirtNumber": 9,
+          "starting": true,
+          "captain": false,
+          "position": null,
+          "orderNumber": 5,
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 5719590,
+              "eventType": {
+                "fcdName": "GOAL"
+              },
+              "player": {
+                "personId": 36753,
+                "hideProfile": false
+              },
+              "player2": null,
+              "homeTeam": true
+            }
+          ]
+        },
+        {
+          "roleId": 3063036,
+          "personId": 76924,
+          "name": "Anna María Baldursdóttir",
+          "shortName": "Anna María B.",
+          "shirtNumber": 10,
+          "starting": true,
+          "captain": true,
+          "position": null,
+          "orderNumber": 6,
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 6121771,
+              "eventType": {
+                "fcdName": "YELLOW"
+              },
+              "player": {
+                "personId": 76924,
+                "hideProfile": false
+              },
+              "player2": null,
+              "homeTeam": true
+            }
+          ]
+        },
+        {
+          "roleId": 3063021,
+          "personId": 78685,
+          "name": "Betsy Doon Hassett",
+          "shortName": "Betsy Doon H.",
+          "shirtNumber": 11,
+          "starting": true,
+          "captain": false,
+          "position": null,
+          "orderNumber": 7,
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 6304893,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 12784,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 78685,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": true
+            }
+          ]
+        },
+        {
+          "roleId": 3063025,
+          "personId": 68406,
+          "name": "Sædís Rún Heiðarsdóttir",
+          "shortName": "Sædís Rún H.",
+          "shirtNumber": 16,
+          "starting": true,
+          "captain": false,
+          "position": null,
+          "orderNumber": 8,
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 6121772,
+              "eventType": {
+                "fcdName": "YELLOW"
+              },
+              "player": {
+                "personId": 68406,
+                "hideProfile": false
+              },
+              "player2": null,
+              "homeTeam": true
+            }
+          ]
+        },
+        {
+          "roleId": 3063043,
+          "personId": 76673,
+          "name": "Heiða Ragney Viðarsdóttir",
+          "shortName": "Heiða Ragney V.",
+          "shirtNumber": 21,
+          "starting": true,
+          "captain": false,
+          "position": null,
+          "orderNumber": 9,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 3063031,
+          "personId": 44879,
+          "name": "Gyða Kristín Gunnarsdóttir",
+          "shortName": "Gyða Kristín G.",
+          "shirtNumber": 23,
+          "starting": true,
+          "captain": false,
+          "position": null,
+          "orderNumber": 10,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 3063053,
+          "personId": 80794,
+          "name": "Málfríður Erna Sigurðardóttir",
+          "shortName": "Málfríður Erna S.",
+          "shirtNumber": 24,
+          "starting": true,
+          "captain": false,
+          "position": null,
+          "orderNumber": 11,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 3063030,
+          "personId": 50143,
+          "name": "Auður Sveinbjörnsdóttir Scheving",
+          "shortName": "Auður Sveinbjörnsdóttir S.",
+          "shirtNumber": 1,
+          "starting": false,
+          "captain": false,
+          "position": "G",
+          "orderNumber": 12,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 3063039,
+          "personId": 3745,
+          "name": "Sóley Guðmundsdóttir",
+          "shortName": "Sóley G.",
+          "shirtNumber": 2,
+          "starting": false,
+          "captain": false,
+          "position": null,
+          "orderNumber": 13,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 3063024,
+          "personId": 68407,
+          "name": "Eyrún Embla Hjartardóttir",
+          "shortName": "Eyrún Embla H.",
+          "shirtNumber": 4,
+          "starting": false,
+          "captain": false,
+          "position": null,
+          "orderNumber": 14,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 3063045,
+          "personId": 12784,
+          "name": "Hulda Hrund Arnarsdóttir",
+          "shortName": "Hulda Hrund A.",
+          "shirtNumber": 15,
+          "starting": false,
+          "captain": false,
+          "position": null,
+          "orderNumber": 15,
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 6304893,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 12784,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 78685,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": true
+            }
+          ]
+        },
+        {
+          "roleId": 3063040,
+          "personId": 4314,
+          "name": "María Sól Jakobsdóttir",
+          "shortName": "María Sól J.",
+          "shirtNumber": 17,
+          "starting": false,
+          "captain": false,
+          "position": null,
+          "orderNumber": 16,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 3063034,
+          "personId": 41982,
+          "name": "Jasmín Erla Ingadóttir",
+          "shortName": "Jasmín Erla I.",
+          "shirtNumber": 18,
+          "starting": false,
+          "captain": false,
+          "position": null,
+          "orderNumber": 17,
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 6304892,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 41982,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 31154,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": true
+            }
+          ]
+        },
+        {
+          "roleId": 3063026,
+          "personId": 61102,
+          "name": "Hrefna Jónsdóttir",
+          "shortName": "Hrefna J.",
+          "shirtNumber": 19,
+          "starting": false,
+          "captain": false,
+          "position": null,
+          "orderNumber": 18,
+          "hideProfile": false,
+          "events": []
+        }
+      ]
+    },
+    "away": {
+      "players": [
+        {
+          "roleId": 3063022,
+          "personId": 80537,
+          "name": "Fanney Inga Birkisdóttir",
+          "shortName": "Fanney Inga B.",
+          "shirtNumber": 1,
+          "starting": true,
+          "captain": false,
+          "position": "G",
+          "orderNumber": 1,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 3063018,
+          "personId": 84451,
+          "name": "Laura Frank",
+          "shortName": "Laura F.",
+          "shirtNumber": 2,
+          "starting": true,
+          "captain": false,
+          "position": null,
+          "orderNumber": 2,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 3063048,
+          "personId": 26054,
+          "name": "Arna Sif Ásgrímsdóttir",
+          "shortName": "Arna Sif Á.",
+          "shirtNumber": 4,
+          "starting": true,
+          "captain": false,
+          "position": null,
+          "orderNumber": 3,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 3063035,
+          "personId": 33736,
+          "name": "Lára Kristín Pedersen",
+          "shortName": "Lára Kristín P.",
+          "shirtNumber": 6,
+          "starting": true,
+          "captain": false,
+          "position": null,
+          "orderNumber": 4,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 3063041,
+          "personId": 3753,
+          "name": "Ásdís Karen Halldórsdóttir",
+          "shortName": "Ásdís Karen H.",
+          "shirtNumber": 8,
+          "starting": true,
+          "captain": false,
+          "position": null,
+          "orderNumber": 5,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 3063027,
+          "personId": 57425,
+          "name": "Amanda Jacobsen Andradóttir",
+          "shortName": "Amanda Jacobsen A.",
+          "shirtNumber": 9,
+          "starting": true,
+          "captain": false,
+          "position": null,
+          "orderNumber": 6,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 3063046,
+          "personId": 20931,
+          "name": "Berglind Rós Ágústsdóttir",
+          "shortName": "Berglind Rós Á.",
+          "shirtNumber": 10,
+          "starting": true,
+          "captain": false,
+          "position": null,
+          "orderNumber": 7,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 3063047,
+          "personId": 18341,
+          "name": "Rebekka Sverrisdóttir",
+          "shortName": "Rebekka S.",
+          "shirtNumber": 14,
+          "starting": true,
+          "captain": false,
+          "position": null,
+          "orderNumber": 8,
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 6304891,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 45106,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 18341,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": false
+            }
+          ]
+        },
+        {
+          "roleId": 3063033,
+          "personId": 39676,
+          "name": "Þórdís Elva Ágústsdóttir",
+          "shortName": "Þórdís Elva Á.",
+          "shirtNumber": 16,
+          "starting": true,
+          "captain": false,
+          "position": null,
+          "orderNumber": 9,
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 6304890,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 86011,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 39676,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": false
+            }
+          ]
+        },
+        {
+          "roleId": 3063037,
+          "personId": 34245,
+          "name": "Málfríður Anna Eiríksdóttir",
+          "shortName": "Málfríður Anna E.",
+          "shirtNumber": 18,
+          "starting": true,
+          "captain": true,
+          "position": null,
+          "orderNumber": 10,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 3063051,
+          "personId": 27167,
+          "name": "Fanndís Friðriksdóttir",
+          "shortName": "Fanndís F.",
+          "shirtNumber": 23,
+          "starting": true,
+          "captain": false,
+          "position": null,
+          "orderNumber": 11,
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 6304889,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 68282,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 27167,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": false
+            }
+          ]
+        },
+        {
+          "roleId": 3063052,
+          "personId": 31345,
+          "name": "Sandra Sigurðardóttir",
+          "shortName": "Sandra S.",
+          "shirtNumber": 12,
+          "starting": false,
+          "captain": false,
+          "position": "G",
+          "orderNumber": 12,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 3063019,
+          "personId": 84510,
+          "name": "Lise Dissing",
+          "shortName": "Lise D.",
+          "shirtNumber": 13,
+          "starting": false,
+          "captain": false,
+          "position": null,
+          "orderNumber": 13,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 3063029,
+          "personId": 86011,
+          "name": "Bryndís Arna Níelsdóttir",
+          "shortName": "Bryndís Arna N.",
+          "shirtNumber": 19,
+          "starting": false,
+          "captain": false,
+          "position": null,
+          "orderNumber": 14,
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 6304890,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 86011,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 39676,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": false
+            }
+          ]
+        },
+        {
+          "roleId": 3063032,
+          "personId": 45106,
+          "name": "Guðrún Elísabet Björgvinsdóttir",
+          "shortName": "Guðrún Elísabet B.",
+          "shirtNumber": 22,
+          "starting": false,
+          "captain": false,
+          "position": null,
+          "orderNumber": 15,
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 6304891,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 45106,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 18341,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": false
+            }
+          ]
+        },
+        {
+          "roleId": 3063023,
+          "personId": 68282,
+          "name": "Ísabella Sara Tryggvadóttir",
+          "shortName": "Ísabella Sara T.",
+          "shirtNumber": 24,
+          "starting": false,
+          "captain": false,
+          "position": null,
+          "orderNumber": 16,
+          "hideProfile": false,
+          "events": [
+            {
+              "eventId": 6304889,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 68282,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 27167,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": false
+            },
+            {
+              "eventId": 6121773,
+              "eventType": {
+                "fcdName": "YELLOW"
+              },
+              "player": {
+                "personId": 68282,
+                "hideProfile": false
+              },
+              "player2": null,
+              "homeTeam": false
+            }
+          ]
+        },
+        {
+          "roleId": 3063028,
+          "personId": 49560,
+          "name": "Sigríður Theód. Guðmundsdóttir",
+          "shortName": "Sigríður Theód. G.",
+          "shirtNumber": 26,
+          "starting": false,
+          "captain": false,
+          "position": null,
+          "orderNumber": 17,
+          "hideProfile": false,
+          "events": []
+        },
+        {
+          "roleId": 3063049,
+          "personId": 28296,
+          "name": "Anna Björk Kristjánsdóttir",
+          "shortName": "Anna Björk K.",
+          "shirtNumber": 29,
+          "starting": false,
+          "captain": false,
+          "position": null,
+          "orderNumber": 18,
+          "hideProfile": false,
+          "events": []
+        }
+      ]
+    }
+  },
+  "events": [
+    {
+      "eventId": 5719590,
+      "eventType": {
+        "fcdName": "GOAL"
+      },
+      "displayMinute": "38'",
+      "orderNumber": 1,
+      "matchPhase": {
+        "fcdName": "FIRST_HALF"
+      },
+      "player": {
+        "personId": 36753,
+        "name": "Andrea Mist Pálsdóttir",
+        "hideProfile": false
+      },
+      "player2": null,
+      "homeTeam": true,
+      "teamOfficial": null
+    },
+    {
+      "eventId": 6304892,
+      "eventType": {
+        "fcdName": "SUBSTITUTION"
+      },
+      "displayMinute": "43'",
+      "orderNumber": 2,
+      "matchPhase": {
+        "fcdName": "FIRST_HALF"
+      },
+      "player": {
+        "personId": 41982,
+        "name": "Jasmín Erla Ingadóttir",
+        "hideProfile": false
+      },
+      "player2": {
+        "personId": 31154,
+        "name": "Gunnhildur Yrsa Jónsdóttir",
+        "hideProfile": false
+      },
+      "homeTeam": true,
+      "teamOfficial": null
+    },
+    {
+      "eventId": 6304893,
+      "eventType": {
+        "fcdName": "SUBSTITUTION"
+      },
+      "displayMinute": "59'",
+      "orderNumber": 3,
+      "matchPhase": {
+        "fcdName": "SECOND_HALF"
+      },
+      "player": {
+        "personId": 12784,
+        "name": "Hulda Hrund Arnarsdóttir",
+        "hideProfile": false
+      },
+      "player2": {
+        "personId": 78685,
+        "name": "Betsy Doon Hassett",
+        "hideProfile": false
+      },
+      "homeTeam": true,
+      "teamOfficial": null
+    },
+    {
+      "eventId": 6304889,
+      "eventType": {
+        "fcdName": "SUBSTITUTION"
+      },
+      "displayMinute": "65'",
+      "orderNumber": 4,
+      "matchPhase": {
+        "fcdName": "SECOND_HALF"
+      },
+      "player": {
+        "personId": 68282,
+        "name": "Ísabella Sara Tryggvadóttir",
+        "hideProfile": false
+      },
+      "player2": {
+        "personId": 27167,
+        "name": "Fanndís Friðriksdóttir",
+        "hideProfile": false
+      },
+      "homeTeam": false,
+      "teamOfficial": null
+    },
+    {
+      "eventId": 6304890,
+      "eventType": {
+        "fcdName": "SUBSTITUTION"
+      },
+      "displayMinute": "65'",
+      "orderNumber": 5,
+      "matchPhase": {
+        "fcdName": "SECOND_HALF"
+      },
+      "player": {
+        "personId": 86011,
+        "name": "Bryndís Arna Níelsdóttir",
+        "hideProfile": false
+      },
+      "player2": {
+        "personId": 39676,
+        "name": "Þórdís Elva Ágústsdóttir",
+        "hideProfile": false
+      },
+      "homeTeam": false,
+      "teamOfficial": null
+    },
+    {
+      "eventId": 6121773,
+      "eventType": {
+        "fcdName": "YELLOW"
+      },
+      "displayMinute": "67'",
+      "orderNumber": 6,
+      "matchPhase": {
+        "fcdName": "SECOND_HALF"
+      },
+      "player": {
+        "personId": 68282,
+        "name": "Ísabella Sara Tryggvadóttir",
+        "hideProfile": false
+      },
+      "player2": null,
+      "homeTeam": false,
+      "teamOfficial": null
+    },
+    {
+      "eventId": 6121771,
+      "eventType": {
+        "fcdName": "YELLOW"
+      },
+      "displayMinute": "71'",
+      "orderNumber": 7,
+      "matchPhase": {
+        "fcdName": "SECOND_HALF"
+      },
+      "player": {
+        "personId": 76924,
+        "name": "Anna María Baldursdóttir",
+        "hideProfile": false
+      },
+      "player2": null,
+      "homeTeam": true,
+      "teamOfficial": null
+    },
+    {
+      "eventId": 6121772,
+      "eventType": {
+        "fcdName": "YELLOW"
+      },
+      "displayMinute": "85'",
+      "orderNumber": 8,
+      "matchPhase": {
+        "fcdName": "SECOND_HALF"
+      },
+      "player": {
+        "personId": 68406,
+        "name": "Sædís Rún Heiðarsdóttir",
+        "hideProfile": false
+      },
+      "player2": null,
+      "homeTeam": true,
+      "teamOfficial": null
+    },
+    {
+      "eventId": 6304891,
+      "eventType": {
+        "fcdName": "SUBSTITUTION"
+      },
+      "displayMinute": "88'",
+      "orderNumber": 9,
+      "matchPhase": {
+        "fcdName": "SECOND_HALF"
+      },
+      "player": {
+        "personId": 45106,
+        "name": "Guðrún Elísabet Björgvinsdóttir",
+        "hideProfile": false
+      },
+      "player2": {
+        "personId": 18341,
+        "name": "Rebekka Sverrisdóttir",
+        "hideProfile": false
+      },
+      "homeTeam": false,
+      "teamOfficial": null
+    },
+    {
+      "eventId": 6184746,
+      "eventType": {
+        "fcdName": "YELLOW"
+      },
+      "displayMinute": "90+3'",
+      "orderNumber": 10,
+      "matchPhase": {
+        "fcdName": "SECOND_HALF"
+      },
+      "player": null,
+      "player2": null,
+      "homeTeam": true,
+      "teamOfficial": {
+        "personId": 23190,
+        "name": "Andri Freyr Hafsteinsson",
+        "shortName": "Andri Freyr H."
+      }
+    }
+  ]
+}

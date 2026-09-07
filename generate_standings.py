@@ -1,3 +1,4 @@
+import sys
 import json
 import re
 from pathlib import Path
@@ -6,10 +7,27 @@ from datetime import datetime, timezone, timedelta
 
 from competition_rules import COMPETITION_RULES
 
-ARCHIVE_FILE = Path("data/archive-2026.json")
-CURRENT_GAMES_FILE = Path("data/games.json")
-SPLIT_FIXTURES_FILE = Path("data/archive.json")
-OUTPUT_FILE = Path("data/standings.json")
+YEAR = sys.argv[1] if len(sys.argv) > 1 else "2026"
+
+ARCHIVE_FILE = Path(f"data/archive-{YEAR}.json")
+
+CURRENT_GAMES_FILE = (
+    Path("data/games.json")
+    if YEAR == "2026"
+    else None
+)
+
+SPLIT_FIXTURES_FILE = (
+    Path("data/archive.json")
+    if YEAR == "2026"
+    else None
+)
+
+OUTPUT_FILE = (
+    Path("data/standings.json")
+    if YEAR == "2026"
+    else Path(f"data/standings-{YEAR}.json")
+)
 
 
 def clean_competition_name(name):
@@ -103,7 +121,7 @@ def load_all_games():
 
     # Fresh games from the automatic KSÍ update.
     # These overwrite archive versions of the same match.
-    if CURRENT_GAMES_FILE.exists():
+    if CURRENT_GAMES_FILE and CURRENT_GAMES_FILE.exists():
         with open(CURRENT_GAMES_FILE, "r", encoding="utf-8") as f:
             current_data = json.load(f)
 
@@ -116,7 +134,7 @@ def load_all_games():
     return list(games_by_id.values())
 
 def load_split_fixture_games():
-    if not SPLIT_FIXTURES_FILE.exists():
+    if not SPLIT_FIXTURES_FILE or not SPLIT_FIXTURES_FILE.exists():
         return []
 
     with open(

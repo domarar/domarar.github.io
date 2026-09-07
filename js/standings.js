@@ -77,22 +77,27 @@ const standingsRules = {
 }
 };
 
-let standingsData = null;
+const standingsDataByYear = {};
 
-async function loadStandingsData() {
-    if (standingsData) {
-        return standingsData;
+async function loadStandingsData(year = "2026") {
+    if (standingsDataByYear[year]) {
+        return standingsDataByYear[year];
     }
 
-    const response = await fetch("data/standings.json");
+    const file =
+        year === "2026"
+            ? "data/standings.json"
+            : `data/standings-${year}.json`;
+
+    const response = await fetch(file);
 
     if (!response.ok) {
         throw new Error("Could not load standings data");
     }
 
-    standingsData = await response.json();
+    standingsDataByYear[year] = await response.json();
 
-    return standingsData;
+return standingsDataByYear[year];
 }
 
 function closeStandings() {
@@ -108,9 +113,9 @@ function closeStandings() {
     }, 280);
 }
 
-async function openStandings(competition, homeTeam, awayTeam) {
+async function openStandings(competition, homeTeam, awayTeam, year = "2026") {
     try {
-        const data = await loadStandingsData();
+        const data = await loadStandingsData(year);
 
         const standingsCompetition = competition
             .replace("Íslandsmót KSÍ - ", "")
