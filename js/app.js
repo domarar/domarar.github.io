@@ -2395,8 +2395,6 @@ document.addEventListener("touchend", () => {
 updateDateTabs();
 loadGames();
 
-updateDateTabs();
-loadGames();
 document.addEventListener("click", async event => {
     const shareButton =
         event.target.closest(".referee-share-button");
