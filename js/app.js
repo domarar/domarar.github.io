@@ -1106,7 +1106,7 @@ const archive2024Section = archive2024SearchGames.length
     archive2023Section;
     
     
-    updateGameCardResultsFromReports();
+    // updateGameCardResultsFromReports();
 
     const showMoreButton =
     gamesContainer.querySelector(".show-more-search-games");
@@ -1435,6 +1435,9 @@ gamesContainer.addEventListener("touchend", event => {
     renderGamesForSelectedDay();
 }, { passive: true });
 
+let loadArchives = null;
+let archivesLoaded = false;
+
 // =====================================
 // LOAD REAL GAME DATA
 // =====================================
@@ -1463,6 +1466,14 @@ async function loadGames() {
         // Render the page NOW
         renderGamesForSelectedDay();
 
+        loadArchives = async function() {
+        
+            if (archivesLoaded) {
+                return;
+            }
+
+            archivesLoaded = true;
+
 
         // 2. Load archive data AFTER first render
         const [
@@ -1471,21 +1482,11 @@ async function loadGames() {
     archive2024Response,
     archive2023Response
 ] = await Promise.all([
-            fetch("data/archive.json", {
-                cache: "no-store"
-            }),
-
-            fetch("data/archive-2025.json", {
-                cache: "no-store"
-            }),
-
-            fetch("data/archive-2024.json", {
-                cache: "no-store"
-            }),
-            fetch("data/archive-2023.json", {
-                cache: "no-store"
-            })
-        ]);
+    fetch("data/archive.json"),
+    fetch("data/archive-2025.json"),
+    fetch("data/archive-2024.json"),
+    fetch("data/archive-2023.json")
+]);
 
         if (!archiveResponse.ok) {
             throw new Error(
@@ -1566,6 +1567,8 @@ async function loadGames() {
 
         allGames = Array.from(gamesById.values());
 
+        }
+
     } catch (error) {
         console.error(
             "Villa við að sækja leiki og skjalasafn:",
@@ -1631,68 +1634,176 @@ document.addEventListener("click", event => {
         );
     }
 });
-searchInput.addEventListener("input", () => {
-    const search = searchInput.value.trim();
-        if (isSmartSearchQuestion(search)) {
-        const parsed = parseSmartSearchQuestion(search);
 
-        if (parsed) {
-            const game = findLatestRefereeTeamGame(
-                parsed.referee,
-                parsed.team
+searchInput.addEventListener("focus", () => {
+    if (loadArchives !== null) {
+        loadArchives();
+    }
+});
+
+
+let searchDebounceTimer = null;
+
+
+searchInput.addEventListener("input", () => {
+
+    clearTimeout(searchDebounceTimer);
+
+    searchDebounceTimer = setTimeout(async () => {
+
+        const search =
+            searchInput.value.trim();
+
+
+        if (
+            search !== "" &&
+            loadArchives !== null
+        ) {
+
+            await loadArchives();
+        }
+
+
+        // -----------------------------------------
+        // SMART SEARCH
+        // -----------------------------------------
+
+        if (
+            isSmartSearchQuestion(search)
+        ) {
+
+            const parsed =
+                parseSmartSearchQuestion(search);
+
+
+            if (parsed) {
+
+                const game =
+                    findLatestRefereeTeamGame(
+                        parsed.referee,
+                        parsed.team
+                    );
+
+
+                if (game) {
+
+                    renderGamesForSelectedDay(
+                        game
+                    );
+
+                    return;
+                }
+            }
+        }
+
+
+        // -----------------------------------------
+        // SEARCH CLEAR BUTTON
+        // -----------------------------------------
+
+        searchClear.hidden =
+            search === "";
+
+
+        // -----------------------------------------
+        // SUGGESTIONS
+        // -----------------------------------------
+
+        const suggestions =
+            getRefereeSuggestions(
+                search
             );
 
-            if (game) {
-    renderGamesForSelectedDay(game);
-    return;
-}
-        }
-    }
-  searchClear.hidden = search === "";
-    const suggestions = getRefereeSuggestions(search);
 
-if (suggestions.length === 0) {
-    searchSuggestions.hidden = true;
-    searchSuggestions.innerHTML = "";
-    searchBackdrop.hidden = true;
-} else {
-    searchSuggestions.innerHTML = suggestions
-        .map(name => `
-            <button
-                type="button"
-                class="search-suggestion"
-                data-name="${name}"
-            >
-                ${name}
-            </button>
-        `)
-        .join("");
+        if (
+            suggestions.length === 0
+        ) {
 
-    searchSuggestions.hidden = false;
-    searchBackdrop.hidden = false;
-}
+            searchSuggestions.hidden =
+                true;
 
-    if (search) {
-    if (activeDayBeforeSearch === null) {
-  activeDayBeforeSearch = [...dateTabs].findIndex(tab =>
-    tab.classList.contains("active")
-  );
-}
+            searchSuggestions.innerHTML =
+                "";
+
+            searchBackdrop.hidden =
+                true;
 
         } else {
 
-  dateTabs.forEach(tab => {
-    tab.classList.remove("active");
-  });
+            searchSuggestions.innerHTML =
+                suggestions
+                    .map(name => `
+                        <button
+                            type="button"
+                            class="search-suggestion"
+                            data-name="${name}"
+                        >
+                            ${name}
+                        </button>
+                    `)
+                    .join("");
 
-  if (activeDayBeforeSearch !== null && activeDayBeforeSearch >= 0) {
-    dateTabs[activeDayBeforeSearch].classList.add("active");
-  }
 
-  activeDayBeforeSearch = null;
-}
+            searchSuggestions.hidden =
+                false;
 
-    renderGamesForSelectedDay();
+            searchBackdrop.hidden =
+                false;
+        }
+
+
+        // -----------------------------------------
+        // ACTIVE DAY STATE
+        // -----------------------------------------
+
+        if (search) {
+
+            if (
+                activeDayBeforeSearch === null
+            ) {
+
+                activeDayBeforeSearch =
+                    [...dateTabs]
+                        .findIndex(
+                            tab =>
+                                tab.classList.contains(
+                                    "active"
+                                )
+                        );
+            }
+
+        } else {
+
+            dateTabs.forEach(
+                tab => {
+                    tab.classList.remove(
+                        "active"
+                    );
+                }
+            );
+
+
+            if (
+                activeDayBeforeSearch !== null &&
+                activeDayBeforeSearch >= 0
+            ) {
+
+                dateTabs[
+                    activeDayBeforeSearch
+                ].classList.add(
+                    "active"
+                );
+            }
+
+
+            activeDayBeforeSearch =
+                null;
+        }
+
+
+        renderGamesForSelectedDay();
+
+    }, 220);
 });
 searchSuggestions.addEventListener("click", event => {
     const button = event.target.closest(".search-suggestion");
