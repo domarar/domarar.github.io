@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-12T12:56:05.465258+00:00",
+  "updatedAt": "2026-09-12T15:58:06.702341+00:00",
   "date": "2026-09-12",
   "dateFrom": "2026-09-10",
   "dateTo": "2026-09-18",
@@ -248,10 +248,10 @@
       "homeLogo": "https://comet.ksi.is/file?id=136d36fc-4974-41ee-b024-5619d18c5459",
       "awayLogo": "https://comet.ksi.is/file?id=cad0532d-7f44-451d-9f9d-a60709971230",
       "facility": "KR-völlur",
-      "status": "SCHEDULED",
+      "status": "PLAYED",
       "liveStatus": null,
-      "homeScore": null,
-      "awayScore": null,
+      "homeScore": 0,
+      "awayScore": 7,
       "officials": [
         {
           "personId": 19925,
@@ -283,10 +283,10 @@
       "homeLogo": "https://comet.ksi.is/file?id=cb661b78-41d9-44fe-9a68-213dd17b5623",
       "awayLogo": "https://comet.ksi.is/file?id=5afa29d4-a7bd-472a-93be-ce649fab8af5",
       "facility": "Kórinn",
-      "status": "SCHEDULED",
-      "liveStatus": "NA",
-      "homeScore": null,
-      "awayScore": null,
+      "status": "PLAYED",
+      "liveStatus": "FULL_TIME",
+      "homeScore": 4,
+      "awayScore": 0,
       "officials": [
         {
           "personId": 52133,
@@ -320,8 +320,8 @@
       "facility": "tekk VÖLLURINN",
       "status": "SCHEDULED",
       "liveStatus": "NA",
-      "homeScore": null,
-      "awayScore": null,
+      "homeScore": 1,
+      "awayScore": 0,
       "officials": [
         {
           "personId": 83403,
@@ -353,10 +353,10 @@
       "homeLogo": "https://comet.ksi.is/file?id=a42fe67b-0c8e-472e-92ae-6c776f936b1d",
       "awayLogo": "https://comet.ksi.is/file?id=d6937a22-320d-4167-a3fa-4d3e34f433c4",
       "facility": "Extra völlurinn",
-      "status": "SCHEDULED",
-      "liveStatus": null,
-      "homeScore": null,
-      "awayScore": null,
+      "status": "PLAYED",
+      "liveStatus": "FULL_TIME",
+      "homeScore": 3,
+      "awayScore": 3,
       "officials": [
         {
           "personId": 27953,
@@ -425,8 +425,8 @@
       "facility": "Vivaldivöllurinn",
       "status": "SCHEDULED",
       "liveStatus": null,
-      "homeScore": null,
-      "awayScore": null,
+      "homeScore": 1,
+      "awayScore": 3,
       "officials": [
         {
           "personId": 79535,
@@ -460,8 +460,8 @@
       "facility": "Fjarðabyggðarhöllin",
       "status": "SCHEDULED",
       "liveStatus": null,
-      "homeScore": null,
-      "awayScore": null,
+      "homeScore": 1,
+      "awayScore": 1,
       "officials": [
         {
           "personId": 19143,
@@ -653,8 +653,8 @@
       "facility": "Ólafsvíkurvöllur",
       "status": "SCHEDULED",
       "liveStatus": null,
-      "homeScore": null,
-      "awayScore": null,
+      "homeScore": 4,
+      "awayScore": 0,
       "officials": [
         {
           "personId": 25433,
@@ -811,8 +811,8 @@
       "facility": "Sauðárkróksvöllur",
       "status": "SCHEDULED",
       "liveStatus": null,
-      "homeScore": null,
-      "awayScore": null,
+      "homeScore": 1,
+      "awayScore": 2,
       "officials": [
         {
           "personId": 20621,
@@ -846,8 +846,8 @@
       "facility": "Brons völlurinn",
       "status": "SCHEDULED",
       "liveStatus": null,
-      "homeScore": null,
-      "awayScore": null,
+      "homeScore": 1,
+      "awayScore": 0,
       "officials": [
         {
           "personId": 37518,
@@ -881,8 +881,8 @@
       "facility": "Rafey-völlurinn",
       "status": "SCHEDULED",
       "liveStatus": null,
-      "homeScore": null,
-      "awayScore": null,
+      "homeScore": 4,
+      "awayScore": 2,
       "officials": [
         {
           "personId": 64785,
@@ -986,8 +986,8 @@
       "facility": "Helluvöllur",
       "status": "SCHEDULED",
       "liveStatus": null,
-      "homeScore": null,
-      "awayScore": null,
+      "homeScore": 0,
+      "awayScore": 1,
       "officials": [
         {
           "personId": 86119,
@@ -1020,7 +1020,7 @@
       "awayLogo": "https://comet.ksi.is/file?id=84fb0756-2829-4c67-ba34-98303709ba3e",
       "facility": "Laugardalsvöllur",
       "status": "SCHEDULED",
-      "liveStatus": null,
+      "liveStatus": "NA",
       "homeScore": null,
       "awayScore": null,
       "officials": [
@@ -1059,6 +1059,12 @@
           "name": "Tijana Krstic",
           "role": null,
           "orderNumber": 6
+        },
+        {
+          "personId": 5897,
+          "name": "Bryndís Sigurðardóttir",
+          "role": "Match Delegate",
+          "orderNumber": 7
         }
       ]
     },
