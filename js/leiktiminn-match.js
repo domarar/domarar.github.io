@@ -3,20 +3,24 @@ const matchTitle =
         "match-title"
     );
 
+
 const matchSubtitle =
     document.getElementById(
         "match-subtitle"
     );
+
 
 const matchDetails =
     document.getElementById(
         "match-details"
     );
 
+
 const matchFitness =
     document.getElementById(
         "match-fitness"
     );
+
 
 const matchGarminEmpty =
     document.getElementById(
@@ -32,6 +36,7 @@ const params =
     new URLSearchParams(
         window.location.search
     );
+
 
 const matchId =
     params.get("id");
@@ -378,6 +383,22 @@ function renderMatchIntro(
 
         subtitleParts.push(
             match.venue
+        );
+    }
+
+
+    // =========================================
+    // ACTUAL PLAYING TIME
+    // =========================================
+
+    if (
+        match.totalElapsedSeconds > 0
+    ) {
+
+        subtitleParts.push(
+            `Leiktími ${formatPlayingTime(
+                match.totalElapsedSeconds
+            )}`
         );
     }
 
@@ -767,6 +788,47 @@ function formatKm(
         .toFixed(
             2
         );
+}
+
+
+// =========================================
+// PLAYING TIME
+// =========================================
+
+function formatPlayingTime(
+    totalSeconds
+) {
+
+    const value =
+        Math.max(
+            0,
+            Math.floor(
+                Number(
+                    totalSeconds ?? 0
+                )
+            )
+        );
+
+
+    const minutes =
+        Math.floor(
+            value / 60
+        );
+
+
+    const seconds =
+        value % 60;
+
+
+    const secondsText =
+        seconds < 10
+            ? `0${seconds}`
+            : String(
+                seconds
+            );
+
+
+    return `${minutes}:${secondsText}`;
 }
 
 
