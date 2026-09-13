@@ -261,6 +261,97 @@ const cancelGarminPairingButton =
         "cancelGarminPairingButton"
     );
 
+
+let forgetGarminButton =
+    document.getElementById(
+        "forgetGarminButton"
+    );
+
+
+let garminDeviceActions =
+    document.getElementById(
+        "garminDeviceActions"
+    );
+
+
+function ensureGarminDeviceActions() {
+
+    if (!connectGarminButton) {
+
+        return;
+    }
+
+
+    if (!garminDeviceActions) {
+
+        garminDeviceActions =
+            document.createElement(
+                "div"
+            );
+
+        garminDeviceActions.id =
+            "garminDeviceActions";
+
+        garminDeviceActions.style.display =
+            "flex";
+
+        garminDeviceActions.style.alignItems =
+            "center";
+
+        garminDeviceActions.style.gap =
+            "8px";
+
+        garminDeviceActions.style.flexWrap =
+            "wrap";
+
+        garminDeviceActions.style.marginTop =
+            "2px";
+
+
+        connectGarminButton.parentNode.insertBefore(
+            garminDeviceActions,
+            connectGarminButton
+        );
+
+
+        garminDeviceActions.appendChild(
+            connectGarminButton
+        );
+    }
+
+
+    if (!forgetGarminButton) {
+
+        forgetGarminButton =
+            document.createElement(
+                "button"
+            );
+
+        forgetGarminButton.id =
+            "forgetGarminButton";
+
+        forgetGarminButton.type =
+            "button";
+
+        forgetGarminButton.className =
+            "profile-button-secondary";
+
+        forgetGarminButton.textContent =
+            "Aftengja úr";
+
+        forgetGarminButton.hidden =
+            true;
+
+
+        garminDeviceActions.appendChild(
+            forgetGarminButton
+        );
+    }
+}
+
+
+ensureGarminDeviceActions();
+
 // =========================================
 // STATE
 // =========================================
@@ -280,6 +371,10 @@ let currentProfile =
     null;
 
 let currentPairingCodeId =
+    null;
+
+
+let currentGarminDevice =
     null;
 
 // =========================================
@@ -2167,6 +2262,7 @@ async function loadGarminStatus() {
         return;
     }
 
+
     const {
         data,
         error
@@ -2197,6 +2293,7 @@ async function loadGarminStatus() {
                 1
             );
 
+
     if (error) {
 
         console.error(
@@ -2204,20 +2301,39 @@ async function loadGarminStatus() {
             error
         );
 
+
+        currentGarminDevice =
+            null;
+
+
         if (garminConnectionStatus) {
 
             garminConnectionStatus.textContent =
                 "Ekki tengt";
         }
 
+
+        if (forgetGarminButton) {
+
+            forgetGarminButton.hidden =
+                true;
+        }
+
+
         return;
     }
+
 
     const device =
         data
         && data.length
             ? data[0]
             : null;
+
+
+    currentGarminDevice =
+        device;
+
 
     if (device) {
 
@@ -2229,11 +2345,26 @@ async function loadGarminStatus() {
                 || "Garmin úr tengt";
         }
 
+
         if (connectGarminButton) {
 
             connectGarminButton.textContent =
                 "Tengja annað úr";
         }
+
+
+        if (forgetGarminButton) {
+
+            forgetGarminButton.hidden =
+                false;
+
+            forgetGarminButton.disabled =
+                false;
+
+            forgetGarminButton.textContent =
+                "Gleyma úri";
+        }
+
 
         hideGarminPairingBox();
 
@@ -2245,15 +2376,191 @@ async function loadGarminStatus() {
                 "Ekki tengt";
         }
 
+
         if (connectGarminButton) {
 
             connectGarminButton.textContent =
                 "Tengja Garmin úr";
         }
 
+
+        if (forgetGarminButton) {
+
+            forgetGarminButton.hidden =
+                true;
+
+            forgetGarminButton.disabled =
+                false;
+
+            forgetGarminButton.textContent =
+                "Gleyma úri";
+        }
+
+
         await restoreActivePairingCode();
     }
 }
+
+
+async function forgetGarminDevice() {
+
+    if (
+        !currentUser
+        || !currentGarminDevice
+    ) {
+
+        return;
+    }
+
+
+    const deviceLabel =
+        currentGarminDevice.device_name
+        || currentGarminDevice.device_model
+        || "Garmin úrið";
+
+
+    const confirmed =
+        window.confirm(
+            `Gleyma ${deviceLabel}? Gamla úrið mun ekki lengur geta samstillt við Leiktímann.`
+        );
+
+
+    if (!confirmed) {
+
+        return;
+    }
+
+
+    if (forgetGarminButton) {
+
+        forgetGarminButton.disabled =
+            true;
+
+        forgetGarminButton.textContent =
+            "Aftengi...";
+    }
+
+
+    if (connectGarminButton) {
+
+        connectGarminButton.disabled =
+            true;
+    }
+
+
+    const deviceId =
+        currentGarminDevice.id;
+
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from(
+                "garmin_devices"
+            )
+            .update({
+                is_active:
+                    false
+            })
+            .eq(
+                "id",
+                deviceId
+            )
+            .eq(
+                "user_id",
+                currentUser.id
+            );
+
+
+    if (error) {
+
+        console.error(
+            "Forget Garmin device error:",
+            error
+        );
+
+
+        if (garminConnectionStatus) {
+
+            garminConnectionStatus.textContent =
+                "Ekki tókst að gleyma úrinu";
+        }
+
+
+        if (forgetGarminButton) {
+
+            forgetGarminButton.disabled =
+                false;
+
+            forgetGarminButton.textContent =
+                "Gleyma úri";
+        }
+
+
+        if (connectGarminButton) {
+
+            connectGarminButton.disabled =
+                false;
+        }
+
+
+        return;
+    }
+
+
+    await deleteOldPairingCodes();
+
+
+    currentGarminDevice =
+        null;
+
+
+    hideGarminPairingBox();
+
+
+    if (garminConnectionStatus) {
+
+        garminConnectionStatus.textContent =
+            "Ekki tengt";
+    }
+
+
+    if (connectGarminButton) {
+
+        connectGarminButton.disabled =
+            false;
+
+        connectGarminButton.textContent =
+            "Tengja Garmin úr";
+    }
+
+
+    if (forgetGarminButton) {
+
+        forgetGarminButton.disabled =
+            false;
+
+        forgetGarminButton.textContent =
+            "Gleyma úri";
+
+        forgetGarminButton.hidden =
+            true;
+    }
+}
+
+
+if (forgetGarminButton) {
+
+    forgetGarminButton.addEventListener(
+        "click",
+        async function () {
+
+            await forgetGarminDevice();
+        }
+    );
+}
+
 
 // =========================================
 // GARMIN PAIRING
