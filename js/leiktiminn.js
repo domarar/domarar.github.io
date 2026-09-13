@@ -83,6 +83,19 @@ let editingMatchId = null;
 
 let loadingMatches = false;
 
+let hasLoadedMatches = false;
+
+let lastMatchesRefreshAt = 0;
+
+const MATCH_REFRESH_COOLDOWN_MS = 10000;
+const PULL_REFRESH_THRESHOLD = 70;
+
+let pullRefreshStartY = null;
+let pullRefreshDistance = 0;
+let pullRefreshActive = false;
+let pullRefreshRunning = false;
+let pullRefreshIndicator = null;
+
 
 
 /* =========================================
@@ -105,7 +118,10 @@ async function initializeLeiktiminn() {
     }
 
 
-    await loadMatchesFromSupabase();
+    await loadMatchesFromSupabase({
+        showLoading: true,
+        force: true
+    });
 }
 
 
@@ -160,10 +176,33 @@ async function getCurrentSession() {
    LOAD MATCHES FROM SUPABASE
 ========================================= */
 
-async function loadMatchesFromSupabase() {
+async function loadMatchesFromSupabase(
+    options = {}
+) {
+
+    const showLoading =
+        options.showLoading === true;
+
+    const force =
+        options.force === true;
+
 
     if (loadingMatches) {
-        return;
+
+        return false;
+    }
+
+
+    if (
+        !force
+        &&
+        hasLoadedMatches
+        &&
+        Date.now() - lastMatchesRefreshAt <
+            MATCH_REFRESH_COOLDOWN_MS
+    ) {
+
+        return false;
     }
 
 
@@ -180,13 +219,23 @@ async function loadMatchesFromSupabase() {
 
             matches = [];
 
+            hasLoadedMatches =
+                false;
+
             renderAll();
 
-            return;
+            return false;
         }
 
 
-        showMatchesLoading();
+        if (
+            showLoading
+            &&
+            !hasLoadedMatches
+        ) {
+
+            showMatchesLoading();
+        }
 
 
         const {
@@ -217,9 +266,14 @@ async function loadMatchesFromSupabase() {
                 error
             );
 
-            showMatchesLoadError();
 
-            return;
+            if (!hasLoadedMatches) {
+
+                showMatchesLoadError();
+            }
+
+
+            return false;
         }
 
 
@@ -230,7 +284,18 @@ async function loadMatchesFromSupabase() {
                 );
 
 
+        hasLoadedMatches =
+            true;
+
+
+        lastMatchesRefreshAt =
+            Date.now();
+
+
         renderAll();
+
+
+        return true;
 
     } catch (error) {
 
@@ -239,14 +304,21 @@ async function loadMatchesFromSupabase() {
             error
         );
 
-        showMatchesLoadError();
+
+        if (!hasLoadedMatches) {
+
+            showMatchesLoadError();
+        }
+
+
+        return false;
 
     } finally {
 
-        loadingMatches = false;
+        loadingMatches =
+            false;
     }
 }
-
 
 
 /* =========================================
@@ -325,66 +397,66 @@ function mapDatabaseMatch(
             null,
 
         garminActivityId:
-    row.garmin_activity_id ||
-    null,
+            row.garmin_activity_id ||
+            null,
 
-completedAt:
-    row.completed_at ||
-    null,
+        completedAt:
+            row.completed_at ||
+            null,
 
-totalElapsedSeconds:
-    Number(
-        row.total_elapsed_seconds ?? 0
-    ),
+        totalElapsedSeconds:
+            Number(
+                row.total_elapsed_seconds ?? 0
+            ),
 
-distanceTotalM:
-    Number(
-        row.distance_total_m ?? 0
-    ),
+        distanceTotalM:
+            Number(
+                row.distance_total_m ?? 0
+            ),
 
-distanceFirstHalfM:
-    Number(
-        row.distance_first_half_m ?? 0
-    ),
+        distanceFirstHalfM:
+            Number(
+                row.distance_first_half_m ?? 0
+            ),
 
-distanceSecondHalfM:
-    Number(
-        row.distance_second_half_m ?? 0
-    ),
+        distanceSecondHalfM:
+            Number(
+                row.distance_second_half_m ?? 0
+            ),
 
-hrAvgTotal:
-    Number(
-        row.hr_avg_total ?? 0
-    ),
+        hrAvgTotal:
+            Number(
+                row.hr_avg_total ?? 0
+            ),
 
-hrMaxTotal:
-    Number(
-        row.hr_max_total ?? 0
-    ),
+        hrMaxTotal:
+            Number(
+                row.hr_max_total ?? 0
+            ),
 
-hrAvgFirstHalf:
-    Number(
-        row.hr_avg_first_half ?? 0
-    ),
+        hrAvgFirstHalf:
+            Number(
+                row.hr_avg_first_half ?? 0
+            ),
 
-hrMaxFirstHalf:
-    Number(
-        row.hr_max_first_half ?? 0
-    ),
+        hrMaxFirstHalf:
+            Number(
+                row.hr_max_first_half ?? 0
+            ),
 
-hrAvgSecondHalf:
-    Number(
-        row.hr_avg_second_half ?? 0
-    ),
+        hrAvgSecondHalf:
+            Number(
+                row.hr_avg_second_half ?? 0
+            ),
 
-hrMaxSecondHalf:
-    Number(
-        row.hr_max_second_half ?? 0
-    ),
+        hrMaxSecondHalf:
+            Number(
+                row.hr_max_second_half ?? 0
+            ),
 
-createdAt:
-    row.created_at ||
-    null,
+        createdAt:
+            row.created_at ||
+            null,
 
         updatedAt:
             row.updated_at ||
@@ -1161,20 +1233,20 @@ async function updateExistingMatch(
 
     const payload = {
 
-    ...createDatabasePayload(
-        data
-    ),
+        ...createDatabasePayload(
+            data
+        ),
 
-    garmin_sync_status:
-        "NOT_SENT",
+        garmin_sync_status:
+            "NOT_SENT",
 
-    garmin_synced_at:
-        null,
+        garmin_synced_at:
+            null,
 
-    updated_at:
-        new Date()
-            .toISOString()
-};
+        updated_at:
+            new Date()
+                .toISOString()
+    };
 
 
     const {
@@ -2033,6 +2105,7 @@ function createMatchRow(
         </article>
     `;
 }
+
 
 /* =========================================
    LISTENERS
@@ -3578,26 +3651,22 @@ function showMatchesLoadError() {
 
 
 /* =========================================
-   REFRESH WHEN RETURNING TO PAGE
+   SILENT REFRESH WHEN RETURNING TO PAGE
 ========================================= */
 
 document.addEventListener(
     "visibilitychange",
-    async () => {
+    () => {
 
         if (
             document.visibilityState ===
             "visible"
         ) {
 
-            const session =
-                await getCurrentSession();
-
-
-            if (session) {
-
-                await loadMatchesFromSupabase();
-            }
+            loadMatchesFromSupabase({
+                showLoading: false,
+                force: false
+            });
         }
     }
 );
@@ -3605,16 +3674,458 @@ document.addEventListener(
 
 window.addEventListener(
     "focus",
+    () => {
+
+        loadMatchesFromSupabase({
+            showLoading: false,
+            force: false
+        });
+    }
+);
+
+
+
+/* =========================================
+   PULL TO REFRESH
+========================================= */
+
+function ensurePullRefreshIndicator() {
+
+    if (pullRefreshIndicator) {
+
+        return;
+    }
+
+
+    const style =
+        document.createElement(
+            "style"
+        );
+
+
+    style.textContent = `
+        @keyframes leiktiminn-refresh-spin {
+
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .leiktiminn-pull-refresh-spinner {
+
+            width: 16px;
+            height: 16px;
+
+            border: 2px solid rgba(255,255,255,0.28);
+
+            border-top-color:
+                rgba(255,255,255,0.95);
+
+            border-radius: 50%;
+        }
+
+        .leiktiminn-pull-refresh-spinner.spinning {
+
+            animation:
+                leiktiminn-refresh-spin
+                700ms
+                linear
+                infinite;
+        }
+    `;
+
+
+    document.head.appendChild(
+        style
+    );
+
+
+    pullRefreshIndicator =
+        document.createElement(
+            "div"
+        );
+
+
+    pullRefreshIndicator.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+
+    Object.assign(
+        pullRefreshIndicator.style,
+        {
+            position:
+                "fixed",
+
+            top:
+                "calc(env(safe-area-inset-top, 0px) + 10px)",
+
+            left:
+                "50%",
+
+            width:
+                "34px",
+
+            height:
+                "34px",
+
+            display:
+                "flex",
+
+            alignItems:
+                "center",
+
+            justifyContent:
+                "center",
+
+            borderRadius:
+                "50%",
+
+            background:
+                "rgba(13, 31, 25, 0.94)",
+
+            border:
+                "1px solid rgba(255, 255, 255, 0.14)",
+
+            boxShadow:
+                "0 8px 24px rgba(0, 0, 0, 0.28)",
+
+            opacity:
+                "0",
+
+            pointerEvents:
+                "none",
+
+            zIndex:
+                "9999",
+
+            transform:
+                "translate(-50%, -54px)",
+
+            transition:
+                "opacity 140ms ease, transform 140ms ease"
+        }
+    );
+
+
+    const spinner =
+        document.createElement(
+            "span"
+        );
+
+
+    spinner.className =
+        "leiktiminn-pull-refresh-spinner";
+
+
+    pullRefreshIndicator.appendChild(
+        spinner
+    );
+
+
+    document.body.appendChild(
+        pullRefreshIndicator
+    );
+}
+
+
+
+function showPullRefreshIndicator(
+    progress = 1,
+    spinning = false
+) {
+
+    ensurePullRefreshIndicator();
+
+
+    const clampedProgress =
+        Math.max(
+            0,
+            Math.min(
+                1,
+                progress
+            )
+        );
+
+
+    pullRefreshIndicator.style.opacity =
+        String(
+            Math.max(
+                0.25,
+                clampedProgress
+            )
+        );
+
+
+    const translateY =
+        -42
+        +
+        (
+            42
+            *
+            clampedProgress
+        );
+
+
+    pullRefreshIndicator.style.transform =
+        `translate(-50%, ${translateY}px)`;
+
+
+    const spinner =
+        pullRefreshIndicator.querySelector(
+            ".leiktiminn-pull-refresh-spinner"
+        );
+
+
+    spinner?.classList.toggle(
+        "spinning",
+        spinning
+    );
+}
+
+
+
+function hidePullRefreshIndicator() {
+
+    if (!pullRefreshIndicator) {
+
+        return;
+    }
+
+
+    pullRefreshIndicator.style.opacity =
+        "0";
+
+
+    pullRefreshIndicator.style.transform =
+        "translate(-50%, -54px)";
+
+
+    const spinner =
+        pullRefreshIndicator.querySelector(
+            ".leiktiminn-pull-refresh-spinner"
+        );
+
+
+    spinner?.classList.remove(
+        "spinning"
+    );
+}
+
+
+
+function resetPullRefreshGesture() {
+
+    pullRefreshStartY =
+        null;
+
+    pullRefreshDistance =
+        0;
+
+    pullRefreshActive =
+        false;
+}
+
+
+
+document.addEventListener(
+    "touchstart",
+    event => {
+
+        if (
+            pullRefreshRunning
+            ||
+            event.touches.length !== 1
+            ||
+            window.scrollY > 0
+            ||
+            document.body.classList.contains(
+                "modal-open"
+            )
+        ) {
+
+            resetPullRefreshGesture();
+
+            return;
+        }
+
+
+        pullRefreshStartY =
+            event.touches[0]
+                .clientY;
+
+
+        pullRefreshDistance =
+            0;
+
+
+        pullRefreshActive =
+            false;
+    },
+    {
+        passive: true
+    }
+);
+
+
+
+document.addEventListener(
+    "touchmove",
+    event => {
+
+        if (
+            pullRefreshStartY ===
+                null
+            ||
+            pullRefreshRunning
+            ||
+            event.touches.length !==
+                1
+        ) {
+
+            return;
+        }
+
+
+        const currentY =
+            event.touches[0]
+                .clientY;
+
+
+        const distance =
+            currentY
+            -
+            pullRefreshStartY;
+
+
+        if (
+            distance <= 0
+            ||
+            window.scrollY > 0
+        ) {
+
+            resetPullRefreshGesture();
+
+            hidePullRefreshIndicator();
+
+            return;
+        }
+
+
+        pullRefreshActive =
+            true;
+
+
+        pullRefreshDistance =
+            Math.min(
+                distance,
+                110
+            );
+
+
+        const progress =
+            pullRefreshDistance
+            /
+            PULL_REFRESH_THRESHOLD;
+
+
+        showPullRefreshIndicator(
+            progress,
+            false
+        );
+
+
+        if (
+            event.cancelable
+        ) {
+
+            event.preventDefault();
+        }
+    },
+    {
+        passive: false
+    }
+);
+
+
+
+document.addEventListener(
+    "touchend",
     async () => {
 
-        const session =
-            await getCurrentSession();
+        if (
+            !pullRefreshActive
+            ||
+            pullRefreshRunning
+        ) {
 
+            resetPullRefreshGesture();
 
-        if (session) {
-
-            await loadMatchesFromSupabase();
+            return;
         }
+
+
+        const shouldRefresh =
+            pullRefreshDistance >=
+            PULL_REFRESH_THRESHOLD;
+
+
+        resetPullRefreshGesture();
+
+
+        if (!shouldRefresh) {
+
+            hidePullRefreshIndicator();
+
+            return;
+        }
+
+
+        pullRefreshRunning =
+            true;
+
+
+        showPullRefreshIndicator(
+            1,
+            true
+        );
+
+
+        try {
+
+            await loadMatchesFromSupabase({
+                showLoading: false,
+                force: true
+            });
+
+        } finally {
+
+            pullRefreshRunning =
+                false;
+
+
+            window.setTimeout(
+                hidePullRefreshIndicator,
+                180
+            );
+        }
+    }
+);
+
+
+
+document.addEventListener(
+    "touchcancel",
+    () => {
+
+        resetPullRefreshGesture();
+
+        hidePullRefreshIndicator();
     }
 );
 
@@ -3645,7 +4156,10 @@ supabaseClient
             window.setTimeout(
                 () => {
 
-                    loadMatchesFromSupabase();
+                    loadMatchesFromSupabase({
+                        showLoading: !hasLoadedMatches,
+                        force: true
+                    });
 
                 },
                 0
