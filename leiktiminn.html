@@ -1,0 +1,1798 @@
+<!DOCTYPE html>
+<html lang="is">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, viewport-fit=cover"
+    >
+
+    <title>Dómarar – Leiktíminn</title>
+
+    <link
+        rel="apple-touch-icon"
+        sizes="180x180"
+        href="/logos/leiktiminn-apple-touch-icon-180.png"
+    >
+
+    <link
+        rel="manifest"
+        href="/leiktiminn-manifest.json"
+    >
+
+    <link rel="stylesheet" href="css/leiktiminn.css?v=6">
+    <link rel="stylesheet" href="css/menu.css?v=5">
+
+</head>
+
+
+<body class="auth-locked">
+
+
+    <!-- =========================================
+         AUTH / LOGIN
+    ========================================== -->
+
+    <div
+        id="authGate"
+        class="auth-gate"
+    >
+
+        <header class="auth-header">
+
+            <a
+                href="leiktiminn.html"
+                class="leiktiminn-brand"
+                aria-label="Leiktíminn"
+            >
+
+                <img
+                    src="logos/leiktiminn-logo.png"
+                    alt="Leiktíminn"
+                    class="leiktiminn-logo"
+                >
+
+                <div>
+
+                    <h1>
+                        LEIKTÍMINN
+                    </h1>
+
+                    <p>
+                        Dómarar
+                    </p>
+
+                </div>
+
+            </a>
+
+
+            <div class="leiktiminn-header-actions">
+
+                <button
+                    id="authMenuButton"
+                    class="menu-button"
+                    type="button"
+                    aria-label="Opna valmynd"
+                >
+
+                    <span></span>
+                    <span></span>
+                    <span></span>
+
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <div class="auth-card">
+
+            <p class="auth-eyebrow">
+                DÓMARAR · LEIKTÍMINN
+            </p>
+
+
+            <h1 id="authTitle">
+                Innskráning
+            </h1>
+
+
+            <p
+                id="authText"
+                class="auth-text"
+            >
+                Skráðu inn netfang og lykilorð til að skrá þig inn.
+            </p>
+
+
+            <div
+                class="auth-mode-switch"
+                style="
+                    display:grid;
+                    grid-template-columns:1fr 1fr;
+                    gap:8px;
+                    margin:18px 0 20px;
+                "
+            >
+
+                <button
+                    id="showLoginButton"
+                    type="button"
+                    style="
+                        padding:11px 12px;
+                        border-radius:10px;
+                        border:1px solid rgba(88,199,91,.55);
+                        background:rgba(88,199,91,.14);
+                        color:inherit;
+                        font:inherit;
+                        font-weight:700;
+                        cursor:pointer;
+                    "
+                >
+                    Skrá inn
+                </button>
+
+
+                <button
+                    id="showSignupButton"
+                    type="button"
+                    style="
+                        padding:11px 12px;
+                        border-radius:10px;
+                        border:1px solid rgba(255,255,255,.14);
+                        background:rgba(255,255,255,.04);
+                        color:inherit;
+                        font:inherit;
+                        font-weight:700;
+                        cursor:pointer;
+                    "
+                >
+                    Búa til aðgang
+                </button>
+
+            </div>
+
+
+            <form
+                id="authForm"
+                class="auth-form"
+            >
+
+                <div
+                    id="authNameField"
+                    hidden
+                >
+
+                    <label for="authName">
+                        Nafn
+                    </label>
+
+                    <input
+                        id="authName"
+                        type="text"
+                        autocomplete="name"
+                        placeholder="Nafn"
+                    >
+
+                </div>
+
+
+                <label for="authEmail">
+                    Netfang
+                </label>
+
+                <input
+                    id="authEmail"
+                    type="email"
+                    autocomplete="email"
+                    placeholder="nafn@netfang.is"
+                    required
+                >
+
+
+                <label for="authPassword">
+                    Lykilorð
+                </label>
+
+                <input
+                    id="authPassword"
+                    type="password"
+                    autocomplete="current-password"
+                    placeholder="Lykilorð"
+                    required
+                >
+
+
+                <div
+                    id="authConfirmPasswordField"
+                    hidden
+                >
+
+                    <label for="authConfirmPassword">
+                        Staðfesta lykilorð
+                    </label>
+
+                    <input
+                        id="authConfirmPassword"
+                        type="password"
+                        autocomplete="new-password"
+                        placeholder="Sláðu lykilorðið aftur"
+                    >
+
+                </div>
+
+
+                <button
+                    id="authSubmitButton"
+                    type="submit"
+                >
+                    Skrá inn
+                </button>
+
+                <button
+                    id="forgotPasswordButton"
+                    type="button"
+                    class="auth-forgot-password"
+                >
+                    Gleymt lykilorð?
+                </button>
+
+            </form>
+
+
+            <p
+                id="authMessage"
+                class="auth-message"
+            ></p>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================================
+         LEIKTÍMINN APP
+    ========================================== -->
+
+    <div
+        class="leiktiminn-page"
+        id="leiktiminnApp"
+    >
+
+
+        <!-- HEADER -->
+
+        <header class="leiktiminn-header">
+
+            <a
+                href="leiktiminn.html"
+                class="leiktiminn-brand"
+                aria-label="Leiktíminn"
+            >
+
+                <img
+                    src="logos/leiktiminn-logo.png"
+                    alt="Leiktíminn"
+                    class="leiktiminn-logo"
+                >
+
+                <div>
+
+                    <h1>
+                        LEIKTÍMINN
+                    </h1>
+
+                    <p>
+                        Dómarar
+                    </p>
+
+                </div>
+
+            </a>
+
+
+            <div class="leiktiminn-header-actions">
+
+                <button
+                    class="profile-button"
+                    type="button"
+                    aria-label="Prófíll"
+                    data-view-target="profile"
+                    id="headerProfileInitials"
+                >
+                    --
+                </button>
+
+
+                <button
+                    class="menu-button"
+                    id="menuButton"
+                    type="button"
+                    aria-label="Opna valmynd"
+                >
+
+                    <span></span>
+                    <span></span>
+                    <span></span>
+
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- DESKTOP NAV -->
+
+        <section class="leiktiminn-toolbar">
+
+            <div
+                class="desktop-view-tabs"
+                role="tablist"
+                aria-label="Leiktíminn"
+            >
+
+                <button
+                    class="desktop-view-tab active"
+                    type="button"
+                    data-view-target="upcoming"
+                >
+                    Leikir
+                </button>
+
+                <button
+                    class="desktop-view-tab"
+                    type="button"
+                    data-view-target="played"
+                >
+                    Spilaðir
+                </button>
+
+                <button
+                    class="desktop-view-tab"
+                    type="button"
+                    data-view-target="stats"
+                >
+                    Tölfræði
+                </button>
+
+                <button
+                    class="desktop-view-tab"
+                    type="button"
+                    data-view-target="profile"
+                >
+                    Prófíll
+                </button>
+
+            </div>
+
+
+            <button
+                id="openCreateMatchDesktop"
+                class="create-match-button"
+                type="button"
+            >
+
+                <span>
+                    ＋
+                </span>
+
+                Búa til leik
+
+            </button>
+
+        </section>
+
+
+
+        <!-- =========================================
+             CONTENT
+        ========================================== -->
+
+        <main class="leiktiminn-view-stack">
+
+
+            <!-- UPCOMING -->
+
+            <section
+                class="leiktiminn-view active"
+                data-view="upcoming"
+            >
+
+                <section class="leiktiminn-panel">
+
+                    <div class="panel-heading">
+
+                        <p class="panel-eyebrow">
+                            LEIKIR
+                        </p>
+
+                        <h3>
+                            Mínir leikir
+                        </h3>
+
+                    </div>
+
+
+                    <div
+                        id="matches-list"
+                        class="matches-list"
+                    ></div>
+
+                </section>
+
+            </section>
+
+
+
+            <!-- PLAYED -->
+
+            <section
+                class="leiktiminn-view"
+                data-view="played"
+                hidden
+            >
+
+                <section class="leiktiminn-panel">
+
+                    <div class="panel-heading">
+
+                        <p class="panel-eyebrow">
+                            SAGA
+                        </p>
+
+                        <h3>
+                            Spilaðir leikir
+                        </h3>
+
+                    </div>
+
+
+                    <div
+                        id="played-matches-list"
+                        class="matches-list"
+                    ></div>
+
+                </section>
+
+            </section>
+
+
+
+            <!-- STATS -->
+
+            <section
+                class="leiktiminn-view"
+                data-view="stats"
+                hidden
+            >
+
+                <section class="leiktiminn-panel stats-overview-panel">
+
+                    <div class="stats-future">
+
+                        <p class="panel-eyebrow">
+                            GARMIN
+                        </p>
+
+                        <h4>
+                            Frammistaða
+                        </h4>
+
+                        <p>
+                            Vegalengd, meðaltöl, sprettir,
+                            hámarkshraði og topp 5 leikir birtast
+                            hér þegar Garmin gögnin eru komin inn.
+                        </p>
+
+                    </div>
+
+                </section>
+
+            </section>
+
+
+
+            <!-- PROFILE -->
+
+            <section
+                class="leiktiminn-view"
+                data-view="profile"
+                hidden
+            >
+
+                <section class="leiktiminn-panel profile-panel">
+
+                    <div class="panel-heading profile-heading">
+
+                        <p class="panel-eyebrow">
+                            PRÓFÍLL
+                        </p>
+
+                        <h3>
+                            Mitt svæði
+                        </h3>
+
+                    </div>
+
+
+                    <div class="profile-main">
+
+
+                        <!-- IDENTITY -->
+
+                        <div class="profile-identity">
+
+                            <div
+                                class="profile-avatar"
+                                id="profileAvatar"
+                            >
+
+                                <img
+                                    id="profileAvatarImage"
+                                    alt="Prófílmynd"
+                                    hidden
+                                >
+
+                                <span id="profileAvatarInitials">
+                                    --
+                                </span>
+
+                            </div>
+
+
+                            <div class="profile-identity-copy">
+
+                                <strong id="profileDisplayName">
+                                    Hleð...
+                                </strong>
+
+                                <span id="profileDisplayEmail"></span>
+
+                            </div>
+
+
+                            <button
+                                id="editProfileButton"
+                                class="profile-text-button"
+                                type="button"
+                            >
+                                Breyta prófíl
+                            </button>
+
+                        </div>
+
+
+
+                        <!-- PROFILE EDIT -->
+
+                        <div
+                            id="profileEditPanel"
+                            class="profile-edit-panel"
+                            hidden
+                        >
+
+                            <form id="profileForm">
+
+                                <div class="profile-edit-grid">
+
+                                    <label class="profile-field">
+
+                                        <span>
+                                            Nafn
+                                        </span>
+
+                                        <input
+                                            id="profileName"
+                                            type="text"
+                                            autocomplete="name"
+                                        >
+
+                                    </label>
+
+
+                                    <label class="profile-field">
+
+                                        <span>
+                                            Netfang
+                                        </span>
+
+                                        <input
+                                            id="profileEmail"
+                                            type="email"
+                                            readonly
+                                        >
+
+                                    </label>
+
+                                </div>
+
+
+
+                                <!-- PROFILE IMAGE -->
+
+                                <div
+                                    style="
+                                        margin-top:16px;
+                                        padding-top:16px;
+                                        border-top:1px solid rgba(255,255,255,.07);
+                                    "
+                                >
+
+                                    <p
+                                        style="
+                                            margin:0 0 10px;
+                                            font-size:12px;
+                                            font-weight:700;
+                                            color:#dbe2df;
+                                        "
+                                    >
+                                        Prófílmynd
+                                    </p>
+
+
+                                    <input
+                                        id="profileAvatarInput"
+                                        type="file"
+                                        accept="image/jpeg,image/png,image/webp"
+                                        hidden
+                                    >
+
+
+                                    <div
+                                        style="
+                                            display:flex;
+                                            align-items:center;
+                                            gap:8px;
+                                            flex-wrap:wrap;
+                                        "
+                                    >
+
+                                        <button
+                                            id="chooseProfileAvatarButton"
+                                            class="profile-button-secondary"
+                                            type="button"
+                                        >
+                                            Velja mynd
+                                        </button>
+
+
+                                        <button
+                                            id="removeProfileAvatarButton"
+                                            class="profile-button-secondary"
+                                            type="button"
+                                            hidden
+                                        >
+                                            Fjarlægja mynd
+                                        </button>
+
+                                    </div>
+
+
+                                    <p
+                                        id="avatarMessage"
+                                        class="profile-feedback"
+                                    ></p>
+
+                                </div>
+
+
+
+                                <div class="profile-edit-actions">
+
+                                    <button
+                                        id="cancelProfileEditButton"
+                                        class="profile-button-secondary"
+                                        type="button"
+                                    >
+                                        Hætta við
+                                    </button>
+
+                                    <button
+                                        id="saveProfileButton"
+                                        class="profile-button-primary"
+                                        type="submit"
+                                    >
+                                        Vista
+                                    </button>
+
+                                </div>
+
+
+                                <p
+                                    id="profileMessage"
+                                    class="profile-feedback"
+                                ></p>
+
+                            </form>
+
+                        </div>
+
+
+                        <div class="profile-divider"></div>
+
+
+
+                        <!-- ACCOUNT -->
+
+                        <section class="profile-section">
+
+                            <div class="profile-section-heading">
+
+                                <div>
+
+                                    <p class="panel-eyebrow">
+                                        REIKNINGUR
+                                    </p>
+
+                                    <h4>
+                                        Upplýsingar
+                                    </h4>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="profile-info-list">
+
+                                <div class="profile-info-row">
+
+                                    <span>
+                                        Nafn
+                                    </span>
+
+                                    <strong id="profileAccountName">
+                                        --
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="profile-info-row">
+
+                                    <span>
+                                        Netfang
+                                    </span>
+
+                                    <strong id="profileAccountEmail">
+                                        --
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+                        </section>
+
+
+                        <div class="profile-divider"></div>
+
+
+
+                        <!-- GARMIN -->
+
+                        <section class="profile-section profile-garmin-section">
+
+                            <div class="profile-section-heading profile-section-heading-row">
+
+                                <div>
+
+                                    <p class="panel-eyebrow">
+                                        GARMIN
+                                    </p>
+
+                                    <h4>
+                                        Garmin úr
+                                    </h4>
+
+                                    <p class="profile-section-description">
+                                        Tengdu Leiktíminn við Garmin úrið þitt til að samstilla leiki og virkni.
+                                    </p>
+
+                                </div>
+
+
+                                <div class="profile-garmin-status">
+
+                                    <span class="profile-status-dot"></span>
+
+                                    <strong id="garminConnectionStatus">
+                                        Ekki tengt
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+
+                            <button
+                                class="profile-button-primary profile-garmin-button"
+                                type="button"
+                                id="connectGarminButton"
+                            >
+                                Tengja Garmin úr
+                            </button>
+
+
+                            <div
+                                class="garmin-pairing-box"
+                                id="garminPairingBox"
+                                hidden
+                            >
+
+                                <p class="garmin-pairing-label">
+                                    PÖRUNARKÓÐI
+                                </p>
+
+                                <div
+                                    class="garmin-pairing-code"
+                                    id="garminPairingCode"
+                                >
+                                    ------
+                                </div>
+
+                                <p class="garmin-pairing-help">
+                                    Sláðu þennan kóða inn í Leiktímann á Garmin úrinu.
+                                    Kóðinn gildir í 10 mínútur.
+                                </p>
+
+                                <button
+                                    class="profile-button-secondary"
+                                    type="button"
+                                    id="cancelGarminPairingButton"
+                                >
+                                    Hætta við
+                                </button>
+
+                            </div>
+
+                        </section>
+
+
+                        <div class="profile-divider"></div>
+
+
+
+                        <!-- SECURITY -->
+
+                        <section class="profile-section">
+
+                            <p class="panel-eyebrow">
+                                ÖRYGGI
+                            </p>
+
+
+                            <button
+                                id="showPasswordButton"
+                                class="profile-action-row"
+                                type="button"
+                            >
+
+                                <span>
+                                    Breyta lykilorði
+                                </span>
+
+                                <span aria-hidden="true">
+                                    ›
+                                </span>
+
+                            </button>
+
+
+                            <div
+                                id="passwordPanel"
+                                class="profile-password-panel"
+                                hidden
+                            >
+
+                                <form id="changePasswordForm">
+
+                                    <div class="profile-edit-grid">
+
+                                        <label class="profile-field">
+
+                                            <span>
+                                                Nýtt lykilorð
+                                            </span>
+
+                                            <input
+                                                id="newPassword"
+                                                type="password"
+                                                autocomplete="new-password"
+                                                placeholder="Nýtt lykilorð"
+                                            >
+
+                                        </label>
+
+
+                                        <label class="profile-field">
+
+                                            <span>
+                                                Staðfesta lykilorð
+                                            </span>
+
+                                            <input
+                                                id="confirmNewPassword"
+                                                type="password"
+                                                autocomplete="new-password"
+                                                placeholder="Sláðu lykilorðið aftur"
+                                            >
+
+                                        </label>
+
+                                    </div>
+
+
+                                    <div class="profile-edit-actions">
+
+                                        <button
+                                            id="cancelPasswordButton"
+                                            class="profile-button-secondary"
+                                            type="button"
+                                        >
+                                            Hætta við
+                                        </button>
+
+                                        <button
+                                            id="changePasswordButton"
+                                            class="profile-button-primary"
+                                            type="submit"
+                                        >
+                                            Vista lykilorð
+                                        </button>
+
+                                    </div>
+
+
+                                    <p
+                                        id="passwordMessage"
+                                        class="profile-feedback"
+                                    ></p>
+
+                                </form>
+
+                            </div>
+
+                        </section>
+
+
+                        <div class="profile-divider"></div>
+
+
+
+                        <!-- LOGOUT -->
+
+                        <div class="profile-footer-actions">
+
+                            <button
+                                id="logoutButton"
+                                class="profile-logout-button"
+                                type="button"
+                            >
+                                Útskrá
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </section>
+
+
+        </main>
+
+
+
+        <!-- FOOTER -->
+
+        <footer class="leiktiminn-footer">
+
+            <img
+                src="logos/domarinn_logo.png"
+                alt=""
+            >
+
+            <span>
+                DÓMARAR · LEIKTÍMINN
+            </span>
+
+        </footer>
+
+    </div>
+
+
+
+    <!-- =========================================
+         CREATE MATCH MODAL
+    ========================================== -->
+
+    <div
+        id="createMatchModal"
+        class="match-modal"
+        aria-hidden="true"
+    >
+
+        <div
+            class="match-modal-backdrop"
+            data-close-create-modal
+        ></div>
+
+
+        <section
+            class="match-modal-card"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="createMatchTitle"
+        >
+
+            <header class="match-modal-header">
+
+                <div>
+
+                    <p class="panel-eyebrow">
+                        NÝR LEIKUR
+                    </p>
+
+                    <h2 id="createMatchTitle">
+                        Búa til leik
+                    </h2>
+
+                </div>
+
+
+                <button
+                    class="match-modal-close"
+                    type="button"
+                    aria-label="Loka"
+                    data-close-create-modal
+                >
+                    ×
+                </button>
+
+            </header>
+
+
+            <form
+                id="create-match-form"
+                class="match-modal-form"
+                autocomplete="off"
+            >
+
+
+                <!-- REQUIRED -->
+
+                <section class="match-form-section">
+
+                    <div class="match-form-section-heading">
+
+                        <div>
+
+                            <h3>
+                                Leikur
+                            </h3>
+
+                            <p>
+                                Nauðsynlegt fyrir Leiktíminn
+                                og Garmin samstillingu.
+                            </p>
+
+                        </div>
+
+
+                        <span class="required-label">
+                            Nauðsynlegt
+                        </span>
+
+                    </div>
+
+
+                    <label class="form-field form-field-full">
+
+                        <span>
+                            Keppni *
+                        </span>
+
+                        <input
+                            id="competition"
+                            type="text"
+                            placeholder="T.d. Besta deild karla"
+                            autocomplete="off"
+                            required
+                        >
+
+                    </label>
+
+
+                    <div class="form-row">
+
+                        <label class="form-field">
+
+                            <span>
+                                Heimalið *
+                            </span>
+
+                            <input
+                                id="home-team"
+                                type="text"
+                                placeholder="Heimalið"
+                                autocomplete="off"
+                                required
+                            >
+
+                        </label>
+
+
+                        <label class="form-field">
+
+                            <span>
+                                Útilið *
+                            </span>
+
+                            <input
+                                id="away-team"
+                                type="text"
+                                placeholder="Útilið"
+                                autocomplete="off"
+                                required
+                            >
+
+                        </label>
+
+                    </div>
+
+
+                    <div class="form-row">
+
+                        <label class="form-field">
+
+                            <span>
+                                Dagsetning *
+                            </span>
+
+                            <input
+                                id="match-date"
+                                type="date"
+                                required
+                            >
+
+                        </label>
+
+
+                        <label class="form-field">
+
+                            <span>
+                                Klukkan *
+                            </span>
+
+                            <input
+                                id="match-time"
+                                type="time"
+                                required
+                            >
+
+                        </label>
+
+                    </div>
+
+
+                    <div class="form-row">
+
+                        <label class="form-field">
+
+                            <span>
+                                Leiklengd *
+                            </span>
+
+                            <select id="match-length">
+
+                                <option value="90">
+                                    90 mínútur
+                                </option>
+
+                                <option value="80">
+                                    80 mínútur
+                                </option>
+
+                                <option value="70">
+                                    70 mínútur
+                                </option>
+
+                                <option value="60">
+                                    60 mínútur
+                                </option>
+
+                            </select>
+
+                        </label>
+
+
+                        <label class="form-field">
+
+                            <span>
+                                Framlenging
+                            </span>
+
+                            <select id="extra-time">
+
+                                <option value="0">
+                                    Engin
+                                </option>
+
+                                <option value="10">
+                                    2 × 10 mín
+                                </option>
+
+                                <option value="15">
+                                    2 × 15 mín
+                                </option>
+
+                            </select>
+
+                        </label>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- OPTIONAL -->
+
+                <section class="match-form-section">
+
+                    <div class="match-form-section-heading">
+
+                        <div>
+
+                            <h3>
+                                Frekari upplýsingar
+                            </h3>
+
+                            <p>
+                                Valfrjálst, en gagnlegt þegar
+                                þú skoðar leikinn síðar.
+                            </p>
+
+                        </div>
+
+
+                        <span class="optional-label">
+                            Valfrjálst
+                        </span>
+
+                    </div>
+
+
+                    <div class="form-row">
+
+                        <label class="form-field">
+
+                            <span>
+                                Völlur
+                            </span>
+
+                            <input
+                                id="venue"
+                                type="text"
+                                placeholder="T.d. Kaplakriki"
+                                autocomplete="off"
+                            >
+
+                        </label>
+
+
+                        <label class="form-field">
+
+                            <span>
+                                Þitt hlutverk
+                            </span>
+
+                            <select id="user-role">
+
+                                <option value="">
+                                    Veldu hlutverk
+                                </option>
+
+                                <option value="Dómari">
+                                    Dómari
+                                </option>
+
+                                <option value="AD1">
+                                    AD1
+                                </option>
+
+                                <option value="AD2">
+                                    AD2
+                                </option>
+
+                                <option value="Fjórði">
+                                    Fjórði
+                                </option>
+
+                            </select>
+
+                        </label>
+
+                    </div>
+
+
+                    <div class="officials-form-section">
+
+                        <div class="officials-form-heading">
+                            Dómarateymi
+                        </div>
+
+
+                        <div class="form-row">
+
+                            <label class="form-field">
+
+                                <span>
+                                    Dómari
+                                </span>
+
+                                <input
+                                    id="referee-name"
+                                    type="text"
+                                    placeholder="Nafn dómara"
+                                    autocomplete="off"
+                                >
+
+                            </label>
+
+
+                            <label class="form-field">
+
+                                <span>
+                                    AD1
+                                </span>
+
+                                <input
+                                    id="ad1-name"
+                                    type="text"
+                                    placeholder="Nafn AD1"
+                                    autocomplete="off"
+                                >
+
+                            </label>
+
+                        </div>
+
+
+                        <div class="form-row">
+
+                            <label class="form-field">
+
+                                <span>
+                                    AD2
+                                </span>
+
+                                <input
+                                    id="ad2-name"
+                                    type="text"
+                                    placeholder="Nafn AD2"
+                                    autocomplete="off"
+                                >
+
+                            </label>
+
+
+                            <label class="form-field">
+
+                                <span>
+                                    Fjórði
+                                </span>
+
+                                <input
+                                    id="fourth-name"
+                                    type="text"
+                                    placeholder="Nafn fjórða"
+                                    autocomplete="off"
+                                >
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- ACTIONS -->
+
+                <footer class="match-modal-actions">
+
+                    <button
+                        class="secondary-button"
+                        type="button"
+                        data-close-create-modal
+                    >
+                        Hætta við
+                    </button>
+
+
+                    <button
+                        id="saveMatchButton"
+                        class="primary-button"
+                        type="submit"
+                    >
+                        Vista leik
+                    </button>
+
+                </footer>
+
+            </form>
+
+        </section>
+
+    </div>
+
+
+
+    <!-- MOBILE CREATE MENU -->
+
+    <div
+        id="mobileCreateMenu"
+        class="mobile-create-menu"
+        hidden
+    >
+
+        <button
+            id="mobileCreateMatchAction"
+            class="mobile-create-menu-item"
+            type="button"
+        >
+
+            <span>
+                ＋
+            </span>
+
+            Búa til leik
+
+        </button>
+
+    </div>
+
+
+
+    <!-- MOBILE BOTTOM NAV -->
+
+    <nav
+        class="mobile-bottom-nav"
+        aria-label="Leiktíminn"
+    >
+
+        <button
+            class="mobile-nav-item active"
+            type="button"
+            data-view-target="upcoming"
+        >
+
+            <span class="mobile-nav-icon">
+                ▣
+            </span>
+
+            <span>
+                Leikir
+            </span>
+
+        </button>
+
+
+        <button
+            class="mobile-nav-item"
+            type="button"
+            data-view-target="played"
+        >
+
+            <span class="mobile-nav-icon">
+                ✓
+            </span>
+
+            <span>
+                Spilaðir
+            </span>
+
+        </button>
+
+
+        <button
+            id="openCreateMatchMobile"
+            class="mobile-nav-create"
+            type="button"
+            aria-label="Opna aðgerðir"
+            aria-expanded="false"
+            aria-controls="mobileCreateMenu"
+        >
+            ＋
+        </button>
+
+
+        <button
+            class="mobile-nav-item"
+            type="button"
+            data-view-target="stats"
+        >
+
+            <span class="mobile-nav-icon">
+                ⌁
+            </span>
+
+            <span>
+                Tölfræði
+            </span>
+
+        </button>
+
+
+        <button
+            class="mobile-nav-item"
+            type="button"
+            data-view-target="profile"
+        >
+
+            <span class="mobile-nav-icon">
+                ●
+            </span>
+
+            <span>
+                Prófíll
+            </span>
+
+        </button>
+
+    </nav>
+
+
+
+    <!-- =========================================
+         GLOBAL DÓMARAR MENU
+    ========================================== -->
+
+    <div
+        class="menu-overlay"
+        id="menuOverlay"
+    >
+
+        <aside class="menu-panel">
+
+            <button
+                class="menu-close"
+                id="menuClose"
+                type="button"
+                aria-label="Loka valmynd"
+            >
+                ×
+            </button>
+
+
+            <div class="menu-content">
+
+                <div class="menu-header">
+
+                    <img
+                        src="logos/domarinn_logo.png"
+                        alt=""
+                        class="menu-logo"
+                    >
+
+
+                    <div>
+
+                        <h2>
+                            DÓMARAR
+                        </h2>
+
+                        <p>
+                            Leikir og dómarateymi
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="menu-section">
+
+                    <div class="menu-section-title">
+                        DÓMARAR
+                    </div>
+
+
+                    <a
+                        class="menu-item beta-hidden"
+                        href="index.html"
+                    >
+
+                        <span>
+                            Dómarar forsíða
+                        </span>
+
+                        <span class="menu-arrow">
+                            ›
+                        </span>
+
+                    </a>
+
+
+                    <a
+                        class="menu-item beta-hidden"
+                        href="referee-stats.html"
+                    >
+
+                        <span>
+                            Hverjir dæma hvar?
+                        </span>
+
+                        <span class="menu-arrow">
+                            ›
+                        </span>
+
+                    </a>
+
+
+                    <a
+                        class="menu-item beta-hidden"
+                        href="laws.html"
+                    >
+
+                        <span>
+                            Knattspyrnulögin
+                        </span>
+
+                        <span class="menu-arrow">
+                            ›
+                        </span>
+
+                    </a>
+
+
+                    <a
+                        class="menu-item menu-item-leiktiminn active"
+                        href="leiktiminn.html"
+                    >
+
+                        <span class="menu-item-main">
+                            Leiktíminn
+                        </span>
+
+                        <span class="menu-item-sub">
+                            Mitt svæði
+                        </span>
+
+                        <span class="menu-arrow">
+                            ›
+                        </span>
+
+                    </a>
+
+
+                    <button
+                        class="menu-item beta-hidden"
+                        id="aboutMenuButton"
+                        type="button"
+                    >
+
+                        <span>
+                            Um Dómarar
+                        </span>
+
+                        <span class="menu-arrow">
+                            ›
+                        </span>
+
+                    </button>
+
+                </div>
+
+
+                <div class="menu-version">
+                    LEIKTÍMINN
+                </div>
+
+            </div>
+
+        </aside>
+
+    </div>
+
+
+
+    <!-- ABOUT -->
+
+    <div
+        class="about-overlay"
+        id="aboutOverlay"
+    >
+
+        <section class="about-card">
+
+            <button
+                class="about-close"
+                id="aboutClose"
+                type="button"
+                aria-label="Loka"
+            >
+                ×
+            </button>
+
+
+            <div class="about-content">
+
+                <h2>
+                    Um Dómarar
+                </h2>
+
+
+                <p>
+                    <strong>Dómarar</strong> er verkefni gert til gamans fyrir
+                    knattspyrnudómara og aðra sem hafa áhuga á dómgæslu.
+                </p>
+
+
+                <p>
+                    Hugmyndin er fyrst og fremst að gera það einfalt og fljótlegt
+                    að skoða leiki dagsins, með algjörum fókus á að sjá hvaða
+                    dómarateymi er á hverjum leik.
+                </p>
+
+
+                <p>
+                    Einnig er hægt að skoða næstu leiki, fyrri leiki og kalla fram
+                    atvik úr leikskýrslum, ásamt stöðu liða í deildum til að setja
+                    komandi leiki í betra samhengi.
+                </p>
+
+
+                <p>
+                    Á síðunni eru aðgengileg gögn frá tímabilunum
+                    <strong>2024, 2025 og 2026</strong>.
+                </p>
+
+
+                <p>
+                    <strong>
+                        Dómarar er sjálfstætt verkefni og höfundur setur fram
+                        fyrirvara um áreiðanleika gagnanna. Enda er hann sjálfur
+                        tækniheftur með öllu.
+                    </strong>
+                </p>
+
+
+                <p>
+                    Upplýsingar um leiki og dómgæslu byggja á gögnum sem birt eru af KSÍ.
+                </p>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+
+    <!-- SCRIPTS -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="js/supabase-config.js?v=1"></script>
+    <script src="js/supabase-client.js?v=5"></script>
+
+    <script src="js/leiktiminn.js?v=5"></script>
+    <script src="js/menu.js?v=5"></script>
+
+
+</body>
+
+</html>

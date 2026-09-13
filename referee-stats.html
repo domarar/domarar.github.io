@@ -1,92 +1,548 @@
 <!DOCTYPE html>
 <html lang="is">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Dómarar">
-  <title>Hverjir dæma hvar? · Dómarar</title>
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=1">
- <link rel="manifest" href="/manifest.json">
-  <link rel="stylesheet" href="css/style.css?v=38">
-  <link rel="stylesheet" href="css/menu.css?v=1">
-  <link rel="stylesheet" href="css/referee-stats.css?v=2">
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, viewport-fit=cover"
+    >
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta
+        name="apple-mobile-web-app-status-bar-style"
+        content="black-translucent"
+    >
+    <meta
+        name="apple-mobile-web-app-title"
+        content="Dómarar"
+    >
+
+    <title>Hverjir dæma hvar? · Dómarar</title>
+
+    <link
+        rel="apple-touch-icon"
+        sizes="180x180"
+        href="/apple-touch-icon.png?v=1"
+    >
+
+    <link rel="manifest" href="/manifest.json">
+
+    <link
+        rel="stylesheet"
+        href="css/style.css?v=38"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/menu.css?v=5"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/referee-stats.css?v=2"
+    >
+
 </head>
+
+
 <body class="referee-stats-page">
-  <main class="app stats-app">
-    <header class="topbar">
-      <a class="brand" href="index.html" aria-label="Dómarar forsíða">
-        <div class="brand-logo">
-          <img src="logos/domarinn_logo.png" alt="Dómarar logo" width="52" height="52">
-        </div>
-        <div><h1>DÓMARAR</h1><p>Leikir og dómarar</p></div>
-      </a>
-      <button class="menu-button" id="menuButton" type="button" aria-label="Opna valmynd" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-    </header>
 
 
-    <header class="stats-heading">
-      <p class="stats-eyebrow">TÖLFRÆÐI</p>
-      <h2>Hverjir dæma hvar?</h2>
-      <p>Leikir sumarsins eftir deildum og hlutverkum.</p>
-    </header>
+    <main class="app stats-app">
 
 
-    <section class="stats-filters" aria-label="Síur">
-      <div class="stats-filter-row">
-        <label class="stats-select-wrap">
-    <span class="sr-only">Veldu ár</span>
-    <select id="statsYearSelect"></select>
-</label>
-        <label class="stats-select-wrap">
-          <span class="sr-only">Veldu deild</span>
-          <select id="statsLeagueSelect"></select>
-        </label>
-      </div>
-      <div class="stats-role-tabs" id="statsRoleTabs" aria-label="Hlutverk">
-        <button class="is-active" type="button" data-role="referees">Dómari</button>
-        <button type="button" data-role="assistants">AD</button>
-        <button type="button" data-role="fourthOfficials">Fjórði</button>
-        <button type="button" data-role="topTen">TOPP 10</button>
-      </div>
-    </section>
+        <!-- =========================================
+             HEADER
+        ========================================== -->
+
+        <header class="topbar">
 
 
-    <section class="stats-ranking-card" aria-live="polite">
-      <div class="stats-ranking-head">
-        <h3 id="statsRankingTitle">Sæki tölfræði…</h3>
-        <p id="statsCoverage"></p>
-      </div>
-      <div id="statsRanking" class="stats-ranking"></div>
-    </section>
-  </main>
+            <a
+                class="brand"
+                href="index.html"
+                aria-label="Dómarar forsíða"
+            >
+
+                <div class="brand-logo">
+
+                    <img
+                        src="logos/domarinn_logo.png"
+                        alt="Dómarar logo"
+                        width="52"
+                        height="52"
+                    >
+
+                </div>
 
 
-  <div class="menu-overlay" id="menuOverlay">
-    <aside class="menu-panel">
-      <button class="menu-close" id="menuClose" type="button" aria-label="Loka valmynd">×</button>
-      <div class="menu-content">
-        <div class="menu-header">
-          <img src="logos/domarinn_logo.png" alt="Dómarar logo" class="menu-logo">
-          <div><h2>DÓMARAR</h2><p>Leikir og dómarar</p></div>
-        </div>
-        <a class="menu-item" href="index.html"><span>Dómarar forsíða</span><span class="menu-arrow">›</span></a>
-        <a class="menu-item is-current" href="referee-stats.html" aria-current="page"><span>Hverjir dæma hvar?</span><span class="menu-arrow">›</span></a>
-        <a class="menu-item" href="laws.html"><span>Knattspyrnulögin</span><span class="menu-arrow">›</span></a>
+                <div>
 
-        <div class="menu-version">DÓMARAR · Tölfræði</div>
-      </div>
-    </aside>
-  </div>
+                    <h1>
+                        DÓMARAR
+                    </h1>
 
- <script src="js/referee-profile.js?v=1"></script>
-<script src="js/referee-stats.js?v=1"></script>
-<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "4c461a123784415db60f9d5e0383df47"}'></script><!-- End Cloudflare Web Analytics -->
+                    <p>
+                        Leikir og dómarar
+                    </p>
+
+                </div>
+
+            </a>
+
+
+            <button
+                class="menu-button"
+                id="menuButton"
+                type="button"
+                aria-label="Opna valmynd"
+                aria-expanded="false"
+            >
+
+                <span></span>
+                <span></span>
+                <span></span>
+
+            </button>
+
+
+        </header>
+
+
+
+        <!-- =========================================
+             PAGE HEADING
+        ========================================== -->
+
+        <header class="stats-heading">
+
+            <p class="stats-eyebrow">
+                TÖLFRÆÐI
+            </p>
+
+            <h2>
+                Hverjir dæma hvar?
+            </h2>
+
+            <p>
+                Leikir sumarsins eftir deildum og hlutverkum.
+            </p>
+
+        </header>
+
+
+
+        <!-- =========================================
+             FILTERS
+        ========================================== -->
+
+        <section
+            class="stats-filters"
+            aria-label="Síur"
+        >
+
+
+            <div class="stats-filter-row">
+
+
+                <label class="stats-select-wrap">
+
+                    <span class="sr-only">
+                        Veldu ár
+                    </span>
+
+                    <select id="statsYearSelect"></select>
+
+                </label>
+
+
+                <label class="stats-select-wrap">
+
+                    <span class="sr-only">
+                        Veldu deild
+                    </span>
+
+                    <select id="statsLeagueSelect"></select>
+
+                </label>
+
+
+            </div>
+
+
+
+            <div
+                class="stats-role-tabs"
+                id="statsRoleTabs"
+                aria-label="Hlutverk"
+            >
+
+                <button
+                    class="is-active"
+                    type="button"
+                    data-role="referees"
+                >
+                    Dómari
+                </button>
+
+
+                <button
+                    type="button"
+                    data-role="assistants"
+                >
+                    AD
+                </button>
+
+
+                <button
+                    type="button"
+                    data-role="fourthOfficials"
+                >
+                    Fjórði
+                </button>
+
+
+                <button
+                    type="button"
+                    data-role="topTen"
+                >
+                    TOPP 10
+                </button>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =========================================
+             RANKING
+        ========================================== -->
+
+        <section
+            class="stats-ranking-card"
+            aria-live="polite"
+        >
+
+
+            <div class="stats-ranking-head">
+
+                <h3 id="statsRankingTitle">
+                    Sæki tölfræði…
+                </h3>
+
+                <p id="statsCoverage"></p>
+
+            </div>
+
+
+            <div
+                id="statsRanking"
+                class="stats-ranking"
+            ></div>
+
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =========================================
+         GLOBAL DÓMARAR MENU
+    ========================================== -->
+
+    <div
+        class="menu-overlay"
+        id="menuOverlay"
+    >
+
+
+        <aside class="menu-panel">
+
+
+            <button
+                class="menu-close"
+                id="menuClose"
+                type="button"
+                aria-label="Loka valmynd"
+            >
+                ×
+            </button>
+
+
+
+            <div class="menu-content">
+
+
+                <div class="menu-header">
+
+
+                    <img
+                        src="logos/domarinn_logo.png"
+                        alt="Dómarar"
+                        class="menu-logo"
+                    >
+
+
+                    <div>
+
+                        <h2>
+                            DÓMARAR
+                        </h2>
+
+                        <p>
+                            Leikir og dómarateymi
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="menu-section">
+
+
+                    <div class="menu-section-title">
+                        DÓMARAR
+                    </div>
+
+
+
+                    <a
+                        class="menu-item"
+                        href="index.html"
+                    >
+
+                        <span>
+                            Dómarar forsíða
+                        </span>
+
+                        <span class="menu-arrow">
+                            ›
+                        </span>
+
+                    </a>
+
+
+
+                    <a
+                        class="menu-item active"
+                        href="referee-stats.html"
+                        aria-current="page"
+                    >
+
+                        <span>
+                            Hverjir dæma hvar?
+                        </span>
+
+                        <span class="menu-arrow">
+                            ›
+                        </span>
+
+                    </a>
+
+
+
+                    <a
+                        class="menu-item"
+                        href="laws.html"
+                    >
+
+                        <span>
+                            Knattspyrnulögin
+                        </span>
+
+                        <span class="menu-arrow">
+                            ›
+                        </span>
+
+                    </a>
+
+
+
+                    <a
+                        class="menu-item menu-item-leiktiminn beta-hidden"
+                    >
+
+                        <span class="menu-item-main">
+                            Leiktíminn – Mitt svæði
+                        </span>
+
+                        <span class="menu-item-sub">
+                            Aðeins virkt fyrir Garmin notendur
+                        </span>
+
+                        <span class="menu-arrow">
+                            ›
+                        </span>
+
+                    </a>
+
+
+
+                    <button
+                        class="menu-item"
+                        id="aboutMenuButton"
+                        type="button"
+                    >
+
+                        <span>
+                            Um Dómarar
+                        </span>
+
+                        <span class="menu-arrow">
+                            ›
+                        </span>
+
+                    </button>
+
+
+                </div>
+
+
+
+                <div class="menu-version">
+                    DÓMARAR
+                </div>
+
+
+            </div>
+
+
+        </aside>
+
+
+    </div>
+
+
+
+    <!-- =========================================
+         UM DÓMARAR
+    ========================================== -->
+
+    <div
+        class="about-overlay"
+        id="aboutOverlay"
+    >
+
+
+        <section class="about-card">
+
+
+            <button
+                class="about-close"
+                id="aboutClose"
+                type="button"
+                aria-label="Loka"
+            >
+                ×
+            </button>
+
+
+
+            <div class="about-content">
+
+
+                <h2>
+                    Um Dómarar
+                </h2>
+
+
+                <p>
+                    Dómarar er verkefni gert til gamans fyrir
+                    knattspyrnudómara og aðra sem hafa áhuga á
+                    dómgæslu.
+                </p>
+
+
+                <p>
+                    Hugmyndin er fyrst og fremst að gera það
+                    einfalt og fljótlegt að skoða leiki dagsins,
+                    með algjörum fókus á að sjá hvaða dómarateymi
+                    er á hverjum leik.
+                </p>
+
+
+                <p>
+                    Einnig er hægt að skoða næstu leiki, fyrri leiki
+                    og kalla fram atvik úr leikskýrslum, ásamt stöðu
+                    liða í deildum til að setja komandi leiki í betra
+                    samhengi.
+                </p>
+
+
+                <p>
+                    Markmiðið er einfaldlega að safna saman
+                    gagnlegum upplýsingum fyrir dómara á einn stað
+                    og birta þær á skýran og aðgengilegan hátt.
+                </p>
+
+
+                <p>
+                    Á síðunni eru aðgengileg gögn frá tímabilunum
+                    2024, 2025 og 2026.
+                </p>
+
+
+                <p>
+                    Dómarar er sjálfstætt verkefni og er ekki
+                    opinber vefur Knattspyrnusambands Íslands (KSÍ).
+                </p>
+
+
+                <p>
+                    Upplýsingar um leiki og dómgæslu byggja á
+                    gögnum sem birt eru af KSÍ og öðrum opinberum
+                    heimildum.
+                </p>
+
+
+                <p>
+                    Dómarar er sjálfstætt verkefni og höfundur
+                    setur fram fyrirvara um áreiðanleika gagnanna.
+                </p>
+
+
+            </div>
+
+
+        </section>
+
+
+    </div>
+
+
+
+    <!-- =========================================
+         SCRIPTS
+    ========================================== -->
+
+    <script src="js/referee-profile.js?v=1"></script>
+    <script src="js/referee-stats.js?v=1"></script>
+    <script src="js/menu.js?v=5"></script>
+
+
+    <!-- Cloudflare Web Analytics -->
+
+    <script
+        type="module"
+        src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon='{"token":"4c461a123784415db60f9d5e0383df47"}'
+    ></script>
+
+    <!-- End Cloudflare Web Analytics -->
+
+
 </body>
-</html>
-</body>
+
 </html>

@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="is">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, viewport-fit=cover"
+    >
+
+    <title>Dómarar – Leiktíminn</title>
+
+    <link
+    rel="apple-touch-icon"
+    sizes="180x180"
+    href="/logos/leiktiminn-apple-touch-icon-180.png"
+>
+>
+
+    <link
+        rel="stylesheet"
+        href="css/leiktiminn.css?v=7"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/menu.css?v=5"
+    >
+
+</head>
+
+
+<body class="leiktiminn-match-page">
+
+
+    <div class="leiktiminn-page">
+
+
+        <!-- =========================================
+             HEADER
+        ========================================== -->
+
+        <header class="leiktiminn-header">
+
+
+            <a
+                href="index.html"
+                class="leiktiminn-brand"
+                aria-label="Til baka á Dómarar"
+            <a
+    href="leiktiminn.html"
+    class="leiktiminn-brand"
+    aria-label="Leiktíminn"
+>
+
+    <img
+        src="logos/leiktiminn-logo.png"
+        alt="Leiktíminn"
+        class="leiktiminn-logo"
+    >
+
+    <div>
+
+        <h1>
+            LEIKTÍMINN
+        </h1>
+
+        <p>
+            Dómarar
+        </p>
+
+    </div>
+
+</a>
+
+
+
+            <div class="leiktiminn-header-actions">
+
+
+                <button
+                    class="profile-button"
+                    type="button"
+                    aria-label="Mitt svæði"
+                    onclick="window.location.href='leiktiminn.html?view=profile'"
+                >
+                    RG
+                </button>
+
+
+                <button
+                    class="menu-button"
+                    id="menuButton"
+                    type="button"
+                    aria-label="Opna valmynd"
+                >
+
+                    <span></span>
+                    <span></span>
+                    <span></span>
+
+                </button>
+
+
+            </div>
+
+
+        </header>
+
+
+
+        <!-- =========================================
+             BACK
+        ========================================== -->
+
+        <a
+            href="leiktiminn.html?view=played"
+            class="match-back-link"
+        >
+            <span>←</span>
+            Til baka í spilaða leiki
+        </a>
+
+
+
+        <!-- =========================================
+             MATCH INTRO
+        ========================================== -->
+
+        <section class="leiktiminn-intro">
+
+
+            <p class="leiktiminn-eyebrow">
+                LEIKUR
+            </p>
+
+
+            <h2 id="match-title">
+                Hleð leik...
+            </h2>
+
+
+            <p id="match-subtitle">
+                Sæki upplýsingar um leik.
+            </p>
+
+
+        </section>
+
+
+
+        <!-- =========================================
+             MATCH CONTENT
+        ========================================== -->
+
+        <main class="leiktiminn-main-grid">
+
+
+            <!-- =====================================
+                 OFFICIALS
+            ====================================== -->
+
+            <section class="match-officials-section">
+
+
+                <h3 class="match-officials-heading">
+                    Dómarateymi
+                </h3>
+
+
+                <div id="match-details"></div>
+
+
+            </section>
+
+
+
+            <!-- =====================================
+                 GARMIN
+            ====================================== -->
+
+            <section class="leiktiminn-panel match-garmin-panel">
+
+
+                <div class="panel-heading">
+
+                    <p class="panel-eyebrow">
+                        GARMIN
+                    </p>
+
+                </div>
+
+
+
+                <!-- =====================================
+                     GARMIN FITNESS DATA
+
+                     Filled by leiktiminn-match.js
+                ====================================== -->
+
+                <div
+                    id="match-fitness"
+                    class="match-fitness-container"
+                ></div>
+
+
+
+                <!-- =====================================
+                     GARMIN EMPTY STATE
+
+                     Hidden when activity data exists
+                ====================================== -->
+
+                <div
+                    id="match-garmin-empty"
+                    class="empty-state"
+                >
+
+
+                    <strong>
+                        Engin virkni tengd enn
+                    </strong>
+
+
+                    <span>
+                        Þegar leikur samstillist úr Garmin
+                        birtast gögnin hér.
+                    </span>
+
+
+                </div>
+
+
+            </section>
+
+
+        </main>
+
+
+
+        <!-- =========================================
+             FUTURE ACTIVITY
+        ========================================== -->
+
+        <section class="leiktiminn-panel activity-placeholder">
+
+
+            <div>
+
+
+                <p class="panel-eyebrow">
+                    Í FRAMTÍÐINNI
+                </p>
+
+
+                <h3>
+                    Hitakort og hreyfing
+                </h3>
+
+
+                <p>
+                    Hér getum við síðar sýnt vegalengd,
+                    púls, spretti, hámarkshraða og hitakort
+                    yfir hreyfingu dómarans á vellinum.
+                </p>
+
+
+            </div>
+
+
+
+            <div class="activity-placeholder-graphic">
+
+                <span></span>
+                <span></span>
+                <span></span>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =========================================
+             DESKTOP FOOTER
+        ========================================== -->
+
+        <footer class="leiktiminn-footer">
+
+
+            <img
+                src="logos/domarinn_logo.png"
+                alt=""
+            >
+
+
+            <span>
+                DÓMARAR · LEIKTÍMINN
+            </span>
+
+
+        </footer>
+
+
+    </div>
+
+
+
+    <!-- =========================================
+         MOBILE CREATE MENU
+    ========================================== -->
+
+    <div
+        id="mobileCreateMenu"
+        class="mobile-create-menu"
+        hidden
+    >
+
+        <button
+            id="mobileCreateMatchAction"
+            class="mobile-create-menu-item"
+            type="button"
+            onclick="window.location.href='leiktiminn.html?create=1'"
+        >
+
+            <span>
+                ＋
+            </span>
+
+            Búa til leik
+
+        </button>
+
+    </div>
+
+
+
+    <!-- =========================================
+         MOBILE BOTTOM NAV
+    ========================================== -->
+
+    <nav
+        class="mobile-bottom-nav"
+        aria-label="Leiktíminn"
+    >
+
+
+        <!-- LEIKIR -->
+
+        <button
+            class="mobile-nav-item"
+            type="button"
+            onclick="window.location.href='leiktiminn.html?view=upcoming'"
+        >
+
+            <span class="mobile-nav-icon">
+                ▣
+            </span>
+
+            <span>
+                Leikir
+            </span>
+
+        </button>
+
+
+
+        <!-- SPILAÐIR -->
+
+        <button
+            class="mobile-nav-item active"
+            type="button"
+            onclick="window.location.href='leiktiminn.html?view=played'"
+        >
+
+            <span class="mobile-nav-icon">
+                ✓
+            </span>
+
+            <span>
+                Spilaðir
+            </span>
+
+        </button>
+
+
+
+        <!-- CREATE -->
+
+        <button
+            id="openCreateMatchMobile"
+            class="mobile-nav-create"
+            type="button"
+            aria-label="Opna aðgerðir"
+            aria-expanded="false"
+            aria-controls="mobileCreateMenu"
+        >
+            ＋
+        </button>
+
+
+
+        <!-- TÖLFRÆÐI -->
+
+        <button
+            class="mobile-nav-item"
+            type="button"
+            onclick="window.location.href='leiktiminn.html?view=stats'"
+        >
+
+            <span class="mobile-nav-icon">
+                ⌁
+            </span>
+
+            <span>
+                Tölfræði
+            </span>
+
+        </button>
+
+
+
+        <!-- PRÓFÍLL -->
+
+        <button
+            class="mobile-nav-item"
+            type="button"
+            onclick="window.location.href='leiktiminn.html?view=profile'"
+        >
+
+            <span class="mobile-nav-icon">
+                ●
+            </span>
+
+            <span>
+                Prófíll
+            </span>
+
+        </button>
+
+
+    </nav>
+
+
+
+    <!-- =========================================
+         GLOBAL DÓMARAR MENU
+    ========================================== -->
+
+    <div
+        class="menu-overlay"
+        id="menuOverlay"
+    >
+
+
+        <aside class="menu-panel">
+
+
+            <button
+                class="menu-close"
+                id="menuClose"
+                type="button"
+                aria-label="Loka valmynd"
+            >
+                ×
+            </button>
+
+
+
+            <div class="menu-content">
+
+
+                <div class="menu-header">
+
+
+                    <img
+                        src="logos/domarinn_logo.png"
+                        alt="Dómarar"
+                        class="menu-logo"
+                    >
+
+
+                    <div>
+
+                        <h2>
+                            DÓMARAR
+                        </h2>
+
+                        <p>
+                            Leikir og dómarateymi
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="menu-section">
+
+
+                    <div class="menu-section-title">
+                        DÓMARAR
+                    </div>
+
+
+
+                    <a
+                        class="menu-item"
+                        href="index.html"
+                    >
+
+                        <span>
+                            Dómarar forsíða
+                        </span>
+
+                        <span class="menu-arrow">
+                            ›
+                        </span>
+
+                    </a>
+
+
+
+                    <a
+                        class="menu-item"
+                        href="referee-stats.html"
+                    >
+
+                        <span>
+                            Hverjir dæma hvar?
+                        </span>
+
+                        <span class="menu-arrow">
+                            ›
+                        </span>
+
+                    </a>
+
+
+
+                    <a
+                        class="menu-item"
+                        href="laws.html"
+                    >
+
+                        <span>
+                            Knattspyrnulögin
+                        </span>
+
+                        <span class="menu-arrow">
+                            ›
+                        </span>
+
+                    </a>
+
+
+
+                    <a
+                        class="menu-item menu-item-leiktiminn active"
+                        href="leiktiminn.html"
+                        aria-current="page"
+                    >
+
+                        <span class="menu-item-main">
+                            Leiktíminn – Mitt svæði
+                        </span>
+
+                        <span class="menu-item-sub">
+                            Aðeins virkt fyrir Garmin notendur
+                        </span>
+
+                        <span class="menu-arrow">
+                            ›
+                        </span>
+
+                    </a>
+
+
+
+                    <button
+                        class="menu-item"
+                        id="aboutMenuButton"
+                        type="button"
+                    >
+
+                        <span>
+                            Um Dómarar
+                        </span>
+
+                        <span class="menu-arrow">
+                            ›
+                        </span>
+
+                    </button>
+
+
+                </div>
+
+
+
+                <div class="menu-version">
+                    DÓMARAR
+                </div>
+
+
+            </div>
+
+
+        </aside>
+
+
+    </div>
+
+
+
+    <!-- =========================================
+         UM DÓMARAR
+    ========================================== -->
+
+    <div
+        class="about-overlay"
+        id="aboutOverlay"
+    >
+
+
+        <section class="about-card">
+
+
+            <button
+                class="about-close"
+                id="aboutClose"
+                type="button"
+                aria-label="Loka Um Dómarar"
+            >
+                ×
+            </button>
+
+
+
+            <div class="about-content">
+
+
+                <h2>
+                    Um Dómarar
+                </h2>
+
+
+                <p>
+                    <strong>Dómarar</strong> er verkefni gert til gamans fyrir
+                    knattspyrnudómara og aðra sem hafa áhuga á dómgæslu.
+                </p>
+
+
+                <p>
+                    Hugmyndin er fyrst og fremst að gera það einfalt og fljótlegt
+                    að skoða leiki dagsins, með algjörum fókus á að sjá hvaða
+                    dómarateymi er á hverjum leik.
+                </p>
+
+
+                <p>
+                    Einnig er hægt að skoða næstu leiki, fyrri leiki og kalla fram
+                    atvik úr leikskýrslum, ásamt stöðu liða í deildum til að setja
+                    komandi leiki í betra samhengi.
+                </p>
+
+
+                <p>
+                    Á síðunni eru aðgengileg gögn frá tímabilunum
+                    <strong>2024, 2025 og 2026</strong>.
+                </p>
+
+
+                <p>
+                    <strong>
+                        Dómarar er sjálfstætt verkefni og höfundur setur fram
+                        fyrirvara um áreiðanleika gagnanna. Enda er hann sjálfur
+                        tækniheftur með öllu.
+                    </strong>
+                </p>
+
+
+                <p>
+                    Upplýsingar um leiki og dómgæslu byggja á gögnum sem birt eru af KSÍ.
+                </p>
+
+
+            </div>
+
+
+        </section>
+
+
+    </div>
+
+
+
+    <!-- =========================================
+         MOBILE CREATE MENU SCRIPT
+    ========================================== -->
+
+    <script>
+
+        const matchPageCreateButton =
+            document.getElementById(
+                "openCreateMatchMobile"
+            );
+
+
+        const matchPageCreateMenu =
+            document.getElementById(
+                "mobileCreateMenu"
+            );
+
+
+        function closeMatchPageCreateMenu() {
+
+            if (
+                !matchPageCreateMenu
+            ) {
+                return;
+            }
+
+
+            matchPageCreateMenu.classList.remove(
+                "open"
+            );
+
+
+            matchPageCreateMenu.hidden =
+                true;
+
+
+            matchPageCreateButton
+                ?.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
+        }
+
+
+        function openMatchPageCreateMenu() {
+
+            if (
+                !matchPageCreateMenu
+            ) {
+                return;
+            }
+
+
+            matchPageCreateMenu.hidden =
+                false;
+
+
+            matchPageCreateMenu.classList.add(
+                "open"
+            );
+
+
+            matchPageCreateButton
+                ?.setAttribute(
+                    "aria-expanded",
+                    "true"
+                );
+        }
+
+
+        matchPageCreateButton
+            ?.addEventListener(
+                "click",
+                event => {
+
+                    event.stopPropagation();
+
+
+                    if (
+                        matchPageCreateMenu
+                            ?.hidden
+                    ) {
+
+                        openMatchPageCreateMenu();
+
+                    } else {
+
+                        closeMatchPageCreateMenu();
+                    }
+                }
+            );
+
+
+        document.addEventListener(
+            "click",
+            event => {
+
+                if (
+                    !event.target.closest(
+                        "#mobileCreateMenu"
+                    )
+                    &&
+                    !event.target.closest(
+                        "#openCreateMatchMobile"
+                    )
+                ) {
+
+                    closeMatchPageCreateMenu();
+                }
+            }
+        );
+
+    </script>
+
+
+
+    <!-- =========================================
+         SCRIPTS
+    ========================================== -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="js/supabase-config.js?v=1"></script>
+    <script src="js/supabase-client.js?v=1"></script>
+
+    <script src="js/leiktiminn-match.js?v=7"></script>
+    <script src="js/menu.js?v=5"></script>
+
+
+</body>
+
+</html>

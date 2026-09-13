@@ -1106,7 +1106,7 @@ const archive2024Section = archive2024SearchGames.length
     archive2023Section;
     
     
-    // updateGameCardResultsFromReports();
+    updateGameCardResultsFromReports();
 
     const showMoreButton =
     gamesContainer.querySelector(".show-more-search-games");
@@ -1436,7 +1436,7 @@ gamesContainer.addEventListener("touchend", event => {
 }, { passive: true });
 
 let loadArchives = null;
-let archivesLoaded = false;
+let archiveLoadPromise = null;
 
 // =====================================
 // LOAD REAL GAME DATA
@@ -1466,108 +1466,51 @@ async function loadGames() {
         // Render the page NOW
         renderGamesForSelectedDay();
 
-        loadArchives = async function() {
-        
-            if (archivesLoaded) {
-                return;
+        loadArchives = function() {
+            if (archiveLoadPromise !== null) {
+                return archiveLoadPromise;
             }
 
-            archivesLoaded = true;
+            archiveLoadPromise = (async () => {
+                // archive.json already contains every available season.
+                const archiveResponse = await fetch("data/archive.json");
 
+                if (!archiveResponse.ok) {
+                    throw new Error(
+                        `Archive HTTP error: ${archiveResponse.status}`
+                    );
+                }
 
-        // 2. Load archive data AFTER first render
-        const [
-    archiveResponse,
-    archive2025Response,
-    archive2024Response,
-    archive2023Response
-] = await Promise.all([
-    fetch("data/archive.json"),
-    fetch("data/archive-2025.json"),
-    fetch("data/archive-2024.json"),
-    fetch("data/archive-2023.json")
-]);
+                const archiveData = await archiveResponse.json();
 
-        if (!archiveResponse.ok) {
-            throw new Error(
-                `Archive HTTP error: ${archiveResponse.status}`
-            );
-        }
+                archiveGames = Array.isArray(archiveData.games)
+                    ? archiveData.games
+                    : [];
 
-        if (!archive2025Response.ok) {
-            throw new Error(
-                `Archive 2025 HTTP error: ${archive2025Response.status}`
-            );
-        }
+                const gamesById = new Map();
 
-        if (!archive2024Response.ok) {
-            throw new Error(
-                `Archive 2024 HTTP error: ${archive2024Response.status}`
-            );
-        }
+                archiveGames.forEach(game => {
+                    if (game.id !== null && game.id !== undefined) {
+                        gamesById.set(game.id, game);
+                    }
+                });
 
-        if (!archive2023Response.ok) {
-    throw new Error(
-        `Archive 2023 HTTP error: ${archive2023Response.status}`
-    );
-}
+                // Current data wins when a game exists in both files.
+                upcomingGames.forEach(game => {
+                    if (game.id !== null && game.id !== undefined) {
+                        gamesById.set(game.id, game);
+                    }
+                });
 
-        const archiveData = await archiveResponse.json();
-        const archive2025Data = await archive2025Response.json();
-        const archive2024Data = await archive2024Response.json();
-        const archive2023Data = await archive2023Response.json();
-        archiveGames = Array.isArray(archiveData.games)
-            ? archiveData.games
-            : [];
+                allGames = Array.from(gamesById.values());
+            })().catch(error => {
+                // Permit a later search to retry after a temporary failure.
+                archiveLoadPromise = null;
+                throw error;
+            });
 
-        const archive2025Games = Array.isArray(archive2025Data.games)
-            ? archive2025Data.games
-            : [];
-
-        const archive2024Games = Array.isArray(archive2024Data.games)
-            ? archive2024Data.games
-            : [];
-
-        const archive2023Games = Array.isArray(archive2023Data.games)
-    ? archive2023Data.games
-    : [];
-
-        // 3. Merge everything once archives are ready
-        const gamesById = new Map();
-
-        archiveGames.forEach(game => {
-            if (game.id !== null && game.id !== undefined) {
-                gamesById.set(game.id, game);
-            }
-        });
-
-        archive2025Games.forEach(game => {
-            if (game.id !== null && game.id !== undefined) {
-                gamesById.set(game.id, game);
-            }
-        });
-
-        archive2024Games.forEach(game => {
-            if (game.id !== null && game.id !== undefined) {
-                gamesById.set(game.id, game);
-            }
-        });
-
-        archive2023Games.forEach(game => {
-    if (game.id !== null && game.id !== undefined) {
-        gamesById.set(game.id, game);
-    }
-});
-
-        upcomingGames.forEach(game => {
-            if (game.id !== null && game.id !== undefined) {
-                gamesById.set(game.id, game);
-            }
-        });
-
-        allGames = Array.from(gamesById.values());
-
-        }
+            return archiveLoadPromise;
+        };
 
     } catch (error) {
         console.error(
@@ -1637,7 +1580,9 @@ document.addEventListener("click", event => {
 
 searchInput.addEventListener("focus", () => {
     if (loadArchives !== null) {
-        loadArchives();
+        loadArchives().catch(error => {
+            console.error("Villa við að sækja skjalasafn:", error);
+        });
     }
 });
 
@@ -1659,8 +1604,16 @@ searchInput.addEventListener("input", () => {
             search !== "" &&
             loadArchives !== null
         ) {
+            try {
+                await loadArchives();
+            } catch (error) {
+                console.error("Villa við að sækja skjalasafn:", error);
+            }
 
-            await loadArchives();
+            // A newer debounced search will render the current value.
+            if (search !== searchInput.value.trim()) {
+                return;
+            }
         }
 
 
