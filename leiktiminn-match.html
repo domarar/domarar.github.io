@@ -13,15 +13,24 @@
     <title>Dómarar – Leiktíminn</title>
 
     <link
-    rel="apple-touch-icon"
-    sizes="180x180"
-    href="/logos/leiktiminn-apple-touch-icon-180.png"
->
->
+        rel="manifest"
+        href="/leiktiminn-manifest.json"
+    >
+
+    <link
+        rel="apple-touch-icon"
+        sizes="180x180"
+        href="/logos/leiktiminn-apple-touch-icon-180.png"
+    >
 
     <link
         rel="stylesheet"
-        href="css/leiktiminn.css?v=7"
+        href="css/leiktiminn.css?v=8"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/leiktiminn-match.css?v=1"
     >
 
     <link
@@ -46,35 +55,30 @@
 
 
             <a
-                href="index.html"
+                href="leiktiminn.html"
                 class="leiktiminn-brand"
-                aria-label="Til baka á Dómarar"
-            <a
-    href="leiktiminn.html"
-    class="leiktiminn-brand"
-    aria-label="Leiktíminn"
->
+                aria-label="Leiktíminn"
+            >
 
-    <img
-        src="logos/leiktiminn-logo.png"
-        alt="Leiktíminn"
-        class="leiktiminn-logo"
-    >
+                <img
+                    src="logos/leiktiminn-logo.png"
+                    alt="Leiktíminn"
+                    class="leiktiminn-logo"
+                >
 
-    <div>
+                <div>
 
-        <h1>
-            LEIKTÍMINN
-        </h1>
+                    <h1>
+                        LEIKTÍMINN
+                    </h1>
 
-        <p>
-            Dómarar
-        </p>
+                    <p>
+                        Dómarar
+                    </p>
 
-    </div>
+                </div>
 
-</a>
-
+            </a>
 
 
             <div class="leiktiminn-header-actions">
@@ -82,6 +86,7 @@
 
                 <button
                     class="profile-button"
+                    id="matchHeaderProfile"
                     type="button"
                     aria-label="Mitt svæði"
                     onclick="window.location.href='leiktiminn.html?view=profile'"
@@ -119,20 +124,25 @@
             href="leiktiminn.html?view=played"
             class="match-back-link"
         >
-            <span>←</span>
+
+            <span>
+                ←
+            </span>
+
             Til baka í spilaða leiki
+
         </a>
 
 
 
         <!-- =========================================
-             MATCH INTRO
+             MATCH HERO
         ========================================== -->
 
-        <section class="leiktiminn-intro">
+        <section class="match-detail-hero">
 
 
-            <p class="leiktiminn-eyebrow">
+            <p class="match-detail-eyebrow">
                 LEIKUR
             </p>
 
@@ -142,9 +152,16 @@
             </h2>
 
 
-            <p id="match-subtitle">
-                Sæki upplýsingar um leik.
-            </p>
+            <div
+                id="match-meta"
+                class="match-detail-meta"
+            >
+
+                <span>
+                    Sæki upplýsingar um leik.
+                </span>
+
+            </div>
 
 
         </section>
@@ -152,22 +169,39 @@
 
 
         <!-- =========================================
-             MATCH CONTENT
+             MAIN MATCH DASHBOARD
         ========================================== -->
 
-        <main class="leiktiminn-main-grid">
+        <main class="match-dashboard">
 
 
             <!-- =====================================
                  OFFICIALS
             ====================================== -->
 
-            <section class="match-officials-section">
+            <section class="match-dashboard-card match-officials-card">
 
 
-                <h3 class="match-officials-heading">
-                    Dómarateymi
-                </h3>
+                <div class="match-card-heading">
+
+
+                    <div class="match-card-heading-icon">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+
+
+                    <div>
+
+                        <p class="match-card-eyebrow">
+                            DÓMARATEYMI
+                        </p>
+
+                    </div>
+
+
+                </div>
 
 
                 <div id="match-details"></div>
@@ -181,24 +215,42 @@
                  GARMIN
             ====================================== -->
 
-            <section class="leiktiminn-panel match-garmin-panel">
+            <section class="match-dashboard-card match-garmin-card">
 
 
-                <div class="panel-heading">
+                <div class="match-card-heading match-garmin-heading">
 
-                    <p class="panel-eyebrow">
-                        GARMIN
-                    </p>
+
+                    <div class="match-garmin-heading-left">
+
+
+                        <div class="match-garmin-bars">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+
+
+                        <p class="match-card-eyebrow">
+                            GARMIN
+                        </p>
+
+
+                    </div>
+
+
+                    <span
+                        id="match-garmin-source"
+                        class="match-garmin-source"
+                    >
+                        Virkni úr Garmin
+                    </span>
+
 
                 </div>
 
 
-
-                <!-- =====================================
-                     GARMIN FITNESS DATA
-
-                     Filled by leiktiminn-match.js
-                ====================================== -->
 
                 <div
                     id="match-fitness"
@@ -207,28 +259,19 @@
 
 
 
-                <!-- =====================================
-                     GARMIN EMPTY STATE
-
-                     Hidden when activity data exists
-                ====================================== -->
-
                 <div
                     id="match-garmin-empty"
-                    class="empty-state"
+                    class="match-garmin-empty"
                 >
 
-
                     <strong>
-                        Engin virkni tengd enn
+                        Engin Garmin gögn enn
                     </strong>
 
-
                     <span>
-                        Þegar leikur samstillist úr Garmin
-                        birtast gögnin hér.
+                        Þegar virkni berst frá úrinu birtast
+                        tölurnar hér.
                     </span>
-
 
                 </div>
 
@@ -241,37 +284,36 @@
 
 
         <!-- =========================================
-             FUTURE ACTIVITY
+             FUTURE DATA
         ========================================== -->
 
-        <section class="leiktiminn-panel activity-placeholder">
+        <section class="match-future-card">
 
 
             <div>
 
 
-                <p class="panel-eyebrow">
-                    Í FRAMTÍÐINNI
+                <p class="match-card-eyebrow">
+                    NÆST
                 </p>
 
 
                 <h3>
-                    Hitakort og hreyfing
+                    Meiri frammistöðugögn
                 </h3>
 
 
                 <p>
-                    Hér getum við síðar sýnt vegalengd,
-                    púls, spretti, hámarkshraða og hitakort
-                    yfir hreyfingu dómarans á vellinum.
+                    Sprettir, hámarkshraði, GPS og hitakort
+                    geta bæst hér við þegar við erum tilbúnir
+                    fyrir næsta stig.
                 </p>
 
 
             </div>
 
 
-
-            <div class="activity-placeholder-graphic">
+            <div class="match-future-mark">
 
                 <span></span>
                 <span></span>
@@ -348,8 +390,6 @@
     >
 
 
-        <!-- LEIKIR -->
-
         <button
             class="mobile-nav-item"
             type="button"
@@ -367,8 +407,6 @@
         </button>
 
 
-
-        <!-- SPILAÐIR -->
 
         <button
             class="mobile-nav-item active"
@@ -388,8 +426,6 @@
 
 
 
-        <!-- CREATE -->
-
         <button
             id="openCreateMatchMobile"
             class="mobile-nav-create"
@@ -402,8 +438,6 @@
         </button>
 
 
-
-        <!-- TÖLFRÆÐI -->
 
         <button
             class="mobile-nav-item"
@@ -422,8 +456,6 @@
         </button>
 
 
-
-        <!-- PRÓFÍLL -->
 
         <button
             class="mobile-nav-item"
@@ -508,9 +540,8 @@
                     </div>
 
 
-
                     <a
-                        class="menu-item"
+                        class="menu-item beta-hidden"
                         href="index.html"
                     >
 
@@ -525,9 +556,8 @@
                     </a>
 
 
-
                     <a
-                        class="menu-item"
+                        class="menu-item beta-hidden"
                         href="referee-stats.html"
                     >
 
@@ -542,9 +572,8 @@
                     </a>
 
 
-
                     <a
-                        class="menu-item"
+                        class="menu-item beta-hidden"
                         href="laws.html"
                     >
 
@@ -559,7 +588,6 @@
                     </a>
 
 
-
                     <a
                         class="menu-item menu-item-leiktiminn active"
                         href="leiktiminn.html"
@@ -567,11 +595,11 @@
                     >
 
                         <span class="menu-item-main">
-                            Leiktíminn – Mitt svæði
+                            Leiktíminn
                         </span>
 
                         <span class="menu-item-sub">
-                            Aðeins virkt fyrir Garmin notendur
+                            Mitt svæði
                         </span>
 
                         <span class="menu-arrow">
@@ -581,9 +609,8 @@
                     </a>
 
 
-
                     <button
-                        class="menu-item"
+                        class="menu-item beta-hidden"
                         id="aboutMenuButton"
                         type="button"
                     >
@@ -602,9 +629,8 @@
                 </div>
 
 
-
                 <div class="menu-version">
-                    DÓMARAR
+                    LEIKTÍMINN
                 </div>
 
 
@@ -641,7 +667,6 @@
             </button>
 
 
-
             <div class="about-content">
 
 
@@ -651,42 +676,9 @@
 
 
                 <p>
-                    <strong>Dómarar</strong> er verkefni gert til gamans fyrir
-                    knattspyrnudómara og aðra sem hafa áhuga á dómgæslu.
-                </p>
-
-
-                <p>
-                    Hugmyndin er fyrst og fremst að gera það einfalt og fljótlegt
-                    að skoða leiki dagsins, með algjörum fókus á að sjá hvaða
-                    dómarateymi er á hverjum leik.
-                </p>
-
-
-                <p>
-                    Einnig er hægt að skoða næstu leiki, fyrri leiki og kalla fram
-                    atvik úr leikskýrslum, ásamt stöðu liða í deildum til að setja
-                    komandi leiki í betra samhengi.
-                </p>
-
-
-                <p>
-                    Á síðunni eru aðgengileg gögn frá tímabilunum
-                    <strong>2024, 2025 og 2026</strong>.
-                </p>
-
-
-                <p>
-                    <strong>
-                        Dómarar er sjálfstætt verkefni og höfundur setur fram
-                        fyrirvara um áreiðanleika gagnanna. Enda er hann sjálfur
-                        tækniheftur með öllu.
-                    </strong>
-                </p>
-
-
-                <p>
-                    Upplýsingar um leiki og dómgæslu byggja á gögnum sem birt eru af KSÍ.
+                    <strong>Dómarar</strong> er sjálfstætt
+                    verkefni fyrir knattspyrnudómara og aðra
+                    sem hafa áhuga á dómgæslu.
                 </p>
 
 
@@ -720,9 +712,7 @@
 
         function closeMatchPageCreateMenu() {
 
-            if (
-                !matchPageCreateMenu
-            ) {
+            if (!matchPageCreateMenu) {
                 return;
             }
 
@@ -746,9 +736,7 @@
 
         function openMatchPageCreateMenu() {
 
-            if (
-                !matchPageCreateMenu
-            ) {
+            if (!matchPageCreateMenu) {
                 return;
             }
 
@@ -823,9 +811,9 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <script src="js/supabase-config.js?v=1"></script>
-    <script src="js/supabase-client.js?v=1"></script>
+    <script src="js/supabase-client.js?v=5"></script>
 
-    <script src="js/leiktiminn-match.js?v=7"></script>
+    <script src="js/leiktiminn-match.js?v=8"></script>
     <script src="js/menu.js?v=5"></script>
 
 

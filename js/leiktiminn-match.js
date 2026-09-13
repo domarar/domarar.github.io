@@ -4,9 +4,9 @@ const matchTitle =
     );
 
 
-const matchSubtitle =
+const matchMeta =
     document.getElementById(
-        "match-subtitle"
+        "match-meta"
     );
 
 
@@ -28,6 +28,22 @@ const matchGarminEmpty =
     );
 
 
+const matchHeaderProfile =
+    document.getElementById(
+        "matchHeaderProfile"
+    );
+
+
+
+// =========================================
+// DISTANCE TARGET
+// =========================================
+
+const MATCH_DISTANCE_TARGET_METERS =
+    13000;
+
+
+
 // =========================================
 // GET MATCH ID
 // =========================================
@@ -39,7 +55,10 @@ const params =
 
 
 const matchId =
-    params.get("id");
+    params.get(
+        "id"
+    );
+
 
 
 // =========================================
@@ -47,6 +66,7 @@ const matchId =
 // =========================================
 
 initializeMatchPage();
+
 
 
 // =========================================
@@ -67,7 +87,9 @@ async function initializeMatchPage() {
         data: { session },
         error: sessionError
     } =
-        await supabaseClient.auth.getSession();
+        await supabaseClient
+            .auth
+            .getSession();
 
 
     if (sessionError) {
@@ -76,6 +98,7 @@ async function initializeMatchPage() {
             "Villa við innskráningu:",
             sessionError
         );
+
 
         showMatchNotFound();
 
@@ -92,13 +115,30 @@ async function initializeMatchPage() {
     }
 
 
+    // =========================================
+    // PROFILE HEADER
+    // =========================================
+
+    await loadMatchPageProfile(
+        session.user
+    );
+
+
+    // =========================================
+    // MATCH
+    // =========================================
+
     const {
         data,
         error
     } =
         await supabaseClient
-            .from("matches")
-            .select("*")
+            .from(
+                "matches"
+            )
+            .select(
+                "*"
+            )
             .eq(
                 "id",
                 matchId
@@ -112,6 +152,7 @@ async function initializeMatchPage() {
             "Villa við að sækja leik:",
             error
         );
+
 
         showMatchNotFound();
 
@@ -137,6 +178,240 @@ async function initializeMatchPage() {
         match
     );
 }
+
+
+
+// =========================================
+// PROFILE IMAGE
+// =========================================
+
+async function loadMatchPageProfile(
+    user
+) {
+
+    if (
+        !user
+        ||
+        !matchHeaderProfile
+    ) {
+
+        return;
+    }
+
+
+    let displayName =
+        user.user_metadata
+        &&
+        user.user_metadata.name
+            ? String(
+                user.user_metadata.name
+            ).trim()
+            : "";
+
+
+    let avatarUrl =
+        "";
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from(
+                "profiles"
+            )
+            .select(
+                "name, avatar_url"
+            )
+            .eq(
+                "id",
+                user.id
+            )
+            .maybeSingle();
+
+
+    if (
+        !error
+        &&
+        data
+    ) {
+
+        if (
+            data.name
+        ) {
+
+            displayName =
+                String(
+                    data.name
+                ).trim();
+        }
+
+
+        if (
+            data.avatar_url
+        ) {
+
+            avatarUrl =
+                String(
+                    data.avatar_url
+                );
+        }
+
+    } else if (
+        error
+    ) {
+
+        console.error(
+            "Profile load error on match page:",
+            error
+        );
+    }
+
+
+    const initials =
+        getInitials(
+            displayName
+            ||
+            user.email
+            ||
+            "LT"
+        );
+
+
+    matchHeaderProfile.textContent =
+        initials;
+
+
+    if (
+        avatarUrl
+    ) {
+
+        matchHeaderProfile.textContent =
+            "";
+
+
+        matchHeaderProfile.style.backgroundImage =
+            `url("${addAvatarCacheBust(
+                avatarUrl
+            )}")`;
+
+
+        matchHeaderProfile.style.backgroundSize =
+            "cover";
+
+
+        matchHeaderProfile.style.backgroundPosition =
+            "center";
+
+
+        matchHeaderProfile.classList.add(
+            "has-profile-image"
+        );
+
+    } else {
+
+        matchHeaderProfile.style.backgroundImage =
+            "";
+
+
+        matchHeaderProfile.classList.remove(
+            "has-profile-image"
+        );
+    }
+}
+
+
+
+// =========================================
+// AVATAR CACHE BUST
+// =========================================
+
+function addAvatarCacheBust(
+    url
+) {
+
+    if (!url) {
+
+        return "";
+    }
+
+
+    const separator =
+        url.includes(
+            "?"
+        )
+            ? "&"
+            : "?";
+
+
+    return (
+        url
+        +
+        separator
+        +
+        "v="
+        +
+        Date.now()
+    );
+}
+
+
+
+// =========================================
+// INITIALS
+// =========================================
+
+function getInitials(
+    value
+) {
+
+    const text =
+        String(
+            value ?? ""
+        )
+            .trim();
+
+
+    if (!text) {
+
+        return "LT";
+    }
+
+
+    const parts =
+        text
+            .split(
+                /\s+/
+            )
+            .filter(
+                Boolean
+            );
+
+
+    if (
+        parts.length ===
+        1
+    ) {
+
+        return parts[0]
+            .slice(
+                0,
+                2
+            )
+            .toUpperCase();
+    }
+
+
+    return (
+        parts[0][0]
+        +
+        parts[
+            parts.length - 1
+        ][0]
+    ).toUpperCase();
+}
+
 
 
 // =========================================
@@ -283,27 +558,37 @@ function mapDatabaseMatch(
 }
 
 
+
 // =========================================
 // NOT FOUND
 // =========================================
 
 function showMatchNotFound() {
 
-    if (matchTitle) {
+    if (
+        matchTitle
+    ) {
 
         matchTitle.textContent =
             "Leikur fannst ekki";
     }
 
 
-    if (matchSubtitle) {
+    if (
+        matchMeta
+    ) {
 
-        matchSubtitle.textContent =
-            "Ekki tókst að finna þennan leik.";
+        matchMeta.innerHTML = `
+            <span>
+                Ekki tókst að finna þennan leik.
+            </span>
+        `;
     }
 
 
-    if (matchDetails) {
+    if (
+        matchDetails
+    ) {
 
         matchDetails.innerHTML = `
             <div class="match-officials-empty">
@@ -313,19 +598,24 @@ function showMatchNotFound() {
     }
 
 
-    if (matchFitness) {
+    if (
+        matchFitness
+    ) {
 
         matchFitness.innerHTML =
             "";
     }
 
 
-    if (matchGarminEmpty) {
+    if (
+        matchGarminEmpty
+    ) {
 
         matchGarminEmpty.hidden =
             false;
     }
 }
+
 
 
 // =========================================
@@ -340,14 +630,17 @@ function renderMatch(
         match
     );
 
+
     renderOfficials(
         match
     );
+
 
     renderFitness(
         match
     );
 }
+
 
 
 // =========================================
@@ -358,61 +651,241 @@ function renderMatchIntro(
     match
 ) {
 
-    if (matchTitle) {
+    if (
+        matchTitle
+    ) {
 
         matchTitle.textContent =
             `${match.homeTeam} – ${match.awayTeam}`;
     }
 
 
-    const subtitleParts = [
-        match.competition,
-        formatDate(
-            match.date
-        ),
-        match.time
-    ]
-        .filter(
-            Boolean
+    if (
+        !matchMeta
+    ) {
+
+        return;
+    }
+
+
+    const items =
+        [];
+
+
+    if (
+        match.competition
+    ) {
+
+        items.push(
+            createMetaItem(
+                "competition",
+                match.competition
+            )
         );
+    }
+
+
+    if (
+        match.date
+    ) {
+
+        items.push(
+            createMetaItem(
+                "date",
+                formatDate(
+                    match.date
+                )
+            )
+        );
+    }
+
+
+    if (
+        match.time
+    ) {
+
+        items.push(
+            createMetaItem(
+                "time",
+                match.time
+            )
+        );
+    }
 
 
     if (
         match.venue
     ) {
 
-        subtitleParts.push(
-            match.venue
+        items.push(
+            createMetaItem(
+                "venue",
+                match.venue
+            )
         );
     }
 
-
-    // =========================================
-    // ACTUAL PLAYING TIME
-    // =========================================
 
     if (
         match.totalElapsedSeconds > 0
     ) {
 
-        subtitleParts.push(
-            `Leiktími ${formatPlayingTime(
-                match.totalElapsedSeconds
-            )}`
+        items.push(
+            createMetaItem(
+                "playing-time",
+                `Leiktími ${formatPlayingTime(
+                    match.totalElapsedSeconds
+                )}`
+            )
         );
     }
 
 
+    matchMeta.innerHTML =
+        items.join("");
+}
+
+
+
+// =========================================
+// MATCH META ITEM
+// =========================================
+
+function createMetaItem(
+    type,
+    text
+) {
+
+    return `
+        <span class="match-meta-item">
+
+            <span class="match-meta-icon">
+                ${getMetaIcon(
+                    type
+                )}
+            </span>
+
+            <span>
+                ${escapeHtml(
+                    text
+                )}
+            </span>
+
+        </span>
+    `;
+}
+
+
+
+// =========================================
+// MATCH META ICON
+// =========================================
+
+function getMetaIcon(
+    type
+) {
+
     if (
-        matchSubtitle
+        type ===
+        "date"
     ) {
 
-        matchSubtitle.textContent =
-            subtitleParts.join(
-                " · "
-            );
+        return `
+            <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+            >
+                <rect
+                    x="3"
+                    y="5"
+                    width="18"
+                    height="16"
+                    rx="2"
+                ></rect>
+
+                <path
+                    d="M16 3v4M8 3v4M3 10h18"
+                ></path>
+            </svg>
+        `;
     }
+
+
+    if (
+        type ===
+        "venue"
+    ) {
+
+        return `
+            <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+            >
+                <path
+                    d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"
+                ></path>
+
+                <circle
+                    cx="12"
+                    cy="10"
+                    r="2.5"
+                ></circle>
+            </svg>
+        `;
+    }
+
+
+    if (
+        type ===
+        "time"
+        ||
+        type ===
+        "playing-time"
+    ) {
+
+        return `
+            <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+            >
+                <circle
+                    cx="12"
+                    cy="12"
+                    r="9"
+                ></circle>
+
+                <path
+                    d="M12 7v5l3 2"
+                ></path>
+            </svg>
+        `;
+    }
+
+
+    return `
+        <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+        >
+            <path
+                d="M8 4h8v4a4 4 0 0 1-8 0V4Z"
+            ></path>
+
+            <path
+                d="M6 5H3v2a5 5 0 0 0 5 5M18 5h3v2a5 5 0 0 1-5 5M12 12v5M8 21h8M9 17h6"
+            ></path>
+        </svg>
+    `;
 }
+
 
 
 // =========================================
@@ -482,6 +955,7 @@ function renderOfficials(
             </div>
         `;
 
+
         return;
     }
 
@@ -494,6 +968,67 @@ function renderOfficials(
         </div>
     `;
 }
+
+
+
+// =========================================
+// OFFICIAL ROW
+// =========================================
+
+function createOfficialRow(
+    name,
+    role,
+    isUser
+) {
+
+    if (
+        !name
+    ) {
+
+        return "";
+    }
+
+
+    return `
+        <div
+            class="match-official-row ${
+                isUser
+                    ? "is-user"
+                    : ""
+            }"
+        >
+
+            <div class="match-official-name">
+
+                ${escapeHtml(
+                    name
+                )}
+
+                ${
+                    isUser
+                        ? `
+                            <em>
+                                ÞÚ
+                            </em>
+                        `
+                        : ""
+                }
+
+            </div>
+
+
+            <div class="match-official-role">
+
+                ${escapeHtml(
+                    role
+                )}
+
+            </div>
+
+        </div>
+    `;
+}
+
 
 
 // =========================================
@@ -529,8 +1064,10 @@ function renderFitness(
         matchFitness.innerHTML =
             "";
 
+
         matchGarminEmpty.hidden =
             false;
+
 
         return;
     }
@@ -558,78 +1095,93 @@ function renderFitness(
         );
 
 
+    const distanceProgress =
+        getDistanceProgress(
+            match.distanceTotalM
+        );
+
+
     matchFitness.innerHTML = `
 
         <div class="match-fitness-hero">
 
-            <div class="match-fitness-total">
 
-                <span class="match-fitness-total-number">
-                    ${totalKm}
+            <div class="match-distance-gauge">
+
+
+                <div
+                    class="match-distance-gauge-arc"
+                    style="--distance-progress: ${distanceProgress}deg;"
+                ></div>
+
+
+                <div class="match-distance-gauge-content">
+
+
+                    <div class="match-fitness-total">
+
+                        <span class="match-fitness-total-number">
+                            ${totalKm}
+                        </span>
+
+                        <span class="match-fitness-total-unit">
+                            km
+                        </span>
+
+                    </div>
+
+
+                    <div class="match-fitness-total-label">
+                        Heildarvegalengd
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+            <div class="match-distance-scale">
+
+                <span>
+                    0 km
                 </span>
 
-                <span class="match-fitness-total-unit">
-                    km
+                <span>
+                    HERO
                 </span>
 
             </div>
 
 
-            <div class="match-fitness-total-label">
-                Heildarvegalengd
+            <div class="match-fitness-overall-hr">
+
+
+                ${createOverallStat(
+                    displayStat(
+                        match.hrAvgTotal
+                    ),
+                    "Meðalpúls"
+                )}
+
+
+                ${createOverallStat(
+                    displayStat(
+                        match.hrMaxTotal
+                    ),
+                    "Hámarkspúls"
+                )}
+
+
             </div>
 
-
-            ${
-                match.hrAvgTotal > 0
-                ||
-                match.hrMaxTotal > 0
-                    ? `
-                        <div class="match-fitness-overall-hr">
-
-                            <span>
-
-                                <strong>
-                                    ${displayStat(
-                                        match.hrAvgTotal
-                                    )}
-                                </strong>
-
-                                <small>
-                                    meðalpúls
-                                </small>
-
-                            </span>
-
-
-                            <span class="match-fitness-overall-divider">
-                                ·
-                            </span>
-
-
-                            <span>
-
-                                <strong>
-                                    ${displayStat(
-                                        match.hrMaxTotal
-                                    )}
-                                </strong>
-
-                                <small>
-                                    hámark
-                                </small>
-
-                            </span>
-
-                        </div>
-                    `
-                    : ""
-            }
 
         </div>
 
 
         <div class="match-fitness-splits">
+
 
             ${createHalfFitnessHtml(
                 "1H",
@@ -646,10 +1198,75 @@ function renderFitness(
                 match.hrMaxSecondHalf
             )}
 
+
         </div>
 
     `;
 }
+
+
+
+// =========================================
+// DISTANCE PROGRESS
+// =========================================
+
+function getDistanceProgress(
+    meters
+) {
+
+    const value =
+        Math.max(
+            0,
+            Number(
+                meters ?? 0
+            )
+        );
+
+
+    const ratio =
+        Math.min(
+            1,
+            value
+            /
+            MATCH_DISTANCE_TARGET_METERS
+        );
+
+
+    return (
+        ratio
+        *
+        180
+    ).toFixed(
+        2
+    );
+}
+
+
+
+// =========================================
+// OVERALL STAT
+// =========================================
+
+function createOverallStat(
+    value,
+    label
+) {
+
+    return `
+        <div class="match-overall-stat">
+
+            <strong>
+                ${value}
+            </strong>
+
+            <span>
+                ${label}
+            </span>
+
+        </div>
+    `;
+}
+
 
 
 // =========================================
@@ -666,60 +1283,85 @@ function createHalfFitnessHtml(
     return `
         <div class="match-fitness-half">
 
-            <div class="match-fitness-half-label">
-                ${label}
-            </div>
 
+            <div class="match-fitness-half-heading">
 
-            <div class="match-fitness-half-distance">
-
-                <strong>
-                    ${km}
-                </strong>
-
-                <span>
-                    km
+                <span class="match-fitness-half-label">
+                    ${label}
                 </span>
 
+
+                <div class="match-fitness-half-distance">
+
+                    <strong>
+                        ${km}
+                    </strong>
+
+                    <span>
+                        km
+                    </span>
+
+                </div>
+
+
             </div>
+
+
+            <div class="match-fitness-half-divider"></div>
 
 
             <div class="match-fitness-half-stats">
 
-                <div class="match-fitness-half-stat">
 
-                    <span>
-                        Meðalpúls
-                    </span>
-
-                    <strong>
-                        ${displayStat(
-                            avgHr
-                        )}
-                    </strong>
-
-                </div>
+                ${createHalfStat(
+                    "Meðalpúls",
+                    displayStat(
+                        avgHr
+                    )
+                )}
 
 
-                <div class="match-fitness-half-stat">
+                ${createHalfStat(
+                    "Hámark",
+                    displayStat(
+                        maxHr
+                    )
+                )}
 
-                    <span>
-                        Hámark
-                    </span>
-
-                    <strong>
-                        ${displayStat(
-                            maxHr
-                        )}
-                    </strong>
-
-                </div>
 
             </div>
+
 
         </div>
     `;
 }
+
+
+
+// =========================================
+// HALF STAT
+// =========================================
+
+function createHalfStat(
+    label,
+    value
+) {
+
+    return `
+        <div class="match-fitness-half-stat">
+
+            <strong>
+                ${value}
+            </strong>
+
+            <span>
+                ${label}
+            </span>
+
+        </div>
+    `;
+}
+
 
 
 // =========================================
@@ -756,6 +1398,7 @@ function displayStat(
 }
 
 
+
 // =========================================
 // KM
 // =========================================
@@ -789,6 +1432,7 @@ function formatKm(
             2
         );
 }
+
 
 
 // =========================================
@@ -831,58 +1475,6 @@ function formatPlayingTime(
     return `${minutes}:${secondsText}`;
 }
 
-
-// =========================================
-// OFFICIAL ROW
-// =========================================
-
-function createOfficialRow(
-    name,
-    role,
-    isUser
-) {
-
-    if (
-        !name
-    ) {
-
-        return "";
-    }
-
-
-    return `
-        <div class="match-official-row">
-
-            <div class="match-official-name">
-
-                ${escapeHtml(
-                    name
-                )}
-
-                ${
-                    isUser
-                        ? `
-                            <em>
-                                Þú
-                            </em>
-                        `
-                        : ""
-                }
-
-            </div>
-
-
-            <div class="match-official-role">
-
-                ${escapeHtml(
-                    role
-                )}
-
-            </div>
-
-        </div>
-    `;
-}
 
 
 // =========================================
@@ -927,6 +1519,7 @@ function formatDate(
         parts[0]
     );
 }
+
 
 
 // =========================================

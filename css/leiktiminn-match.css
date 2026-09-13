@@ -1,0 +1,1681 @@
+/* =========================================
+   LEIKTÍMINN
+   PLAYED MATCH DETAIL
+========================================= */
+
+
+.leiktiminn-match-page {
+
+    --match-card:
+        linear-gradient(
+            180deg,
+            rgba(9, 39, 28, 0.94),
+            rgba(6, 29, 21, 0.94)
+        );
+
+    --match-line:
+        rgba(223, 240, 224, 0.11);
+
+    --match-green:
+        #63df73;
+
+    --match-green-bright:
+        #78ed87;
+
+    --match-muted:
+        rgba(235, 239, 230, 0.59);
+
+    --match-text:
+        #f5f3eb;
+}
+
+
+
+/* =========================================
+   PAGE WIDTH
+========================================= */
+
+.leiktiminn-match-page
+.leiktiminn-page {
+
+    width:
+        min(
+            1260px,
+            calc(100% - 40px)
+        );
+}
+
+
+
+/* =========================================
+   MATCH HERO
+========================================= */
+
+.match-detail-hero {
+
+    margin:
+        5px
+        0
+        22px;
+
+    padding:
+        0
+        4px;
+}
+
+
+.match-detail-eyebrow,
+.match-card-eyebrow {
+
+    margin: 0;
+
+    color:
+        var(--match-green);
+
+    font-size: 11px;
+
+    font-weight: 900;
+
+    letter-spacing: 0.12em;
+}
+
+
+.match-detail-hero h2 {
+
+    margin:
+        8px
+        0
+        12px;
+
+    color:
+        var(--match-text);
+
+    font-size:
+        clamp(
+            38px,
+            5vw,
+            58px
+        );
+
+    line-height: 0.98;
+
+    letter-spacing: -2px;
+}
+
+
+.match-detail-meta {
+
+    display: flex;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap:
+        8px
+        20px;
+
+    color:
+        rgba(
+            242,
+            241,
+            232,
+            0.72
+        );
+
+    font-size: 13px;
+
+    font-weight: 650;
+}
+
+
+.match-meta-item {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+}
+
+
+.match-meta-icon {
+
+    width: 18px;
+
+    height: 18px;
+
+    display: inline-grid;
+
+    place-items: center;
+
+    flex: 0 0 18px;
+
+    color:
+        var(--match-green);
+
+    opacity: 0.9;
+}
+
+
+.match-meta-icon svg {
+
+    width: 17px;
+
+    height: 17px;
+
+    display: block;
+}
+
+
+
+/* =========================================
+   DASHBOARD
+========================================= */
+
+.match-dashboard {
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(290px, 0.72fr)
+        minmax(0, 1.5fr);
+
+    gap: 18px;
+
+    align-items: stretch;
+}
+
+
+.match-dashboard-card {
+
+    position: relative;
+
+    min-width: 0;
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        rgba(
+            102,
+            221,
+            119,
+            0.25
+        );
+
+    border-radius: 22px;
+
+    background:
+        var(--match-card);
+
+    box-shadow:
+        0 18px 46px
+        rgba(0, 0, 0, 0.18),
+
+        inset
+        0 1px 0
+        rgba(255, 255, 255, 0.035);
+
+    backdrop-filter:
+        blur(18px);
+
+    -webkit-backdrop-filter:
+        blur(18px);
+}
+
+
+
+/* =========================================
+   CARD HEADER
+========================================= */
+
+.match-card-heading {
+
+    min-height: 58px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding:
+        0
+        20px;
+
+    border-bottom:
+        1px solid
+        var(--match-line);
+}
+
+
+.match-card-heading-icon {
+
+    position: relative;
+
+    width: 25px;
+
+    height: 19px;
+
+    flex: 0 0 25px;
+}
+
+
+.match-card-heading-icon span {
+
+    position: absolute;
+
+    bottom: 0;
+
+    width: 7px;
+
+    border-radius:
+        6px
+        6px
+        2px
+        2px;
+
+    background:
+        var(--match-green);
+}
+
+
+.match-card-heading-icon span:nth-child(1) {
+
+    left: 0;
+
+    height: 10px;
+}
+
+
+.match-card-heading-icon span:nth-child(2) {
+
+    left: 9px;
+
+    height: 16px;
+}
+
+
+.match-card-heading-icon span:nth-child(3) {
+
+    right: 0;
+
+    height: 12px;
+}
+
+
+
+/* =========================================
+   OFFICIALS
+========================================= */
+
+.match-officials-card {
+
+    padding-bottom: 7px;
+}
+
+
+.match-officials-list {
+
+    width: 100%;
+
+    max-width: none;
+
+    padding:
+        2px
+        20px
+        8px;
+}
+
+
+.match-official-row {
+
+    min-height: 58px;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        auto;
+
+    gap: 18px;
+
+    align-items: center;
+
+    border-bottom:
+        1px solid
+        var(--match-line);
+}
+
+
+.match-official-row:last-child {
+
+    border-bottom: 0;
+}
+
+
+.match-official-name {
+
+    min-width: 0;
+
+    color:
+        var(--match-text);
+
+    font-size: 14px;
+
+    font-weight: 800;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+.match-official-name em {
+
+    display: inline-block;
+
+    margin-left: 7px;
+
+    padding:
+        3px
+        8px;
+
+    border-radius: 999px;
+
+    background:
+        rgba(
+            99,
+            217,
+            106,
+            0.14
+        );
+
+    color:
+        var(--match-green);
+
+    font-size: 8px;
+
+    font-style: normal;
+
+    font-weight: 950;
+
+    vertical-align: 2px;
+}
+
+
+.match-official-role {
+
+    color:
+        rgba(
+            237,
+            239,
+            231,
+            0.55
+        );
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    text-align: right;
+}
+
+
+.match-official-row.is-user
+.match-official-name {
+
+    font-weight: 900;
+}
+
+
+.match-officials-empty {
+
+    padding: 24px;
+
+    color:
+        var(--match-muted);
+
+    font-size: 13px;
+}
+
+
+
+/* =========================================
+   GARMIN CARD
+========================================= */
+
+.match-garmin-card {
+
+    padding-bottom: 18px;
+}
+
+
+.match-garmin-heading {
+
+    justify-content:
+        space-between;
+}
+
+
+.match-garmin-heading-left {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+}
+
+
+.match-garmin-bars {
+
+    width: 24px;
+
+    height: 21px;
+
+    display: flex;
+
+    align-items: flex-end;
+
+    gap: 3px;
+}
+
+
+.match-garmin-bars span {
+
+    width: 3px;
+
+    border-radius: 3px;
+
+    background:
+        var(--match-green);
+}
+
+
+.match-garmin-bars span:nth-child(1) {
+
+    height: 8px;
+}
+
+
+.match-garmin-bars span:nth-child(2) {
+
+    height: 13px;
+}
+
+
+.match-garmin-bars span:nth-child(3) {
+
+    height: 19px;
+}
+
+
+.match-garmin-bars span:nth-child(4) {
+
+    height: 12px;
+}
+
+
+.match-garmin-source {
+
+    color:
+        rgba(
+            242,
+            240,
+            231,
+            0.54
+        );
+
+    font-size: 10px;
+
+    font-weight: 700;
+}
+
+
+
+/* =========================================
+   GARMIN EMPTY
+========================================= */
+
+.match-garmin-empty {
+
+    min-height: 270px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    padding: 30px;
+
+    text-align: center;
+
+    color:
+        var(--match-muted);
+}
+
+
+.match-garmin-empty[hidden] {
+
+    display: none !important;
+}
+
+
+.match-garmin-empty strong {
+
+    color:
+        var(--match-text);
+
+    font-size: 16px;
+}
+
+
+.match-garmin-empty span {
+
+    max-width: 340px;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+
+
+/* =========================================
+   FITNESS AREA
+========================================= */
+
+.match-fitness-container {
+
+    width: 100%;
+
+    margin: 0;
+
+    padding:
+        20px
+        20px
+        0;
+}
+
+
+
+/* =========================================
+   MAIN FITNESS HERO
+========================================= */
+
+.match-fitness-hero {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    padding:
+        6px
+        0
+        20px;
+}
+
+
+
+/* =========================================
+   180 DEGREE DISTANCE GAUGE
+========================================= */
+
+.match-distance-gauge {
+
+    position: relative;
+
+    width: 300px;
+
+    height: 158px;
+
+    overflow: hidden;
+}
+
+
+.match-distance-gauge-arc {
+
+    --distance-progress: 0deg;
+
+    position: absolute;
+
+    left: 50%;
+
+    bottom: -142px;
+
+    width: 284px;
+
+    height: 284px;
+
+    transform:
+        translateX(-50%);
+
+    border-radius: 50%;
+
+    background:
+        conic-gradient(
+            from 270deg,
+
+            var(--match-green)
+            0deg,
+
+            var(--match-green)
+            var(--distance-progress),
+
+            rgba(
+                99,
+                217,
+                106,
+                0.14
+            )
+            var(--distance-progress),
+
+            rgba(
+                99,
+                217,
+                106,
+                0.14
+            )
+            180deg,
+
+            transparent
+            180deg,
+
+            transparent
+            360deg
+        );
+
+    filter:
+        drop-shadow(
+            0 0 10px
+            rgba(
+                99,
+                217,
+                106,
+                0.10
+            )
+        );
+}
+
+
+.match-distance-gauge-arc::after {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 13px;
+
+    border-radius: 50%;
+
+    background:
+        #09271c;
+}
+
+
+.match-distance-gauge-content {
+
+    position: absolute;
+
+    left: 0;
+
+    right: 0;
+
+    bottom: 6px;
+
+    z-index: 2;
+
+    text-align: center;
+}
+
+
+.match-fitness-total {
+
+    display: flex;
+
+    align-items: baseline;
+
+    justify-content: center;
+
+    gap: 6px;
+
+    line-height: 1;
+}
+
+
+.match-fitness-total-number {
+
+    color:
+        var(--match-text);
+
+    font-size:
+        clamp(
+            50px,
+            5.5vw,
+            72px
+        );
+
+    font-weight: 900;
+
+    letter-spacing: -3px;
+}
+
+
+.match-fitness-total-unit {
+
+    color:
+        var(--match-green);
+
+    font-size: 18px;
+
+    font-weight: 900;
+}
+
+
+.match-fitness-total-label {
+
+    margin-top: 8px;
+
+    color:
+        rgba(
+            239,
+            240,
+            232,
+            0.48
+        );
+
+    font-size: 10px;
+
+    font-weight: 850;
+
+    letter-spacing: 0.13em;
+
+    text-transform: uppercase;
+}
+
+
+
+/* =========================================
+   DISTANCE SCALE
+========================================= */
+
+.match-distance-scale {
+
+    width: 282px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content:
+        space-between;
+
+    margin-top: 2px;
+
+    color:
+        rgba(
+            239,
+            240,
+            232,
+            0.34
+        );
+
+    font-size: 9px;
+
+    font-weight: 750;
+}
+
+
+
+/* =========================================
+   OVERALL HEART RATE
+========================================= */
+
+.match-fitness-overall-hr {
+
+    width:
+        min(
+            100%,
+            440px
+        );
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    margin-top: 22px;
+
+    border-top:
+        1px solid
+        var(--match-line);
+
+    border-bottom:
+        1px solid
+        var(--match-line);
+}
+
+
+.match-overall-stat {
+
+    min-width: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding:
+        13px
+        18px;
+}
+
+
+.match-overall-stat
++
+.match-overall-stat {
+
+    border-left:
+        1px solid
+        var(--match-line);
+}
+
+
+.match-overall-stat strong {
+
+    color:
+        var(--match-text);
+
+    font-size: 24px;
+
+    font-weight: 900;
+
+    line-height: 1;
+}
+
+
+.match-overall-stat span {
+
+    margin-top: 5px;
+
+    color:
+        var(--match-muted);
+
+    font-size: 9px;
+
+    font-weight: 750;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.06em;
+}
+
+
+
+/* =========================================
+   HALF SPLITS
+========================================= */
+
+.match-fitness-splits {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 12px;
+
+    margin-top: 2px;
+}
+
+
+.match-fitness-half {
+
+    min-width: 0;
+
+    padding:
+        17px
+        18px
+        15px;
+
+    border:
+        1px solid
+        rgba(
+            117,
+            225,
+            130,
+            0.17
+        );
+
+    border-radius: 16px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(
+                20,
+                57,
+                40,
+                0.44
+            ),
+            rgba(
+                8,
+                35,
+                25,
+                0.52
+            )
+        );
+}
+
+
+.match-fitness-half-heading {
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content:
+        space-between;
+
+    gap: 12px;
+}
+
+
+.match-fitness-half-label {
+
+    color:
+        var(--match-green);
+
+    font-size: 12px;
+
+    font-weight: 950;
+
+    letter-spacing: 0.08em;
+}
+
+
+.match-fitness-half-distance {
+
+    display: flex;
+
+    align-items: baseline;
+
+    gap: 5px;
+}
+
+
+.match-fitness-half-distance strong {
+
+    color:
+        var(--match-text);
+
+    font-size: 31px;
+
+    font-weight: 900;
+
+    letter-spacing: -1px;
+
+    line-height: 1;
+}
+
+
+.match-fitness-half-distance span {
+
+    color:
+        var(--match-muted);
+
+    font-size: 10px;
+
+    font-weight: 800;
+}
+
+
+.match-fitness-half-divider {
+
+    height: 1px;
+
+    margin:
+        14px
+        0;
+
+    background:
+        var(--match-line);
+}
+
+
+.match-fitness-half-stats {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+}
+
+
+.match-fitness-half-stat {
+
+    min-width: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    justify-content: center;
+
+    padding:
+        2px
+        12px
+        2px
+        0;
+}
+
+
+.match-fitness-half-stat
++
+.match-fitness-half-stat {
+
+    padding-left: 14px;
+
+    border-left:
+        1px solid
+        var(--match-line);
+}
+
+
+.match-fitness-half-stat strong {
+
+    color:
+        var(--match-text);
+
+    font-size: 19px;
+
+    font-weight: 900;
+
+    line-height: 1;
+}
+
+
+.match-fitness-half-stat span {
+
+    margin-top: 5px;
+
+    color:
+        var(--match-muted);
+
+    font-size: 9px;
+
+    font-weight: 700;
+}
+
+
+
+/* =========================================
+   FUTURE
+========================================= */
+
+.match-future-card {
+
+    min-height: 100px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 28px;
+
+    margin-top: 18px;
+
+    padding:
+        18px
+        22px;
+
+    border:
+        1px solid
+        rgba(
+            99,
+            217,
+            106,
+            0.17
+        );
+
+    border-radius: 18px;
+
+    background:
+        rgba(
+            7,
+            32,
+            23,
+            0.76
+        );
+
+    backdrop-filter:
+        blur(15px);
+
+    -webkit-backdrop-filter:
+        blur(15px);
+}
+
+
+.match-future-card h3 {
+
+    margin:
+        4px
+        0
+        0;
+
+    font-size: 17px;
+}
+
+
+.match-future-card p:last-child {
+
+    max-width: 670px;
+
+    margin:
+        7px
+        0
+        0;
+
+    color:
+        var(--match-muted);
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+
+.match-future-mark {
+
+    width: 100px;
+
+    height: 55px;
+
+    position: relative;
+
+    flex: 0 0 100px;
+
+    border:
+        1px solid
+        rgba(
+            99,
+            217,
+            106,
+            0.13
+        );
+
+    border-radius: 12px;
+}
+
+
+.match-future-mark span {
+
+    position: absolute;
+
+    width: 10px;
+
+    height: 10px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(
+            99,
+            217,
+            106,
+            0.55
+        );
+
+    box-shadow:
+        0 0 13px
+        rgba(
+            99,
+            217,
+            106,
+            0.22
+        );
+}
+
+
+.match-future-mark span:nth-child(1) {
+
+    left: 18px;
+
+    bottom: 12px;
+}
+
+
+.match-future-mark span:nth-child(2) {
+
+    left: 48px;
+
+    top: 11px;
+}
+
+
+.match-future-mark span:nth-child(3) {
+
+    right: 14px;
+
+    bottom: 18px;
+}
+
+
+
+/* =========================================
+   PROFILE IMAGE
+========================================= */
+
+.leiktiminn-match-page
+.profile-button.has-profile-image {
+
+    border-color:
+        rgba(
+            99,
+            217,
+            106,
+            0.75
+        );
+
+    box-shadow:
+        0 0 0 2px
+        rgba(
+            99,
+            217,
+            106,
+            0.08
+        );
+
+    color: transparent;
+}
+
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (
+    max-width: 760px
+) {
+
+
+    .leiktiminn-match-page
+    .leiktiminn-page {
+
+        width:
+            calc(
+                100% - 28px
+            );
+
+        padding-top:
+            14px;
+    }
+
+
+    .leiktiminn-match-page
+    .match-back-link {
+
+        margin-bottom:
+            18px;
+    }
+
+
+    .match-detail-hero {
+
+        margin-bottom:
+            18px;
+
+        padding: 0;
+    }
+
+
+    .match-detail-hero h2 {
+
+        margin-top: 8px;
+
+        font-size:
+            clamp(
+                35px,
+                10vw,
+                45px
+            );
+
+        letter-spacing:
+            -1.7px;
+    }
+
+
+    .match-detail-meta {
+
+        gap:
+            8px
+            14px;
+
+        font-size: 12px;
+    }
+
+
+    .match-dashboard {
+
+        grid-template-columns:
+            1fr;
+
+        gap: 14px;
+    }
+
+
+    .match-dashboard-card {
+
+        border-radius: 20px;
+    }
+
+
+    .match-card-heading {
+
+        min-height: 55px;
+
+        padding:
+            0
+            16px;
+    }
+
+
+    .match-officials-list {
+
+        padding:
+            0
+            15px
+            6px;
+    }
+
+
+    .match-official-row {
+
+        min-height: 54px;
+    }
+
+
+    .match-official-name {
+
+        font-size: 14px;
+    }
+
+
+    .match-official-role {
+
+        font-size: 10px;
+    }
+
+
+    .match-fitness-container {
+
+        padding:
+            18px
+            13px
+            0;
+    }
+
+
+    .match-fitness-hero {
+
+        padding:
+            2px
+            0
+            18px;
+    }
+
+
+    .match-distance-gauge {
+
+        width: 270px;
+
+        height: 145px;
+    }
+
+
+    .match-distance-gauge-arc {
+
+        bottom: -128px;
+
+        width: 256px;
+
+        height: 256px;
+    }
+
+
+    .match-distance-gauge-arc::after {
+
+        inset: 12px;
+    }
+
+
+    .match-distance-scale {
+
+        width: 254px;
+    }
+
+
+    .match-fitness-total-number {
+
+        font-size: 50px;
+    }
+
+
+    .match-fitness-total-unit {
+
+        font-size: 16px;
+    }
+
+
+    .match-fitness-overall-hr {
+
+        width: 100%;
+
+        margin-top: 18px;
+    }
+
+
+    .match-overall-stat {
+
+        padding:
+            12px
+            10px;
+    }
+
+
+    .match-overall-stat strong {
+
+        font-size: 22px;
+    }
+
+
+    .match-fitness-splits {
+
+        grid-template-columns:
+            1fr
+            1fr;
+
+        gap: 8px;
+    }
+
+
+    .match-fitness-half {
+
+        padding:
+            14px
+            13px
+            13px;
+    }
+
+
+    .match-fitness-half-heading {
+
+        display: block;
+    }
+
+
+    .match-fitness-half-distance {
+
+        margin-top: 9px;
+    }
+
+
+    .match-fitness-half-distance strong {
+
+        font-size: 27px;
+    }
+
+
+    .match-fitness-half-divider {
+
+        margin:
+            12px
+            0;
+    }
+
+
+    .match-fitness-half-stat {
+
+        padding-right: 7px;
+    }
+
+
+    .match-fitness-half-stat
+    +
+    .match-fitness-half-stat {
+
+        padding-left: 9px;
+    }
+
+
+    .match-fitness-half-stat strong {
+
+        font-size: 17px;
+    }
+
+
+    .match-fitness-half-stat span {
+
+        font-size: 8px;
+    }
+
+
+    .match-future-card {
+
+        margin-top: 14px;
+
+        padding: 16px;
+
+        border-radius: 18px;
+    }
+
+
+    .match-future-mark {
+
+        display: none;
+    }
+
+
+    .match-garmin-source {
+
+        display: none;
+    }
+
+}
+
+
+
+/* =========================================
+   VERY SMALL MOBILE
+========================================= */
+
+@media (
+    max-width: 390px
+) {
+
+
+    .match-distance-gauge {
+
+        width: 246px;
+
+        height: 133px;
+    }
+
+
+    .match-distance-gauge-arc {
+
+        width: 234px;
+
+        height: 234px;
+
+        bottom: -117px;
+    }
+
+
+    .match-distance-scale {
+
+        width: 232px;
+    }
+
+
+    .match-fitness-total-number {
+
+        font-size: 46px;
+    }
+
+
+    .match-fitness-splits {
+
+        gap: 7px;
+    }
+
+
+    .match-fitness-half {
+
+        padding:
+            13px
+            11px
+            12px;
+    }
+
+
+    .match-fitness-half-distance strong {
+
+        font-size: 24px;
+    }
+
+
+    .match-fitness-half-stat strong {
+
+        font-size: 16px;
+    }
+
+}
