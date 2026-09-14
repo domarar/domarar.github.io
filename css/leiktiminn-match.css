@@ -1874,36 +1874,84 @@
 @media (max-width: 760px) {
 
     .match-top-actions {
-        gap: 10px;
+        width: 100%;
 
-        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        gap: 12px;
+
+        margin:
+            0
+            0
+            20px;
     }
 
 
-    .match-top-actions .match-back-link {
+    .match-top-actions .match-back-link,
+    .match-top-actions .match-back-link:link,
+    .match-top-actions .match-back-link:visited {
+        flex:
+            0
+            1
+            auto;
+
+        min-width: 0;
         min-height: 44px;
 
         padding:
             0
-            14px;
+            15px
+            0
+            12px;
+
+        gap: 7px;
+
+        border-radius: 999px;
 
         font-size: 13px;
+
+        white-space: nowrap;
+    }
+
+
+    .match-back-icon {
+        width: 18px;
+
+        flex:
+            0
+            0
+            18px;
+
+        font-size: 29px;
+
+        transform:
+            translateY(-1px);
     }
 
 
     .match-edit-button {
+        flex:
+            0
+            0
+            auto;
+
         min-height: 44px;
+
+        margin-left: auto;
 
         padding:
             0
             16px;
 
+        gap: 8px;
+
+        border-radius: 999px;
+
         font-size: 13px;
-    }
 
-
-    .match-back-icon {
-        font-size: 28px;
+        white-space: nowrap;
     }
 
 
@@ -1911,10 +1959,12 @@
         width: 17px;
         height: 17px;
 
-        flex-basis: 17px;
+        flex:
+            0
+            0
+            17px;
     }
 }
-
 
 /* =========================================
    VERY SMALL PHONES
@@ -1928,11 +1978,35 @@
 
 
     .match-top-actions .match-back-link,
-    .match-edit-button {
+    .match-top-actions .match-back-link:link,
+    .match-top-actions .match-back-link:visited {
+        min-height: 42px;
+
         padding:
             0
-            12px;
+            12px
+            0
+            10px;
 
         font-size: 12px;
+    }
+
+
+    .match-edit-button {
+        min-height: 42px;
+
+        padding:
+            0
+            13px;
+
+        font-size: 12px;
+    }
+
+
+    .match-edit-icon {
+        width: 16px;
+        height: 16px;
+
+        flex-basis: 16px;
     }
 }
