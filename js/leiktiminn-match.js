@@ -230,18 +230,29 @@ function configureMatchNavigation(
     match
 ) {
 
+    const played =
+        isPlayedMatch(
+            match
+        );
+
+
+    // =========================================
+    // PAGE CONTEXT
+    //
+    // A completed match is ALWAYS treated as
+    // played, regardless of the URL it came from.
+    // =========================================
+
     const sourceView =
-        requestedSourceView ===
-            "upcoming"
-        ||
-        requestedSourceView ===
-            "played"
-            ? requestedSourceView
+        played
+            ? "played"
             : (
-                isPlayedMatch(
-                    match
-                )
-                    ? "played"
+                requestedSourceView ===
+                    "upcoming"
+                ||
+                requestedSourceView ===
+                    "played"
+                    ? requestedSourceView
                     : "upcoming"
             );
 
@@ -250,6 +261,10 @@ function configureMatchNavigation(
         sourceView ===
         "upcoming";
 
+
+    // =========================================
+    // BACK LINK
+    // =========================================
 
     if (
         matchBackLink
@@ -273,6 +288,10 @@ function configureMatchNavigation(
     }
 
 
+    // =========================================
+    // MOBILE NAV
+    // =========================================
+
     matchNavUpcoming
         ?.classList
         .toggle(
@@ -289,30 +308,48 @@ function configureMatchNavigation(
         );
 
 
+    // =========================================
+    // EDIT BUTTON
+    //
+    // Only available inside an UPCOMING match.
+    //
+    // Played matches can still be edited from
+    // the 3-dot menu on the main match list.
+    // =========================================
+
     if (
         matchEditButton
     ) {
 
-        matchEditButton.hidden =
-            !isUpcoming;
-
-
         if (
-            isUpcoming
+            played
         ) {
 
-            matchEditButton.onclick =
-                () => {
+            matchEditButton.hidden =
+                true;
 
-                    window.location.href =
-                        `leiktiminn.html?view=upcoming&edit=${encodeURIComponent(
-                            match.id
-                        )}`;
-                };
+            matchEditButton.onclick =
+                null;
+
+
+            return;
         }
+
+
+        matchEditButton.hidden =
+            false;
+
+
+        matchEditButton.onclick =
+            () => {
+
+                window.location.href =
+                    `leiktiminn.html?view=upcoming&edit=${encodeURIComponent(
+                        match.id
+                    )}`;
+            };
     }
 }
-
 
 
 // =========================================
