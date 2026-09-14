@@ -1114,40 +1114,46 @@
 
                     <div class="form-row">
 
-                        <label class="form-field">
+    <div class="form-row">
 
-                            <span>
-                                Heimalið *
-                            </span>
+    <label class="form-field">
 
-                            <input
-                                id="home-team"
-                                type="text"
-                                placeholder="Heimalið"
-                                autocomplete="off"
-                                required
-                            >
+        <span>
+            Heimalið *
+        </span>
 
-                        </label>
+        <input
+            id="home-team"
+            type="text"
+            placeholder="Heimalið"
+            autocomplete="off"
+            autocapitalize="characters"
+            oninput="this.value = this.value.toUpperCase()"
+            required
+        >
+
+    </label>
 
 
-                        <label class="form-field">
+    <label class="form-field">
 
-                            <span>
-                                Útilið *
-                            </span>
+        <span>
+            Útilið *
+        </span>
 
-                            <input
-                                id="away-team"
-                                type="text"
-                                placeholder="Útilið"
-                                autocomplete="off"
-                                required
-                            >
+        <input
+            id="away-team"
+            type="text"
+            placeholder="Útilið"
+            autocomplete="off"
+            autocapitalize="characters"
+            oninput="this.value = this.value.toUpperCase()"
+            required
+        >
 
-                        </label>
+    </label>
 
-                    </div>
+</div>
 
 
                     <div class="form-row">

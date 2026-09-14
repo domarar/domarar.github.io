@@ -121,6 +121,7 @@
         ========================================== -->
 
         <a
+            id="matchBackLink"
             href="leiktiminn.html?view=played"
             class="match-back-link"
         >
@@ -129,9 +130,21 @@
                 ←
             </span>
 
-            Til baka í spilaða leiki
+            <span id="matchBackText">
+                Til baka í spilaða leiki
+            </span>
 
         </a>
+
+
+        <button
+            id="matchEditButton"
+            class="create-match-button"
+            type="button"
+            hidden
+        >
+            Breyta leik
+        </button>
 
 
 
@@ -391,6 +404,7 @@
 
 
         <button
+            id="matchNavUpcoming"
             class="mobile-nav-item"
             type="button"
             onclick="window.location.href='leiktiminn.html?view=upcoming'"
@@ -409,6 +423,7 @@
 
 
         <button
+            id="matchNavPlayed"
             class="mobile-nav-item active"
             type="button"
             onclick="window.location.href='leiktiminn.html?view=played'"
@@ -813,7 +828,7 @@
     <script src="js/supabase-config.js?v=1"></script>
     <script src="js/supabase-client.js?v=5"></script>
 
-    <script src="js/leiktiminn-match.js?v=8"></script>
+    <script src="js/leiktiminn-match.js?v=9"></script>
     <script src="js/menu.js?v=5"></script>
 
 

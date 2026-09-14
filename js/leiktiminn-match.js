@@ -34,6 +34,36 @@ const matchHeaderProfile =
     );
 
 
+const matchBackLink =
+    document.getElementById(
+        "matchBackLink"
+    );
+
+
+const matchBackText =
+    document.getElementById(
+        "matchBackText"
+    );
+
+
+const matchEditButton =
+    document.getElementById(
+        "matchEditButton"
+    );
+
+
+const matchNavUpcoming =
+    document.getElementById(
+        "matchNavUpcoming"
+    );
+
+
+const matchNavPlayed =
+    document.getElementById(
+        "matchNavPlayed"
+    );
+
+
 
 // =========================================
 // DISTANCE TARGET
@@ -57,6 +87,12 @@ const params =
 const matchId =
     params.get(
         "id"
+    );
+
+
+const requestedSourceView =
+    params.get(
+        "from"
     );
 
 
@@ -176,6 +212,158 @@ async function initializeMatchPage() {
 
     renderMatch(
         match
+    );
+
+
+    configureMatchNavigation(
+        match
+    );
+}
+
+
+
+// =========================================
+// MATCH PAGE CONTEXT
+// =========================================
+
+function configureMatchNavigation(
+    match
+) {
+
+    const sourceView =
+        requestedSourceView ===
+            "upcoming"
+        ||
+        requestedSourceView ===
+            "played"
+            ? requestedSourceView
+            : (
+                isPlayedMatch(
+                    match
+                )
+                    ? "played"
+                    : "upcoming"
+            );
+
+
+    const isUpcoming =
+        sourceView ===
+        "upcoming";
+
+
+    if (
+        matchBackLink
+    ) {
+
+        matchBackLink.href =
+            isUpcoming
+                ? "leiktiminn.html?view=upcoming"
+                : "leiktiminn.html?view=played";
+    }
+
+
+    if (
+        matchBackText
+    ) {
+
+        matchBackText.textContent =
+            isUpcoming
+                ? "Til baka í leiki"
+                : "Til baka í spilaða leiki";
+    }
+
+
+    matchNavUpcoming
+        ?.classList
+        .toggle(
+            "active",
+            isUpcoming
+        );
+
+
+    matchNavPlayed
+        ?.classList
+        .toggle(
+            "active",
+            !isUpcoming
+        );
+
+
+    if (
+        matchEditButton
+    ) {
+
+        matchEditButton.hidden =
+            !isUpcoming;
+
+
+        if (
+            isUpcoming
+        ) {
+
+            matchEditButton.onclick =
+                () => {
+
+                    window.location.href =
+                        `leiktiminn.html?view=upcoming&edit=${encodeURIComponent(
+                            match.id
+                        )}`;
+                };
+        }
+    }
+}
+
+
+
+// =========================================
+// PLAYED MATCH
+// =========================================
+
+function isPlayedMatch(
+    match
+) {
+
+    if (
+        match.status ===
+            "COMPLETED"
+        ||
+        match.status ===
+            "ACTIVITY_RECEIVED"
+    ) {
+
+        return true;
+    }
+
+
+    if (
+        !match.date
+        ||
+        !match.time
+    ) {
+
+        return false;
+    }
+
+
+    const matchDate =
+        new Date(
+            `${match.date}T${match.time}`
+        );
+
+
+    if (
+        Number.isNaN(
+            matchDate.getTime()
+        )
+    ) {
+
+        return false;
+    }
+
+
+    return (
+        matchDate <
+        new Date()
     );
 }
 

@@ -81,6 +81,8 @@ let matches = [];
 
 let editingMatchId = null;
 
+let pendingEditMatchId = null;
+
 let loadingMatches = false;
 
 let hasLoadedMatches = false;
@@ -293,6 +295,9 @@ async function loadMatchesFromSupabase(
 
 
         renderAll();
+
+
+        openPendingEditIfReady();
 
 
         return true;
@@ -680,6 +685,62 @@ function openEditModal(
 
 
     showMatchModal();
+}
+
+
+/* =========================================
+   OPEN PENDING EDIT REQUEST
+========================================= */
+
+function openPendingEditIfReady() {
+
+    if (
+        !pendingEditMatchId
+    ) {
+
+        return;
+    }
+
+
+    const match =
+        matches.find(
+            item =>
+                item.id ===
+                pendingEditMatchId
+        );
+
+
+    if (
+        !match
+    ) {
+
+        return;
+    }
+
+
+    const matchId =
+        pendingEditMatchId;
+
+
+    pendingEditMatchId =
+        null;
+
+
+    switchView(
+        "upcoming"
+    );
+
+
+    openEditModal(
+        matchId
+    );
+
+
+    window.history.replaceState(
+        {},
+        "",
+        window.location.pathname
+    );
 }
 
 
@@ -2402,8 +2463,26 @@ function openMatch(
     matchId
 ) {
 
+    const match =
+        matches.find(
+            item =>
+                item.id ===
+                matchId
+        );
+
+
+    const sourceView =
+        match
+        &&
+        isPlayedMatch(
+            match
+        )
+            ? "played"
+            : "upcoming";
+
+
     window.location.href =
-        `leiktiminn-match.html?id=${encodeURIComponent(matchId)}`;
+        `leiktiminn-match.html?id=${encodeURIComponent(matchId)}&from=${sourceView}`;
 }
 
 
@@ -4191,6 +4270,12 @@ function handleLeiktiminnUrlState() {
         );
 
 
+    const editRequested =
+        params.get(
+            "edit"
+        );
+
+
     // =========================================
     // OPEN REQUESTED VIEW
     // =========================================
@@ -4236,13 +4321,41 @@ function handleLeiktiminnUrlState() {
 
 
     // =========================================
-    // CLEAN URL AFTER HANDLING
+    // OPEN EXISTING MATCH FOR EDITING
     // =========================================
 
     if (
-        requestedView
-        ||
-        createRequested
+        editRequested
+    ) {
+
+        pendingEditMatchId =
+            editRequested;
+
+
+        switchView(
+            "upcoming"
+        );
+
+
+        openPendingEditIfReady();
+    }
+
+
+    // =========================================
+    // CLEAN URL
+    //
+    // Edit URLs are cleaned only after the
+    // requested match has actually opened.
+    // =========================================
+
+    if (
+        !editRequested
+        &&
+        (
+            requestedView
+            ||
+            createRequested
+        )
     ) {
 
         const cleanUrl =
@@ -4256,6 +4369,7 @@ function handleLeiktiminnUrlState() {
         );
     }
 }
+
 
 
 /* =========================================
