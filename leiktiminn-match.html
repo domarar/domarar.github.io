@@ -116,35 +116,67 @@
 
 
 
-        <!-- =========================================
-             BACK
-        ========================================== -->
+       <!-- =========================================
+     MATCH ACTIONS
+========================================== -->
 
-        <a
-            id="matchBackLink"
-            href="leiktiminn.html?view=played"
-            class="match-back-link"
+<div class="match-top-actions">
+
+
+    <a
+        id="matchBackLink"
+        href="leiktiminn.html?view=played"
+        class="match-back-link"
+    >
+
+        <span class="match-back-icon">
+            ‹
+        </span>
+
+        <span id="matchBackText">
+            Til baka í spilaða leiki
+        </span>
+
+    </a>
+
+
+    <button
+        id="matchEditButton"
+        class="match-edit-button"
+        type="button"
+        hidden
+    >
+
+        <svg
+            class="match-edit-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
         >
+            <path
+                d="M4 20h4l11-11-4-4L4 16v4Z"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            ></path>
 
-            <span>
-                ←
-            </span>
+            <path
+                d="m13.5 6.5 4 4"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+            ></path>
+        </svg>
 
-            <span id="matchBackText">
-                Til baka í spilaða leiki
-            </span>
-
-        </a>
-
-
-        <button
-            id="matchEditButton"
-            class="create-match-button"
-            type="button"
-            hidden
-        >
+        <span>
             Breyta leik
-        </button>
+        </span>
+
+    </button>
+
+
+</div>
 
 
 
