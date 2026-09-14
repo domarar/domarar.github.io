@@ -2301,3 +2301,1214 @@ body.auth-locked .leiktiminn-footer { display: none !important; }
         font-size: 18px;
     }
 }
+
+/* =========================================
+   TÖLFRÆÐI DASHBOARD
+========================================= */
+
+.stats-overview-panel {
+    overflow: hidden;
+}
+
+
+#statsDashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+
+/* =========================================
+   TOP HEADER
+========================================= */
+
+.stats-dashboard-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 16px;
+}
+
+
+.stats-dashboard-header h3 {
+    margin:
+        2px
+        0
+        0;
+
+    font-size:
+        clamp(
+            22px,
+            3vw,
+            28px
+        );
+
+    line-height: 1.1;
+}
+
+
+.stats-garmin-count {
+    flex:
+        0
+        0
+        auto;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 34px;
+
+    padding:
+        0
+        12px;
+
+    border:
+        1px solid
+        rgba(88, 199, 91, 0.24);
+
+    border-radius: 999px;
+
+    background:
+        rgba(88, 199, 91, 0.07);
+
+    color:
+        rgba(214, 240, 217, 0.82);
+
+    font-size: 12px;
+    font-weight: 800;
+
+    letter-spacing: 0.02em;
+}
+
+
+/* =========================================
+   TOTAL DISTANCE HERO
+========================================= */
+
+.stats-dashboard-hero {
+    position: relative;
+
+    min-height: 220px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    padding:
+        28px
+        20px;
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.08);
+
+    border-radius: 24px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.038),
+            rgba(255, 255, 255, 0.018)
+        );
+
+    box-shadow:
+        inset
+        0
+        1px
+        0
+        rgba(255, 255, 255, 0.035);
+}
+
+
+.stats-dashboard-hero::before {
+    content: "";
+
+    position: absolute;
+
+    width: 240px;
+    height: 240px;
+
+    left: 50%;
+    top: 55%;
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        );
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(88, 199, 91, 0.13) 0%,
+            rgba(88, 199, 91, 0.045) 46%,
+            rgba(88, 199, 91, 0) 72%
+        );
+
+    pointer-events: none;
+}
+
+
+.stats-dashboard-total {
+    position: relative;
+
+    z-index: 1;
+
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+
+    gap: 9px;
+}
+
+
+.stats-dashboard-total strong {
+    color: #ffffff;
+
+    font-size:
+        clamp(
+            56px,
+            11vw,
+            96px
+        );
+
+    font-weight: 900;
+
+    letter-spacing: -0.055em;
+    line-height: 0.95;
+}
+
+
+.stats-dashboard-total span {
+    color:
+        rgba(218, 227, 222, 0.56);
+
+    font-size:
+        clamp(
+            17px,
+            2.2vw,
+            22px
+        );
+
+    font-weight: 800;
+
+    line-height: 1;
+}
+
+
+.stats-dashboard-total-label {
+    position: relative;
+
+    z-index: 1;
+
+    margin-top: 15px;
+
+    color: var(--lt-green);
+
+    font-size: 11px;
+    font-weight: 900;
+
+    letter-spacing: 0.16em;
+}
+
+
+/* =========================================
+   RECORD CARDS
+========================================= */
+
+.stats-record-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 12px;
+}
+
+
+.stats-record-card {
+    min-width: 0;
+
+    display: grid;
+
+    grid-template-columns:
+        auto
+        minmax(0, 1fr);
+
+    align-items: center;
+
+    gap: 14px;
+
+    min-height: 128px;
+
+    padding:
+        18px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.085);
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.043),
+            rgba(255, 255, 255, 0.018)
+        );
+
+    box-shadow:
+        inset
+        0
+        1px
+        0
+        rgba(255, 255, 255, 0.03);
+}
+
+
+.stats-record-icon {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex:
+        0
+        0
+        42px;
+
+    border:
+        1px solid
+        rgba(88, 199, 91, 0.22);
+
+    border-radius: 14px;
+
+    background:
+        rgba(88, 199, 91, 0.07);
+
+    color: var(--lt-green);
+
+    font-size: 22px;
+    font-weight: 900;
+}
+
+
+.stats-record-card > div {
+    min-width: 0;
+}
+
+
+.stats-record-label {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color:
+        rgba(222, 228, 225, 0.58);
+
+    font-size: 11px;
+    font-weight: 800;
+
+    text-transform: uppercase;
+    letter-spacing: 0.075em;
+}
+
+
+.stats-record-value {
+    display: flex;
+    align-items: baseline;
+
+    gap: 6px;
+}
+
+
+.stats-record-value strong {
+    color: #ffffff;
+
+    font-size:
+        clamp(
+            28px,
+            5vw,
+            38px
+        );
+
+    font-weight: 900;
+
+    letter-spacing: -0.035em;
+    line-height: 1;
+}
+
+
+.stats-record-value span {
+    color:
+        rgba(213, 223, 217, 0.56);
+
+    font-size: 12px;
+    font-weight: 800;
+}
+
+
+.stats-record-card small {
+    display: block;
+
+    margin-top: 8px;
+
+    overflow: hidden;
+
+    color:
+        rgba(214, 223, 218, 0.68);
+
+    font-size: 12px;
+    font-weight: 650;
+
+    line-height: 1.3;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* =========================================
+   AVERAGE CARD
+========================================= */
+
+.stats-average-card {
+    padding:
+        18px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.08);
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.038),
+            rgba(255, 255, 255, 0.017)
+        );
+
+    box-shadow:
+        inset
+        0
+        1px
+        0
+        rgba(255, 255, 255, 0.03);
+}
+
+
+.stats-average-card h4 {
+    margin:
+        0
+        0
+        16px;
+
+    color:
+        rgba(222, 228, 225, 0.54);
+
+    font-size: 11px;
+    font-weight: 900;
+
+    letter-spacing: 0.14em;
+}
+
+
+.stats-average-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+
+    gap: 0;
+}
+
+
+.stats-average-item {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding:
+        6px
+        14px;
+
+    text-align: center;
+}
+
+
+.stats-average-item + .stats-average-item {
+    border-left:
+        1px solid
+        rgba(255, 255, 255, 0.065);
+}
+
+
+.stats-average-item strong {
+    color: #ffffff;
+
+    font-size:
+        clamp(
+            22px,
+            4vw,
+            30px
+        );
+
+    font-weight: 900;
+
+    letter-spacing: -0.03em;
+    line-height: 1;
+}
+
+
+.stats-average-unit {
+    margin-top: 3px;
+
+    color: var(--lt-green);
+
+    font-size: 11px;
+    font-weight: 850;
+}
+
+
+.stats-average-item small {
+    margin-top: 7px;
+
+    color:
+        rgba(216, 224, 219, 0.54);
+
+    font-size: 11px;
+    font-weight: 650;
+
+    line-height: 1.25;
+}
+
+
+/* =========================================
+   HALF COMPARISON
+========================================= */
+
+.stats-half-dashboard {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 12px;
+}
+
+
+.stats-half-dashboard-item {
+    padding:
+        18px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.08);
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.038),
+            rgba(255, 255, 255, 0.016)
+        );
+}
+
+
+.stats-half-dashboard-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    margin-bottom: 14px;
+}
+
+
+.stats-half-dashboard-heading > span {
+    color: var(--lt-green);
+
+    font-size: 12px;
+    font-weight: 900;
+
+    letter-spacing: 0.08em;
+}
+
+
+.stats-half-dashboard-heading strong {
+    display: flex;
+    align-items: baseline;
+
+    gap: 4px;
+
+    color: #ffffff;
+
+    font-size: 24px;
+    font-weight: 900;
+
+    letter-spacing: -0.035em;
+    line-height: 1;
+}
+
+
+.stats-half-dashboard-heading strong small {
+    color:
+        rgba(216, 224, 219, 0.5);
+
+    font-size: 10px;
+    font-weight: 800;
+}
+
+
+.stats-half-progress {
+    position: relative;
+
+    width: 100%;
+    height: 7px;
+
+    overflow: hidden;
+
+    border-radius: 999px;
+
+    background:
+        rgba(255, 255, 255, 0.055);
+}
+
+
+.stats-half-progress > span {
+    display: block;
+
+    min-width: 4px;
+    height: 100%;
+
+    border-radius: inherit;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(88, 199, 91, 0.55),
+            var(--lt-green)
+        );
+
+    box-shadow:
+        0
+        0
+        14px
+        rgba(88, 199, 91, 0.14);
+}
+
+
+.stats-half-dashboard-item > small {
+    display: block;
+
+    margin-top: 9px;
+
+    color:
+        rgba(214, 223, 217, 0.43);
+
+    font-size: 10px;
+    font-weight: 700;
+
+    text-align: right;
+}
+
+
+/* =========================================
+   LEADERBOARD
+========================================= */
+
+.stats-leaderboard {
+    overflow: hidden;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.08);
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.04),
+            rgba(255, 255, 255, 0.016)
+        );
+
+    box-shadow:
+        inset
+        0
+        1px
+        0
+        rgba(255, 255, 255, 0.03);
+}
+
+
+.stats-leaderboard-heading {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    padding:
+        17px
+        18px
+        15px;
+
+    border-bottom:
+        1px solid
+        rgba(255, 255, 255, 0.065);
+}
+
+
+.stats-leaderboard-heading > span {
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex:
+        0
+        0
+        34px;
+
+    border:
+        1px solid
+        rgba(88, 199, 91, 0.2);
+
+    border-radius: 11px;
+
+    background:
+        rgba(88, 199, 91, 0.06);
+
+    color: var(--lt-green);
+
+    font-size: 18px;
+}
+
+
+.stats-leaderboard-heading > div {
+    display: flex;
+    flex-direction: column;
+
+    gap: 2px;
+}
+
+
+.stats-leaderboard-heading strong {
+    color: #ffffff;
+
+    font-size: 12px;
+    font-weight: 900;
+
+    letter-spacing: 0.08em;
+}
+
+
+.stats-leaderboard-heading small {
+    color:
+        rgba(214, 223, 218, 0.5);
+
+    font-size: 11px;
+    font-weight: 650;
+}
+
+
+.stats-leaderboard-list {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.stats-leaderboard-row,
+.stats-leaderboard-row:link,
+.stats-leaderboard-row:visited {
+    display: grid;
+
+    grid-template-columns:
+        34px
+        minmax(0, 1fr)
+        auto;
+
+    align-items: center;
+
+    gap: 12px;
+
+    min-height: 76px;
+
+    padding:
+        13px
+        18px;
+
+    color: inherit;
+
+    text-decoration: none;
+
+    transition:
+        background 160ms ease;
+}
+
+
+.stats-leaderboard-row + .stats-leaderboard-row {
+    border-top:
+        1px solid
+        rgba(255, 255, 255, 0.055);
+}
+
+
+.stats-leaderboard-row:hover {
+    background:
+        rgba(255, 255, 255, 0.025);
+}
+
+
+.stats-leaderboard-rank {
+    width: 30px;
+    height: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background:
+        rgba(88, 199, 91, 0.07);
+
+    color: var(--lt-green);
+
+    font-size: 12px;
+    font-weight: 900;
+}
+
+
+.stats-leaderboard-match {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 4px;
+}
+
+
+.stats-leaderboard-match strong {
+    overflow: hidden;
+
+    color:
+        rgba(248, 250, 249, 0.92);
+
+    font-size: 13px;
+    font-weight: 800;
+
+    line-height: 1.25;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+.stats-leaderboard-match small {
+    overflow: hidden;
+
+    color:
+        rgba(208, 218, 212, 0.47);
+
+    font-size: 10px;
+    font-weight: 600;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+.stats-leaderboard-distance {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    gap: 2px;
+}
+
+
+.stats-leaderboard-distance strong {
+    color: #ffffff;
+
+    font-size: 18px;
+    font-weight: 900;
+
+    letter-spacing: -0.025em;
+}
+
+
+.stats-leaderboard-distance small {
+    color: var(--lt-green);
+
+    font-size: 9px;
+    font-weight: 800;
+}
+
+
+/* =========================================
+   EMPTY / LOADING
+========================================= */
+
+.stats-dashboard-empty,
+.stats-dashboard-loading {
+    min-height: 220px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    padding: 30px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.08);
+
+    border-radius: 22px;
+
+    background:
+        rgba(255, 255, 255, 0.018);
+
+    text-align: center;
+}
+
+
+.stats-dashboard-empty strong {
+    color: #ffffff;
+
+    font-size: 16px;
+    font-weight: 850;
+}
+
+
+.stats-dashboard-empty span,
+.stats-dashboard-loading p {
+    max-width: 340px;
+
+    color:
+        rgba(214, 223, 218, 0.52);
+
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 820px) {
+
+    #statsDashboard {
+        gap: 14px;
+    }
+
+
+    .stats-dashboard-hero {
+        min-height: 200px;
+
+        border-radius: 22px;
+    }
+
+
+    .stats-record-card,
+    .stats-average-card,
+    .stats-half-dashboard-item,
+    .stats-leaderboard {
+        border-radius: 18px;
+    }
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 620px) {
+
+    .stats-overview-panel {
+        padding-bottom: 10px;
+    }
+
+
+    #statsDashboard {
+        gap: 12px;
+    }
+
+
+    .stats-dashboard-header {
+        align-items: center;
+
+        padding:
+            0
+            2px;
+    }
+
+
+    .stats-dashboard-header h3 {
+        font-size: 23px;
+    }
+
+
+    .stats-garmin-count {
+        min-height: 31px;
+
+        padding:
+            0
+            10px;
+
+        font-size: 11px;
+    }
+
+
+    .stats-dashboard-hero {
+        min-height: 190px;
+
+        padding:
+            24px
+            16px;
+
+        border-radius: 20px;
+    }
+
+
+    .stats-dashboard-hero::before {
+        width: 210px;
+        height: 210px;
+    }
+
+
+    .stats-dashboard-total strong {
+        font-size: 58px;
+    }
+
+
+    .stats-dashboard-total span {
+        font-size: 16px;
+    }
+
+
+    .stats-dashboard-total-label {
+        margin-top: 13px;
+
+        font-size: 10px;
+    }
+
+
+    .stats-record-grid {
+        gap: 10px;
+    }
+
+
+    .stats-record-card {
+        grid-template-columns: 1fr;
+
+        align-items: flex-start;
+
+        gap: 12px;
+
+        min-height: 154px;
+
+        padding:
+            15px;
+
+        border-radius: 18px;
+    }
+
+
+    .stats-record-icon {
+        width: 36px;
+        height: 36px;
+
+        flex-basis: 36px;
+
+        border-radius: 12px;
+
+        font-size: 19px;
+    }
+
+
+    .stats-record-value strong {
+        font-size: 27px;
+    }
+
+
+    .stats-record-card small {
+        margin-top: 7px;
+
+        font-size: 11px;
+    }
+
+
+    .stats-average-card {
+        padding:
+            16px
+            12px;
+    }
+
+
+    .stats-average-card h4 {
+        margin-left: 4px;
+
+        margin-bottom: 14px;
+    }
+
+
+    .stats-average-item {
+        padding:
+            6px
+            9px;
+    }
+
+
+    .stats-average-item strong {
+        font-size: 23px;
+    }
+
+
+    .stats-average-unit,
+    .stats-average-item small {
+        font-size: 10px;
+    }
+
+
+    .stats-half-dashboard {
+        gap: 10px;
+    }
+
+
+    .stats-half-dashboard-item {
+        padding:
+            15px;
+    }
+
+
+    .stats-half-dashboard-heading {
+        margin-bottom: 12px;
+    }
+
+
+    .stats-half-dashboard-heading strong {
+        font-size: 21px;
+    }
+
+
+    .stats-leaderboard-heading {
+        padding:
+            15px;
+    }
+
+
+    .stats-leaderboard-row,
+    .stats-leaderboard-row:link,
+    .stats-leaderboard-row:visited {
+        grid-template-columns:
+            30px
+            minmax(0, 1fr)
+            auto;
+
+        gap: 10px;
+
+        min-height: 72px;
+
+        padding:
+            12px
+            14px;
+    }
+
+
+    .stats-leaderboard-rank {
+        width: 28px;
+        height: 28px;
+    }
+
+
+    .stats-leaderboard-match strong {
+        font-size: 12px;
+    }
+
+
+    .stats-leaderboard-distance strong {
+        font-size: 16px;
+    }
+}
+
+
+/* =========================================
+   VERY SMALL PHONES
+========================================= */
+
+@media (max-width: 390px) {
+
+    .stats-record-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .stats-record-card {
+        grid-template-columns:
+            auto
+            minmax(0, 1fr);
+
+        min-height: 118px;
+    }
+
+
+    .stats-half-dashboard {
+        grid-template-columns: 1fr;
+    }
+
+
+    .stats-average-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .stats-average-item {
+        align-items: flex-start;
+
+        text-align: left;
+
+        padding:
+            12px
+            4px;
+    }
+
+
+    .stats-average-item + .stats-average-item {
+        border-left: 0;
+
+        border-top:
+            1px solid
+            rgba(255, 255, 255, 0.065);
+    }
+}

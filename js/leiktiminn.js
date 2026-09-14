@@ -2869,6 +2869,17 @@ function updateCounts() {
 
 function updateStats() {
 
+    const statsDashboard =
+        document.getElementById(
+            "statsDashboard"
+        );
+
+
+    if (!statsDashboard) {
+        return;
+    }
+
+
     const played =
         matches.filter(
             match =>
@@ -2877,37 +2888,6 @@ function updateStats() {
                 )
         );
 
-
-    const refereeCount =
-        played.filter(
-            match =>
-                match.userRole ===
-                "Dómari"
-        ).length;
-
-
-    const adCount =
-        played.filter(
-            match =>
-                match.userRole ===
-                    "AD1"
-                ||
-                match.userRole ===
-                    "AD2"
-        ).length;
-
-
-    const fourthCount =
-        played.filter(
-            match =>
-                match.userRole ===
-                    "Fjórði"
-        ).length;
-
-
-    // =========================================
-    // GARMIN FITNESS MATCHES
-    // =========================================
 
     const fitnessMatches =
         played.filter(
@@ -2922,154 +2902,13 @@ function updateStats() {
         );
 
 
-    // =========================================
-    // COMPACT MATCH SUMMARY
-    // =========================================
-
-    const careerGrid =
-        document.querySelector(
-            ".career-stats-grid"
-        );
-
-
     if (
-        careerGrid
+        fitnessMatches.length === 0
     ) {
 
-        const summaryItems =
-            [];
+        statsDashboard.innerHTML = `
 
-
-        summaryItems.push(`
-            <article class="stats-summary-item">
-
-                <span>
-                    Leikir
-                </span>
-
-                <strong>
-                    ${played.length}
-                </strong>
-
-            </article>
-        `);
-
-
-        if (
-            refereeCount > 0
-        ) {
-
-            summaryItems.push(`
-                <article class="stats-summary-item">
-
-                    <span>
-                        Dómari
-                    </span>
-
-                    <strong>
-                        ${refereeCount}
-                    </strong>
-
-                </article>
-            `);
-        }
-
-
-        if (
-            adCount > 0
-        ) {
-
-            summaryItems.push(`
-                <article class="stats-summary-item">
-
-                    <span>
-                        AD
-                    </span>
-
-                    <strong>
-                        ${adCount}
-                    </strong>
-
-                </article>
-            `);
-        }
-
-
-        if (
-            fourthCount > 0
-        ) {
-
-            summaryItems.push(`
-                <article class="stats-summary-item">
-
-                    <span>
-                        Fjórði
-                    </span>
-
-                    <strong>
-                        ${fourthCount}
-                    </strong>
-
-                </article>
-            `);
-        }
-
-
-        if (
-            fitnessMatches.length > 0
-        ) {
-
-            summaryItems.push(`
-                <article class="stats-summary-item stats-summary-garmin">
-
-                    <span>
-                        Garmin
-                    </span>
-
-                    <strong>
-                        ${fitnessMatches.length}
-                    </strong>
-
-                </article>
-            `);
-        }
-
-
-        careerGrid.innerHTML =
-            summaryItems.join("");
-    }
-
-
-    // =========================================
-    // GARMIN CONTAINER
-    // =========================================
-
-    const statsFuture =
-        document.querySelector(
-            ".stats-future"
-        );
-
-
-    if (
-        !statsFuture
-    ) {
-
-        return;
-    }
-
-
-    // =========================================
-    // NO GARMIN DATA
-    // =========================================
-
-    if (
-        fitnessMatches.length ===
-        0
-    ) {
-
-        statsFuture.innerHTML = `
-
-            <div class="stats-garmin-heading">
+            <div class="stats-dashboard-header">
 
                 <div>
 
@@ -3077,30 +2916,34 @@ function updateStats() {
                         GARMIN
                     </p>
 
-                    <h4>
+                    <h3>
                         Frammistaða
-                    </h4>
+                    </h3>
 
                 </div>
 
+                <span class="stats-garmin-count">
+                    0 leikir
+                </span>
+
             </div>
 
+            <div class="stats-dashboard-empty">
 
-            <div class="stats-garmin-empty">
+                <strong>
+                    Engin Garmin gögn enn
+                </strong>
 
-                Engin Garmin gögn komin inn enn.
+                <span>
+                    Þegar leikur berst frá Garmin birtist frammistaðan hér.
+                </span>
 
             </div>
         `;
 
-
         return;
     }
 
-
-    // =========================================
-    // DISTANCE MATCHES
-    // =========================================
 
     const distanceMatches =
         fitnessMatches.filter(
@@ -3111,60 +2954,31 @@ function updateStats() {
         );
 
 
-    // =========================================
-    // TOTAL DISTANCE
-    // =========================================
-
     const totalDistanceMeters =
         distanceMatches.reduce(
-            (
-                total,
-                match
-            ) =>
-                total
-                +
-                Number(
-                    match.distanceTotalM ?? 0
-                ),
+            (total, match) =>
+                total + Number(match.distanceTotalM ?? 0),
             0
         );
 
-
-    // =========================================
-    // AVERAGE DISTANCE
-    // =========================================
 
     const averageDistanceMeters =
         distanceMatches.length > 0
-            ? totalDistanceMeters
-                /
-                distanceMatches.length
+            ? totalDistanceMeters / distanceMatches.length
             : 0;
 
 
-    // =========================================
-    // LONGEST MATCH
-    // =========================================
+    const longestMatch =
+        distanceMatches.length > 0
+            ? distanceMatches.reduce(
+                (longest, match) =>
+                    Number(match.distanceTotalM ?? 0) >
+                    Number(longest.distanceTotalM ?? 0)
+                        ? match
+                        : longest
+            )
+            : null;
 
-    const longestDistanceMeters =
-        distanceMatches.reduce(
-            (
-                longest,
-                match
-            ) =>
-                Math.max(
-                    longest,
-                    Number(
-                        match.distanceTotalM ?? 0
-                    )
-                ),
-            0
-        );
-
-
-    // =========================================
-    // HEART RATE MATCHES
-    // =========================================
 
     const hrMatches =
         fitnessMatches.filter(
@@ -3175,424 +2989,289 @@ function updateStats() {
         );
 
 
-    // =========================================
-    // AVERAGE HEART RATE
-    // =========================================
-
     const averageHeartRate =
         hrMatches.length > 0
             ? Math.round(
                 hrMatches.reduce(
-                    (
-                        total,
-                        match
-                    ) =>
-                        total
-                        +
-                        Number(
-                            match.hrAvgTotal ?? 0
-                        ),
+                    (total, match) =>
+                        total + Number(match.hrAvgTotal ?? 0),
                     0
-                )
-                /
-                hrMatches.length
+                ) / hrMatches.length
             )
             : 0;
 
 
-    // =========================================
-    // HIGHEST HEART RATE
-    // =========================================
+    const highestAverageHrMatch =
+        hrMatches.length > 0
+            ? hrMatches.reduce(
+                (highest, match) =>
+                    Number(match.hrAvgTotal ?? 0) >
+                    Number(highest.hrAvgTotal ?? 0)
+                        ? match
+                        : highest
+            )
+            : null;
 
-    const highestHeartRate =
-        fitnessMatches.reduce(
-            (
-                highest,
-                match
-            ) =>
-                Math.max(
-                    highest,
-                    Number(
-                        match.hrMaxTotal ?? 0
-                    )
-                ),
-            0
-        );
-
-
-    // =========================================
-    // FIRST HALF DISTANCE
-    // =========================================
 
     const firstHalfDistanceTotal =
         distanceMatches.reduce(
-            (
-                total,
-                match
-            ) =>
-                total
-                +
-                Number(
-                    match.distanceFirstHalfM ?? 0
-                ),
+            (total, match) =>
+                total + Number(match.distanceFirstHalfM ?? 0),
             0
         );
 
-
-    // =========================================
-    // SECOND HALF DISTANCE
-    // =========================================
 
     const secondHalfDistanceTotal =
         distanceMatches.reduce(
-            (
-                total,
-                match
-            ) =>
-                total
-                +
-                Number(
-                    match.distanceSecondHalfM ?? 0
-                ),
+            (total, match) =>
+                total + Number(match.distanceSecondHalfM ?? 0),
             0
         );
 
 
-    // =========================================
-    // HALF DISTANCE AVERAGES
-    // =========================================
-
     const averageFirstHalfDistance =
         distanceMatches.length > 0
-            ? firstHalfDistanceTotal
-                /
-                distanceMatches.length
+            ? firstHalfDistanceTotal / distanceMatches.length
             : 0;
 
 
     const averageSecondHalfDistance =
         distanceMatches.length > 0
-            ? secondHalfDistanceTotal
-                /
-                distanceMatches.length
+            ? secondHalfDistanceTotal / distanceMatches.length
             : 0;
 
 
-    // =========================================
-    // FIRST HALF HR
-    // =========================================
-
-    const firstHalfHrMatches =
-        fitnessMatches.filter(
-            match =>
-                Number(
-                    match.hrAvgFirstHalf ?? 0
-                ) > 0
-        );
+    const halfDistanceTotal =
+        averageFirstHalfDistance + averageSecondHalfDistance;
 
 
-    const averageFirstHalfHr =
-        firstHalfHrMatches.length > 0
+    const firstHalfPercent =
+        halfDistanceTotal > 0
             ? Math.round(
-                firstHalfHrMatches.reduce(
-                    (
-                        total,
-                        match
-                    ) =>
-                        total
-                        +
-                        Number(
-                            match.hrAvgFirstHalf ?? 0
-                        ),
-                    0
-                )
-                /
-                firstHalfHrMatches.length
+                (averageFirstHalfDistance / halfDistanceTotal) * 100
             )
-            : 0;
+            : 50;
 
 
-    // =========================================
-    // SECOND HALF HR
-    // =========================================
-
-    const secondHalfHrMatches =
-        fitnessMatches.filter(
-            match =>
-                Number(
-                    match.hrAvgSecondHalf ?? 0
-                ) > 0
-        );
+    const secondHalfPercent =
+        halfDistanceTotal > 0
+            ? 100 - firstHalfPercent
+            : 50;
 
 
-    const averageSecondHalfHr =
-        secondHalfHrMatches.length > 0
-            ? Math.round(
-                secondHalfHrMatches.reduce(
-                    (
-                        total,
-                        match
-                    ) =>
-                        total
-                        +
-                        Number(
-                            match.hrAvgSecondHalf ?? 0
-                        ),
-                    0
-                )
-                /
-                secondHalfHrMatches.length
+    const topDistanceMatches =
+        [...distanceMatches]
+            .sort(
+                (a, b) =>
+                    Number(b.distanceTotalM ?? 0) -
+                    Number(a.distanceTotalM ?? 0)
             )
-            : 0;
+            .slice(0, 3);
 
 
-    // =========================================
-    // RENDER GARMIN DASHBOARD
-    // =========================================
+    const topMatchesHtml =
+        topDistanceMatches
+            .map(
+                (match, index) => {
 
-    statsFuture.innerHTML = `
+                    const title =
+                        `${match.homeTeam} – ${match.awayTeam}`;
 
-        <div class="stats-garmin-heading">
+                    const metaParts = [];
+
+                    if (match.competition) {
+                        metaParts.push(match.competition);
+                    }
+
+                    if (match.date) {
+                        metaParts.push(formatStatsDate(match.date));
+                    }
+
+                    return `
+                        <a
+                            class="stats-leaderboard-row"
+                            href="leiktiminn-match.html?id=${encodeURIComponent(match.id)}&from=played"
+                        >
+                            <span class="stats-leaderboard-rank">
+                                ${index + 1}
+                            </span>
+
+                            <span class="stats-leaderboard-match">
+                                <strong>
+                                    ${escapeHtml(title)}
+                                </strong>
+
+                                <small>
+                                    ${escapeHtml(metaParts.join(" · "))}
+                                </small>
+                            </span>
+
+                            <span class="stats-leaderboard-distance">
+                                <strong>
+                                    ${formatStatsKm(match.distanceTotalM)}
+                                </strong>
+                                <small>km</small>
+                            </span>
+                        </a>
+                    `;
+                }
+            )
+            .join("");
+
+
+    const longestMatchTitle =
+        longestMatch
+            ? `${longestMatch.homeTeam} – ${longestMatch.awayTeam}`
+            : "–";
+
+
+    const highestHrMatchTitle =
+        highestAverageHrMatch
+            ? `${highestAverageHrMatch.homeTeam} – ${highestAverageHrMatch.awayTeam}`
+            : "–";
+
+
+    statsDashboard.innerHTML = `
+
+        <div class="stats-dashboard-header">
 
             <div>
-
-                <p class="panel-eyebrow">
-                    GARMIN
-                </p>
-
-                <h4>
-                    Frammistaða
-                </h4>
-
+                <p class="panel-eyebrow">GARMIN</p>
+                <h3>Frammistaða</h3>
             </div>
-
 
             <span class="stats-garmin-count">
-
                 ${fitnessMatches.length}
-
-                ${
-                    fitnessMatches.length === 1
-                        ? "leikur"
-                        : "leikir"
-                }
-
+                ${fitnessMatches.length === 1 ? "leikur" : "leikir"}
             </span>
-
         </div>
 
 
-        <div class="stats-distance-hero">
-
-            <div class="stats-distance-value">
-
-                <strong>
-                    ${formatStatsKm(
-                        totalDistanceMeters
-                    )}
-                </strong>
-
-                <span>
-                    km
-                </span>
-
+        <div class="stats-dashboard-hero">
+            <div class="stats-dashboard-total">
+                <strong>${formatStatsKm(totalDistanceMeters)}</strong>
+                <span>km</span>
             </div>
-
-
-            <div class="stats-distance-label">
-                Heildarvegalengd
+            <div class="stats-dashboard-total-label">
+                HEILDARVEGALEGD
             </div>
+        </div>
+
+
+        <div class="stats-record-grid">
+
+            <article class="stats-record-card">
+                <span class="stats-record-icon">◎</span>
+                <div>
+                    <span class="stats-record-label">Lengsti leikur</span>
+                    <div class="stats-record-value">
+                        <strong>${longestMatch ? formatStatsKm(longestMatch.distanceTotalM) : "–"}</strong>
+                        <span>km</span>
+                    </div>
+                    <small>${escapeHtml(longestMatchTitle)}</small>
+                </div>
+            </article>
+
+            <article class="stats-record-card">
+                <span class="stats-record-icon">♡</span>
+                <div>
+                    <span class="stats-record-label">Hæsti meðalpúls</span>
+                    <div class="stats-record-value">
+                        <strong>${highestAverageHrMatch ? Math.round(highestAverageHrMatch.hrAvgTotal) : "–"}</strong>
+                        <span>bpm</span>
+                    </div>
+                    <small>${escapeHtml(highestHrMatchTitle)}</small>
+                </div>
+            </article>
 
         </div>
 
 
-        <div class="stats-performance-grid">
+        <section class="stats-average-card">
+            <h4>MEÐALTAL</h4>
+            <div class="stats-average-grid">
 
+                <div class="stats-average-item">
+                    <strong>${formatStatsKm(averageDistanceMeters)}</strong>
+                    <span class="stats-average-unit">km/leik</span>
+                    <small>Meðalvegalengd</small>
+                </div>
 
-            <article>
+                <div class="stats-average-item">
+                    <strong>${averageHeartRate > 0 ? averageHeartRate : "–"}</strong>
+                    <span class="stats-average-unit">bpm</span>
+                    <small>Meðalpúls</small>
+                </div>
 
-                <span>
-                    Meðaltal í leik
-                </span>
-
-                <strong>
-
-                    ${formatStatsKm(
-                        averageDistanceMeters
-                    )}
-
-                    <small>
-                        km
-                    </small>
-
-                </strong>
-
-            </article>
-
-
-            <article>
-
-                <span>
-                    Lengsti leikur
-                </span>
-
-                <strong>
-
-                    ${formatStatsKm(
-                        longestDistanceMeters
-                    )}
-
-                    <small>
-                        km
-                    </small>
-
-                </strong>
-
-            </article>
-
-
-            <article>
-
-                <span>
-                    Meðalpúls
-                </span>
-
-                <strong>
-
-                    ${
-                        averageHeartRate > 0
-                            ? averageHeartRate
-                            : "–"
-                    }
-
-                    <small>
-                        bpm
-                    </small>
-
-                </strong>
-
-            </article>
-
-
-            <article>
-
-                <span>
-                    Hæsti púls
-                </span>
-
-                <strong>
-
-                    ${
-                        highestHeartRate > 0
-                            ? highestHeartRate
-                            : "–"
-                    }
-
-                    <small>
-                        bpm
-                    </small>
-
-                </strong>
-
-            </article>
-
-
-        </div>
-
-
-        <div class="stats-half-comparison">
-
-
-            <div class="stats-half-card">
-
-                <span class="stats-half-label">
-                    1H
-                </span>
-
-
-                <strong>
-
-                    ${formatStatsKm(
-                        averageFirstHalfDistance
-                    )}
-
-                    <small>
-                        km
-                    </small>
-
-                </strong>
-
-
-                <span class="stats-half-caption">
-                    Meðal vegalengd
-                </span>
-
-
-                <div class="stats-half-hr">
-
-                    <span>
-                        Meðalpúls
-                    </span>
-
-                    <b>
-                        ${
-                            averageFirstHalfHr > 0
-                                ? averageFirstHalfHr
-                                : "–"
-                        }
-                    </b>
-
+                <div class="stats-average-item">
+                    <strong>${fitnessMatches.length}</strong>
+                    <small>Garmin leikir</small>
                 </div>
 
             </div>
+        </section>
 
 
-            <div class="stats-half-card">
+        <section class="stats-half-dashboard">
 
-                <span class="stats-half-label">
-                    2H
-                </span>
-
-
-                <strong>
-
-                    ${formatStatsKm(
-                        averageSecondHalfDistance
-                    )}
-
-                    <small>
-                        km
-                    </small>
-
-                </strong>
-
-
-                <span class="stats-half-caption">
-                    Meðal vegalengd
-                </span>
-
-
-                <div class="stats-half-hr">
-
-                    <span>
-                        Meðalpúls
-                    </span>
-
-                    <b>
-                        ${
-                            averageSecondHalfHr > 0
-                                ? averageSecondHalfHr
-                                : "–"
-                        }
-                    </b>
-
+            <div class="stats-half-dashboard-item">
+                <div class="stats-half-dashboard-heading">
+                    <span>1H</span>
+                    <strong>${formatStatsKm(averageFirstHalfDistance)} <small>km</small></strong>
                 </div>
-
+                <div class="stats-half-progress">
+                    <span style="width:${firstHalfPercent}%"></span>
+                </div>
+                <small>${firstHalfPercent}%</small>
             </div>
 
+            <div class="stats-half-dashboard-item">
+                <div class="stats-half-dashboard-heading">
+                    <span>2H</span>
+                    <strong>${formatStatsKm(averageSecondHalfDistance)} <small>km</small></strong>
+                </div>
+                <div class="stats-half-progress">
+                    <span style="width:${secondHalfPercent}%"></span>
+                </div>
+                <small>${secondHalfPercent}%</small>
+            </div>
 
-        </div>
+        </section>
+
+
+        <section class="stats-leaderboard">
+            <div class="stats-leaderboard-heading">
+                <span>◇</span>
+                <div>
+                    <strong>TOPP LEIKIR</strong>
+                    <small>eftir vegalengd</small>
+                </div>
+            </div>
+
+            <div class="stats-leaderboard-list">
+                ${topMatchesHtml}
+            </div>
+        </section>
     `;
+}
+
+
+function formatStatsDate(
+    value
+) {
+
+    if (!value) {
+        return "";
+    }
+
+    const parts =
+        String(value).split("-");
+
+    if (parts.length !== 3) {
+        return value;
+    }
+
+    return `${parts[2]}.${parts[1]}.${parts[0]}`;
 }
 
 
@@ -4246,6 +3925,7 @@ supabaseClient
         }
     );
 
+
 /* =========================================
    URL VIEW / ACTION ROUTING
 ========================================= */
@@ -4276,10 +3956,6 @@ function handleLeiktiminnUrlState() {
         );
 
 
-    // =========================================
-    // OPEN REQUESTED VIEW
-    // =========================================
-
     if (
         requestedView ===
             "upcoming"
@@ -4300,10 +3976,6 @@ function handleLeiktiminnUrlState() {
     }
 
 
-    // =========================================
-    // OPEN CREATE MATCH
-    // =========================================
-
     if (
         createRequested ===
         "1"
@@ -4319,10 +3991,6 @@ function handleLeiktiminnUrlState() {
         );
     }
 
-
-    // =========================================
-    // OPEN EXISTING MATCH FOR EDITING
-    // =========================================
 
     if (
         editRequested
@@ -4340,13 +4008,6 @@ function handleLeiktiminnUrlState() {
         openPendingEditIfReady();
     }
 
-
-    // =========================================
-    // CLEAN URL
-    //
-    // Edit URLs are cleaned only after the
-    // requested match has actually opened.
-    // =========================================
 
     if (
         !editRequested
@@ -4384,6 +4045,8 @@ window.addEventListener(
 
     }
 );
+
+
 
 /* =========================================
    HTML SAFETY

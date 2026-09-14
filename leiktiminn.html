@@ -475,21 +475,26 @@
 
                 <section class="leiktiminn-panel stats-overview-panel">
 
-                    <div class="stats-future">
+                    <div
+                        class="stats-future"
+                        id="statsDashboard"
+                    >
 
-                        <p class="panel-eyebrow">
-                            GARMIN
-                        </p>
+                        <div class="stats-dashboard-loading">
 
-                        <h4>
-                            Frammistaða
-                        </h4>
+                            <p class="panel-eyebrow">
+                                GARMIN
+                            </p>
 
-                        <p>
-                            Vegalengd, meðaltöl, sprettir,
-                            hámarkshraði og topp 5 leikir birtast
-                            hér þegar Garmin gögnin eru komin inn.
-                        </p>
+                            <h3>
+                                Frammistaða
+                            </h3>
+
+                            <p>
+                                Sæki tölfræði...
+                            </p>
+
+                        </div>
 
                     </div>
 
@@ -1114,46 +1119,44 @@
 
                     <div class="form-row">
 
-    <div class="form-row">
+                        <label class="form-field">
 
-    <label class="form-field">
+                            <span>
+                                Heimalið *
+                            </span>
 
-        <span>
-            Heimalið *
-        </span>
+                            <input
+                                id="home-team"
+                                type="text"
+                                placeholder="Heimalið"
+                                autocomplete="off"
+                                autocapitalize="characters"
+                                oninput="this.value = this.value.toUpperCase()"
+                                required
+                            >
 
-        <input
-            id="home-team"
-            type="text"
-            placeholder="Heimalið"
-            autocomplete="off"
-            autocapitalize="characters"
-            oninput="this.value = this.value.toUpperCase()"
-            required
-        >
-
-    </label>
+                        </label>
 
 
-    <label class="form-field">
+                        <label class="form-field">
 
-        <span>
-            Útilið *
-        </span>
+                            <span>
+                                Útilið *
+                            </span>
 
-        <input
-            id="away-team"
-            type="text"
-            placeholder="Útilið"
-            autocomplete="off"
-            autocapitalize="characters"
-            oninput="this.value = this.value.toUpperCase()"
-            required
-        >
+                            <input
+                                id="away-team"
+                                type="text"
+                                placeholder="Útilið"
+                                autocomplete="off"
+                                autocapitalize="characters"
+                                oninput="this.value = this.value.toUpperCase()"
+                                required
+                            >
 
-    </label>
+                        </label>
 
-</div>
+                    </div>
 
 
                     <div class="form-row">
