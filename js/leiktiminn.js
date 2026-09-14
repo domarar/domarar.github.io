@@ -1663,7 +1663,21 @@ function isPlayedMatch(
     );
 }
 
+/* =========================================
+   VIEW HISTORY
+========================================= */
 
+let currentViewName =
+    "upcoming";
+
+let previousContentViewName =
+    "upcoming";
+
+
+const profileBackButton =
+    document.getElementById(
+        "profileBackButton"
+    );
 
 /* =========================================
    VIEW BUTTONS
@@ -1697,7 +1711,30 @@ document
             );
         }
     );
+if (
+    profileBackButton
+) {
 
+    profileBackButton.addEventListener(
+        "click",
+        () => {
+
+            const returnView =
+                (
+                    previousContentViewName === "played"
+                    || previousContentViewName === "stats"
+                    || previousContentViewName === "upcoming"
+                )
+                    ? previousContentViewName
+                    : "upcoming";
+
+
+            switchView(
+                returnView
+            );
+        }
+    );
+}
 
 
 /* =========================================
@@ -1707,6 +1744,29 @@ document
 function switchView(
     viewName
 ) {
+
+    if (
+        viewName !==
+            currentViewName
+    ) {
+
+        if (
+            viewName ===
+                "profile"
+            &&
+            currentViewName !==
+                "profile"
+        ) {
+
+            previousContentViewName =
+                currentViewName;
+        }
+
+
+        currentViewName =
+            viewName;
+    }
+
 
     closeMobileCreateMenu();
 
@@ -3153,7 +3213,7 @@ function updateStats() {
                 <span>km</span>
             </div>
             <div class="stats-dashboard-total-label">
-                HEILDARVEGALEGD
+                HEILDARVEGALENGD
             </div>
         </div>
 

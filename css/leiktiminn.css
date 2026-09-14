@@ -3512,3 +3512,558 @@ body.auth-locked .leiktiminn-footer { display: none !important; }
             rgba(255, 255, 255, 0.065);
     }
 }
+/* ==================================================
+   PROFILE V2
+================================================== */
+
+.profile-panel {
+    overflow: visible;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+
+/* --------------------------------------------------
+   BACK
+-------------------------------------------------- */
+
+button.profile-back-link {
+    margin:
+        0
+        18px
+        10px;
+
+    padding: 0;
+    border: 0;
+    outline: none;
+    background: transparent;
+    font: inherit;
+    cursor: pointer;
+}
+
+
+/* --------------------------------------------------
+   PAGE HEADING
+-------------------------------------------------- */
+
+.profile-heading {
+    padding:
+        0
+        18px
+        18px;
+}
+
+
+/* --------------------------------------------------
+   CARD STACK
+-------------------------------------------------- */
+
+.profile-main {
+    display: grid;
+    gap: 18px;
+    padding: 0;
+}
+
+.profile-divider {
+    display: none;
+}
+
+
+/* --------------------------------------------------
+   SHARED PROFILE CARDS
+-------------------------------------------------- */
+
+.profile-identity,
+.profile-section,
+.profile-edit-panel {
+    border:
+        1px solid
+        rgba(88, 199, 91, 0.22);
+
+    border-radius: 22px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(10, 42, 31, 0.96),
+            rgba(6, 28, 21, 0.95)
+        );
+
+    box-shadow:
+        0 16px 38px rgba(0, 0, 0, 0.20),
+        inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+
+/* --------------------------------------------------
+   PROFILE HERO
+-------------------------------------------------- */
+
+.profile-identity {
+    grid-template-columns:
+        auto
+        minmax(0, 1fr)
+        auto;
+
+    gap: 24px;
+    padding: 26px 28px;
+}
+
+.profile-avatar {
+    width: 94px;
+    height: 94px;
+
+    border:
+        2px solid
+        rgba(88, 199, 91, 0.82);
+
+    background:
+        rgba(88, 199, 91, 0.10);
+
+    box-shadow:
+        0 0 0 5px rgba(88, 199, 91, 0.045);
+}
+
+.profile-identity-copy strong {
+    font-size: 22px;
+    letter-spacing: -0.45px;
+}
+
+.profile-identity-copy > span:not(.profile-role-badge) {
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+.profile-identity-copy .profile-role-badge {
+    width: fit-content;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    margin-top: 13px;
+    padding: 6px 13px;
+
+    overflow: visible;
+    border:
+        1px solid
+        rgba(88, 199, 91, 0.40);
+
+    border-radius: 999px;
+    background:
+        rgba(88, 199, 91, 0.11);
+
+    color: var(--lt-green);
+    font-size: 12px;
+    font-weight: 850;
+    line-height: 1;
+}
+
+.profile-role-badge::before {
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+    background: var(--lt-green);
+
+    box-shadow:
+        0 0 0 4px rgba(88, 199, 91, 0.10);
+
+    content: "";
+}
+
+.profile-text-button {
+    min-height: 44px;
+    padding: 0 17px;
+
+    border-color:
+        rgba(88, 199, 91, 0.52);
+
+    background:
+        rgba(4, 20, 15, 0.36);
+}
+
+
+/* --------------------------------------------------
+   EDIT PROFILE CARD
+-------------------------------------------------- */
+
+.profile-edit-panel {
+    padding: 24px 26px;
+}
+
+
+/* --------------------------------------------------
+   CONTENT CARDS
+-------------------------------------------------- */
+
+.profile-section {
+    padding: 24px 26px;
+}
+
+.profile-section-heading {
+    margin-bottom: 17px;
+}
+
+.profile-section-heading h4,
+.profile-section > h4 {
+    font-size: 19px;
+}
+
+.profile-section-description {
+    max-width: 620px;
+    margin-top: 8px;
+    font-size: 13px;
+}
+
+
+/* --------------------------------------------------
+   ACCOUNT INFORMATION
+-------------------------------------------------- */
+
+.profile-info-list {
+    max-width: none;
+    overflow: hidden;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.085);
+
+    border-radius: 14px;
+    background:
+        rgba(2, 16, 11, 0.22);
+}
+
+.profile-info-row {
+    grid-template-columns:
+        150px
+        minmax(0, 1fr);
+
+    gap: 24px;
+    padding: 15px 17px;
+}
+
+.profile-info-row + .profile-info-row {
+    border-top:
+        1px solid
+        rgba(255, 255, 255, 0.07);
+}
+
+.profile-info-row span {
+    font-size: 13px;
+}
+
+.profile-info-row strong {
+    font-size: 14px;
+}
+
+
+/* --------------------------------------------------
+   GARMIN STATUS
+-------------------------------------------------- */
+
+.profile-garmin-status {
+    min-height: 34px;
+    margin-top: 0;
+    padding: 0 13px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.09);
+
+    border-radius: 999px;
+    background:
+        rgba(255, 255, 255, 0.035);
+}
+
+.profile-garmin-status strong {
+    font-size: 12px;
+}
+
+.profile-garmin-section:has(
+    #forgetGarminButton:not([hidden])
+)
+.profile-garmin-status {
+    border-color:
+        rgba(88, 199, 91, 0.38);
+
+    background:
+        rgba(88, 199, 91, 0.10);
+
+    color: var(--lt-green);
+}
+
+.profile-garmin-section:has(
+    #forgetGarminButton:not([hidden])
+)
+.profile-garmin-status strong {
+    color: var(--lt-green);
+}
+
+.profile-garmin-section:has(
+    #forgetGarminButton:not([hidden])
+)
+.profile-status-dot {
+    background: var(--lt-green);
+
+    box-shadow:
+        0 0 0 4px rgba(88, 199, 91, 0.10);
+}
+
+
+/* --------------------------------------------------
+   GARMIN BUTTONS
+-------------------------------------------------- */
+
+#garminDeviceActions {
+    width: 100%;
+    display: grid !important;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        minmax(0, 1fr);
+
+    gap: 12px !important;
+    margin-top: 18px !important;
+}
+
+#garminDeviceActions
+.profile-button-primary,
+#garminDeviceActions
+.profile-button-secondary {
+    width: 100%;
+    min-height: 48px;
+}
+
+#garminDeviceActions:has(
+    #forgetGarminButton[hidden]
+)
+#connectGarminButton {
+    grid-column: 1 / -1;
+}
+
+.profile-garmin-button {
+    width: 100%;
+    margin-top: 0;
+}
+
+
+/* --------------------------------------------------
+   SECURITY
+-------------------------------------------------- */
+
+.profile-action-row {
+    min-height: 54px;
+    padding: 0 16px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.085);
+
+    border-radius: 13px;
+    background:
+        rgba(2, 16, 11, 0.22);
+}
+
+.profile-action-row:hover {
+    border-color:
+        rgba(88, 199, 91, 0.30);
+
+    background:
+        rgba(88, 199, 91, 0.055);
+}
+
+.profile-password-panel {
+    margin-top: 16px;
+    padding:
+        18px
+        0
+        0;
+}
+
+
+/* --------------------------------------------------
+   LOGOUT
+-------------------------------------------------- */
+
+.profile-footer-actions {
+    justify-content: center;
+    padding: 2px 0;
+}
+
+.profile-logout-button {
+    width: fit-content;
+    min-height: 38px;
+    padding: 0 20px;
+
+    border-color:
+        rgba(255, 110, 110, 0.42);
+
+    border-radius: 10px;
+
+    background:
+        rgba(255, 110, 110, 0.025);
+}
+
+
+/* ==================================================
+   PROFILE V2 — TABLET AND MOBILE
+================================================== */
+
+@media (max-width: 760px) {
+
+    button.profile-back-link {
+        margin:
+            0
+            0
+            10px;
+    }
+
+    .profile-heading {
+        padding:
+            0
+            0
+            14px;
+    }
+
+    .profile-main {
+        gap: 14px;
+    }
+
+    .profile-identity {
+        grid-template-columns:
+            auto
+            minmax(0, 1fr)
+            auto;
+
+        gap: 18px;
+        padding: 20px;
+    }
+
+    .profile-avatar {
+        width: 78px;
+        height: 78px;
+    }
+
+    .profile-identity-copy strong {
+        font-size: 19px;
+    }
+
+    .profile-text-button {
+        grid-column: auto;
+        width: auto;
+        margin-left: 0;
+    }
+
+    .profile-section,
+    .profile-edit-panel {
+        padding: 20px;
+    }
+
+    .profile-section-heading-row {
+        display: flex;
+    }
+
+    .profile-garmin-status {
+        margin-top: 0;
+    }
+}
+
+
+/* ==================================================
+   PROFILE V2 — SMALL PHONE
+================================================== */
+
+@media (max-width: 560px) {
+
+    .profile-identity {
+        grid-template-columns:
+            auto
+            minmax(0, 1fr);
+
+        gap: 14px;
+        padding: 18px;
+    }
+
+    .profile-avatar {
+        width: 66px;
+        height: 66px;
+    }
+
+    .profile-identity-copy strong {
+        font-size: 17px;
+    }
+
+    .profile-text-button {
+        grid-column: 1 / -1;
+        width: 100%;
+        margin: 2px 0 0;
+    }
+
+    .profile-section,
+    .profile-edit-panel {
+        padding: 18px;
+    }
+
+    .profile-section-heading-row {
+        display: block;
+    }
+
+    .profile-garmin-status {
+        width: fit-content;
+        margin-top: 12px;
+    }
+
+    #garminDeviceActions {
+        grid-template-columns: 1fr;
+    }
+
+    #garminDeviceActions
+    #connectGarminButton,
+    #garminDeviceActions
+    #forgetGarminButton {
+        grid-column: 1;
+    }
+
+    .profile-info-row {
+        grid-template-columns:
+            88px
+            minmax(0, 1fr);
+
+        gap: 12px;
+        padding: 14px;
+    }
+}
+
+.stats-overview-panel {
+    overflow: visible;
+}
+
+.stats-overview-panel .stats-future {
+    margin: 0;
+    padding-top: 0;
+    border-top: 0;
+}
+/* TÖLFRÆÐI — SOLID INDIVIDUAL CARDS */
+
+.stats-dashboard-hero,
+.stats-record-card,
+.stats-average-card,
+.stats-half-dashboard-item,
+.stats-leaderboard {
+    background:
+        linear-gradient(
+            180deg,
+            rgba(16, 45, 34, 0.85) 0%,
+            rgba(10, 33, 25, 0.85) 100%
+        ) !important;
+
+    border-color:
+        rgba(99, 217, 106, 0.18) !important;
+
+    box-shadow:
+        0 10px 26px rgba(0, 0, 0, 0.22),
+        inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
+}
