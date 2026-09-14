@@ -611,7 +611,24 @@
           "position": null,
           "orderNumber": 6,
           "hideProfile": false,
-          "events": []
+          "events": [
+            {
+              "eventId": 8298998,
+              "eventType": {
+                "fcdName": "SUBSTITUTION"
+              },
+              "player": {
+                "personId": 40645,
+                "hideProfile": false
+              },
+              "player2": {
+                "personId": 84560,
+                "name": null,
+                "hideProfile": false
+              },
+              "homeTeam": false
+            }
+          ]
         },
         {
           "roleId": 8294880,
@@ -624,24 +641,7 @@
           "position": null,
           "orderNumber": 7,
           "hideProfile": false,
-          "events": [
-            {
-              "eventId": 8298998,
-              "eventType": {
-                "fcdName": "SUBSTITUTION"
-              },
-              "player": {
-                "personId": 40645,
-                "hideProfile": false
-              },
-              "player2": {
-                "personId": 27733,
-                "name": null,
-                "hideProfile": false
-              },
-              "homeTeam": false
-            }
-          ]
+          "events": []
         },
         {
           "roleId": 8285603,
@@ -777,7 +777,7 @@
                 "hideProfile": false
               },
               "player2": {
-                "personId": 27733,
+                "personId": 84560,
                 "name": null,
                 "hideProfile": false
               },
@@ -976,8 +976,8 @@
         "hideProfile": false
       },
       "player2": {
-        "personId": 27733,
-        "name": "Andri Fannar Stefánsson",
+        "personId": 84560,
+        "name": "Garðar Gísli Þórisson",
         "hideProfile": false
       },
       "homeTeam": false,
