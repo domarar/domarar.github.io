@@ -4512,6 +4512,10 @@ document.addEventListener(
    AUTH CHANGE
 ========================================= */
 
+/* =========================================
+   AUTH CHANGE
+========================================= */
+
 supabaseClient
     .auth
     .onAuthStateChange(
@@ -4524,6 +4528,9 @@ supabaseClient
 
                 matches = [];
 
+                currentMatchFormUserName = "";
+                lastAutoFilledRole = "";
+
                 renderAll();
 
                 return;
@@ -4531,9 +4538,13 @@ supabaseClient
 
 
             window.setTimeout(
-                () => {
+                async () => {
 
-                    loadMatchesFromSupabase({
+                    await loadCurrentMatchFormUserName(
+                        session
+                    );
+
+                    await loadMatchesFromSupabase({
                         showLoading: !hasLoadedMatches,
                         force: true
                     });
