@@ -1,0 +1,265 @@
+/* =========================================
+   LEIKTÍMINN · ÍSLANDSFERÐ V2
+   Enhances the existing HEILDARVEGALENGD card.
+   Iceland itself is the progress bar.
+========================================= */
+
+.stats-dashboard-hero.iceland-total-card {
+    position: relative;
+    overflow: hidden;
+    min-height: 220px;
+    padding: 18px 18px 20px;
+    transition: min-height 220ms ease;
+}
+
+.iceland-total-top {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 5;
+}
+
+.iceland-total-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 30px;
+    padding: 4px 7px 4px 9px;
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 9px;
+    background: rgba(10,16,18,.42);
+    color: rgba(244,246,244,.86);
+    font: inherit;
+    font-size: 10px;
+    font-weight: 850;
+    cursor: pointer;
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+}
+
+.iceland-total-toggle-track {
+    position: relative;
+    width: 31px;
+    height: 18px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.12);
+    transition: background 160ms ease;
+}
+
+.iceland-total-toggle-track::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(235,240,237,.78);
+    transition: transform 160ms ease, background 160ms ease;
+}
+
+.iceland-total-toggle[aria-pressed="true"] .iceland-total-toggle-track {
+    background: rgba(99,217,106,.32);
+}
+
+.iceland-total-toggle[aria-pressed="true"] .iceland-total-toggle-track::after {
+    transform: translateX(13px);
+    background: var(--lt-green);
+}
+
+.iceland-total-visual {
+    position: absolute;
+    inset: 12px 18px 12px;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    opacity: 1;
+    transform: scale(1);
+    transition: opacity 180ms ease, transform 180ms ease;
+    pointer-events: none;
+}
+
+.iceland-total-map {
+    position: absolute;
+    width: min(88%, 560px);
+    height: 82%;
+    overflow: visible;
+}
+
+.iceland-total-map .iceland-track {
+    color: rgba(180,196,190,.20);
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 8;
+    vector-effect: non-scaling-stroke;
+}
+
+.iceland-total-map .iceland-progress {
+    color: var(--lt-green);
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 9;
+    vector-effect: non-scaling-stroke;
+    stroke-dasharray: 0 1322;
+    stroke-dashoffset: 0;
+    filter: drop-shadow(0 0 5px rgba(99,217,106,.34));
+    transition: stroke-dasharray 700ms cubic-bezier(.22,.8,.22,1);
+}
+
+.iceland-total-center {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transform: translateY(4px);
+    text-align: center;
+}
+
+.iceland-total-center .stats-dashboard-total {
+    margin: 0;
+}
+
+.iceland-total-center .stats-dashboard-total-label {
+    margin-top: 7px;
+}
+
+.iceland-total-progress-copy {
+    margin-top: 5px;
+    color: rgba(218,226,222,.50);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .01em;
+}
+
+.iceland-total-card.is-iceland-off {
+    min-height: unset;
+}
+
+.iceland-total-card.is-iceland-off .iceland-total-visual {
+    opacity: 0;
+    transform: scale(.97);
+    visibility: hidden;
+}
+
+.iceland-total-card.is-iceland-off .iceland-total-center {
+    position: relative;
+    transform: none;
+}
+
+/* When hidden, retain the original total-distance presentation */
+.iceland-total-card.is-iceland-off .iceland-total-progress-copy {
+    display: none;
+}
+
+@media (max-width: 620px) {
+    .stats-dashboard-hero.iceland-total-card {
+        min-height: 230px;
+        padding: 15px 10px 17px;
+    }
+
+    .iceland-total-top {
+        top: 10px;
+        right: 10px;
+    }
+
+    .iceland-total-toggle {
+        min-height: 27px;
+        padding: 3px 6px 3px 8px;
+        font-size: 9px;
+    }
+
+    .iceland-total-map {
+        width: 96%;
+        height: 76%;
+    }
+
+    .iceland-total-map .iceland-track {
+        stroke-width: 6;
+    }
+
+    .iceland-total-map .iceland-progress {
+        stroke-width: 7;
+    }
+
+    .iceland-total-progress-copy {
+        font-size: 9px;
+    }
+}
+/* =========================================
+   ÍSLANDSFERÐ – SIZE + CLEAN TOGGLE
+========================================= */
+
+/* Make Iceland much larger inside the hero */
+.iceland-total-map {
+    width: min(98%, 680px);
+    height: 94%;
+}
+
+/* Give the map a little more vertical room */
+.stats-dashboard-hero.iceland-total-card {
+    min-height: 255px;
+}
+
+/* Remove the box around BIRTA */
+.iceland-total-toggle {
+    min-height: auto;
+    padding: 0;
+
+    border: 0;
+    border-radius: 0;
+
+    background: transparent;
+
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+/* Keep Birta + switch neatly aligned */
+.iceland-total-top {
+    top: 15px;
+    right: 16px;
+}
+
+.iceland-total-toggle {
+    gap: 7px;
+
+    color: rgba(244, 246, 244, 0.82);
+
+    font-size: 10px;
+    font-weight: 850;
+}
+
+/* Switch itself remains */
+.iceland-total-toggle-track {
+    width: 31px;
+    height: 18px;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 620px) {
+
+    .stats-dashboard-hero.iceland-total-card {
+        min-height: 250px;
+    }
+
+    .iceland-total-map {
+        width: 108%;
+        height: 94%;
+    }
+
+    .iceland-total-top {
+        top: 13px;
+        right: 14px;
+    }
+
+    .iceland-total-toggle {
+        font-size: 9px;
+    }
+}
