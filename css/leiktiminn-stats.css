@@ -1,0 +1,376 @@
+/* =========================================
+   LEIKTÍMINN
+   TÖLFRÆÐI
+========================================= */
+
+
+/* =========================================
+   ROOT / SECTION
+========================================= */
+
+.stats-overview-panel {
+    overflow: visible;
+}
+
+
+.leiktiminn-stats-shell {
+    width: 100%;
+}
+
+
+#statsFilters,
+#statsDashboard {
+    width: 100%;
+}
+
+
+/* =========================================
+   FILTER AREA
+========================================= */
+
+.stats-filter-bar {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 10px;
+
+    margin:
+        0
+        0
+        16px;
+}
+
+
+.stats-filter-control {
+    min-width: 0;
+    min-height: 64px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+
+    padding:
+        9px
+        13px;
+
+    border:
+        1px solid
+        rgba(99, 217, 106, 0.17);
+
+    border-radius: 17px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(31, 38, 42, 0.70),
+            rgba(22, 29, 33, 0.66)
+        );
+
+    box-shadow:
+        inset
+        0
+        1px
+        0
+        rgba(255, 255, 255, 0.025);
+
+    cursor: pointer;
+
+    transition:
+        border-color 150ms ease,
+        background 150ms ease,
+        transform 150ms ease;
+}
+
+
+.stats-filter-control:hover {
+    border-color:
+        rgba(99, 217, 106, 0.30);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(38, 46, 50, 0.78),
+            rgba(28, 35, 39, 0.72)
+        );
+
+    transform:
+        translateY(-1px);
+}
+
+
+.stats-filter-icon {
+    width: 36px;
+    height: 36px;
+
+    display: grid;
+    place-items: center;
+
+    flex:
+        0
+        0
+        36px;
+
+    border:
+        1px solid
+        rgba(99, 217, 106, 0.26);
+
+    border-radius: 11px;
+
+    background:
+        rgba(99, 217, 106, 0.07);
+
+    color:
+        var(--lt-green);
+}
+
+
+.stats-filter-icon svg {
+    width: 19px;
+    height: 19px;
+
+    fill: none;
+
+    stroke:
+        currentColor;
+
+    stroke-width: 1.8;
+
+    stroke-linecap: round;
+
+    stroke-linejoin: round;
+}
+
+
+.stats-filter-copy {
+    min-width: 0;
+
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 2px;
+}
+
+
+.stats-filter-copy small {
+    color:
+        rgba(214, 223, 218, 0.48);
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: 0.08em;
+
+    text-transform: uppercase;
+}
+
+
+.stats-filter-copy select {
+    width: 100%;
+
+    padding: 0;
+
+    border: 0;
+    outline: 0;
+
+    background: transparent;
+
+    color:
+        var(--lt-text);
+
+    font-size: 12px;
+    font-weight: 850;
+
+    cursor: pointer;
+}
+
+
+.stats-filter-copy select option {
+    background:
+        #171f23;
+
+    color:
+        #f3f0e7;
+}
+
+
+/* =========================================
+   CUSTOM DATE RANGE
+========================================= */
+
+.stats-custom-date-range {
+    display: flex;
+    align-items: flex-end;
+
+    gap: 10px;
+
+    margin:
+        -4px
+        0
+        16px;
+
+    padding:
+        13px
+        14px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.08);
+
+    border-radius: 15px;
+
+    background:
+        rgba(25, 31, 35, 0.72);
+}
+
+
+.stats-custom-date-range[hidden] {
+    display: none !important;
+}
+
+
+.stats-custom-date-range label {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 5px;
+}
+
+
+.stats-custom-date-range label span {
+    color:
+        var(--lt-muted);
+
+    font-size: 10px;
+    font-weight: 800;
+}
+
+
+.stats-custom-date-range input {
+    width: 100%;
+    min-height: 40px;
+
+    padding:
+        0
+        10px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.10);
+
+    border-radius: 10px;
+
+    outline: none;
+
+    background:
+        rgba(255, 255, 255, 0.035);
+
+    color:
+        var(--lt-text);
+
+    font: inherit;
+}
+
+
+.stats-custom-date-range input:focus {
+    border-color:
+        rgba(99, 217, 106, 0.52);
+
+    box-shadow:
+        0
+        0
+        0
+        3px
+        rgba(99, 217, 106, 0.06);
+}
+
+
+.stats-date-separator {
+    padding-bottom: 10px;
+
+    color:
+        var(--lt-muted);
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 620px) {
+
+    .stats-filter-bar {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+
+        gap: 7px;
+
+        margin-bottom: 13px;
+    }
+
+
+    .stats-filter-control {
+        min-height: 68px;
+
+        display: block;
+
+        padding:
+            9px
+            8px;
+
+        border-radius: 15px;
+    }
+
+
+    .stats-filter-icon {
+        width: 25px;
+        height: 25px;
+
+        margin-bottom: 5px;
+
+        border: 0;
+
+        background: transparent;
+    }
+
+
+    .stats-filter-icon svg {
+        width: 19px;
+        height: 19px;
+    }
+
+
+    .stats-filter-copy {
+        gap: 1px;
+    }
+
+
+    .stats-filter-copy small {
+        font-size: 8px;
+    }
+
+
+    .stats-filter-copy select {
+        font-size: 10px;
+        font-weight: 800;
+    }
+
+
+    .stats-custom-date-range {
+        gap: 7px;
+
+        padding:
+            10px;
+    }
+
+
+    .stats-custom-date-range input {
+        font-size: 11px;
+    }
+}

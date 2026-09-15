@@ -99,6 +99,17 @@ let pullRefreshRunning = false;
 let pullRefreshIndicator = null;
 
 
+/* =========================================
+   CREATE FORM HELPERS
+========================================= */
+
+let currentMatchFormUserName = "";
+
+let lastAutoFilledRole = "";
+
+const COMPETITION_DATALIST_ID =
+    "competition-suggestions";
+
 
 /* =========================================
    INITIALISE
@@ -114,10 +125,22 @@ async function initializeLeiktiminn() {
 
         matches = [];
 
+        currentMatchFormUserName = "";
+
         renderAll();
+
+        setupCompetitionField();
 
         return;
     }
+
+
+    await loadCurrentMatchFormUserName(
+        session
+    );
+
+
+    setupCompetitionField();
 
 
     await loadMatchesFromSupabase({
@@ -172,6 +195,507 @@ async function getCurrentSession() {
     }
 }
 
+
+
+
+/* =========================================
+   CURRENT USER NAME FOR ROLE AUTOFILL
+========================================= */
+
+async function loadCurrentMatchFormUserName(
+    session
+) {
+
+    currentMatchFormUserName = "";
+
+
+    if (
+        !session
+        || !session.user
+    ) {
+
+        return;
+    }
+
+
+    const fallbackName =
+        String(
+            session.user.user_metadata
+                ?.name
+            ||
+            ""
+        ).trim();
+
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from(
+                    "profiles"
+                )
+                .select(
+                    "name"
+                )
+                .eq(
+                    "id",
+                    session.user.id
+                )
+                .maybeSingle();
+
+
+        if (error) {
+
+            console.warn(
+                "Profile name load warning:",
+                error
+            );
+
+            currentMatchFormUserName =
+                fallbackName;
+
+            return;
+        }
+
+
+        currentMatchFormUserName =
+            String(
+                data?.name
+                ||
+                fallbackName
+                ||
+                ""
+            ).trim();
+
+    } catch (error) {
+
+        console.warn(
+            "Profile name load warning:",
+            error
+        );
+
+
+        currentMatchFormUserName =
+            fallbackName;
+    }
+}
+
+
+/* =========================================
+   COMPETITION NORMALISATION + AUTOCOMPLETE
+========================================= */
+
+function normalizeCompetitionName(
+    value
+) {
+
+    return String(
+        value
+        ||
+        ""
+    )
+        .replace(
+            /\s+/g,
+            " "
+        )
+        .trim()
+        .toLocaleUpperCase(
+            "is-IS"
+        );
+}
+
+
+function setupCompetitionField() {
+
+    const competitionInput =
+        document.getElementById(
+            "competition"
+        );
+
+
+    if (!competitionInput) {
+
+        return;
+    }
+
+
+    let datalist =
+        document.getElementById(
+            COMPETITION_DATALIST_ID
+        );
+
+
+    if (!datalist) {
+
+        datalist =
+            document.createElement(
+                "datalist"
+            );
+
+
+        datalist.id =
+            COMPETITION_DATALIST_ID;
+
+
+        document.body.appendChild(
+            datalist
+        );
+    }
+
+
+    competitionInput.setAttribute(
+        "list",
+        COMPETITION_DATALIST_ID
+    );
+
+
+    competitionInput.setAttribute(
+        "autocomplete",
+        "off"
+    );
+
+
+    if (
+        competitionInput.dataset
+            .competitionHelpersReady
+        !==
+        "true"
+    ) {
+
+        competitionInput.dataset
+            .competitionHelpersReady =
+                "true";
+
+
+        competitionInput.addEventListener(
+            "input",
+            () => {
+
+                const start =
+                    competitionInput
+                        .selectionStart;
+
+                const end =
+                    competitionInput
+                        .selectionEnd;
+
+
+                const upperValue =
+                    String(
+                        competitionInput.value
+                        ||
+                        ""
+                    ).toLocaleUpperCase(
+                        "is-IS"
+                    );
+
+
+                if (
+                    competitionInput.value
+                    !==
+                    upperValue
+                ) {
+
+                    competitionInput.value =
+                        upperValue;
+
+
+                    try {
+
+                        competitionInput
+                            .setSelectionRange(
+                                start,
+                                end
+                            );
+
+                    } catch (error) {
+
+                        // Some browsers/input modes do not
+                        // support selection restoration.
+                    }
+                }
+            }
+        );
+
+
+        competitionInput.addEventListener(
+            "change",
+            () => {
+
+                competitionInput.value =
+                    normalizeCompetitionName(
+                        competitionInput.value
+                    );
+            }
+        );
+
+
+        competitionInput.addEventListener(
+            "blur",
+            () => {
+
+                competitionInput.value =
+                    normalizeCompetitionName(
+                        competitionInput.value
+                    );
+            }
+        );
+    }
+
+
+    refreshCompetitionSuggestions();
+}
+
+
+function refreshCompetitionSuggestions() {
+
+    const datalist =
+        document.getElementById(
+            COMPETITION_DATALIST_ID
+        );
+
+
+    if (!datalist) {
+
+        return;
+    }
+
+
+    const names =
+        [
+            ...new Set(
+                matches
+                    .map(
+                        match =>
+                            normalizeCompetitionName(
+                                match.competition
+                            )
+                    )
+                    .filter(
+                        Boolean
+                    )
+            )
+        ]
+            .sort(
+                (
+                    a,
+                    b
+                ) =>
+                    a.localeCompare(
+                        b,
+                        "is"
+                    )
+            );
+
+
+    datalist.innerHTML =
+        names
+            .map(
+                name =>
+                    `<option value="${escapeHtml(name)}"></option>`
+            )
+            .join("");
+}
+
+
+/* =========================================
+   USER ROLE -> OFFICIAL NAME AUTOFILL
+========================================= */
+
+function getOfficialFieldIdForRole(
+    role
+) {
+
+    const roleMap = {
+
+        "Dómari":
+            "referee-name",
+
+        "AD1":
+            "ad1-name",
+
+        "AD2":
+            "ad2-name",
+
+        "Fjórði":
+            "fourth-name"
+    };
+
+
+    return roleMap[
+        role
+    ] || "";
+}
+
+
+function clearPreviousAutoFilledRole() {
+
+    if (
+        !lastAutoFilledRole
+        ||
+        !currentMatchFormUserName
+    ) {
+
+        lastAutoFilledRole = "";
+
+        return;
+    }
+
+
+    const previousFieldId =
+        getOfficialFieldIdForRole(
+            lastAutoFilledRole
+        );
+
+
+    if (!previousFieldId) {
+
+        lastAutoFilledRole = "";
+
+        return;
+    }
+
+
+    const previousField =
+        document.getElementById(
+            previousFieldId
+        );
+
+
+    if (
+        previousField
+        &&
+        String(
+            previousField.value
+            ||
+            ""
+        ).trim()
+        ===
+        currentMatchFormUserName
+    ) {
+
+        previousField.value =
+            "";
+    }
+
+
+    lastAutoFilledRole = "";
+}
+
+
+function applyUserNameToSelectedRole() {
+
+    const role =
+        getValue(
+            "user-role"
+        );
+
+
+    clearPreviousAutoFilledRole();
+
+
+    if (
+        !role
+        ||
+        !currentMatchFormUserName
+    ) {
+
+        return;
+    }
+
+
+    const fieldId =
+        getOfficialFieldIdForRole(
+            role
+        );
+
+
+    if (!fieldId) {
+
+        return;
+    }
+
+
+    setValue(
+        fieldId,
+        currentMatchFormUserName
+    );
+
+
+    lastAutoFilledRole =
+        role;
+}
+
+
+function rememberExistingAutoFilledRole(
+    match
+) {
+
+    lastAutoFilledRole = "";
+
+
+    if (
+        !match
+        ||
+        !currentMatchFormUserName
+        ||
+        !match.userRole
+    ) {
+
+        return;
+    }
+
+
+    const fieldId =
+        getOfficialFieldIdForRole(
+            match.userRole
+        );
+
+
+    if (!fieldId) {
+
+        return;
+    }
+
+
+    const officialValue =
+        String(
+            document
+                .getElementById(
+                    fieldId
+                )
+                ?.value
+            ||
+            ""
+        ).trim();
+
+
+    if (
+        officialValue
+        ===
+        currentMatchFormUserName
+    ) {
+
+        lastAutoFilledRole =
+            match.userRole;
+    }
+}
+
+
+const userRoleSelect =
+    document.getElementById(
+        "user-role"
+    );
+
+
+userRoleSelect
+    ?.addEventListener(
+        "change",
+        applyUserNameToSelectedRole
+    );
 
 
 /* =========================================
@@ -284,6 +808,9 @@ async function loadMatchesFromSupabase(
                 .map(
                     mapDatabaseMatch
                 );
+
+
+        refreshCompetitionSuggestions();
 
 
         hasLoadedMatches =
@@ -482,7 +1009,9 @@ function createDatabasePayload(
     return {
 
         competition:
-            data.competition,
+            normalizeCompetitionName(
+                data.competition
+            ),
 
         home_team:
             data.homeTeam,
@@ -539,7 +1068,13 @@ function openCreateModal() {
     editingMatchId = null;
 
 
+    lastAutoFilledRole = "";
+
+
     resetCreateForm();
+
+
+    setupCompetitionField();
 
 
     if (createMatchTitle) {
@@ -588,7 +1123,9 @@ function openEditModal(
 
     setValue(
         "competition",
-        match.competition
+        normalizeCompetitionName(
+            match.competition
+        )
     );
 
 
@@ -667,6 +1204,14 @@ function openEditModal(
         "extra-time",
         match.extraTime ??
         0
+    );
+
+
+    setupCompetitionField();
+
+
+    rememberExistingAutoFilledRole(
+        match
     );
 
 
@@ -1032,9 +1577,17 @@ if (form) {
 
 
             const competition =
-                getValue(
-                    "competition"
+                normalizeCompetitionName(
+                    getValue(
+                        "competition"
+                    )
                 );
+
+
+            setValue(
+                "competition",
+                competition
+            );
 
 
             const homeTeam =
@@ -1403,6 +1956,9 @@ function finishMatchSave(
     sortMatches();
 
 
+    refreshCompetitionSuggestions();
+
+
     renderAll();
 
 
@@ -1528,6 +2084,9 @@ function resetCreateForm() {
     if (!form) {
         return;
     }
+
+
+    lastAutoFilledRole = "";
 
 
     form.reset();

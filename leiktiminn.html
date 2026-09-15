@@ -25,6 +25,10 @@
 
     <link rel="stylesheet" href="css/leiktiminn.css?v=7">
     <link rel="stylesheet" href="css/menu.css?v=5">
+    <link
+        rel="stylesheet"
+        href="css/leiktiminn-stats.css?v=1"
+    >
 
 </head>
 
@@ -414,7 +418,7 @@
                         </p>
 
                         <h3>
-                            Mínir leikir - Framundan    
+                            Mínir leikir - Framundan
                         </h3>
 
                     </div>
@@ -475,6 +479,227 @@
 
                 <section class="stats-overview-panel">
 
+                    <!-- =========================================
+                         TÖLFRÆÐI FILTERS
+                    ========================================== -->
+
+                    <div
+                        class="stats-filter-bar"
+                        id="statsFilters"
+                    >
+
+                        <!-- TÍMABIL -->
+
+                        <label class="stats-filter-control">
+
+                            <span class="stats-filter-icon">
+
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    aria-hidden="true"
+                                >
+                                    <rect
+                                        x="3"
+                                        y="5"
+                                        width="18"
+                                        height="16"
+                                        rx="2"
+                                    ></rect>
+
+                                    <path d="M8 3v4"></path>
+                                    <path d="M16 3v4"></path>
+                                    <path d="M3 10h18"></path>
+                                </svg>
+
+                            </span>
+
+                            <span class="stats-filter-copy">
+
+                                <small>
+                                    Tímabil
+                                </small>
+
+                                <select id="statsPeriodFilter">
+
+                                    <option
+                                        value="all"
+                                        selected
+                                    >
+                                        Allt tímabil
+                                    </option>
+
+                                    <option value="year">
+                                        Þetta ár
+                                    </option>
+
+                                    <option value="6months">
+                                        Síðustu 6 mánuðir
+                                    </option>
+
+                                    <option value="30days">
+                                        Síðustu 30 dagar
+                                    </option>
+
+                                    <option value="custom">
+                                        Velja dagsetningar
+                                    </option>
+
+                                </select>
+
+                            </span>
+
+                        </label>
+                        <!-- KEPPNI -->
+
+                        <label class="stats-filter-control">
+
+                            <span class="stats-filter-icon">
+
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    aria-hidden="true"
+                                >
+                                    <path d="M8 4h8v3a4 4 0 0 1-8 0V4Z"></path>
+                                    <path d="M6 5H3v2a5 5 0 0 0 5 5"></path>
+                                    <path d="M18 5h3v2a5 5 0 0 1-5 5"></path>
+                                    <path d="M12 11v5"></path>
+                                    <path d="M8 21h8"></path>
+                                    <path d="M9 16h6v5H9z"></path>
+                                </svg>
+
+                            </span>
+
+                            <span class="stats-filter-copy">
+
+                                <small>
+                                    Keppni
+                                </small>
+
+                                <select id="statsCompetitionFilter">
+
+                                    <option
+                                        value="all"
+                                        selected
+                                    >
+                                        Allar keppnir
+                                    </option>
+
+                                </select>
+
+                            </span>
+
+                        </label>
+
+
+                        <!-- GPS -->
+
+                        <label class="stats-filter-control">
+
+                            <span class="stats-filter-icon">
+
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    aria-hidden="true"
+                                >
+                                    <circle
+                                        cx="12"
+                                        cy="12"
+                                        r="3"
+                                    ></circle>
+
+                                    <circle
+                                        cx="12"
+                                        cy="12"
+                                        r="8"
+                                    ></circle>
+
+                                    <path d="M12 2v3"></path>
+                                    <path d="M12 19v3"></path>
+                                    <path d="M2 12h3"></path>
+                                    <path d="M19 12h3"></path>
+                                </svg>
+
+                            </span>
+
+                            <span class="stats-filter-copy">
+
+                                <small>
+                                    GPS
+                                </small>
+
+                                <select id="statsGpsFilter">
+
+                                    <option
+                                        value="all"
+                                        selected
+                                    >
+                                        Allir leikir
+                                    </option>
+
+                                    <option value="with">
+                                        Með GPS
+                                    </option>
+
+                                    <option value="without">
+                                        Án GPS
+                                    </option>
+
+                                </select>
+
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+                    <!-- =========================================
+                         CUSTOM DATE RANGE
+                    ========================================== -->
+
+                    <div
+                        class="stats-custom-date-range"
+                        id="statsCustomDateRange"
+                        hidden
+                    >
+
+                        <label>
+
+                            <span>
+                                Frá
+                            </span>
+
+                            <input
+                                id="statsDateFrom"
+                                type="date"
+                            >
+
+                        </label>
+
+                        <span class="stats-date-separator">
+                            –
+                        </span>
+
+                        <label>
+
+                            <span>
+                                Til
+                            </span>
+
+                            <input
+                                id="statsDateTo"
+                                type="date"
+                            >
+
+                        </label>
+
+                    </div>
+
+
+                    <!-- =========================================
+                         STATS DASHBOARD
+                    ========================================== -->
+
                     <div
                         class="stats-future"
                         id="statsDashboard"
@@ -487,7 +712,7 @@
                             </p>
 
                             <h3>
-                                Frammistaða
+                                Tölfræði
                             </h3>
 
                             <p>
@@ -514,22 +739,22 @@
 
                 <section class="leiktiminn-panel profile-panel">
 
-    <button
-        id="profileBackButton"
-        class="match-back-link profile-back-link"
-        type="button"
-    >
+                    <button
+                        id="profileBackButton"
+                        class="match-back-link profile-back-link"
+                        type="button"
+                    >
 
-        <span aria-hidden="true">
-            ←
-        </span>
+                        <span aria-hidden="true">
+                            ←
+                        </span>
 
-        Til baka
+                        Til baka
 
-    </button>
+                    </button>
 
 
-    <div class="panel-heading profile-heading">
+                    <div class="panel-heading profile-heading">
 
                         <p class="panel-eyebrow">
                             PRÓFÍLL
@@ -574,8 +799,9 @@
                                 </strong>
 
                                 <span id="profileDisplayEmail"></span>
+
                                 <span class="profile-role-badge">
-                                     Dómari
+                                    Dómari
                                 </span>
 
                             </div>
@@ -1031,9 +1257,6 @@
         </footer>
 
     </div>
-
-
-
     <!-- =========================================
          CREATE MATCH MODAL
     ========================================== -->
@@ -1579,11 +1802,7 @@
 
         </button>
 
-    </nav>
-
-
-
-    <!-- =========================================
+    </nav>    <!-- =========================================
          GLOBAL DÓMARAR MENU
     ========================================== -->
 
@@ -1817,9 +2036,10 @@
     <script src="js/supabase-client.js?v=5"></script>
 
     <script src="js/leiktiminn.js?v=5"></script>
+    <script src="js/leiktiminn-stats.js?v=1"></script>
     <script src="js/menu.js?v=5"></script>
 
 
 </body>
 
-</html>
+</html>        
