@@ -33,6 +33,11 @@
         href="css/leiktiminn-match.css?v=1"
     >
 
+        <link
+        rel="stylesheet"
+        href="css/leiktiminn-heatmap.css?v=1"
+    >
+
     <link
         rel="stylesheet"
         href="css/menu.css?v=5"
@@ -325,6 +330,129 @@
 
 
         </main>
+
+
+
+                </main>
+
+
+
+        <!-- =========================================
+             GPS / HEATMAP
+        ========================================== -->
+
+        <section
+            id="matchHeatmapSection"
+            class="match-heatmap-section"
+            hidden
+        >
+
+            <div class="match-heatmap-header">
+
+                <div class="match-heatmap-title-row">
+
+                    <div class="match-heatmap-icon">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+
+
+                    <div>
+
+                        <p class="match-heatmap-eyebrow">
+                            HITAKORT
+                        </p>
+
+                        <p class="match-heatmap-subtitle">
+                            GPS hreyfing úr Garmin
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="match-heatmap-options">
+
+    <button
+        id="matchHeatmapRouteToggle"
+        class="match-heatmap-route-toggle"
+        type="button"
+        aria-pressed="false"
+    >
+
+        <span class="match-heatmap-route-toggle-knob"></span>
+
+        <span>
+            Leið
+        </span>
+
+    </button>
+
+</div>
+
+
+                <div class="match-heatmap-filters">
+
+                    <button
+                        class="match-heatmap-filter active"
+                        type="button"
+                        data-heatmap-period="all"
+                    >
+                        Allur leikurinn
+                    </button>
+
+                    <button
+                        class="match-heatmap-filter"
+                        type="button"
+                        data-heatmap-period="1"
+                    >
+                        1H
+                    </button>
+
+                    <button
+                        class="match-heatmap-filter"
+                        type="button"
+                        data-heatmap-period="2"
+                    >
+                        2H
+                    </button>
+
+                    <button
+                        class="match-heatmap-filter"
+                        type="button"
+                        data-heatmap-period="3"
+                        hidden
+                    >
+                        ET1
+                    </button>
+
+                    <button
+                        class="match-heatmap-filter"
+                        type="button"
+                        data-heatmap-period="4"
+                        hidden
+                    >
+                        ET2
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="matchHeatmapContent"
+                class="match-heatmap-content"
+            >
+
+                <div class="match-heatmap-message">
+                    Sæki GPS gögn...
+                </div>
+
+            </div>
+
+        </section>
 
 
 
@@ -861,6 +989,7 @@
     <script src="js/supabase-client.js?v=5"></script>
 
     <script src="js/leiktiminn-match.js?v=9"></script>
+     <script src="js/leiktiminn-heatmap.js?v=1"></script>
     <script src="js/menu.js?v=5"></script>
 
 
