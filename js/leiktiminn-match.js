@@ -596,8 +596,6 @@ function getInitials(
             value ?? ""
         )
             .trim();
-
-
     if (!text) {
 
         return "LT";
@@ -757,6 +755,69 @@ function mapDatabaseMatch(
         hrMaxSecondHalf:
             Number(
                 row.hr_max_second_half ?? 0
+            ),
+
+
+        // =========================================
+        // HEART RATE ZONES
+        // =========================================
+
+        hrZoneSource:
+            row.hr_zone_source || "",
+
+        hrZone1Min:
+            Number(
+                row.hr_zone_1_min ?? 0
+            ),
+
+        hrZone1Max:
+            Number(
+                row.hr_zone_1_max ?? 0
+            ),
+
+        hrZone2Max:
+            Number(
+                row.hr_zone_2_max ?? 0
+            ),
+
+        hrZone3Max:
+            Number(
+                row.hr_zone_3_max ?? 0
+            ),
+
+        hrZone4Max:
+            Number(
+                row.hr_zone_4_max ?? 0
+            ),
+
+        hrZone5Max:
+            Number(
+                row.hr_zone_5_max ?? 0
+            ),
+
+        hrZone1Seconds:
+            Number(
+                row.hr_zone_1_seconds ?? 0
+            ),
+
+        hrZone2Seconds:
+            Number(
+                row.hr_zone_2_seconds ?? 0
+            ),
+
+        hrZone3Seconds:
+            Number(
+                row.hr_zone_3_seconds ?? 0
+            ),
+
+        hrZone4Seconds:
+            Number(
+                row.hr_zone_4_seconds ?? 0
+            ),
+
+        hrZone5Seconds:
+            Number(
+                row.hr_zone_5_seconds ?? 0
             ),
 
 
@@ -1253,9 +1314,6 @@ function createOfficialRow(
         </div>
     `;
 }
-
-
-
 // =========================================
 // FITNESS
 // =========================================
@@ -1274,12 +1332,23 @@ function renderFitness(
     }
 
 
+    const hasZoneData =
+        match.hrZoneSource ===
+            "GARMIN"
+        &&
+        match.hrZone1Min > 0
+        &&
+        match.hrZone5Max > 0;
+
+
     const hasFitnessData =
         match.distanceTotalM > 0
         ||
         match.hrAvgTotal > 0
         ||
-        match.hrMaxTotal > 0;
+        match.hrMaxTotal > 0
+        ||
+        hasZoneData;
 
 
     if (
@@ -1326,107 +1395,658 @@ function renderFitness(
         );
 
 
+    const zonePercentBase =
+        Math.max(
+            0,
+            Number(
+                match.totalElapsedSeconds ?? 0
+            )
+        );
+
+
+    const zonesHtml =
+        hasZoneData
+            ? createHeartRateZonesHtml(
+                match,
+                zonePercentBase
+            )
+            : `
+                <div class="match-zone-empty">
+
+                    <strong>
+                        Engin svæðagreining tiltæk
+                    </strong>
+
+                    <span>
+                        Garmin púlssvæði þurfa að vera tiltæk til að sýna þessa greiningu.
+                    </span>
+
+                </div>
+            `;
+
+
     matchFitness.innerHTML = `
 
-        <div class="match-fitness-hero">
+        <!-- =========================================
+             HLAUPATÖLUR
+        ========================================== -->
+
+        <section
+            class="match-performance-section"
+            data-performance-section
+        >
+
+            <button
+                class="match-performance-heading"
+                type="button"
+                aria-expanded="true"
+            >
+
+                <span class="match-performance-heading-left">
+
+                    <span
+    class="match-km-icon"
+    aria-hidden="true"
+>
+    KM
+</span>
+
+                    <strong>
+                        HLAUPATÖLUR
+                    </strong>
+
+                </span>
+
+                <span
+    class="match-performance-toggle"
+    aria-hidden="true"
+>
+    <span class="match-performance-toggle-knob"></span>
+</span>
+
+            </button>
 
 
-            <div class="match-distance-gauge">
+            <div class="match-performance-content">
 
+                <div class="match-running-hero">
 
-                <div
-                    class="match-distance-gauge-arc"
-                    style="--distance-progress: ${distanceProgress}deg;"
-                ></div>
+                    <div class="match-distance-gauge">
 
+                        <div
+                            class="match-distance-gauge-arc"
+                            style="--distance-progress: ${distanceProgress}deg;"
+                        ></div>
 
-                <div class="match-distance-gauge-content">
+                        <div class="match-distance-gauge-content">
 
+                            <div class="match-fitness-total">
 
-                    <div class="match-fitness-total">
+                                <span class="match-fitness-total-number">
+                                    ${totalKm}
+                                </span>
 
-                        <span class="match-fitness-total-number">
-                            ${totalKm}
-                        </span>
+                                <span class="match-fitness-total-unit">
+                                    km
+                                </span>
 
-                        <span class="match-fitness-total-unit">
-                            km
-                        </span>
+                            </div>
+
+                            <div class="match-fitness-total-label">
+                                Heildarvegalengd
+                            </div>
+
+                        </div>
 
                     </div>
 
 
-                    <div class="match-fitness-total-label">
-                        Heildarvegalengd
-                    </div>
+                    <div class="match-distance-scale">
 
+                        <span>
+                            0 km
+                        </span>
+
+                        <span>
+                            HERO
+                        </span>
+
+                    </div>
 
                 </div>
 
 
+                <div class="match-running-splits">
+
+                    ${createDistanceSplitHtml(
+                        "1H",
+                        firstHalfKm
+                    )}
+
+                    ${createDistanceSplitHtml(
+                        "2H",
+                        secondHalfKm
+                    )}
+
+                </div>
+
             </div>
 
+        </section>
 
-            <div class="match-distance-scale">
 
-                <span>
-                    0 km
+
+        <!-- =========================================
+             HJARTSLÁTTUR
+        ========================================== -->
+
+        <section
+            class="match-performance-section"
+            data-performance-section
+        >
+
+            <button
+                class="match-performance-heading"
+                type="button"
+                aria-expanded="true"
+            >
+
+                <span class="match-performance-heading-left">
+
+                    <span
+                        class="match-heart-icon"
+                        aria-hidden="true"
+                    >
+                        ♥
+                    </span>
+
+                    <strong>
+                        HJARTSLÁTTUR
+                    </strong>
+
                 </span>
 
-                <span>
-                    HERO
+                <span
+    class="match-performance-toggle"
+    aria-hidden="true"
+>
+    <span class="match-performance-toggle-knob"></span>
+</span>
+
+            </button>
+
+
+            <div class="match-performance-content">
+
+                <div class="match-heart-hero">
+
+                    <div class="match-heart-main">
+
+                        <strong>
+                            ${displayStat(
+                                match.hrAvgTotal
+                            )}
+                        </strong>
+
+                        <span>
+                            bpm
+                        </span>
+
+                        <small>
+                            Meðalhjartsláttur
+                        </small>
+
+                    </div>
+
+
+                    <div class="match-heart-max">
+
+                        <span>
+                            Hámark
+                        </span>
+
+                        <strong>
+                            ${displayStat(
+                                match.hrMaxTotal
+                            )}
+
+                            <small>
+                                bpm
+                            </small>
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="match-heart-splits">
+
+                    ${createHeartRateSplitHtml(
+    "1H",
+    match.hrAvgFirstHalf,
+    match.hrMaxFirstHalf
+)}
+
+${createHeartRateSplitHtml(
+    "2H",
+    match.hrAvgSecondHalf,
+    match.hrMaxSecondHalf
+)}
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================================
+             HJARTSLÁTTUR - ZONE
+        ========================================== -->
+
+        <section
+            class="match-performance-section"
+            data-performance-section
+        >
+
+            <button
+                class="match-performance-heading"
+                type="button"
+                aria-expanded="true"
+            >
+
+                <span class="match-performance-heading-left">
+
+                    <span
+                        class="match-zone-icon"
+                        aria-hidden="true"
+                    >
+                        Z
+                    </span>
+
+                    <strong>
+                        HJARTSLÁTTUR - ZONE
+                    </strong>
+
                 </span>
 
-            </div>
+                <span
+    class="match-performance-toggle"
+    aria-hidden="true"
+>
+    <span class="match-performance-toggle-knob"></span>
+</span>
+
+            </button>
 
 
-            <div class="match-fitness-overall-hr">
+            <div class="match-performance-content">
 
+                <div class="match-zone-list">
 
-                ${createOverallStat(
-                    displayStat(
-                        match.hrAvgTotal
-                    ),
-                    "Meðalpúls"
-                )}
+                    ${zonesHtml}
 
-
-                ${createOverallStat(
-                    displayStat(
-                        match.hrMaxTotal
-                    ),
-                    "Hámarkspúls"
-                )}
-
+                </div>
 
             </div>
 
-
-        </div>
-
-
-        <div class="match-fitness-splits">
-
-
-            ${createHalfFitnessHtml(
-                "1H",
-                firstHalfKm,
-                match.hrAvgFirstHalf,
-                match.hrMaxFirstHalf
-            )}
-
-
-            ${createHalfFitnessHtml(
-                "2H",
-                secondHalfKm,
-                match.hrAvgSecondHalf,
-                match.hrMaxSecondHalf
-            )}
-
-
-        </div>
+        </section>
 
     `;
+
+
+    initializePerformanceSections();
+}
+
+
+
+// =========================================
+// PERFORMANCE SECTIONS
+// =========================================
+
+function initializePerformanceSections() {
+
+    document
+        .querySelectorAll(
+            "[data-performance-section]"
+        )
+        .forEach(
+            section => {
+
+                const button =
+                    section.querySelector(
+                        ".match-performance-heading"
+                    );
+
+
+                if (
+                    !button
+                ) {
+
+                    return;
+                }
+
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        const collapsed =
+                            section.classList
+                                .toggle(
+                                    "is-collapsed"
+                                );
+
+
+                        button.setAttribute(
+                            "aria-expanded",
+                            collapsed
+                                ? "false"
+                                : "true"
+                        );
+                    }
+                );
+            }
+        );
+}
+
+
+
+// =========================================
+// DISTANCE SPLIT
+// =========================================
+
+function createDistanceSplitHtml(
+    label,
+    km
+) {
+
+    return `
+        <div class="match-running-split">
+
+            <span>
+                ${label}
+            </span>
+
+            <strong>
+                ${km}
+
+                <small>
+                    km
+                </small>
+            </strong>
+
+        </div>
+    `;
+}
+
+
+
+// =========================================
+// HEART RATE SPLIT
+// =========================================
+
+function createHeartRateSplitHtml(
+    label,
+    avgHeartRate,
+    maxHeartRate
+) {
+
+    return `
+        <div class="match-heart-split">
+
+            <span>
+                ${label}
+            </span>
+
+            <div class="match-heart-split-stats">
+
+                <div class="match-heart-split-stat">
+
+                    <strong>
+                        ${displayStat(
+                            avgHeartRate
+                        )}
+
+                        <small>
+                            bpm
+                        </small>
+                    </strong>
+
+                    <em>
+                        Meðaltal
+                    </em>
+
+                </div>
+
+                <div class="match-heart-split-stat">
+
+                    <strong>
+                        ${displayStat(
+                            maxHeartRate
+                        )}
+
+                        <small>
+                            bpm
+                        </small>
+                    </strong>
+
+                    <em>
+                        Hámark
+                    </em>
+
+                </div>
+
+            </div>
+
+        </div>
+    `;
+}
+// =========================================
+// HEART RATE ZONES
+// =========================================
+
+function createHeartRateZonesHtml(
+    match,
+    percentBase
+) {
+
+    const zones = [
+
+        {
+            label:
+                "Z1",
+
+            min:
+                match.hrZone1Min,
+
+            max:
+                match.hrZone1Max,
+
+            seconds:
+                match.hrZone1Seconds
+        },
+
+        {
+            label:
+                "Z2",
+
+            min:
+                match.hrZone1Max + 1,
+
+            max:
+                match.hrZone2Max,
+
+            seconds:
+                match.hrZone2Seconds
+        },
+
+        {
+            label:
+                "Z3",
+
+            min:
+                match.hrZone2Max + 1,
+
+            max:
+                match.hrZone3Max,
+
+            seconds:
+                match.hrZone3Seconds
+        },
+
+        {
+            label:
+                "Z4",
+
+            min:
+                match.hrZone3Max + 1,
+
+            max:
+                match.hrZone4Max,
+
+            seconds:
+                match.hrZone4Seconds
+        },
+
+        {
+            label:
+                "Z5",
+
+            min:
+                match.hrZone4Max + 1,
+
+            max:
+                match.hrZone5Max,
+
+            seconds:
+                match.hrZone5Seconds
+        }
+
+    ];
+
+
+    return zones
+        .map(
+            zone => {
+
+                const seconds =
+                    Math.max(
+                        0,
+                        Number(
+                            zone.seconds ?? 0
+                        )
+                    );
+
+
+                const percent =
+                    percentBase > 0
+                        ? Math.min(
+                            100,
+                            Math.round(
+                                (
+                                    seconds
+                                    /
+                                    percentBase
+                                )
+                                *
+                                100
+                            )
+                        )
+                        : 0;
+
+
+                return `
+                    <div class="match-zone-row">
+
+                        <div class="match-zone-label">
+                            ${zone.label}
+                        </div>
+
+
+                        <div class="match-zone-info">
+
+                            <div class="match-zone-topline">
+
+                                <span>
+                                    ${zone.min}–${zone.max} bpm
+                                </span>
+
+                                <strong>
+                                    ${formatZoneTime(
+                                        seconds
+                                    )}
+                                </strong>
+
+                                <em>
+                                    ${percent}%
+                                </em>
+
+                            </div>
+
+
+                            <div class="match-zone-track">
+
+                                <span
+                                    style="width: ${percent}%"
+                                ></span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                `;
+            }
+        )
+        .join("");
+}
+
+
+
+// =========================================
+// ZONE TIME
+// =========================================
+
+function formatZoneTime(
+    totalSeconds
+) {
+
+    const seconds =
+        Math.max(
+            0,
+            Math.round(
+                Number(
+                    totalSeconds ?? 0
+                )
+            )
+        );
+
+
+    const minutes =
+        Math.floor(
+            seconds / 60
+        );
+
+
+    const remainder =
+        seconds % 60;
+
+
+    return (
+        minutes
+        +
+        ":"
+        +
+        String(
+            remainder
+        ).padStart(
+            2,
+            "0"
+        )
+    );
 }
 
 
