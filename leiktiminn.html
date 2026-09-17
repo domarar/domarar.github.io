@@ -1342,21 +1342,67 @@
                     </div>
 
 
-                    <label class="form-field form-field-full">
+                    <div class="form-field form-field-full competition-field">
 
-                        <span>
-                            Keppni *
-                        </span>
+    <span>
+        Keppni *
+    </span>
 
-                        <input
-                            id="competition"
-                            type="text"
-                            placeholder="T.d. Besta deild karla"
-                            autocomplete="off"
-                            required
-                        >
+    <select
+        id="competition"
+        required
+    >
+        <option value="">
+            Veldu keppni
+        </option>
+    </select>
 
-                    </label>
+
+    <div class="competition-field-actions">
+
+        <button
+            id="addCompetitionButton"
+            class="competition-field-action"
+            type="button"
+        >
+            ＋ Búa til mótarheiti
+        </button>
+
+
+        <button
+            id="deleteCompetitionButton"
+            class="competition-field-action competition-field-action-delete"
+            type="button"
+        >
+            Eyða mótarheiti
+        </button>
+
+    </div>
+
+
+    <div
+        id="newCompetitionRow"
+        class="competition-create-row"
+        hidden
+    >
+
+        <input
+            id="newCompetitionName"
+            type="text"
+            placeholder="Nýtt mótarheiti"
+            autocomplete="off"
+        >
+
+        <button
+            id="saveCompetitionButton"
+            type="button"
+        >
+            Bæta við
+        </button>
+
+    </div>
+
+</div>
 
 
                     <div class="form-row">

@@ -107,9 +107,6 @@ let currentMatchFormUserName = "";
 
 let lastAutoFilledRole = "";
 
-const COMPETITION_DATALIST_ID =
-    "competition-suggestions";
-
 
 /* =========================================
    INITIALISE
@@ -285,8 +282,11 @@ async function loadCurrentMatchFormUserName(
 
 
 /* =========================================
-   COMPETITION NORMALISATION + AUTOCOMPLETE
+   USER COMPETITIONS
 ========================================= */
+
+let userCompetitions = [];
+
 
 function normalizeCompetitionName(
     value
@@ -301,203 +301,579 @@ function normalizeCompetitionName(
             /\s+/g,
             " "
         )
-        .trim()
-        .toLocaleUpperCase(
-            "is-IS"
-        );
+        .trim();
 }
 
 
-function setupCompetitionField() {
 
-    const competitionInput =
+async function setupCompetitionField() {
+
+    setupCompetitionControls();
+
+    await loadUserCompetitions();
+}
+
+
+
+function setupCompetitionControls() {
+
+    const competitionSelect =
         document.getElementById(
             "competition"
         );
 
+    const addButton =
+        document.getElementById(
+            "addCompetitionButton"
+        );
 
-    if (!competitionInput) {
+    const deleteButton =
+        document.getElementById(
+            "deleteCompetitionButton"
+        );
+
+    const createRow =
+        document.getElementById(
+            "newCompetitionRow"
+        );
+
+    const nameInput =
+        document.getElementById(
+            "newCompetitionName"
+        );
+
+    const saveButton =
+        document.getElementById(
+            "saveCompetitionButton"
+        );
+
+
+    if (
+        !competitionSelect
+        ||
+        competitionSelect.dataset
+            .competitionReady === "true"
+    ) {
 
         return;
     }
 
 
-    let datalist =
-        document.getElementById(
-            COMPETITION_DATALIST_ID
-        );
+    competitionSelect.dataset
+        .competitionReady =
+            "true";
 
 
-    if (!datalist) {
-
-        datalist =
-            document.createElement(
-                "datalist"
-            );
-
-
-        datalist.id =
-            COMPETITION_DATALIST_ID;
-
-
-        document.body.appendChild(
-            datalist
-        );
-    }
-
-
-    competitionInput.setAttribute(
-        "list",
-        COMPETITION_DATALIST_ID
+    competitionSelect.addEventListener(
+        "change",
+        updateCompetitionDeleteButton
     );
 
 
-    competitionInput.setAttribute(
-        "autocomplete",
-        "off"
-    );
-
-
-    if (
-        competitionInput.dataset
-            .competitionHelpersReady
-        !==
-        "true"
-    ) {
-
-        competitionInput.dataset
-            .competitionHelpersReady =
-                "true";
-
-
-        competitionInput.addEventListener(
-            "input",
+    addButton
+        ?.addEventListener(
+            "click",
             () => {
 
-                const start =
-                    competitionInput
-                        .selectionStart;
-
-                const end =
-                    competitionInput
-                        .selectionEnd;
+                createRow.hidden =
+                    !createRow.hidden;
 
 
-                const upperValue =
-                    String(
-                        competitionInput.value
-                        ||
-                        ""
-                    ).toLocaleUpperCase(
-                        "is-IS"
-                    );
+                if (!createRow.hidden) {
 
-
-                if (
-                    competitionInput.value
-                    !==
-                    upperValue
-                ) {
-
-                    competitionInput.value =
-                        upperValue;
-
-
-                    try {
-
-                        competitionInput
-                            .setSelectionRange(
-                                start,
-                                end
-                            );
-
-                    } catch (error) {
-
-                        // Some browsers/input modes do not
-                        // support selection restoration.
-                    }
+                    nameInput?.focus();
                 }
             }
         );
 
 
-        competitionInput.addEventListener(
-            "change",
-            () => {
+    saveButton
+        ?.addEventListener(
+            "click",
+            async () => {
 
-                competitionInput.value =
-                    normalizeCompetitionName(
-                        competitionInput.value
-                    );
+                await createCompetition();
             }
         );
 
 
-        competitionInput.addEventListener(
-            "blur",
-            () => {
+    nameInput
+        ?.addEventListener(
+            "keydown",
+            async event => {
 
-                competitionInput.value =
-                    normalizeCompetitionName(
-                        competitionInput.value
-                    );
+                if (
+                    event.key !== "Enter"
+                ) {
+
+                    return;
+                }
+
+
+                event.preventDefault();
+
+                await createCompetition();
             }
         );
-    }
 
 
-    refreshCompetitionSuggestions();
+    deleteButton
+        ?.addEventListener(
+            "click",
+            async () => {
+
+                await deleteSelectedCompetition();
+            }
+        );
+
+
+    updateCompetitionDeleteButton();
 }
 
 
-function refreshCompetitionSuggestions() {
 
-    const datalist =
+async function loadUserCompetitions() {
+
+    const select =
         document.getElementById(
-            COMPETITION_DATALIST_ID
+            "competition"
         );
 
 
-    if (!datalist) {
+    if (!select) {
 
         return;
     }
 
 
-    const names =
-        [
-            ...new Set(
-                matches
-                    .map(
-                        match =>
-                            normalizeCompetitionName(
-                                match.competition
-                            )
-                    )
-                    .filter(
-                        Boolean
-                    )
-            )
-        ]
-            .sort(
-                (
-                    a,
-                    b
-                ) =>
-                    a.localeCompare(
-                        b,
-                        "is"
-                    )
+    const session =
+        await getCurrentSession();
+
+
+    if (!session) {
+
+        userCompetitions = [];
+
+        renderCompetitionOptions();
+
+        return;
+    }
+
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from(
+                    "user_competitions"
+                )
+                .select(
+                    "id, name"
+                )
+                .eq(
+                    "user_id",
+                    session.user.id
+                )
+                .order(
+                    "name",
+                    {
+                        ascending: true
+                    }
+                );
+
+
+        if (error) {
+
+            console.error(
+                "Villa við að sækja mótalista:",
+                error
+            );
+
+            return;
+        }
+
+
+        userCompetitions =
+            data || [];
+
+
+        renderCompetitionOptions();
+
+    } catch (error) {
+
+        console.error(
+            "Villa við að sækja mótalista:",
+            error
+        );
+    }
+}
+
+
+
+function renderCompetitionOptions(
+    selectedValue = null
+) {
+
+    const select =
+        document.getElementById(
+            "competition"
+        );
+
+
+    if (!select) {
+
+        return;
+    }
+
+
+    const currentValue =
+        selectedValue !== null
+            ? selectedValue
+            : select.value;
+
+
+    select.innerHTML = `
+        <option value="">
+            Veldu keppni
+        </option>
+
+        ${
+            userCompetitions
+                .map(
+                    competition => `
+                        <option
+                            value="${escapeHtml(
+                                competition.name
+                            )}"
+                        >
+                            ${escapeHtml(
+                                competition.name
+                            )}
+                        </option>
+                    `
+                )
+                .join("")
+        }
+    `;
+
+
+    if (
+        currentValue
+        &&
+        !userCompetitions.some(
+            item =>
+                item.name ===
+                currentValue
+        )
+    ) {
+
+        const legacyOption =
+            document.createElement(
+                "option"
             );
 
 
-    datalist.innerHTML =
-        names
-            .map(
-                name =>
-                    `<option value="${escapeHtml(name)}"></option>`
-            )
-            .join("");
+        legacyOption.value =
+            currentValue;
+
+        legacyOption.textContent =
+            currentValue;
+
+
+        select.appendChild(
+            legacyOption
+        );
+    }
+
+
+    if (currentValue) {
+
+        select.value =
+            currentValue;
+    }
+
+
+    updateCompetitionDeleteButton();
+}
+
+
+
+async function createCompetition() {
+
+    const nameInput =
+        document.getElementById(
+            "newCompetitionName"
+        );
+
+    const createRow =
+        document.getElementById(
+            "newCompetitionRow"
+        );
+
+
+    const name =
+        normalizeCompetitionName(
+            nameInput?.value
+        );
+
+
+    if (!name) {
+
+        return;
+    }
+
+
+    const session =
+        await getCurrentSession();
+
+
+    if (!session) {
+
+        return;
+    }
+
+
+    const existing =
+        userCompetitions.find(
+            competition =>
+                competition.name
+                    .toLocaleLowerCase(
+                        "is-IS"
+                    )
+                ===
+                name.toLocaleLowerCase(
+                    "is-IS"
+                )
+        );
+
+
+    if (existing) {
+
+        renderCompetitionOptions(
+            existing.name
+        );
+
+
+        if (nameInput) {
+
+            nameInput.value = "";
+        }
+
+
+        if (createRow) {
+
+            createRow.hidden = true;
+        }
+
+
+        return;
+    }
+
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from(
+                    "user_competitions"
+                )
+                .insert({
+                    user_id:
+                        session.user.id,
+
+                    name:
+                        name
+                })
+                .select(
+                    "id, name"
+                )
+                .single();
+
+
+        if (error) {
+
+            console.error(
+                "Villa við að bæta við mótarheiti:",
+                error
+            );
+
+            return;
+        }
+
+
+        userCompetitions.push(
+            data
+        );
+
+
+        userCompetitions.sort(
+            (
+                a,
+                b
+            ) =>
+                a.name.localeCompare(
+                    b.name,
+                    "is"
+                )
+        );
+
+
+        renderCompetitionOptions(
+            data.name
+        );
+
+
+        if (nameInput) {
+
+            nameInput.value = "";
+        }
+
+
+        if (createRow) {
+
+            createRow.hidden = true;
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Villa við að bæta við mótarheiti:",
+            error
+        );
+    }
+}
+
+
+
+async function deleteSelectedCompetition() {
+
+    const select =
+        document.getElementById(
+            "competition"
+        );
+
+
+    if (!select?.value) {
+
+        return;
+    }
+
+
+    const competition =
+        userCompetitions.find(
+            item =>
+                item.name ===
+                select.value
+        );
+
+
+    if (!competition) {
+
+        return;
+    }
+
+
+    const confirmed =
+        window.confirm(
+            `Eyða „${competition.name}“ úr mótalistanum?\n\nEldri leikir og tölfræði breytast ekki.`
+        );
+
+
+    if (!confirmed) {
+
+        return;
+    }
+
+
+    try {
+
+        const {
+            error
+        } =
+            await supabaseClient
+                .from(
+                    "user_competitions"
+                )
+                .delete()
+                .eq(
+                    "id",
+                    competition.id
+                );
+
+
+        if (error) {
+
+            console.error(
+                "Villa við að eyða mótarheiti:",
+                error
+            );
+
+            return;
+        }
+
+
+        userCompetitions =
+            userCompetitions.filter(
+                item =>
+                    item.id !==
+                    competition.id
+            );
+
+
+        renderCompetitionOptions(
+            ""
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Villa við að eyða mótarheiti:",
+            error
+        );
+    }
+}
+
+
+
+function updateCompetitionDeleteButton() {
+
+    const select =
+        document.getElementById(
+            "competition"
+        );
+
+    const deleteButton =
+        document.getElementById(
+            "deleteCompetitionButton"
+        );
+
+
+    if (
+        !select
+        ||
+        !deleteButton
+    ) {
+
+        return;
+    }
+
+
+    const isManagedCompetition =
+        userCompetitions.some(
+            item =>
+                item.name ===
+                select.value
+        );
+
+
+    deleteButton.disabled =
+        !isManagedCompetition;
 }
 
 
@@ -810,7 +1186,7 @@ async function loadMatchesFromSupabase(
                 );
 
 
-        refreshCompetitionSuggestions();
+       
 
 
         hasLoadedMatches =
@@ -1955,20 +2331,13 @@ function finishMatchSave(
 
     sortMatches();
 
-
-    refreshCompetitionSuggestions();
-
-
     renderAll();
 
-
     resetCreateForm();
-
 
     closeCreateModal(
         false
     );
-
 
     if (
         isPlayedMatch(
@@ -2860,9 +3229,120 @@ async function handleMatchListClick(
 
         if (menu) {
 
-            menu.hidden =
-                !menu.hidden;
+    const willOpen =
+        menu.hidden;
+
+    if (!willOpen) {
+
+        menu.hidden = true;
+
+        menu.classList.remove(
+            "open-up"
+        );
+
+        return;
+    }
+
+
+    menu.classList.remove(
+        "open-up"
+    );
+
+    menu.hidden = false;
+
+
+    const buttonRect =
+        menuButton.getBoundingClientRect();
+
+    const menuRect =
+        menu.getBoundingClientRect();
+
+
+    let bottomBoundary =
+        window.innerHeight - 12;
+
+
+    const mobileNav =
+        document.querySelector(
+            ".mobile-bottom-nav"
+        );
+
+
+    if (mobileNav) {
+
+        const navStyle =
+            window.getComputedStyle(
+                mobileNav
+            );
+
+        const navRect =
+            mobileNav.getBoundingClientRect();
+
+
+        if (
+            navStyle.display !== "none"
+            &&
+            navRect.top >
+                buttonRect.bottom
+        ) {
+
+            bottomBoundary =
+                Math.min(
+                    bottomBoundary,
+                    navRect.top - 8
+                );
         }
+    }
+
+
+    const footer =
+        document.querySelector(
+            ".leiktiminn-footer"
+        );
+
+
+    if (footer) {
+
+        const footerRect =
+            footer.getBoundingClientRect();
+
+
+        if (
+            footerRect.top >
+                buttonRect.bottom
+            &&
+            footerRect.top <
+                bottomBoundary
+        ) {
+
+            bottomBoundary =
+                footerRect.top - 8;
+        }
+    }
+
+
+    const spaceBelow =
+        bottomBoundary -
+        buttonRect.bottom;
+
+
+    const spaceAbove =
+        buttonRect.top;
+
+
+    if (
+        spaceBelow <
+            menuRect.height + 12
+        &&
+        spaceAbove >
+            spaceBelow
+    ) {
+
+        menu.classList.add(
+            "open-up"
+        );
+    }
+}
 
 
         return;

@@ -419,6 +419,11 @@ button { -webkit-tap-highlight-color: transparent; }
     pointer-events: auto;
 }
 
+.match-action-menu.open-up {
+    top: auto;
+    bottom: 40px;
+}
+
 
 .match-action-menu[hidden] {
     display: none !important;
@@ -571,6 +576,105 @@ button { -webkit-tap-highlight-color: transparent; }
 .officials-form-section { margin-top: 2px; padding-top: 12px; border-top: 1px solid var(--lt-border-soft); }
 
 .officials-form-heading { margin-bottom: 9px; color: var(--lt-text); font-size: 12px; font-weight: 800; }
+
+/* =========================================
+   COMPETITION FIELD
+========================================= */
+
+.competition-field-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 3px;
+}
+
+
+.competition-field-action {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--lt-green);
+    font-size: 11px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+
+.competition-field-action:hover {
+    text-decoration: underline;
+}
+
+
+.competition-field-action-delete {
+    color: #d48a8a;
+}
+
+
+.competition-field-action-delete:disabled {
+    opacity: 0.35;
+    cursor: default;
+    text-decoration: none;
+}
+
+
+.competition-create-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+    margin-top: 7px;
+}
+
+
+.competition-create-row[hidden] {
+    display: none !important;
+}
+
+
+.competition-create-row input {
+    min-width: 0;
+}
+
+
+.competition-create-row button {
+    min-height: 42px;
+    padding: 0 14px;
+
+    border:
+        1px solid
+        rgba(99, 217, 106, 0.40);
+
+    border-radius: var(--lt-radius-sm);
+
+    background:
+        rgba(99, 217, 106, 0.12);
+
+    color: var(--lt-green);
+
+    font-size: 12px;
+    font-weight: 900;
+
+    cursor: pointer;
+}
+
+
+.competition-create-row button:hover {
+    background:
+        rgba(99, 217, 106, 0.18);
+}
+
+
+@media (max-width: 700px) {
+
+    .competition-field-actions {
+        justify-content: space-between;
+        gap: 8px;
+    }
+
+
+    .competition-create-row button {
+        min-height: 48px;
+    }
+}
 
 /* CREATE MATCH MODAL */
 
