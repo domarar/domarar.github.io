@@ -99,6 +99,7 @@ let pullRefreshRunning = false;
 let pullRefreshIndicator = null;
 
 
+
 /* =========================================
    CREATE FORM HELPERS
 ========================================= */
@@ -113,6 +114,8 @@ let lastAutoFilledRole = "";
 ========================================= */
 
 async function initializeLeiktiminn() {
+
+
 
     const session =
         await getCurrentSession();
@@ -1518,15 +1521,11 @@ function openEditModal(
 
 
     setValue(
-        "match-date",
-        match.date
-    );
-
-
-    setValue(
-        "match-time",
-        match.time
-    );
+    "match-datetime",
+    match.date && match.time
+        ? `${match.date}T${match.time}`
+        : ""
+);
 
 
     setValue(
@@ -1978,16 +1977,23 @@ if (form) {
                 );
 
 
-            const date =
-                getValue(
-                    "match-date"
-                );
+            const matchDateTime =
+    getValue(
+        "match-datetime"
+    );
 
 
-            const time =
-                getValue(
-                    "match-time"
-                );
+const [
+    date = "",
+    rawTime = ""
+] =
+    matchDateTime.split("T");
+
+
+const time =
+    rawTime
+        ? rawTime.slice(0, 5)
+        : "";
 
 
             const venue =
@@ -2459,6 +2465,11 @@ function resetCreateForm() {
 
 
     form.reset();
+
+    setValue(
+    "match-datetime",
+    ""
+);
 
 
     setValue(

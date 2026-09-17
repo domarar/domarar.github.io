@@ -578,6 +578,56 @@ button { -webkit-tap-highlight-color: transparent; }
 .officials-form-heading { margin-bottom: 9px; color: var(--lt-text); font-size: 12px; font-weight: 800; }
 
 /* =========================================
+   DATE + TIME
+========================================= */
+
+.match-datetime-field input[type="datetime-local"] {
+    width: 100%;
+
+    min-height: 48px;
+
+    padding:
+        0
+        13px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.12);
+
+    border-radius:
+        var(--lt-radius-sm);
+
+    outline: none;
+
+    background:
+        rgba(255, 255, 255, 0.04);
+
+    color:
+        var(--lt-text);
+
+    font-size: 15px;
+    font-weight: 600;
+}
+
+
+.match-datetime-field input[type="datetime-local"]:focus {
+    border-color:
+        var(--lt-green);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(88, 199, 91, 0.12);
+}
+
+@media (max-width: 700px) {
+
+    .match-datetime-field input[type="datetime-local"] {
+        width: 92%;
+        max-width: 360px;
+    }
+
+}
+/* =========================================
    COMPETITION FIELD
 ========================================= */
 
@@ -4218,4 +4268,19 @@ rgba(18, 24, 28, 0.85) 100%
     .match-modal input[type="time"]::-webkit-date-and-time-value {
         line-height: 36px;
     }
+}
+@media (max-width: 700px) {
+
+    .form-field input,
+    .form-field select,
+    .form-field textarea {
+        box-sizing: border-box;
+    }
+
+    .form-field input,
+    .form-field select {
+        height: 52px;
+        min-height: 52px;
+    }
+
 }
