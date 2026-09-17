@@ -145,7 +145,7 @@
                 aria-pressed="true"
                 aria-label="Birta eða fela Íslandsferð"
             >
-                <span>Birta</span>
+                <span>ICELAND</span>
                 <span class="iceland-total-toggle-track" aria-hidden="true"></span>
             </button>
         `;
