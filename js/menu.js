@@ -12,6 +12,7 @@
     const menuClose =
         document.getElementById("menuClose");
 
+
     const aboutMenuButton =
         document.getElementById("aboutMenuButton");
 
@@ -20,6 +21,16 @@
 
     const aboutClose =
         document.getElementById("aboutClose");
+
+
+    const privacyMenuButton =
+        document.getElementById("privacyMenuButton");
+
+    const privacyOverlay =
+        document.getElementById("privacyOverlay");
+
+    const privacyClose =
+        document.getElementById("privacyClose");
 
 
     /* =========================================
@@ -64,10 +75,19 @@
         menuOverlay.classList.remove("open");
 
 
-        if (
-            !aboutOverlay ||
-            !aboutOverlay.classList.contains("open")
-        ) {
+        const infoOverlayOpen =
+            (
+                aboutOverlay &&
+                aboutOverlay.classList.contains("open")
+            )
+            ||
+            (
+                privacyOverlay &&
+                privacyOverlay.classList.contains("open")
+            );
+
+
+        if (!infoOverlayOpen) {
             document.body.style.overflow = "";
         }
 
@@ -90,7 +110,7 @@
 
 
     /* =========================================
-       UM DÓMARAR
+       UM LEIKTÍMANN
     ========================================== */
 
     function openAbout() {
@@ -120,6 +140,43 @@
 
 
         aboutOverlay.classList.remove("open");
+
+        document.body.style.overflow =
+            "";
+    }
+
+
+    /* =========================================
+       PERSÓNUVERNDARSTEFNA
+    ========================================== */
+
+    function openPrivacy() {
+
+        if (!privacyOverlay) {
+            return;
+        }
+
+
+        if (menuOverlay) {
+            menuOverlay.classList.remove("open");
+        }
+
+
+        privacyOverlay.classList.add("open");
+
+        document.body.style.overflow =
+            "hidden";
+    }
+
+
+    function closePrivacy() {
+
+        if (!privacyOverlay) {
+            return;
+        }
+
+
+        privacyOverlay.classList.remove("open");
 
         document.body.style.overflow =
             "";
@@ -173,11 +230,36 @@
     }
 
 
+    if (privacyMenuButton) {
+
+        privacyMenuButton.addEventListener(
+            "click",
+            function (event) {
+
+                event.preventDefault();
+                event.stopPropagation();
+
+                openPrivacy();
+
+            }
+        );
+    }
+
+
     if (aboutClose) {
 
         aboutClose.addEventListener(
             "click",
             closeAbout
+        );
+    }
+
+
+    if (privacyClose) {
+
+        privacyClose.addEventListener(
+            "click",
+            closePrivacy
         );
     }
 
@@ -220,6 +302,23 @@
     }
 
 
+    if (privacyOverlay) {
+
+        privacyOverlay.addEventListener(
+            "click",
+            function (event) {
+
+                if (
+                    event.target === privacyOverlay
+                ) {
+                    closePrivacy();
+                }
+
+            }
+        );
+    }
+
+
     /* =========================================
        ESCAPE
     ========================================== */
@@ -229,6 +328,17 @@
         function (event) {
 
             if (event.key !== "Escape") {
+                return;
+            }
+
+
+            if (
+                privacyOverlay &&
+                privacyOverlay.classList.contains("open")
+            ) {
+
+                closePrivacy();
+
                 return;
             }
 

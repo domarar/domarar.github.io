@@ -998,40 +998,105 @@ button { -webkit-tap-highlight-color: transparent; }
     width: fit-content;
     display: inline-flex;
     align-items: center;
-    gap: 7px;
-    margin: 2px 0 18px;
+    gap: 6px;
 
-    color: var(--lt-muted);
+    margin: 0 0 14px;
+
+    padding: 0;
+
+    border: 0;
+    background: transparent;
+
+    color: rgba(255, 255, 255, 0.58);
     text-decoration: none;
 
     font-size: 12px;
-    font-weight: 800;
+    font-weight: 750;
+
+    cursor: pointer;
 
     transition:
         color 160ms ease,
         transform 160ms ease;
 }
 
+
 .match-back-link span {
     color: var(--lt-green);
-    font-size: 18px;
+    font-size: 15px;
     line-height: 1;
 }
 
+
 .match-back-link:hover,
 .match-back-link:focus-visible {
-    color: var(--lt-text);
+    color: var(--lt-green);
     text-decoration: none;
     transform: translateX(-2px);
 }
 
+
 .match-back-link:active {
     color: var(--lt-green);
-    text-decoration: none;
 }
 
+
 @media (max-width: 760px) {
-    .match-back-link { margin-bottom: 15px; }
+
+    .match-back-link {
+        margin-bottom: 12px;
+    }
+}
+/* =========================================
+   MATCH DETAIL BACK LINK — FINAL OVERRIDE
+========================================= */
+
+a.match-back-link,
+button.match-back-link {
+    width: fit-content !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+
+    margin: 0 0 14px !important;
+    padding: 0 !important;
+
+    border: 0 !important;
+    border-radius: 0 !important;
+
+    background: transparent !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+
+    color: rgba(255, 255, 255, 0.58) !important;
+
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+
+    text-decoration: none !important;
+}
+
+
+a.match-back-link span,
+button.match-back-link span {
+    color: var(--lt-green) !important;
+    font-size: 14px !important;
+    line-height: 1 !important;
+}
+
+
+a.match-back-link:hover,
+button.match-back-link:hover {
+    color: var(--lt-green) !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
 }
 
 /* AUTH */

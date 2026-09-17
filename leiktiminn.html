@@ -25,10 +25,12 @@
 
     <link rel="stylesheet" href="css/leiktiminn.css?v=7">
     <link rel="stylesheet" href="css/menu.css?v=5">
+
     <link
         rel="stylesheet"
         href="css/leiktiminn-stats.css?v=1"
     >
+
     <link rel="stylesheet" href="css/leiktiminn-iceland.css?v=2">
 
 </head>
@@ -480,16 +482,10 @@
 
                 <section class="stats-overview-panel">
 
-                    <!-- =========================================
-                         TÖLFRÆÐI FILTERS
-                    ========================================== -->
-
                     <div
                         class="stats-filter-bar"
                         id="statsFilters"
                     >
-
-                        <!-- TÍMABIL -->
 
                         <label class="stats-filter-control">
 
@@ -510,6 +506,7 @@
                                     <path d="M8 3v4"></path>
                                     <path d="M16 3v4"></path>
                                     <path d="M3 10h18"></path>
+
                                 </svg>
 
                             </span>
@@ -550,7 +547,7 @@
                             </span>
 
                         </label>
-                        <!-- KEPPNI -->
+
 
                         <label class="stats-filter-control">
 
@@ -591,8 +588,6 @@
 
                         </label>
 
-
-                        <!-- GPS -->
 
                         <label class="stats-filter-control">
 
@@ -654,10 +649,6 @@
                     </div>
 
 
-                    <!-- =========================================
-                         CUSTOM DATE RANGE
-                    ========================================== -->
-
                     <div
                         class="stats-custom-date-range"
                         id="statsCustomDateRange"
@@ -696,10 +687,6 @@
 
                     </div>
 
-
-                    <!-- =========================================
-                         STATS DASHBOARD
-                    ========================================== -->
 
                     <div
                         class="stats-future"
@@ -740,19 +727,6 @@
 
                 <section class="leiktiminn-panel profile-panel">
 
-                    <button
-                        id="profileBackButton"
-                        class="match-back-link profile-back-link"
-                        type="button"
-                    >
-
-                        <span aria-hidden="true">
-                            ←
-                        </span>
-
-                        Til baka
-
-                    </button>
 
 
                     <div class="panel-heading profile-heading">
@@ -769,9 +743,6 @@
 
 
                     <div class="profile-main">
-
-
-                        <!-- IDENTITY -->
 
                         <div class="profile-identity">
 
@@ -819,9 +790,6 @@
                         </div>
 
 
-
-                        <!-- PROFILE EDIT -->
-
                         <div
                             id="profileEditPanel"
                             class="profile-edit-panel"
@@ -863,9 +831,6 @@
 
                                 </div>
 
-
-
-                                <!-- PROFILE IMAGE -->
 
                                 <div
                                     style="
@@ -933,7 +898,6 @@
                                 </div>
 
 
-
                                 <div class="profile-edit-actions">
 
                                     <button
@@ -967,9 +931,6 @@
 
                         <div class="profile-divider"></div>
 
-
-
-                        <!-- ACCOUNT -->
 
                         <section class="profile-section">
 
@@ -1024,9 +985,6 @@
 
                         <div class="profile-divider"></div>
 
-
-
-                        <!-- GARMIN -->
 
                         <section class="profile-section profile-garmin-section">
 
@@ -1108,9 +1066,6 @@
 
                         <div class="profile-divider"></div>
 
-
-
-                        <!-- SECURITY -->
 
                         <section class="profile-section">
 
@@ -1216,9 +1171,6 @@
                         <div class="profile-divider"></div>
 
 
-
-                        <!-- LOGOUT -->
-
                         <div class="profile-footer-actions">
 
                             <button
@@ -1241,7 +1193,6 @@
         </main>
 
 
-
         <!-- FOOTER -->
 
         <footer class="leiktiminn-footer">
@@ -1258,6 +1209,8 @@
         </footer>
 
     </div>
+
+
     <!-- =========================================
          CREATE MATCH MODAL
     ========================================== -->
@@ -1314,9 +1267,6 @@
                 autocomplete="off"
             >
 
-
-                <!-- REQUIRED -->
-
                 <section class="match-form-section">
 
                     <div class="match-form-section-heading">
@@ -1344,65 +1294,65 @@
 
                     <div class="form-field form-field-full competition-field">
 
-    <span>
-        Keppni *
-    </span>
+                        <span>
+                            Keppni *
+                        </span>
 
-    <select
-        id="competition"
-        required
-    >
-        <option value="">
-            Veldu keppni
-        </option>
-    </select>
-
-
-    <div class="competition-field-actions">
-
-        <button
-            id="addCompetitionButton"
-            class="competition-field-action"
-            type="button"
-        >
-            ＋ Búa til mótarheiti
-        </button>
+                        <select
+                            id="competition"
+                            required
+                        >
+                            <option value="">
+                                Veldu keppni
+                            </option>
+                        </select>
 
 
-        <button
-            id="deleteCompetitionButton"
-            class="competition-field-action competition-field-action-delete"
-            type="button"
-        >
-            Eyða mótarheiti
-        </button>
+                        <div class="competition-field-actions">
 
-    </div>
+                            <button
+                                id="addCompetitionButton"
+                                class="competition-field-action"
+                                type="button"
+                            >
+                                ＋ Búa til mótarheiti
+                            </button>
 
 
-    <div
-        id="newCompetitionRow"
-        class="competition-create-row"
-        hidden
-    >
+                            <button
+                                id="deleteCompetitionButton"
+                                class="competition-field-action competition-field-action-delete"
+                                type="button"
+                            >
+                                Eyða mótarheiti
+                            </button>
 
-        <input
-            id="newCompetitionName"
-            type="text"
-            placeholder="Nýtt mótarheiti"
-            autocomplete="off"
-        >
+                        </div>
 
-        <button
-            id="saveCompetitionButton"
-            type="button"
-        >
-            Bæta við
-        </button>
 
-    </div>
+                        <div
+                            id="newCompetitionRow"
+                            class="competition-create-row"
+                            hidden
+                        >
 
-</div>
+                            <input
+                                id="newCompetitionName"
+                                type="text"
+                                placeholder="Nýtt mótarheiti"
+                                autocomplete="off"
+                            >
+
+                            <button
+                                id="saveCompetitionButton"
+                                type="button"
+                            >
+                                Bæta við
+                            </button>
+
+                        </div>
+
+                    </div>
 
 
                     <div class="form-row">
@@ -1447,25 +1397,25 @@
                     </div>
 
 
-                   <div class="form-row date-time-row">
+                    <div class="form-row date-time-row">
 
-    <label class="form-field">
+                        <label class="form-field form-field-full match-datetime-field">
 
+                            <span>
+                                Dagsetning og tími *
+                            </span>
 
-  <label class="form-field form-field-full match-datetime-field">
+                            <input
+                                id="match-datetime"
+                                type="datetime-local"
+                                step="300"
+                                required
+                            >
 
-    <span>
-        Dagsetning og tími *
-    </span>
+                        </label>
 
-    <input
-        id="match-datetime"
-        type="datetime-local"
-        step="300"
-        required
-    >
+                    </div>
 
-</label>
 
                     <div class="form-row">
 
@@ -1526,9 +1476,6 @@
 
                 </section>
 
-
-
-                <!-- OPTIONAL -->
 
                 <section class="match-form-section">
 
@@ -1691,9 +1638,6 @@
                 </section>
 
 
-
-                <!-- ACTIONS -->
-
                 <footer class="match-modal-actions">
 
                     <button
@@ -1835,7 +1779,11 @@
 
         </button>
 
-    </nav>    <!-- =========================================
+    </nav>
+
+
+
+    <!-- =========================================
          GLOBAL DÓMARAR MENU
     ========================================== -->
 
@@ -1958,8 +1906,42 @@
 
 
                     <button
-                        class="menu-item beta-hidden"
+                        class="menu-item"
                         id="aboutMenuButton"
+                        type="button"
+                    >
+
+                        <span>
+                            Um Leiktímann
+                        </span>
+
+                        <span class="menu-arrow">
+                            ›
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        class="menu-item"
+                        id="privacyMenuButton"
+                        type="button"
+                    >
+
+                        <span>
+                            Persónuverndarstefna
+                        </span>
+
+                        <span class="menu-arrow">
+                            ›
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        class="menu-item beta-hidden"
+                        id="domararAboutMenuButton"
                         type="button"
                     >
 
@@ -1988,7 +1970,9 @@
 
 
 
-    <!-- ABOUT -->
+    <!-- =========================================
+         UM LEIKTÍMANN
+    ========================================== -->
 
     <div
         class="about-overlay"
@@ -2000,6 +1984,198 @@
             <button
                 class="about-close"
                 id="aboutClose"
+                type="button"
+                aria-label="Loka"
+            >
+                ×
+            </button>
+
+
+            <div class="about-content">
+
+                <p class="panel-eyebrow">
+                    DÓMARAR · LEIKTÍMINN
+                </p>
+
+                <h2>
+                    Um Leiktímann
+                </h2>
+
+
+                <p>
+                    <strong>Leiktíminn</strong> er einföld og skemmtileg lausn
+                    fyrir knattspyrnudómara sem vilja halda utan um leikina sína
+                    á einum stað.
+                </p>
+
+
+                <p>
+                    Hægt er að skrá næstu leiki, halda utan um leikjasögu og
+                    skoða ýmsan fróðleik og tölfræði úr vistuðum leikjum.
+                    Með tímanum verður þannig til persónulegt yfirlit þar sem
+                    hægt er að bera saman leiki, tímabil, keppnir og
+                    dómarahlutverk.
+                </p>
+
+
+                <p>
+                    Þegar leikgögn eru tiltæk getur Leiktíminn meðal annars
+                    sýnt upplýsingar um vegalengd, hjartslátt, leiktíma og
+                    GPS-gögn úr leikjum.
+                </p>
+
+
+                <p>
+                    Einnig er hægt að "senda" skráða leiki sem framundan eru í dagatal notandans 
+                    svo allir viti hvenær næsti leikur er. 
+                </p>
+
+                <p>
+                    Sem stendur virkar Leiktíminn eingöngu með <strong>Garmin</strong> úrum, en í framtíðinni er stefnt að því að styðja fleiri
+                    tegundir úra. 
+                </p>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+
+    <!-- =========================================
+         PERSÓNUVERNDARSTEFNA
+    ========================================== -->
+
+    <div
+        class="about-overlay"
+        id="privacyOverlay"
+    >
+
+        <section class="about-card">
+
+            <button
+                class="about-close"
+                id="privacyClose"
+                type="button"
+                aria-label="Loka"
+            >
+                ×
+            </button>
+
+
+            <div class="about-content">
+
+                <p class="panel-eyebrow">
+                    DÓMARAR · LEIKTÍMINN
+                </p>
+
+                <h2>
+                    Persónuverndarstefna
+                </h2>
+
+
+                <p>
+                    Persónuvernd notenda skiptir máli hjá Leiktímanum.
+                    Aðeins er safnað þeim upplýsingum sem nauðsynlegar eru
+                    til að veita og þróa þjónustuna.
+                </p>
+
+
+                <h3>
+                    Hvaða upplýsingar eru vistaðar?
+                </h3>
+
+                <p>
+                    Þegar þú stofnar aðgang geta verið vistaðar upplýsingar
+                    sem þú skráir sjálfur, svo sem nafn, netfang, leikir og
+                    aðrar upplýsingar sem tengjast notkun þinni á Leiktímanum.
+                </p>
+
+
+                <p>
+                    Ef Garmin úr er tengt við Leiktímann geta einnig verið
+                    vistuð gögn úr leikjum, svo sem:
+                </p>
+
+
+                <ul>
+                    <li>GPS-staðsetningar úr leik</li>
+                    <li>Vegalengd og hreyfigögn</li>
+                    <li>Hjartsláttur</li>
+                    <li>Leiktími</li>
+                    <li>Upplýsingar um leik og dómarahlutverk</li>
+                </ul>
+
+
+                <h3>
+                    Til hvers eru gögnin notuð?
+                </h3>
+
+                <p>
+                    Gögnin eru notuð til að birta þér þína eigin leikjasögu,
+                    tölfræði og yfirlit innan Leiktímans og til að tryggja
+                    virkni þjónustunnar.
+                </p>
+
+
+                <p>
+                    Persónuleg leikja- og hreyfigögn eru ekki birt öðrum
+                    notendum nema þú veljir sérstaklega að nota eiginleika
+                    þar sem upplýsingum er deilt.
+                </p>
+
+
+                <h3>
+                    Geymsla og þjónustuaðilar
+                </h3>
+
+                <p>
+                    Leiktíminn notar utanaðkomandi þjónustur til að reka
+                    kerfið, meðal annars fyrir innskráningu, gagnageymslu
+                    og tæknilega virkni. Slík þjónusta fær aðeins aðgang að
+                    upplýsingum eftir því sem nauðsynlegt er til að veita
+                    þjónustuna.
+                </p>
+
+
+                <h3>
+                    Þín gögn
+                </h3>
+
+                <p>
+                    Þú getur óskað eftir upplýsingum um þau gögn sem vistuð
+                    eru um þig og óskað eftir leiðréttingu eða eyðingu þeirra.
+                </p>
+
+
+                <p>
+                    Persónuverndarstefnan getur verið uppfærð eftir því sem
+                    Leiktíminn þróast eða nýir eiginleikar bætast við.
+                </p>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+
+    <!-- =========================================
+         UM DÓMARAR — HIDDEN
+    ========================================== -->
+
+    <div
+        class="about-overlay"
+        id="domararAboutOverlay"
+    >
+
+        <section class="about-card">
+
+            <button
+                class="about-close"
+                id="domararAboutClose"
                 type="button"
                 aria-label="Loka"
             >
@@ -2071,9 +2247,10 @@
     <script src="js/leiktiminn.js?v=6"></script>
     <script src="js/leiktiminn-stats.js?v=1"></script>
     <script src="js/leiktiminn-iceland.js?v=2"></script>
-    <script src="js/menu.js?v=5"></script>
+
+    <script src="js/menu.js?v=6"></script>
 
 
 </body>
 
-</html>        
+</html>
