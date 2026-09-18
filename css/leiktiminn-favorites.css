@@ -11,12 +11,23 @@
 .played-filter-bar {
     display: flex;
     align-items: center;
-    gap: 9px;
+    gap: 8px;
 
-    padding:
-        13px
-        18px
-        1px;
+    width: fit-content;
+    max-width: 100%;
+
+    margin:
+        0
+        0
+        12px;
+
+    padding: 0;
+
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
 }
 
 
@@ -460,4 +471,18 @@
         padding-right: 8px;
     }
 
+}
+.played-filter-label {
+    margin:
+        0
+        0
+        6px;
+
+    color:
+        var(--lt-green);
+
+    font-size: 10px;
+    font-weight: 800;
+
+    letter-spacing: 0.11em;
 }
