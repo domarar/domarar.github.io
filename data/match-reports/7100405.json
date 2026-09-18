@@ -1,7 +1,7 @@
 {
   "id": 7100405,
-  "liveStatus": "SCHEDULED",
-  "currentMinute": null,
+  "liveStatus": "PLAYED",
+  "currentMinute": "FT",
   "dateTimeUTC": 1789751700000,
   "round": "1",
   "attendance": null,
@@ -529,7 +529,20 @@
           "position": null,
           "orderNumber": 2,
           "hideProfile": false,
-          "events": []
+          "events": [
+            {
+              "eventId": 8327400,
+              "eventType": {
+                "fcdName": "YELLOW"
+              },
+              "player": {
+                "personId": 63275,
+                "hideProfile": false
+              },
+              "player2": null,
+              "homeTeam": false
+            }
+          ]
         },
         {
           "roleId": 8323031,
@@ -1290,12 +1303,31 @@
       "teamOfficial": null
     },
     {
+      "eventId": 8327400,
+      "eventType": {
+        "fcdName": "YELLOW"
+      },
+      "displayMinute": "88'",
+      "orderNumber": 16,
+      "matchPhase": {
+        "fcdName": "SECOND_HALF"
+      },
+      "player": {
+        "personId": 63275,
+        "name": "Mist Funadóttir",
+        "hideProfile": false
+      },
+      "player2": null,
+      "homeTeam": false,
+      "teamOfficial": null
+    },
+    {
       "eventId": 8327248,
       "eventType": {
         "fcdName": "SUBSTITUTION"
       },
       "displayMinute": "89'",
-      "orderNumber": 16,
+      "orderNumber": 17,
       "matchPhase": {
         "fcdName": "SECOND_HALF"
       },
@@ -1318,7 +1350,7 @@
         "fcdName": "SUBSTITUTION"
       },
       "displayMinute": "89'",
-      "orderNumber": 17,
+      "orderNumber": 18,
       "matchPhase": {
         "fcdName": "SECOND_HALF"
       },
@@ -1341,7 +1373,7 @@
         "fcdName": "GOAL"
       },
       "displayMinute": "90+2'",
-      "orderNumber": 18,
+      "orderNumber": 19,
       "matchPhase": {
         "fcdName": "SECOND_HALF"
       },

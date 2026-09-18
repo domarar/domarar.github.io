@@ -1,10 +1,10 @@
 {
   "id": 7100406,
-  "liveStatus": "RUNNING",
-  "currentMinute": "90+85'",
+  "liveStatus": "PLAYED",
+  "currentMinute": "FT",
   "dateTimeUTC": 1789749000000,
   "round": "1",
-  "attendance": null,
+  "attendance": 137,
   "competition": {
     "id": 7025657,
     "name": "Besta deild kvenna 2026 - Efri hluti"
@@ -931,6 +931,18 @@
                 "hideProfile": false
               },
               "homeTeam": false
+            },
+            {
+              "eventId": 8327715,
+              "eventType": {
+                "fcdName": "YELLOW"
+              },
+              "player": {
+                "personId": 81427,
+                "hideProfile": false
+              },
+              "player2": null,
+              "homeTeam": false
             }
           ]
         }
@@ -1252,12 +1264,31 @@
       "teamOfficial": null
     },
     {
+      "eventId": 8327715,
+      "eventType": {
+        "fcdName": "YELLOW"
+      },
+      "displayMinute": "88'",
+      "orderNumber": 16,
+      "matchPhase": {
+        "fcdName": "SECOND_HALF"
+      },
+      "player": {
+        "personId": 81427,
+        "name": "Eydís Lilja Th. Guðmundsdóttir",
+        "hideProfile": false
+      },
+      "player2": null,
+      "homeTeam": false,
+      "teamOfficial": null
+    },
+    {
       "eventId": 8326902,
       "eventType": {
         "fcdName": "GOAL"
       },
       "displayMinute": "89'",
-      "orderNumber": 16,
+      "orderNumber": 17,
       "matchPhase": {
         "fcdName": "SECOND_HALF"
       },
@@ -1268,6 +1299,21 @@
       },
       "player2": null,
       "homeTeam": true,
+      "teamOfficial": null
+    },
+    {
+      "eventId": null,
+      "eventType": {
+        "fcdName": "FULL_TIME"
+      },
+      "displayMinute": "",
+      "orderNumber": 18,
+      "matchPhase": {
+        "fcdName": "SECOND_HALF"
+      },
+      "player": null,
+      "player2": null,
+      "homeTeam": null,
       "teamOfficial": null
     }
   ]
