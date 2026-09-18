@@ -138,7 +138,7 @@
     color:
         var(--lt-text);
 
-    font-size: 12px;
+    font-size: 16px;
     font-weight: 750;
 
     cursor: pointer;
@@ -300,13 +300,40 @@
     }
 
 
-    .played-date-filter select {
-        min-height: 38px;
+    .played-date-filter {
+    flex: 1;
+}
 
-        max-width: 190px;
+.played-date-filter select {
+    width: 100%;
+    min-width: 0;
+    height: 44px;
+    min-height: 44px;
 
-        font-size: 11px;
-    }
+    padding:
+        0
+        42px
+        0
+        14px;
+
+    font-size: 16px;
+    line-height: 48px;
+
+    -webkit-appearance: none;
+    appearance: none;
+
+    border:
+    1px solid
+    rgba(99, 217, 106, 0.22);
+
+    border-radius: 11px;
+
+    background:
+        rgba(255, 255, 255, 0.015);
+
+    color:
+        var(--lt-text);
+}
 
 
     .match-favorite-button {
