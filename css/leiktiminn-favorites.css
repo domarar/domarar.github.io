@@ -419,3 +419,10 @@
     opacity: 0.78;
     cursor: pointer;
 }
+@media (max-width: 760px) {
+
+    [data-view="played"] .match-garmin-status {
+        display: none;
+    }
+
+}
