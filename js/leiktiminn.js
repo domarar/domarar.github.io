@@ -1299,6 +1299,9 @@ function mapDatabaseMatch(
         status:
             row.status || "UPCOMING",
 
+        favorite:
+            row.favorite === true,
+
         garminSyncStatus:
             row.garmin_sync_status ||
             "NOT_SENT",
@@ -2834,33 +2837,60 @@ function renderPlayedMatches() {
     }
 
 
-    const played =
+    let played =
         matches
             .filter(
                 match =>
                     isPlayedMatch(
                         match
                     )
-            )
-            .sort(
-                (
-                    a,
-                    b
-                ) =>
-                    getMatchDate(b)
-                    -
-                    getMatchDate(a)
             );
+
+
+    if (
+        window.LeiktiminnFavorites
+        ?.preparePlayedMatches
+    ) {
+
+        played =
+            window.LeiktiminnFavorites
+                .preparePlayedMatches(
+                    played
+                );
+
+    } else {
+
+        played.sort(
+            (
+                a,
+                b
+            ) =>
+                getMatchDate(b)
+                -
+                getMatchDate(a)
+        );
+    }
+
+
+    const favoritesOnly =
+        window.LeiktiminnFavorites
+            ?.isFavoritesOnly?.()
+        === true;
 
 
     renderMatchCollection(
         playedMatchesList,
         played,
-        "Engir spilaðir leikir enn",
-        "Leikir birtast hér þegar leikdagur er liðinn."
+
+        favoritesOnly
+            ? "Engir uppáhaldsleikir enn"
+            : "Engir spilaðir leikir enn",
+
+        favoritesOnly
+            ? "Merktu leik með stjörnu til að bæta honum í uppáhald."
+            : "Leikir birtast hér þegar leikdagur er liðinn."
     );
 }
-
 
 
 /* =========================================
@@ -2967,6 +2997,11 @@ function createMatchRow(
             match
         );
 
+    const favoriteClass =
+    played && match.favorite
+        ? " match-favorite"
+        : "";
+
 
     const statusText =
         played
@@ -3048,7 +3083,7 @@ function createMatchRow(
 
     return `
         <article
-            class="match-item"
+            class="match-item${favoriteClass}"
             data-match-id="${escapeHtml(match.id)}"
             tabindex="0"
             role="button"
@@ -3105,6 +3140,26 @@ function createMatchRow(
                     }
 
                 </div>
+
+                ${played
+    ? `
+        <button
+            class="match-favorite-button ${match.favorite ? "active" : ""}"
+            type="button"
+            data-favorite-match="${escapeHtml(match.id)}"
+            aria-label="${match.favorite
+                ? "Fjarlægja leik úr uppáhaldi"
+                : "Setja leik í uppáhald"
+            }"
+            aria-pressed="${match.favorite ? "true" : "false"}"
+        >
+            <span aria-hidden="true">
+                ${match.favorite ? "★" : "☆"}
+            </span>
+        </button>
+    `
+    : ""
+}
 
 
                 <button
@@ -3206,6 +3261,32 @@ async function handleMatchListClick(
 
     const container =
         event.currentTarget;
+
+    const favoriteButton =
+    event.target.closest(
+        "[data-favorite-match]"
+    );
+
+
+if (favoriteButton) {
+
+    event.preventDefault();
+    event.stopPropagation();
+
+
+    const matchId =
+        favoriteButton.dataset
+            .favoriteMatch;
+
+
+    await window.LeiktiminnFavorites
+        ?.toggleMatchFavorite(
+            matchId
+        );
+
+
+    return;
+}
 
 
 

@@ -24,6 +24,7 @@
     >
 
     <link rel="stylesheet" href="css/leiktiminn.css?v=7">
+    <link rel="stylesheet" href="css/leiktiminn-favorites.css?v=1">
     <link rel="stylesheet" href="css/menu.css?v=5">
 
     <link
@@ -459,6 +460,92 @@
                         </h3>
 
                     </div>
+
+                    <div class="panel-heading">
+
+
+<div class="played-filter-bar">
+
+    <button
+        id="playedFavoritesFilter"
+        class="played-favorite-filter"
+        type="button"
+        aria-label="Sýna aðeins uppáhaldsleiki"
+        aria-pressed="false"
+        title="Uppáhaldsleikir"
+    >
+        <span aria-hidden="true">
+            ☆
+        </span>
+    </button>
+
+
+    <label class="played-date-filter">
+
+    <select
+        id="playedPeriodFilter"
+        aria-label="Sía leiki eftir tímabili"
+    >
+
+        <option value="all">
+            Allt tímabil
+        </option>
+
+        <option value="week">
+            Síðasta vika
+        </option>
+
+        <option value="month">
+            Síðasti mánuður
+        </option>
+
+        <option value="year">
+            Þetta ár
+        </option>
+
+        <option value="last-year">
+            Síðasta ár
+        </option>
+
+        <option value="custom">
+            Velja dagsetningar
+        </option>
+
+    </select>
+
+</label>
+
+</div>
+
+<div
+    id="playedCustomDateRange"
+    class="played-custom-date-range"
+    hidden
+>
+
+    <label>
+        <span>Frá</span>
+
+        <input
+            id="playedDateFrom"
+            type="date"
+        >
+    </label>
+
+    <span class="played-date-range-separator">
+        –
+    </span>
+
+    <label>
+        <span>Til</span>
+
+        <input
+            id="playedDateTo"
+            type="date"
+        >
+    </label>
+
+</div>
 
 
                     <div
@@ -2245,6 +2332,7 @@
     <script src="js/supabase-client.js?v=6"></script>
 
     <script src="js/leiktiminn.js?v=6"></script>
+    <script src="js/leiktiminn-favorites.js?v=1"></script>
     <script src="js/leiktiminn-stats.js?v=1"></script>
     <script src="js/leiktiminn-iceland.js?v=2"></script>
 
