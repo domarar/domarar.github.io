@@ -619,6 +619,7 @@ const centerText = hasScore
             data-home-logo="${game.homeLogo || ""}"
             data-away-logo="${game.awayLogo || ""}"
             data-gender="${game.gender || ""}"
+            data-competition="${game.competition || ""}"
         >
             VS
         </button>

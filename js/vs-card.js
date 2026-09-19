@@ -2,7 +2,7 @@
 // VS CARD
 // =========================================
 
-document.addEventListener("click", (event) => {
+document.addEventListener("click", async (event) => {
     const vsButton = event.target.closest(".vs-button");
 
     if (vsButton) {
@@ -11,8 +11,27 @@ const awayTeam = vsButton.dataset.away;
 const homeLogo = vsButton.dataset.homeLogo;
 const awayLogo = vsButton.dataset.awayLogo;
 const gender = vsButton.dataset.gender;
+const competition = vsButton.dataset.competition;
 
-openVsCard(homeTeam, awayTeam, homeLogo, awayLogo, gender);
+if (typeof loadArchives === "function") {
+    try {
+        await loadArchives();
+    } catch (error) {
+        console.warn(
+            "Could not load archive before opening VS card:",
+            error
+        );
+    }
+}
+
+openVsCard(
+    homeTeam,
+    awayTeam,
+    homeLogo,
+    awayLogo,
+    gender,
+    competition
+);
     }
 
     if (
@@ -23,11 +42,26 @@ openVsCard(homeTeam, awayTeam, homeLogo, awayLogo, gender);
     }
 });
 
-function getTeamForm(teamName, gender) {
+function getCompetitionFamily(competition = "") {
+    const value = competition
+        .trim()
+        .toLowerCase();
+
+    if (value.includes("besta deild karla")) {
+        return "besta-deild-karla";
+    }
+
+    return value;
+}
+
+function getTeamForm(teamName, gender, competition) {
     const games =
         typeof allGames !== "undefined" && Array.isArray(allGames)
             ? allGames
             : [];
+
+    const competitionFamily =
+        getCompetitionFamily(competition);
 
     const playedGames = games
         .filter(game => {
@@ -45,48 +79,60 @@ function getTeamForm(teamName, gender) {
                 !gender ||
                 game.gender === gender;
 
-            return involvesTeam && hasScore && sameGender;
+            const sameCompetition =
+                !competition ||
+                getCompetitionFamily(game.competition) === competitionFamily;
+
+            return (
+                involvesTeam &&
+                hasScore &&
+                sameGender &&
+                sameCompetition
+            );
         })
         .sort((a, b) => new Date(b.date) - new Date(a.date))
         .slice(0, 5)
         .reverse();
 
     return playedGames.map(game => {
-    const isHome = game.home === teamName;
+        const isHome =
+            game.home === teamName;
 
-    const teamScore = Number(
-        isHome ? game.homeScore : game.awayScore
-    );
+        const teamScore = Number(
+            isHome ? game.homeScore : game.awayScore
+        );
 
-    const opponentScore = Number(
-        isHome ? game.awayScore : game.homeScore
-    );
+        const opponentScore = Number(
+            isHome ? game.awayScore : game.homeScore
+        );
 
-    let result;
+        let result;
 
-    if (teamScore > opponentScore) {
-        result = "win";
-    } else if (teamScore < opponentScore) {
-        result = "loss";
-    } else {
-        result = "draw";
-    }
+        if (teamScore > opponentScore) {
+            result = "win";
+        } else if (teamScore < opponentScore) {
+            result = "loss";
+        } else {
+            result = "draw";
+        }
 
-    return {
-    result,
-    date: game.date,
+        return {
+            result,
+            date: game.date,
 
-    opponent: isHome ? game.away : game.home,
+            opponent:
+                isHome ? game.away : game.home,
 
-    home: game.home,
-    away: game.away,
+            home: game.home,
+            away: game.away,
 
-    homeScore: game.homeScore,
-    awayScore: game.awayScore,
+            homeScore: game.homeScore,
+            awayScore: game.awayScore,
 
-    matchId: game.id ?? game.matchId ?? null
-};
-});
+            matchId:
+                game.id ?? game.matchId ?? null
+        };
+    });
 }
 
 function createFormDots(form) {
@@ -209,13 +255,32 @@ return `
         .join("");
 }
 function getHeadToHead(homeTeam, awayTeam, gender) {
-    const games =
-        typeof allGames !== "undefined" && Array.isArray(allGames)
+    const games = [
+        ...(typeof allGames !== "undefined" && Array.isArray(allGames)
             ? allGames
-            : [];
+            : []),
 
+        ...(typeof archiveGames !== "undefined" && Array.isArray(archiveGames)
+            ? archiveGames
+            : [])
+    ];
 
-    return games
+    const gamesById = new Map();
+
+    games.forEach(game => {
+        const id = game.id ?? game.matchId ?? null;
+
+        if (id !== null && id !== undefined) {
+            gamesById.set(String(id), game);
+        }
+    });
+
+    const uniqueGames =
+        gamesById.size > 0
+            ? Array.from(gamesById.values())
+            : games;
+
+    return uniqueGames
         .filter(game => {
             const hasScore =
                 game.homeScore !== null &&
@@ -228,30 +293,49 @@ function getHeadToHead(homeTeam, awayTeam, gender) {
                 (game.home === awayTeam && game.away === homeTeam);
 
             const sameGender =
-              !gender ||
-              game.gender === gender;
+                !gender ||
+                game.gender === gender;
 
-
-            return sameTeams && hasScore && sameGender;
+            return (
+                sameTeams &&
+                hasScore &&
+                sameGender
+            );
         })
         .sort((a, b) => new Date(b.date) - new Date(a.date))
         .slice(0, 3);
 }
 
 
-function openVsCard(homeTeam, awayTeam, homeLogo, awayLogo, gender) {
+function openVsCard(
+    homeTeam,
+    awayTeam,
+    homeLogo,
+    awayLogo,
+    gender,
+    competition
+) {
     closeVsCard();
     document.body.classList.add("vs-card-open");
 
-    const homeForm = getTeamForm(homeTeam, gender);
-    const awayForm = getTeamForm(awayTeam, gender); 
+    const homeForm = getTeamForm(
+    homeTeam,
+    gender,
+    competition
+);
+
+    const awayForm = getTeamForm(
+    awayTeam,
+    gender,
+    competition
+);
 
     const homeFormHTML = createFormDots(homeForm);
     const awayFormHTML = createFormDots(awayForm);
 
     const headToHeadGames = getHeadToHead(homeTeam, awayTeam, gender);
 
-const headToHeadHTML = headToHeadGames
+    const headToHeadHTML = headToHeadGames
     .map(game => {
         const gameDate = new Date(game.date);
 
