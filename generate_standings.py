@@ -5,7 +5,6 @@ from pathlib import Path
 from collections import defaultdict
 from datetime import datetime, timezone, timedelta
 
-from competition_rules import COMPETITION_RULES
 
 YEAR = sys.argv[1] if len(sys.argv) > 1 else "2026"
 
@@ -30,29 +29,56 @@ OUTPUT_FILE = (
 )
 
 
+# ============================================================
+# COMPETITION NAME
+# ============================================================
+
 def clean_competition_name(name):
     if not name:
         return "Unknown"
 
     name = name.replace("Íslandsmót KSÍ - ", "")
 
-    # Remove season year automatically:
+    # Remove season year:
     # 2026, 2027, 2028 etc.
     name = re.sub(r"\s20\d{2}", "", name)
 
     return name.strip()
 
 
+def get_split_base_competition(competition):
+    """
+    Examples:
+
+    Besta deild karla - Efri hluti
+        -> Besta deild karla
+
+    Besta deild kvenna - Neðri hluti
+        -> Besta deild kvenna
+    """
+
+    for suffix in (
+        " - Efri hluti",
+        " - Neðri hluti",
+    ):
+        if competition.endswith(suffix):
+            return competition[:-len(suffix)].strip()
+
+    return None
+
+
+# ============================================================
+# MATCH STATE
+# ============================================================
+
 def game_should_count(game):
     home_score = game.get("homeScore")
     away_score = game.get("awayScore")
     match_date = game.get("date")
 
-    # No score available
     if home_score is None or away_score is None:
         return False
 
-    # No kickoff time
     if not match_date:
         return False
 
@@ -60,18 +86,24 @@ def game_should_count(game):
         kickoff = datetime.fromisoformat(
             match_date.replace("Z", "+00:00")
         )
+
         if kickoff.tzinfo is None:
-            kickoff = kickoff.replace(tzinfo=timezone.utc)
+            kickoff = kickoff.replace(
+                tzinfo=timezone.utc
+            )
+
     except ValueError:
         return False
 
     now = datetime.now(timezone.utc)
 
-    # Never include a match before kickoff
+    # Never count a future match just because
+    # a placeholder score exists.
     if now < kickoff:
         return False
 
     return True
+
 
 def game_is_live(game):
     status = game.get("status")
@@ -90,11 +122,14 @@ def game_is_live(game):
 
     try:
         kickoff = datetime.fromisoformat(
-        match_date.replace("Z", "+00:00")
-)
+            match_date.replace("Z", "+00:00")
+        )
 
         if kickoff.tzinfo is None:
-            kickoff = kickoff.replace(tzinfo=timezone.utc)
+            kickoff = kickoff.replace(
+                tzinfo=timezone.utc
+            )
+
     except ValueError:
         return False
 
@@ -102,15 +137,27 @@ def game_is_live(game):
 
     return (
         now >= kickoff
-        and now <= kickoff + timedelta(hours=2, minutes=15)
+        and now <= kickoff + timedelta(
+            hours=2,
+            minutes=15,
+        )
     )
+
+
+# ============================================================
+# DATA LOADING
+# ============================================================
 
 def load_all_games():
     games_by_id = {}
 
     # Full-season archive
     if ARCHIVE_FILE.exists():
-        with open(ARCHIVE_FILE, "r", encoding="utf-8") as f:
+        with open(
+            ARCHIVE_FILE,
+            "r",
+            encoding="utf-8",
+        ) as f:
             archive_data = json.load(f)
 
         for game in archive_data.get("games", []):
@@ -119,10 +166,17 @@ def load_all_games():
             if game_id is not None:
                 games_by_id[game_id] = game
 
-    # Fresh games from the automatic KSÍ update.
-    # These overwrite archive versions of the same match.
-    if CURRENT_GAMES_FILE and CURRENT_GAMES_FILE.exists():
-        with open(CURRENT_GAMES_FILE, "r", encoding="utf-8") as f:
+    # Fresh/current KSÍ data overwrites old versions
+    # of the same match.
+    if (
+        CURRENT_GAMES_FILE
+        and CURRENT_GAMES_FILE.exists()
+    ):
+        with open(
+            CURRENT_GAMES_FILE,
+            "r",
+            encoding="utf-8",
+        ) as f:
             current_data = json.load(f)
 
         for game in current_data.get("games", []):
@@ -133,8 +187,12 @@ def load_all_games():
 
     return list(games_by_id.values())
 
+
 def load_split_fixture_games():
-    if not SPLIT_FIXTURES_FILE or not SPLIT_FIXTURES_FILE.exists():
+    if (
+        not SPLIT_FIXTURES_FILE
+        or not SPLIT_FIXTURES_FILE.exists()
+    ):
         return []
 
     with open(
@@ -145,6 +203,11 @@ def load_split_fixture_games():
         data = json.load(f)
 
     return data.get("games", [])
+
+
+# ============================================================
+# TABLE HELPERS
+# ============================================================
 
 def empty_team_stats():
     return {
@@ -171,79 +234,155 @@ def add_stats(target, source):
         target[key] += source.get(key, 0)
 
 
-def apply_competition_rules(
+# ============================================================
+# SPLIT LEAGUE MERGE
+# ============================================================
+
+def apply_split_league_carry_over(
     competitions,
-    live_teams,
     split_members,
 ):
-    for base_competition, rule in COMPETITION_RULES.items():
+    """
+    A split competition keeps the regular-season totals.
 
-        if rule.get("type") != "split_league":
+    Example:
+
+    Besta deild kvenna
+        18 games / 35 points
+
+    Besta deild kvenna - Efri hluti
+        2 games / 4 points
+
+    Final split table:
+        20 games / 39 points
+    """
+
+    split_competitions = list(
+        split_members.keys()
+    )
+
+    for split_competition in split_competitions:
+
+        base_competition = (
+            get_split_base_competition(
+                split_competition
+            )
+        )
+
+        if not base_competition:
             continue
 
-        regular_table = competitions.get(base_competition)
+        regular_table = competitions.get(
+            base_competition
+        )
 
         if not regular_table:
+            print(
+                "Warning: no regular-season table for "
+                f"{split_competition}"
+            )
             continue
 
-        split_groups = rule.get("split_groups", {})
+        split_table = competitions.get(
+            split_competition,
+            {},
+        )
 
-        for group_name, group_rule in split_groups.items():
+        team_names = split_members.get(
+            split_competition,
+            set(),
+        )
 
-            split_competition = (
-                f"{base_competition} - {group_name}"
-            )
+        if not team_names:
+            continue
 
-            # Split matches that have actually been played.
-            # Before the split starts this can be empty.
-            split_table = competitions.get(
-                split_competition,
-                {},
-            )
+        combined_table = defaultdict(
+            empty_team_stats
+        )
 
-            # Team membership comes from future split fixtures.
-            split_team_names = set(
-                split_members.get(
-                    split_competition,
-                    set(),
+        for team_name in team_names:
+
+            # Carry over everything earned
+            # before the league split.
+            if team_name in regular_table:
+                add_stats(
+                    combined_table[team_name],
+                    regular_table[team_name],
                 )
-            )
 
-            if not split_team_names:
-                continue
+            # Add split-phase matches played so far.
+            if team_name in split_table:
+                add_stats(
+                    combined_table[team_name],
+                    split_table[team_name],
+                )
 
-            combined_table = defaultdict(empty_team_stats)
+        competitions[
+            split_competition
+        ] = combined_table
 
-            for team_name in split_team_names:
 
-                # Carry over the full regular-season record.
-                if team_name in regular_table:
-                    add_stats(
-                        combined_table[team_name],
-                        regular_table[team_name],
-                    )
-
-                # Add any split matches already played.
-                if team_name in split_table:
-                    add_stats(
-                        combined_table[team_name],
-                        split_table[team_name],
-                    )
-
-            competitions[split_competition] = combined_table
+# ============================================================
+# GENERATE
+# ============================================================
 
 def generate_standings():
     games = load_all_games()
 
+    split_fixture_games = (
+        load_split_fixture_games()
+    )
+
     competitions = defaultdict(
-        lambda: defaultdict(empty_team_stats)
+        lambda: defaultdict(
+            empty_team_stats
+        )
     )
 
     live_teams = defaultdict(set)
 
     split_members = defaultdict(set)
 
-    split_fixture_games = load_split_fixture_games()
+    # --------------------------------------------------------
+    # First determine membership of every split league.
+    #
+    # Use BOTH normal game data and the larger fixture source,
+    # because a team belongs to a split group even before all
+    # split matches have been played.
+    # --------------------------------------------------------
+
+    membership_games = [
+        *games,
+        *split_fixture_games,
+    ]
+
+    for game in membership_games:
+
+        competition = clean_competition_name(
+            game.get("competition")
+        )
+
+        if not get_split_base_competition(
+            competition
+        ):
+            continue
+
+        home = game.get("home")
+        away = game.get("away")
+
+        if home:
+            split_members[
+                competition
+            ].add(home)
+
+        if away:
+            split_members[
+                competition
+            ].add(away)
+
+    # --------------------------------------------------------
+    # Calculate each competition on its own first.
+    # --------------------------------------------------------
 
     for game in games:
 
@@ -254,114 +393,180 @@ def generate_standings():
         home = game.get("home")
         away = game.get("away")
 
-        # Remember teams belonging to split competitions,
-        # even when their matches have not been played yet.
-        if (
-            competition.endswith("- Efri hluti")
-            or competition.endswith("- Neðri hluti")
-        ):
-            if home:
-                split_members[competition].add(home)
-
-            if away:
-                split_members[competition].add(away)
+        if not home or not away:
+            continue
 
         if not game_should_count(game):
             continue
-        home_score = game.get("homeScore")
-        away_score = game.get("awayScore")
+
+        home_score = game.get(
+            "homeScore"
+        )
+
+        away_score = game.get(
+            "awayScore"
+        )
 
         if game_is_live(game):
-            live_teams[competition].add(home)
-            live_teams[competition].add(away)
+            live_teams[
+                competition
+            ].add(home)
 
-        home_team = competitions[competition][home]
-        away_team = competitions[competition][away]
+            live_teams[
+                competition
+            ].add(away)
+
+        home_team = competitions[
+            competition
+        ][home]
+
+        away_team = competitions[
+            competition
+        ][away]
 
         # Games played
         home_team["played"] += 1
         away_team["played"] += 1
 
         # Goals
-        home_team["goalsFor"] += home_score
-        home_team["goalsAgainst"] += away_score
+        home_team["goalsFor"] += (
+            home_score
+        )
 
-        away_team["goalsFor"] += away_score
-        away_team["goalsAgainst"] += home_score
+        home_team["goalsAgainst"] += (
+            away_score
+        )
 
+        away_team["goalsFor"] += (
+            away_score
+        )
+
+        away_team["goalsAgainst"] += (
+            home_score
+        )
+
+        # Result / points
         if home_score > away_score:
+
             home_team["won"] += 1
             away_team["lost"] += 1
 
             home_team["points"] += 3
 
         elif away_score > home_score:
+
             away_team["won"] += 1
             home_team["lost"] += 1
 
             away_team["points"] += 3
 
         else:
-         home_team["drawn"] += 1
-         away_team["drawn"] += 1
 
-         home_team["points"] += 1
-         away_team["points"] += 1
+            home_team["drawn"] += 1
+            away_team["drawn"] += 1
 
+            home_team["points"] += 1
+            away_team["points"] += 1
 
-    apply_competition_rules(
-    competitions,
-    live_teams,
-    split_members,
-)
+    # --------------------------------------------------------
+    # Now turn each split table into:
+    #
+    # regular season + split phase
+    #
+    # Works automatically for both:
+    # Besta deild karla
+    # Besta deild kvenna
+    # --------------------------------------------------------
+
+    apply_split_league_carry_over(
+        competitions,
+        split_members,
+    )
+
+    # --------------------------------------------------------
+    # Output
+    # --------------------------------------------------------
 
     output = {}
 
-    for competition, teams in competitions.items():
+    for competition, teams in (
+        competitions.items()
+    ):
 
         table = []
 
-        for team_name, stats in teams.items():
+        for team_name, stats in (
+            teams.items()
+        ):
 
             goal_difference = (
-                stats["goalsFor"] - stats["goalsAgainst"]
+                stats["goalsFor"]
+                - stats["goalsAgainst"]
             )
 
             table.append(
                 {
-    "team": team_name,
-    "played": stats["played"],
-    "won": stats["won"],
-    "drawn": stats["drawn"],
-    "lost": stats["lost"],
-    "goalsFor": stats["goalsFor"],
-    "goalsAgainst": stats["goalsAgainst"],
-    "goalDifference": goal_difference,
-    "points": stats["points"],
-    "isLive": team_name in live_teams[competition],
-}
-                )
-            
-    
+                    "team": team_name,
+                    "played": stats[
+                        "played"
+                    ],
+                    "won": stats[
+                        "won"
+                    ],
+                    "drawn": stats[
+                        "drawn"
+                    ],
+                    "lost": stats[
+                        "lost"
+                    ],
+                    "goalsFor": stats[
+                        "goalsFor"
+                    ],
+                    "goalsAgainst": stats[
+                        "goalsAgainst"
+                    ],
+                    "goalDifference":
+                        goal_difference,
+                    "points": stats[
+                        "points"
+                    ],
+                    "isLive":
+                        team_name
+                        in live_teams[
+                            competition
+                        ],
+                }
+            )
 
-        # Temporary/basic sorting:
-        # points first, then goal difference
+        # Points first,
+        # then goal difference,
+        # then goals scored.
         table.sort(
-    key=lambda team: (
-        team["points"],
-        team["goalDifference"],
-        team["goalsFor"],
-    ),
-    reverse=True,
-)
+            key=lambda team: (
+                team["points"],
+                team[
+                    "goalDifference"
+                ],
+                team["goalsFor"],
+            ),
+            reverse=True,
+        )
 
-        # Add league position
-        for index, team in enumerate(table, start=1):
+        for index, team in enumerate(
+            table,
+            start=1,
+        ):
             team["position"] = index
 
-        output[competition] = table
+        output[
+            competition
+        ] = table
 
-    with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
+    with open(
+        OUTPUT_FILE,
+        "w",
+        encoding="utf-8",
+    ) as f:
         json.dump(
             output,
             f,
@@ -370,7 +575,8 @@ def generate_standings():
         )
 
     print(
-        f"Standings generated successfully: {OUTPUT_FILE}"
+        "Standings generated successfully: "
+        f"{OUTPUT_FILE}"
     )
 
 
