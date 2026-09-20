@@ -774,3 +774,42 @@ body.vs-card-open {
     }
 
 }
+.previous-match-substitution {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    line-height: 1.2;
+}
+
+.previous-match-sub-player {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.previous-match-sub-arrow {
+    width: 14px;
+    flex: 0 0 14px;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.previous-match-sub-player.sub-in .previous-match-sub-arrow {
+    color: #35e878;
+}
+
+.previous-match-sub-player.sub-out .previous-match-sub-arrow {
+    color: #ff5c5c;
+}
+
+.previous-match-sub-player.sub-in {
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.previous-match-sub-player.sub-out {
+    color: #aeb8b6;
+    font-weight: 500;
+}
