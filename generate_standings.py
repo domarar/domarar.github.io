@@ -202,7 +202,17 @@ def load_split_fixture_games():
     ) as f:
         data = json.load(f)
 
-    return data.get("games", [])
+    # archive.json can contain fixtures from more than one season.
+    # Only use fixtures from the standings year when determining
+    # split-league membership. Otherwise teams from older split
+    # groups can leak into the current Efri/Neðri hluti tables.
+    year_prefix = f"{YEAR}-"
+
+    return [
+        game
+        for game in data.get("games", [])
+        if str(game.get("date") or "").startswith(year_prefix)
+    ]
 
 
 # ============================================================
