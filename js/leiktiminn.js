@@ -3718,25 +3718,41 @@ function addMatchToCalendar(
     const descriptionParts = [];
 
 
-    if (match.competition) {
-
-        descriptionParts.push(
-            match.competition
-        );
-    }
-
-
-    if (match.userRole) {
-
-        descriptionParts.push(
-            `Hlutverk: ${match.userRole}`
-        );
-    }
-
+if (match.competition) {
 
     descriptionParts.push(
-        "Leiktíminn – Dómarar"
+        `Keppni: ${match.competition}`
     );
+}
+
+
+if (
+    match.homeTeam ||
+    match.awayTeam
+) {
+
+    descriptionParts.push(
+        `Leikur: ${match.homeTeam} – ${match.awayTeam}`
+    );
+}
+
+
+if (match.userRole) {
+
+    descriptionParts.push(
+        `Hlutverk: ${match.userRole}`
+    );
+}
+
+
+descriptionParts.push(
+    ""
+);
+
+
+descriptionParts.push(
+    "Leiktíminn – Dómarar"
+);
 
 
     const ics = [
@@ -3761,7 +3777,7 @@ function addMatchToCalendar(
 
         `SUMMARY:${escapeIcs(title)}`,
 
-        `DESCRIPTION:${escapeIcs(descriptionParts.join("\\n"))}`,
+        `DESCRIPTION:${escapeIcs(descriptionParts.join("\n"))}`,
 
         `LOCATION:${escapeIcs(match.venue || "")}`,
 
