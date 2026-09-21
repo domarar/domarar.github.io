@@ -1,0 +1,187 @@
+/* =========================================
+   LEIKTÍMINN
+   MATCH DETAIL — DESKTOP LAYOUT
+========================================= */
+
+@media (min-width: 761px) {
+
+    /* =====================================
+       PAGE WIDTH
+    ===================================== */
+
+    .leiktiminn-match-page
+    .leiktiminn-page {
+        width:
+            min(
+                1120px,
+                calc(100% - 48px)
+            );
+    }
+
+
+    /* =====================================
+       MAIN 2 x 2 DASHBOARD GRID
+    ===================================== */
+
+    .match-dashboard {
+        display: grid;
+
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            );
+
+        gap: 18px;
+
+        align-items: stretch;
+    }
+
+
+    /* =====================================
+       REMOVE LAYOUT WRAPPERS ON DESKTOP
+    ===================================== */
+
+    .match-garmin-card {
+        display: contents;
+    }
+
+
+    .match-fitness-container {
+        display: contents !important;
+    }
+
+
+    /* Garmin empty state is not part
+       of the normal completed-match grid */
+
+    .match-garmin-empty[hidden] {
+        display: none !important;
+    }
+
+
+    /* =====================================
+       FOUR MAIN CARDS
+    ===================================== */
+
+    .match-officials-card,
+    .match-performance-section {
+        min-width: 0;
+    }
+
+
+    /* Row 1 */
+
+    .match-officials-card {
+        grid-column: 1;
+        grid-row: 1;
+
+        min-height: 380px;
+    }
+
+
+    .match-performance-section:nth-child(1) {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+
+    /* Row 2 */
+
+    .match-performance-section:nth-child(2) {
+        grid-column: 1;
+        grid-row: 2;
+    }
+
+
+    .match-performance-section:nth-child(3) {
+        grid-column: 2;
+        grid-row: 2;
+    }
+
+
+    /* =====================================
+       COMPACT HEART RATE ROW
+    ===================================== */
+
+    .match-performance-section:nth-child(2)
+    .match-performance-content,
+
+    .match-performance-section:nth-child(3)
+    .match-performance-content {
+        padding: 16px;
+    }
+
+
+    /* =====================================
+       HEART RATE HERO
+    ===================================== */
+
+    .match-performance-section:nth-child(2)
+    .match-heart-hero {
+        gap: 16px;
+
+        padding:
+            4px
+            2px
+            18px;
+    }
+
+
+    .match-performance-section:nth-child(2)
+    .match-heart-main strong {
+        font-size: 52px;
+    }
+
+
+    /* =====================================
+       HEART RATE HALF CARDS
+    ===================================== */
+
+    .match-performance-section:nth-child(2)
+    .match-heart-splits {
+        gap: 8px;
+    }
+
+
+    .match-performance-section:nth-child(2)
+    .match-heart-split {
+        min-height: 82px;
+
+        padding: 13px;
+    }
+
+
+    .match-performance-section:nth-child(2)
+    .match-heart-split strong {
+        font-size: 23px;
+    }
+
+
+    /* =====================================
+       HEART RATE ZONES
+    ===================================== */
+
+    .match-performance-section:nth-child(3)
+    .match-zone-list {
+        gap: 11px;
+    }
+
+
+    .match-performance-section:nth-child(3)
+    .match-zone-label {
+        width: 36px;
+        height: 36px;
+    }
+
+
+    .match-performance-section:nth-child(3)
+    .match-zone-row {
+        grid-template-columns:
+            36px
+            minmax(0, 1fr);
+
+        gap: 10px;
+    }
+
+}
