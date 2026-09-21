@@ -63,6 +63,35 @@ const matchNavPlayed =
         "matchNavPlayed"
     );
 
+const matchNotesToggle =
+    document.getElementById(
+        "matchNotesToggle"
+    );
+
+
+const matchNotesContent =
+    document.getElementById(
+        "matchNotesContent"
+    );
+
+
+const matchNotesInput =
+    document.getElementById(
+        "matchNotesInput"
+    );
+
+
+const matchNotesSave =
+    document.getElementById(
+        "matchNotesSave"
+    );
+
+
+const matchNotesStatus =
+    document.getElementById(
+        "matchNotesStatus"
+    );
+
 
 
 // =========================================
@@ -673,8 +702,11 @@ function mapDatabaseMatch(
         venue:
             row.venue || "",
 
-        userRole:
+                userRole:
             row.user_role || "",
+
+        matchNotes:
+            row.match_notes || "",
 
         officials: {
 
@@ -1029,6 +1061,167 @@ function renderMatchIntro(
 
     matchMeta.innerHTML =
         items.join("");
+}
+
+function renderMatch(
+    match
+) {
+
+    renderMatchIntro(
+        match
+    );
+
+
+    renderOfficials(
+        match
+    );
+
+
+    renderFitness(
+        match
+    );
+
+
+    initializeMatchNotes(
+        match
+    );
+}
+
+// =========================================
+// MATCH NOTES
+// =========================================
+
+function initializeMatchNotes(
+    match
+) {
+
+    if (
+        !matchNotesToggle
+        ||
+        !matchNotesContent
+        ||
+        !matchNotesInput
+        ||
+        !matchNotesSave
+    ) {
+
+        return;
+    }
+
+
+    matchNotesInput.value =
+        match.matchNotes || "";
+
+
+    matchNotesContent.hidden =
+        true;
+
+
+    matchNotesToggle.setAttribute(
+        "aria-expanded",
+        "false"
+    );
+
+
+    matchNotesToggle.onclick =
+        () => {
+
+            const isOpen =
+                !matchNotesContent.hidden;
+
+
+            matchNotesContent.hidden =
+                isOpen;
+
+
+            matchNotesToggle.setAttribute(
+                "aria-expanded",
+                isOpen
+                    ? "false"
+                    : "true"
+            );
+        };
+
+
+    matchNotesSave.onclick =
+        async () => {
+
+            const notes =
+                matchNotesInput.value;
+
+
+            matchNotesSave.disabled =
+                true;
+
+
+            if (matchNotesStatus) {
+
+                matchNotesStatus.textContent =
+                    "Vista...";
+            }
+
+
+            const {
+                error
+            } =
+                await supabaseClient
+                    .from(
+                        "matches"
+                    )
+                    .update({
+                        match_notes:
+                            notes
+                    })
+                    .eq(
+                        "id",
+                        match.id
+                    );
+
+
+            matchNotesSave.disabled =
+                false;
+
+
+            if (error) {
+
+                console.error(
+                    "Villa við að vista punkta:",
+                    error
+                );
+
+
+                if (matchNotesStatus) {
+
+                    matchNotesStatus.textContent =
+                        "Ekki tókst að vista";
+                }
+
+
+                return;
+            }
+
+
+            match.matchNotes =
+                notes;
+
+
+            if (matchNotesStatus) {
+
+                matchNotesStatus.textContent =
+                    "Vistað";
+
+
+                window.setTimeout(
+                    () => {
+
+                        matchNotesStatus.textContent =
+                            "";
+
+                    },
+                    1800
+                );
+            }
+        };
 }
 
 

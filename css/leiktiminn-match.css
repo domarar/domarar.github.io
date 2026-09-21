@@ -3702,3 +3702,312 @@
         font-size: 19px;
     }
 }
+/* =========================================
+   MATCH NOTES
+========================================= */
+
+.match-notes-section {
+    margin-top: 18px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.08);
+
+    border-radius: 18px;
+
+    background:
+        rgba(17, 25, 28, 0.97);
+
+    overflow: hidden;
+}
+
+
+/* =========================================
+   HEADER / TOGGLE
+========================================= */
+
+.match-notes-toggle {
+    width: 100%;
+    min-height: 60px;
+
+    padding:
+        0 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+
+    border: 0;
+
+    background:
+        transparent;
+
+    color:
+        inherit;
+
+    font:
+        inherit;
+
+    text-align:
+        left;
+
+    cursor:
+        pointer;
+}
+
+
+.match-notes-toggle strong {
+    font-size:
+        15px;
+
+    font-weight:
+        700;
+}
+
+
+.match-notes-arrow {
+    font-size:
+        24px;
+
+    line-height:
+        1;
+
+    opacity:
+        0.65;
+
+    transition:
+        transform 160ms ease;
+}
+
+
+.match-notes-toggle[aria-expanded="true"]
+.match-notes-arrow {
+    transform:
+        rotate(90deg);
+}
+
+
+/* =========================================
+   CONTENT
+========================================= */
+
+.match-notes-content {
+    padding:
+        0 18px 18px;
+}
+
+
+/* =========================================
+   TEXT AREA
+========================================= */
+
+.match-notes-input {
+    display:
+        block;
+
+    width:
+        100%;
+
+    min-height:
+        140px;
+
+    padding:
+        14px;
+
+    box-sizing:
+        border-box;
+
+    resize:
+        vertical;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.10);
+
+    border-radius:
+        12px;
+
+    background:
+        rgba(7, 12, 14, 0.94);
+
+    color:
+        #f5f7f7;
+
+    font:
+        inherit;
+
+    font-size:
+        15px;
+
+    line-height:
+        1.5;
+
+    outline:
+        none;
+
+    transition:
+        border-color 160ms ease,
+        background 160ms ease;
+}
+
+
+.match-notes-input::placeholder {
+    color:
+        rgba(255, 255, 255, 0.38);
+}
+
+
+.match-notes-input:focus {
+    border-color:
+        rgba(90, 220, 120, 0.55);
+
+    background:
+        rgba(7, 12, 14, 1);
+}
+
+
+/* =========================================
+   ACTIONS
+========================================= */
+
+.match-notes-actions {
+    margin-top:
+        12px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        flex-end;
+
+    gap:
+        12px;
+}
+
+
+.match-notes-status {
+    font-size:
+        13px;
+
+    color:
+        rgba(255, 255, 255, 0.62);
+}
+
+
+/* =========================================
+   SAVE BUTTON
+========================================= */
+
+.match-notes-save {
+    min-width:
+        88px;
+
+    min-height:
+        42px;
+
+    padding:
+        0 18px;
+
+    border:
+        0;
+
+    border-radius:
+        11px;
+
+    background:
+        #ffffff;
+
+    color:
+        #07100c;
+
+    font:
+        inherit;
+
+    font-weight:
+        800;
+
+    cursor:
+        pointer;
+
+    transition:
+        transform 120ms ease,
+        opacity 120ms ease;
+}
+
+
+.match-notes-save:hover {
+    transform:
+        translateY(-1px);
+}
+
+
+.match-notes-save:active {
+    transform:
+        translateY(0);
+}
+
+
+.match-notes-save:disabled {
+    opacity:
+        0.55;
+
+    cursor:
+        default;
+
+    transform:
+        none;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 700px) {
+
+    .match-notes-section {
+        margin-top:
+            16px;
+
+        border-radius:
+            18px;
+    }
+
+
+    .match-notes-toggle {
+        min-height:
+            58px;
+
+        padding:
+            0 16px;
+    }
+
+
+    .match-notes-content {
+        padding:
+            0 16px 16px;
+    }
+
+
+    .match-notes-input {
+        min-height:
+            140px;
+
+        font-size:
+            16px;
+    }
+
+
+    .match-notes-save {
+        min-width:
+            88px;
+
+        min-height:
+            42px;
+    }
+
+}
