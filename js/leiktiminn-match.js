@@ -63,6 +63,7 @@ const matchNavPlayed =
         "matchNavPlayed"
     );
 
+
 const matchNotesToggle =
     document.getElementById(
         "matchNotesToggle"
@@ -339,11 +340,6 @@ function configureMatchNavigation(
 
     // =========================================
     // EDIT BUTTON
-    //
-    // Only available inside an UPCOMING match.
-    //
-    // Played matches can still be edited from
-    // the 3-dot menu on the main match list.
     // =========================================
 
     if (
@@ -379,6 +375,7 @@ function configureMatchNavigation(
             };
     }
 }
+
 
 
 // =========================================
@@ -625,6 +622,8 @@ function getInitials(
             value ?? ""
         )
             .trim();
+
+
     if (!text) {
 
         return "LT";
@@ -702,7 +701,7 @@ function mapDatabaseMatch(
         venue:
             row.venue || "",
 
-                userRole:
+        userRole:
             row.user_role || "",
 
         matchNotes:
@@ -854,7 +853,7 @@ function mapDatabaseMatch(
 
 
         // =========================================
-        // DISTANCE
+        // DISTANCE / SPEED
         // =========================================
 
         distanceTotalM:
@@ -870,6 +869,16 @@ function mapDatabaseMatch(
         distanceSecondHalfM:
             Number(
                 row.distance_second_half_m ?? 0
+            ),
+
+        avgSpeedMps:
+            Number(
+                row.avg_speed_mps ?? 0
+            ),
+
+        maxSpeedMps:
+            Number(
+                row.max_speed_mps ?? 0
             )
 
     };
@@ -955,6 +964,11 @@ function renderMatch(
 
 
     renderFitness(
+        match
+    );
+
+
+    initializeMatchNotes(
         match
     );
 }
@@ -1063,29 +1077,7 @@ function renderMatchIntro(
         items.join("");
 }
 
-function renderMatch(
-    match
-) {
 
-    renderMatchIntro(
-        match
-    );
-
-
-    renderOfficials(
-        match
-    );
-
-
-    renderFitness(
-        match
-    );
-
-
-    initializeMatchNotes(
-        match
-    );
-}
 
 // =========================================
 // MATCH NOTES
@@ -1154,7 +1146,9 @@ function initializeMatchNotes(
                 true;
 
 
-            if (matchNotesStatus) {
+            if (
+                matchNotesStatus
+            ) {
 
                 matchNotesStatus.textContent =
                     "Vista...";
@@ -1182,7 +1176,9 @@ function initializeMatchNotes(
                 false;
 
 
-            if (error) {
+            if (
+                error
+            ) {
 
                 console.error(
                     "Villa við að vista punkta:",
@@ -1190,7 +1186,9 @@ function initializeMatchNotes(
                 );
 
 
-                if (matchNotesStatus) {
+                if (
+                    matchNotesStatus
+                ) {
 
                     matchNotesStatus.textContent =
                         "Ekki tókst að vista";
@@ -1205,7 +1203,9 @@ function initializeMatchNotes(
                 notes;
 
 
-            if (matchNotesStatus) {
+            if (
+                matchNotesStatus
+            ) {
 
                 matchNotesStatus.textContent =
                     "Vistað";
@@ -1507,6 +1507,9 @@ function createOfficialRow(
         </div>
     `;
 }
+
+
+
 // =========================================
 // FITNESS
 // =========================================
@@ -1582,6 +1585,18 @@ function renderFitness(
         );
 
 
+    const avgPace =
+        formatAveragePaceFromSpeed(
+            match.avgSpeedMps
+        );
+
+
+    const maxSpeed =
+        formatSpeedKmh(
+            match.maxSpeedMps
+        );
+
+
     const distanceProgress =
         getDistanceProgress(
             match.distanceTotalM
@@ -1638,11 +1653,11 @@ function renderFitness(
                 <span class="match-performance-heading-left">
 
                     <span
-    class="match-km-icon"
-    aria-hidden="true"
->
-    KM
-</span>
+                        class="match-km-icon"
+                        aria-hidden="true"
+                    >
+                        KM
+                    </span>
 
                     <strong>
                         HLAUPATÖLUR
@@ -1651,11 +1666,11 @@ function renderFitness(
                 </span>
 
                 <span
-    class="match-performance-toggle"
-    aria-hidden="true"
->
-    <span class="match-performance-toggle-knob"></span>
-</span>
+                    class="match-performance-toggle"
+                    aria-hidden="true"
+                >
+                    <span class="match-performance-toggle-knob"></span>
+                </span>
 
             </button>
 
@@ -1711,14 +1726,22 @@ function renderFitness(
 
                 <div class="match-running-splits">
 
-                    ${createDistanceSplitHtml(
+                    ${createRunningDoubleStatHtml(
                         "1H",
-                        firstHalfKm
+                        firstHalfKm,
+                        "km",
+                        "2H",
+                        secondHalfKm,
+                        "km"
                     )}
 
-                    ${createDistanceSplitHtml(
-                        "2H",
-                        secondHalfKm
+                    ${createRunningDoubleStatHtml(
+                        "AVG PACE",
+                        avgPace,
+                        "min/km",
+                        "MAX SPEED",
+                        maxSpeed,
+                        "km/h"
                     )}
 
                 </div>
@@ -1760,11 +1783,11 @@ function renderFitness(
                 </span>
 
                 <span
-    class="match-performance-toggle"
-    aria-hidden="true"
->
-    <span class="match-performance-toggle-knob"></span>
-</span>
+                    class="match-performance-toggle"
+                    aria-hidden="true"
+                >
+                    <span class="match-performance-toggle-knob"></span>
+                </span>
 
             </button>
 
@@ -1816,16 +1839,16 @@ function renderFitness(
                 <div class="match-heart-splits">
 
                     ${createHeartRateSplitHtml(
-    "1H",
-    match.hrAvgFirstHalf,
-    match.hrMaxFirstHalf
-)}
+                        "1H",
+                        match.hrAvgFirstHalf,
+                        match.hrMaxFirstHalf
+                    )}
 
-${createHeartRateSplitHtml(
-    "2H",
-    match.hrAvgSecondHalf,
-    match.hrMaxSecondHalf
-)}
+                    ${createHeartRateSplitHtml(
+                        "2H",
+                        match.hrAvgSecondHalf,
+                        match.hrMaxSecondHalf
+                    )}
 
                 </div>
 
@@ -1866,11 +1889,11 @@ ${createHeartRateSplitHtml(
                 </span>
 
                 <span
-    class="match-performance-toggle"
-    aria-hidden="true"
->
-    <span class="match-performance-toggle-knob"></span>
-</span>
+                    class="match-performance-toggle"
+                    aria-hidden="true"
+                >
+                    <span class="match-performance-toggle-knob"></span>
+                </span>
 
             </button>
 
@@ -1948,28 +1971,53 @@ function initializePerformanceSections() {
 
 
 // =========================================
-// DISTANCE SPLIT
+// RUNNING DOUBLE STAT
 // =========================================
 
-function createDistanceSplitHtml(
-    label,
-    km
+function createRunningDoubleStatHtml(
+    labelOne,
+    valueOne,
+    unitOne,
+    labelTwo,
+    valueTwo,
+    unitTwo
 ) {
 
     return `
-        <div class="match-running-split">
+        <div class="match-running-split match-running-double">
 
-            <span>
-                ${label}
-            </span>
+            <div class="match-running-double-stat">
 
-            <strong>
-                ${km}
+                <span>
+                    ${labelOne}
+                </span>
+
+                <strong>
+                    ${valueOne}
+                </strong>
 
                 <small>
-                    km
+                    ${unitOne}
                 </small>
-            </strong>
+
+            </div>
+
+
+            <div class="match-running-double-stat">
+
+                <span>
+                    ${labelTwo}
+                </span>
+
+                <strong>
+                    ${valueTwo}
+                </strong>
+
+                <small>
+                    ${unitTwo}
+                </small>
+
+            </div>
 
         </div>
     `;
@@ -2037,6 +2085,9 @@ function createHeartRateSplitHtml(
         </div>
     `;
 }
+
+
+
 // =========================================
 // HEART RATE ZONES
 // =========================================
@@ -2469,6 +2520,117 @@ function formatKm(
         .toFixed(
             2
         );
+}
+
+
+
+// =========================================
+// AVERAGE PACE
+// Garmin speed m/s -> min/km
+// =========================================
+
+function formatAveragePaceFromSpeed(
+    speedMps
+) {
+
+    const speed =
+        Number(
+            speedMps ?? 0
+        );
+
+
+    if (
+        !Number.isFinite(
+            speed
+        )
+        ||
+        speed <= 0
+    ) {
+
+        return "–";
+    }
+
+
+    const secondsPerKm =
+        1000
+        /
+        speed;
+
+
+    const minutes =
+        Math.floor(
+            secondsPerKm / 60
+        );
+
+
+    const seconds =
+        Math.round(
+            secondsPerKm % 60
+        );
+
+
+    const safeSeconds =
+        seconds === 60
+            ? 0
+            : seconds;
+
+
+    const safeMinutes =
+        seconds === 60
+            ? minutes + 1
+            : minutes;
+
+
+    return (
+        safeMinutes
+        +
+        ":"
+        +
+        String(
+            safeSeconds
+        ).padStart(
+            2,
+            "0"
+        )
+    );
+}
+
+
+
+// =========================================
+// MAX SPEED
+// Garmin m/s -> km/h
+// =========================================
+
+function formatSpeedKmh(
+    speedMps
+) {
+
+    const speed =
+        Number(
+            speedMps ?? 0
+        );
+
+
+    if (
+        !Number.isFinite(
+            speed
+        )
+        ||
+        speed <= 0
+    ) {
+
+        return "–";
+    }
+
+
+    return (
+        speed
+        *
+        3.6
+    ).toFixed(
+        1
+    );
 }
 
 
