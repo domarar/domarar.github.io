@@ -50,19 +50,54 @@ function getCompetitionFamily(competition = "") {
         return "besta-deild-karla";
     }
 
+    if (value.includes("besta deild kvenna")) {
+        return "besta-deild-kvenna";
+    }
+
     return value;
 }
 
 function getTeamForm(teamName, gender, competition) {
-    const games =
-        typeof allGames !== "undefined" && Array.isArray(allGames)
-            ? allGames
-            : [];
+    const games = [
+        ...(
+            typeof allGames !== "undefined" &&
+            Array.isArray(allGames)
+                ? allGames
+                : []
+        ),
+
+        ...(
+            typeof archiveGames !== "undefined" &&
+            Array.isArray(archiveGames)
+                ? archiveGames
+                : []
+        )
+    ];
 
     const competitionFamily =
         getCompetitionFamily(competition);
 
-    const playedGames = games
+    // Remove duplicate matches that may exist
+    // in both allGames and archiveGames.
+    const gamesById = new Map();
+
+    games.forEach(game => {
+        const id =
+            game.id ??
+            game.matchId ??
+            null;
+
+        if (id !== null && id !== undefined) {
+            gamesById.set(String(id), game);
+        }
+    });
+
+    const uniqueGames =
+        gamesById.size > 0
+            ? Array.from(gamesById.values())
+            : games;
+
+    const playedGames = uniqueGames
         .filter(game => {
             const involvesTeam =
                 game.home === teamName ||
@@ -80,7 +115,9 @@ function getTeamForm(teamName, gender, competition) {
 
             const sameCompetition =
                 !competition ||
-                getCompetitionFamily(game.competition) === competitionFamily;
+                getCompetitionFamily(
+                    game.competition
+                ) === competitionFamily;
 
             return (
                 involvesTeam &&
@@ -89,7 +126,11 @@ function getTeamForm(teamName, gender, competition) {
                 sameCompetition
             );
         })
-        .sort((a, b) => new Date(b.date) - new Date(a.date))
+        .sort(
+            (a, b) =>
+                new Date(b.date) -
+                new Date(a.date)
+        )
         .slice(0, 5)
         .reverse();
 
@@ -98,11 +139,15 @@ function getTeamForm(teamName, gender, competition) {
             game.home === teamName;
 
         const teamScore = Number(
-            isHome ? game.homeScore : game.awayScore
+            isHome
+                ? game.homeScore
+                : game.awayScore
         );
 
         const opponentScore = Number(
-            isHome ? game.awayScore : game.homeScore
+            isHome
+                ? game.awayScore
+                : game.homeScore
         );
 
         let result;
@@ -120,7 +165,9 @@ function getTeamForm(teamName, gender, competition) {
             date: game.date,
 
             opponent:
-                isHome ? game.away : game.home,
+                isHome
+                    ? game.away
+                    : game.home,
 
             home: game.home,
             away: game.away,
@@ -129,7 +176,9 @@ function getTeamForm(teamName, gender, competition) {
             awayScore: game.awayScore,
 
             matchId:
-                game.id ?? game.matchId ?? null
+                game.id ??
+                game.matchId ??
+                null
         };
     });
 }
