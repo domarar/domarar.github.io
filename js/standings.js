@@ -335,7 +335,11 @@ function openStandingsMenu() {
     "Besta deild karla - Efri hluti",
     "Besta deild karla - Neðri hluti",
     "Besta deild karla",
+
+    "Besta deild kvenna - Efri hluti",
+    "Besta deild kvenna - Neðri hluti",
     "Besta deild kvenna",
+
     "Lengjudeild karla",
     "Lengjudeild kvenna",
     "2. deild karla",
