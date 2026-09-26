@@ -1188,6 +1188,8 @@ async function loadMatchesFromSupabase(
                     mapDatabaseMatch
                 );
 
+        window.LeiktiminnNotifications.setUser(session.user.id);
+
 
        
 
@@ -2781,6 +2783,17 @@ function renderAll() {
 
     sortMatches();
 
+    if (hasLoadedMatches) {
+        window.LeiktiminnNotifications.sync(
+            matches.filter(match =>
+                match.status === "COMPLETED" ||
+                match.status === "ACTIVITY_RECEIVED"
+            )
+        );
+    }
+
+    updatePlayedUnreadCount();
+
 
     renderUpcomingMatches();
 
@@ -2892,6 +2905,91 @@ function renderPlayedMatches() {
     );
 }
 
+function updatePlayedUnreadCount() {
+    const count = matches.filter(match =>
+        isPlayedMatch(match) &&
+        window.LeiktiminnNotifications.isUnread(match.id)
+    ).length;
+
+    document.querySelectorAll("[data-played-unread-count]").forEach(badge => {
+        badge.hidden = count === 0;
+        badge.textContent = count > 99 ? "99+" : String(count);
+    });
+
+    const notificationButton =
+    document.getElementById("playedNotificationButton");
+
+const notificationNumber =
+    document.getElementById("playedNotificationNumber");
+
+if (notificationButton && notificationNumber) {
+    notificationButton.hidden = count === 0;
+    notificationNumber.textContent =
+        count > 99 ? "99+" : String(count);
+
+    notificationButton.setAttribute(
+        "aria-label",
+        `${count} nýir spilaðir leikir. Opna nýjasta leikinn.`
+    );
+}
+}
+
+document.getElementById("playedNotificationButton")?.addEventListener("click", () => {
+    const panel = document.getElementById("playedNotificationPanel");
+    const list = document.getElementById("playedNotificationList");
+    if (!panel || !list) return;
+
+    list.replaceChildren();
+
+    matches
+        .filter(match =>
+            isPlayedMatch(match) &&
+            window.LeiktiminnNotifications.isUnread(match.id)
+        )
+        .sort((a, b) => getMatchDate(b) - getMatchDate(a))
+        .forEach(match => {
+            const item = document.createElement("button");
+            item.type = "button";
+            item.className = "played-notification-item";
+            const title = document.createElement("strong");
+title.textContent = `${match.homeTeam} – ${match.awayTeam}`;
+
+const when = document.createElement("small");
+when.textContent =
+    `${new Intl.DateTimeFormat("is-IS", {
+        day: "numeric",
+        month: "short",
+        year: "numeric"
+    }).format(getMatchDate(match))} · kl. ${match.time}`;
+
+const label = document.createElement("span");
+label.className = "played-notification-label";
+label.textContent = "Nýr leikur í Spilaðir";
+
+item.append(label, title, when);
+            item.addEventListener("click", () => {
+                panel.hidden = true;
+                openMatch(match.id);
+            });
+            list.appendChild(item);
+        });
+
+    panel.hidden = !panel.hidden;
+});
+
+document.addEventListener("click", event => {
+    const button = document.getElementById("playedNotificationButton");
+    const panel = document.getElementById("playedNotificationPanel");
+
+    if (
+        panel &&
+        !panel.hidden &&
+        !panel.contains(event.target) &&
+        !button?.contains(event.target)
+    ) {
+        panel.hidden = true;
+    }
+});
 
 /* =========================================
    MATCH COLLECTION
@@ -2997,6 +3095,9 @@ function createMatchRow(
             match
         );
 
+    const unread = played &&
+    window.LeiktiminnNotifications.isUnread(match.id);
+
     const favoriteClass =
     played && match.favorite
         ? " match-favorite"
@@ -3083,7 +3184,7 @@ function createMatchRow(
 
     return `
         <article
-            class="match-item${favoriteClass}"
+            class="match-item${favoriteClass}${unread ? " match-unread" : ""}"
             data-match-id="${escapeHtml(match.id)}"
             tabindex="0"
             role="button"
@@ -3108,8 +3209,8 @@ function createMatchRow(
                     ${escapeHtml(match.homeTeam)}
                     –
                     ${escapeHtml(match.awayTeam)}
+                    ${unread ? '<span class="match-new-badge">NÝR</span>' : ""}
                 </strong>
-
                 <span>
                     ${escapeHtml(match.competition)}
                     · ${escapeHtml(match.time)}
@@ -3670,6 +3771,10 @@ function openMatch(
         )
             ? "played"
             : "upcoming";
+
+    if (sourceView === "played") {
+    window.LeiktiminnNotifications.markSeen(matchId);
+}
 
 
     window.location.href =
@@ -4647,6 +4752,21 @@ window.addEventListener(
         });
     }
 );
+
+window.setInterval(() => {
+    if (document.visibilityState === "visible" && hasLoadedMatches) {
+        loadMatchesFromSupabase({
+            showLoading: false,
+            force: false
+        });
+    }
+}, 60000);
+
+window.addEventListener("pageshow", event => {
+    if (event.persisted && hasLoadedMatches) {
+        renderAll();
+    }
+});
 
 
 

@@ -239,6 +239,11 @@ async function initializeMatchPage() {
             data
         );
 
+    if (isPlayedMatch(match)) {
+    window.LeiktiminnNotifications.setUser(session.user.id);
+    window.LeiktiminnNotifications.markSeen(match.id);
+}
+
 
     renderMatch(
         match

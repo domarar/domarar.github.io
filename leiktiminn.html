@@ -23,7 +23,7 @@
         href="/leiktiminn-manifest.json"
     >
 
-    <link rel="stylesheet" href="css/leiktiminn.css?v=7">
+    <link rel="stylesheet" href="css/leiktiminn.css?v=9">
     <link rel="stylesheet" href="css/leiktiminn-favorites.css?v=3">
     <link rel="stylesheet" href="css/menu.css?v=5">
 
@@ -308,6 +308,26 @@
             <div class="leiktiminn-header-actions">
 
                 <button
+                    id="playedNotificationButton"
+                    class="played-notification-button"
+                    type="button"
+                    aria-label="Nýir spilaðir leikir"
+                    hidden
+                >
+                    🔔 <span id="playedNotificationNumber"></span>
+                </button>
+
+                <div
+                    id="playedNotificationPanel"
+                    class="played-notification-panel"
+                    aria-label="Tilkynningar"
+                    hidden
+                >
+                    <strong>Tilkynningar</strong>
+                    <div id="playedNotificationList"></div>
+                </div>
+
+                <button
                     class="profile-button"
                     type="button"
                     aria-label="Prófíll"
@@ -360,6 +380,7 @@
                     data-view-target="played"
                 >
                     Spilaðir
+                    <span class="played-unread-count" data-played-unread-count hidden></span>
                 </button>
 
                 <button
@@ -1822,6 +1843,8 @@
                 Spilaðir
             </span>
 
+            <span class="played-unread-count" data-played-unread-count hidden></span>
+
         </button>
 
 
@@ -2335,7 +2358,8 @@
     <script src="js/supabase-config.js?v=1"></script>
     <script src="js/supabase-client.js?v=6"></script>
 
-    <script src="js/leiktiminn.js?v=6"></script>
+    <script src="js/leiktiminn-notifications.js?v=1"></script>
+    <script src="js/leiktiminn.js?v=9"></script>
     <script src="js/leiktiminn-favorites.js?v=3"></script>
     <script src="js/leiktiminn-stats.js?v=1"></script>
     <script src="js/leiktiminn-iceland.js?v=2"></script>
