@@ -3257,14 +3257,6 @@ function createMatchRow(
     }
 
 
-    const hasScore =
-        played
-        &&
-        match.homeScore !== null
-        &&
-        match.awayScore !== null;
-
-
     return `
         <article
             class="match-item${favoriteClass}${unread ? " match-unread" : ""}"
@@ -3348,19 +3340,9 @@ function createMatchRow(
             </div>
 
 
-            <div class="match-row-right">
+                       <div class="match-row-right">
 
-                ${
-                    hasScore
-                        ? `
-                            <div class="match-score-pill">
-                                ${escapeHtml(match.homeScore)}
-                                <span>–</span>
-                                ${escapeHtml(match.awayScore)}
-                            </div>
-                        `
-                        : ""
-                }
+                <div class="match-actions">
 
 
                 <div class="match-actions">
