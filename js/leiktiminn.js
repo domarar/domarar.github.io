@@ -1298,6 +1298,12 @@ function mapDatabaseMatch(
         awayTeam:
             row.away_team || "",
 
+        homeScore:
+            row.home_score ?? null,
+
+        awayScore:
+            row.away_score ?? null,
+
         date:
             row.match_date || "",
 
@@ -3109,10 +3115,6 @@ function renderMatchCollection(
 
 
 
-/* =========================================
-   MATCH ROW
-========================================= */
-
 function createMatchRow(
     match
 ) {
@@ -3154,24 +3156,27 @@ function createMatchRow(
         ];
 
 
-    const venueText =
-        match.venue
-            ? ` · ${escapeHtml(match.venue)}`
-            : "";
-
-
     const played =
         isPlayedMatch(
             match
         );
 
-    const unread = played &&
-    window.LeiktiminnNotifications.isUnread(match.id);
+
+    const unread =
+        played
+        &&
+        window.LeiktiminnNotifications
+            .isUnread(
+                match.id
+            );
+
 
     const favoriteClass =
-    played && match.favorite
-        ? " match-favorite"
-        : "";
+        played
+        &&
+        match.favorite
+            ? " match-favorite"
+            : "";
 
 
     const statusText =
@@ -3252,6 +3257,14 @@ function createMatchRow(
     }
 
 
+    const hasScore =
+        played
+        &&
+        match.homeScore !== null
+        &&
+        match.awayScore !== null;
+
+
     return `
         <article
             class="match-item${favoriteClass}${unread ? " match-unread" : ""}"
@@ -3279,110 +3292,176 @@ function createMatchRow(
                     ${escapeHtml(match.homeTeam)}
                     –
                     ${escapeHtml(match.awayTeam)}
-                    ${unread ? '<span class="match-new-badge">NÝR</span>' : ""}
+                    ${unread
+                        ? '<span class="match-new-badge">NÝR</span>'
+                        : ""
+                    }
                 </strong>
-                <span>
+
+
+                ${
+    played
+        ? `
+            <span class="match-secondary-line">
+
+                <span class="match-competition-inline">
                     ${escapeHtml(match.competition)}
-                    · ${escapeHtml(match.time)}
-                    ${venueText}
                 </span>
+
+                <span class="match-secondary-separator">
+                    ·
+                </span>
+
+                <span>
+                    ${escapeHtml(match.time)}
+                </span>
+
+                ${
+                    match.venue
+                        ? `
+                            <span class="match-secondary-separator">
+                                ·
+                            </span>
+
+                            <span>
+                                ${escapeHtml(match.venue)}
+                            </span>
+                        `
+                        : ""
+                }
+
+            </span>
+        `
+        : `
+            <span>
+                ${escapeHtml(match.competition)}
+                · ${escapeHtml(match.time)}
+                ${
+                    match.venue
+                        ? ` · ${escapeHtml(match.venue)}`
+                        : ""
+                }
+            </span>
+        `
+}
 
             </div>
 
 
-            <div class="match-actions">
+            <div class="match-row-right">
 
-                <div class="match-status-stack">
-
-                    <span class="match-badge">
-                        ${statusText}
-                    </span>
-
-                    ${garminStatusText
+                ${
+                    hasScore
                         ? `
-                            <span
-                                class="match-garmin-status ${garminStatusClass}"
-                            >
-                                <span class="match-garmin-dot"></span>
-                                ${garminStatusText}
-                            </span>
+                            <div class="match-score-pill">
+                                ${escapeHtml(match.homeScore)}
+                                <span>–</span>
+                                ${escapeHtml(match.awayScore)}
+                            </div>
                         `
                         : ""
+                }
+
+
+                <div class="match-actions">
+
+                    <div class="match-status-stack">
+
+                        <span class="match-badge">
+                            ${statusText}
+                        </span>
+
+                        ${
+                            garminStatusText
+                                ? `
+                                    <span
+                                        class="match-garmin-status ${garminStatusClass}"
+                                    >
+                                        <span class="match-garmin-dot"></span>
+                                        ${garminStatusText}
+                                    </span>
+                                `
+                                : ""
+                        }
+
+                    </div>
+
+
+                    ${
+                        played
+                            ? `
+                                <button
+                                    class="match-favorite-button ${match.favorite ? "active" : ""}"
+                                    type="button"
+                                    data-favorite-match="${escapeHtml(match.id)}"
+                                    aria-label="${
+                                        match.favorite
+                                            ? "Fjarlægja leik úr uppáhaldi"
+                                            : "Setja leik í uppáhald"
+                                    }"
+                                    aria-pressed="${match.favorite ? "true" : "false"}"
+                                >
+                                    <span aria-hidden="true">
+                                        ${match.favorite ? "★" : "☆"}
+                                    </span>
+                                </button>
+                            `
+                            : ""
                     }
 
-                </div>
-
-                ${played
-    ? `
-        <button
-            class="match-favorite-button ${match.favorite ? "active" : ""}"
-            type="button"
-            data-favorite-match="${escapeHtml(match.id)}"
-            aria-label="${match.favorite
-                ? "Fjarlægja leik úr uppáhaldi"
-                : "Setja leik í uppáhald"
-            }"
-            aria-pressed="${match.favorite ? "true" : "false"}"
-        >
-            <span aria-hidden="true">
-                ${match.favorite ? "★" : "☆"}
-            </span>
-        </button>
-    `
-    : ""
-}
-
-
-                <button
-                    class="match-more-button"
-                    type="button"
-                    aria-label="Fleiri valkostir"
-                    data-match-menu-button="${escapeHtml(match.id)}"
-                >
-                    ⋮
-                </button>
-
-
-                <div
-                    class="match-action-menu"
-                    data-match-menu="${escapeHtml(match.id)}"
-                    hidden
-                >
 
                     <button
+                        class="match-more-button"
                         type="button"
-                        class="match-menu-action"
-                        data-open-match="${escapeHtml(match.id)}"
+                        aria-label="Fleiri valkostir"
+                        data-match-menu-button="${escapeHtml(match.id)}"
                     >
-                        Opna leik
+                        ⋮
                     </button>
 
 
-                    <button
-                        type="button"
-                        class="match-menu-action"
-                        data-edit-match="${escapeHtml(match.id)}"
+                    <div
+                        class="match-action-menu"
+                        data-match-menu="${escapeHtml(match.id)}"
+                        hidden
                     >
-                        Breyta leik
-                    </button>
+
+                        <button
+                            type="button"
+                            class="match-menu-action"
+                            data-open-match="${escapeHtml(match.id)}"
+                        >
+                            Opna leik
+                        </button>
 
 
-                    <button
-                        type="button"
-                        class="match-menu-action"
-                        data-calendar-match="${escapeHtml(match.id)}"
-                    >
-                        Bæta í dagatal
-                    </button>
+                        <button
+                            type="button"
+                            class="match-menu-action"
+                            data-edit-match="${escapeHtml(match.id)}"
+                        >
+                            Breyta leik
+                        </button>
 
 
-                    <button
-                        type="button"
-                        class="match-menu-action delete-match-button"
-                        data-delete-match="${escapeHtml(match.id)}"
-                    >
-                        Eyða leik
-                    </button>
+                        <button
+                            type="button"
+                            class="match-menu-action"
+                            data-calendar-match="${escapeHtml(match.id)}"
+                        >
+                            Bæta í dagatal
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="match-menu-action delete-match-button"
+                            data-delete-match="${escapeHtml(match.id)}"
+                        >
+                            Eyða leik
+                        </button>
+
+                    </div>
 
                 </div>
 
@@ -3391,8 +3470,6 @@ function createMatchRow(
         </article>
     `;
 }
-
-
 /* =========================================
    LISTENERS
 ========================================= */

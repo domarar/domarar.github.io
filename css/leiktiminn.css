@@ -4565,3 +4565,575 @@ rgba(18, 24, 28, 0.85) 100%
     background: #253034;
     color: #ff8585;
 }
+/* =========================================
+   PLAYED MATCH CARDS — V2
+========================================= */
+
+[data-view="played"] .matches-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    padding:
+        14px
+        12px
+        18px;
+}
+
+
+[data-view="played"] .match-item {
+    position: relative;
+
+    display: grid;
+
+    grid-template-columns:
+        58px
+        minmax(0, 1fr)
+        auto;
+
+    gap: 13px;
+
+    align-items: center;
+
+    min-height: 72px;
+
+    padding:
+        11px
+        10px
+        11px
+        0;
+
+    overflow: visible;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.095);
+
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(25, 34, 36, 0.94),
+            rgba(17, 25, 28, 0.92)
+        );
+
+    box-shadow:
+        inset
+        0
+        1px
+        0
+        rgba(255, 255, 255, 0.025);
+
+    cursor: pointer;
+
+    transition:
+        border-color 160ms ease,
+        background 160ms ease,
+        transform 160ms ease;
+}
+
+
+[data-view="played"] .match-item:last-child {
+    border-bottom:
+        1px solid
+        rgba(255, 255, 255, 0.095);
+}
+
+
+[data-view="played"] .match-item:hover {
+    border-color:
+        rgba(88, 199, 91, 0.28);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(31, 42, 43, 0.97),
+            rgba(20, 29, 31, 0.95)
+        );
+
+    transform:
+        translateY(-1px);
+}
+
+
+/* DATE BLOCK */
+
+[data-view="played"] .match-date-box {
+    align-self: stretch;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    border-right:
+        1px solid
+        rgba(255, 255, 255, 0.08);
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(0, 0, 0, 0.13),
+            transparent
+        );
+
+    border-radius:
+        13px
+        0
+        0
+        13px;
+}
+
+
+[data-view="played"] .match-date-box strong {
+    font-size: 23px;
+    line-height: 1;
+
+    color: #f5f5ef;
+}
+
+
+[data-view="played"] .match-date-box span {
+    margin-top: 5px;
+
+    color: #b8bdb4;
+
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+}
+
+
+/* MATCH TEXT */
+
+[data-view="played"] .match-info {
+    min-width: 0;
+}
+
+
+[data-view="played"] .match-info strong {
+    display: block;
+
+    overflow: hidden;
+
+    color: #f3f3ee;
+
+    font-size: 15px;
+    font-weight: 900;
+
+    line-height: 1.2;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+[data-view="played"] .match-info > span {
+    display: block;
+
+    margin-top: 6px;
+
+    overflow: hidden;
+
+    color: #aeb5ae;
+
+    font-size: 11px;
+    font-weight: 500;
+
+    line-height: 1.25;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* ACTIONS */
+
+[data-view="played"] .match-actions {
+    gap: 2px;
+}
+
+
+[data-view="played"] .match-favorite-button,
+[data-view="played"] .match-more-button {
+    opacity: 0.72;
+
+    transition:
+        opacity 150ms ease,
+        background 150ms ease,
+        color 150ms ease;
+}
+
+
+[data-view="played"] .match-item:hover
+.match-favorite-button,
+[data-view="played"] .match-item:hover
+.match-more-button {
+    opacity: 1;
+}
+
+
+/* UNREAD */
+
+[data-view="played"] .match-item.match-unread {
+    border-color:
+        rgba(88, 220, 100, 0.78);
+
+    box-shadow:
+        inset
+        4px
+        0
+        0
+        #58dc64,
+        inset
+        0
+        1px
+        0
+        rgba(255, 255, 255, 0.04);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(24, 48, 38, 0.97),
+            rgba(18, 31, 30, 0.95)
+        );
+}
+
+
+/* PHONE */
+
+@media (max-width: 460px) {
+
+    [data-view="played"] .matches-list {
+        gap: 9px;
+
+        padding:
+            12px
+            10px
+            16px;
+    }
+
+
+    [data-view="played"] .match-item {
+        grid-template-columns:
+            52px
+            minmax(0, 1fr)
+            auto;
+
+        gap: 10px;
+
+        min-height: 70px;
+
+        padding-right: 6px;
+    }
+
+
+    [data-view="played"] .match-date-box strong {
+        font-size: 21px;
+    }
+
+
+    [data-view="played"] .match-info strong {
+        font-size: 14px;
+    }
+
+
+    [data-view="played"] .match-info > span {
+        font-size: 10.5px;
+    }
+}
+/* =========================================
+   PLAYED MATCH CARD DETAILS — REFINED
+========================================= */
+
+[data-view="played"] .match-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+
+    gap: 4px;
+
+    min-width: 0;
+}
+
+
+[data-view="played"] .match-title {
+    width: 100%;
+
+    overflow: hidden;
+
+    color: #f3f3ee;
+
+    font-size: 15px;
+    font-weight: 900;
+
+    line-height: 1.15;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* COMPETITION */
+
+[data-view="played"] .match-competition-pill {
+    display: inline-flex;
+    align-items: center;
+
+    max-width: 100%;
+
+    padding:
+        3px
+        7px;
+
+    border:
+        1px solid
+        rgba(88, 199, 91, 0.22);
+
+    border-radius: 999px;
+
+    background:
+        rgba(88, 199, 91, 0.10);
+
+    color:
+        #bfe8c1;
+
+    font-size: 9px;
+    font-weight: 800;
+
+    line-height: 1;
+
+    white-space: nowrap;
+}
+
+
+/* VENUE + KICKOFF */
+
+[data-view="played"] .match-meta-row {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    min-width: 0;
+}
+
+
+[data-view="played"] .match-meta-item {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 5px;
+
+    min-width: 0;
+
+    color: #aeb5ae;
+
+    font-size: 10px;
+    font-weight: 600;
+
+    line-height: 1.1;
+}
+
+
+[data-view="played"] .match-meta-icon {
+    flex: 0 0 auto;
+
+    color:
+        rgba(215, 224, 217, 0.72);
+
+    font-size: 12px;
+    line-height: 1;
+}
+
+
+/* PHONE */
+
+@media (max-width: 460px) {
+
+    [data-view="played"] .match-info {
+        gap: 3px;
+    }
+
+
+    [data-view="played"] .match-title {
+        font-size: 14px;
+    }
+
+
+    [data-view="played"] .match-competition-pill {
+        padding:
+            3px
+            6px;
+
+        font-size: 8.5px;
+    }
+
+
+    [data-view="played"] .match-meta-row {
+        gap: 10px;
+    }
+
+
+    [data-view="played"] .match-meta-item {
+        font-size: 9.5px;
+    }
+}
+/* =========================================
+   PLAYED MATCH — COMPACT INFO FIX
+========================================= */
+
+[data-view="played"] .match-info {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    gap: 4px;
+}
+
+
+/* TITLE */
+
+[data-view="played"] .match-info > strong {
+    display: block;
+
+    margin: 0;
+
+    overflow: hidden;
+
+    color: #f3f3ee;
+
+    font-size: 15px;
+    font-weight: 900;
+
+    line-height: 1.15;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* SECOND LINE */
+
+[data-view="played"] .match-secondary-line {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+
+    gap: 5px;
+
+    width: 100%;
+
+    margin-top: 0 !important;
+
+    overflow: hidden;
+
+    color: #aeb5ae;
+
+    font-size: 10px;
+    font-weight: 600;
+
+    line-height: 1;
+
+    white-space: nowrap;
+}
+
+
+/* IMPORTANT:
+   override old .match-info span styles
+*/
+
+[data-view="played"] .match-secondary-line > span {
+    display: inline-flex !important;
+    align-items: center;
+
+    margin-top: 0 !important;
+
+    flex: 0 0 auto;
+}
+
+
+/* COMPETITION */
+
+[data-view="played"] .match-competition-inline {
+    padding: 3px 7px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.10);
+
+    border-radius: 999px;
+
+    background:
+        rgba(255, 255, 255, 0.055);
+
+    color: #c8ceca;
+
+    font-size: 9px;
+    font-weight: 900;
+
+    line-height: 1;
+}
+
+
+/* DOT */
+
+[data-view="played"] .match-secondary-separator {
+    color:
+        rgba(255, 255, 255, 0.3);
+}
+
+
+/* VENUE CAN SHRINK */
+
+[data-view="played"] .match-secondary-line > span:last-child {
+    min-width: 0;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+/* SCORE */
+
+[data-view="played"] .match-score-pill {
+    min-width: 54px;
+    height: 38px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+
+    padding: 0 11px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.13);
+
+    border-radius: 10px;
+
+    background:
+        rgba(255, 255, 255, 0.055);
+
+    color: #f4f4ef;
+
+    font-size: 17px;
+    font-weight: 900;
+
+    line-height: 1;
+}
+
+
+[data-view="played"] .match-score-pill span {
+    color:
+        rgba(255, 255, 255, 0.42);
+
+    font-size: 14px;
+}

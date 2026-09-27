@@ -9,6 +9,31 @@ const matchMeta =
         "match-meta"
     );
 
+const matchScoreEditor =
+    document.getElementById(
+        "matchScoreEditor"
+    );
+
+const homeScoreInput =
+    document.getElementById(
+        "homeScoreInput"
+    );
+
+const awayScoreInput =
+    document.getElementById(
+        "awayScoreInput"
+    );
+
+const saveMatchScoreButton =
+    document.getElementById(
+        "saveMatchScoreButton"
+    );
+
+const matchScoreStatus =
+    document.getElementById(
+        "matchScoreStatus"
+    );
+
 
 const matchDetails =
     document.getElementById(
@@ -91,6 +116,26 @@ const matchNotesSave =
 const matchNotesStatus =
     document.getElementById(
         "matchNotesStatus"
+    );
+
+const matchScoreDisplay =
+    document.getElementById(
+        "matchScoreDisplay"
+    );
+
+const matchScoreValue =
+    document.getElementById(
+        "matchScoreValue"
+    );
+
+const matchScoreControls =
+    document.getElementById(
+        "matchScoreControls"
+    );
+
+const editMatchScoreButton =
+    document.getElementById(
+        "editMatchScoreButton"
     );
 
 
@@ -692,6 +737,12 @@ function mapDatabaseMatch(
         awayTeam:
             row.away_team || "",
 
+        homeScore:
+            row.home_score ?? null,
+
+        awayScore:
+            row.away_score ?? null,
+
         date:
             row.match_date || "",
 
@@ -948,6 +999,247 @@ function showMatchNotFound() {
     }
 }
 
+function renderMatchScore(
+    match
+) {
+
+    if (
+        !matchScoreEditor
+        ||
+        !homeScoreInput
+        ||
+        !awayScoreInput
+        ||
+        !saveMatchScoreButton
+    ) {
+        return;
+    }
+
+
+    const played =
+        isPlayedMatch(
+            match
+        );
+
+
+    matchScoreEditor.hidden =
+        !played;
+
+
+    if (!played) {
+        return;
+    }
+
+
+    homeScoreInput.value =
+        match.homeScore !== null
+            ? String(match.homeScore)
+            : "";
+
+
+    awayScoreInput.value =
+        match.awayScore !== null
+            ? String(match.awayScore)
+            : "";
+
+
+    const hasSavedScore =
+        match.homeScore !== null
+        &&
+        match.awayScore !== null;
+
+
+    if (
+        matchScoreDisplay
+        &&
+        matchScoreControls
+        &&
+        matchScoreValue
+    ) {
+
+        matchScoreDisplay.hidden =
+            !hasSavedScore;
+
+        matchScoreControls.hidden =
+            hasSavedScore;
+
+
+        if (hasSavedScore) {
+
+            matchScoreValue.textContent =
+                `${match.homeScore} – ${match.awayScore}`;
+        }
+    }
+
+
+    if (matchScoreStatus) {
+        matchScoreStatus.textContent =
+            "";
+    }
+
+
+    if (editMatchScoreButton) {
+
+        editMatchScoreButton.onclick =
+            () => {
+
+                if (matchScoreDisplay) {
+                    matchScoreDisplay.hidden =
+                        true;
+                }
+
+                if (matchScoreControls) {
+                    matchScoreControls.hidden =
+                        false;
+                }
+
+                if (matchScoreStatus) {
+                    matchScoreStatus.textContent =
+                        "";
+                }
+
+                homeScoreInput.focus();
+            };
+    }
+
+
+    saveMatchScoreButton.onclick =
+        async () => {
+
+            const homeScore =
+                homeScoreInput.value === ""
+                    ? null
+                    : Number(
+                        homeScoreInput.value
+                    );
+
+
+            const awayScore =
+                awayScoreInput.value === ""
+                    ? null
+                    : Number(
+                        awayScoreInput.value
+                    );
+
+
+            if (
+                homeScore === null
+                ||
+                awayScore === null
+                ||
+                !Number.isInteger(
+                    homeScore
+                )
+                ||
+                !Number.isInteger(
+                    awayScore
+                )
+                ||
+                homeScore < 0
+                ||
+                awayScore < 0
+            ) {
+
+                if (matchScoreStatus) {
+
+                    matchScoreStatus.textContent =
+                        "Sláðu inn gildan lokastöðu.";
+                }
+
+                return;
+            }
+
+
+            saveMatchScoreButton.disabled =
+                true;
+
+
+            if (matchScoreStatus) {
+
+                matchScoreStatus.textContent =
+                    "Vista...";
+            }
+
+
+            const {
+                error
+            } =
+                await supabaseClient
+                    .from(
+                        "matches"
+                    )
+                    .update({
+
+                        home_score:
+                            homeScore,
+
+                        away_score:
+                            awayScore
+
+                    })
+                    .eq(
+                        "id",
+                        match.id
+                    );
+
+
+            saveMatchScoreButton.disabled =
+                false;
+
+
+            if (error) {
+
+                console.error(
+                    "Villa við að vista lokastöðu:",
+                    error
+                );
+
+
+                if (matchScoreStatus) {
+
+                    matchScoreStatus.textContent =
+                        "Ekki tókst að vista.";
+                }
+
+                return;
+            }
+
+
+            match.homeScore =
+                homeScore;
+
+            match.awayScore =
+                awayScore;
+
+
+            if (matchScoreValue) {
+
+                matchScoreValue.textContent =
+                    `${homeScore} – ${awayScore}`;
+            }
+
+
+            if (matchScoreDisplay) {
+
+                matchScoreDisplay.hidden =
+                    false;
+            }
+
+
+            if (matchScoreControls) {
+
+                matchScoreControls.hidden =
+                    true;
+            }
+
+
+            if (matchScoreStatus) {
+
+                matchScoreStatus.textContent =
+                    "";
+            }
+        };
+}
 
 
 // =========================================
@@ -960,6 +1252,10 @@ function renderMatch(
 
     renderMatchIntro(
         match
+    );
+
+    renderMatchScore(
+    match
     );
 
 
