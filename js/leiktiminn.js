@@ -2905,11 +2905,39 @@ function renderPlayedMatches() {
     );
 }
 
+async function updateAppIconBadge(count) {
+
+    if (!("setAppBadge" in navigator)) {
+        return;
+    }
+
+    try {
+
+        if (count > 0) {
+
+            await navigator.setAppBadge(count);
+
+        } else if ("clearAppBadge" in navigator) {
+
+            await navigator.clearAppBadge();
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "App badge update failed:",
+            error
+        );
+    }
+}
+
 function updatePlayedUnreadCount() {
     const count = matches.filter(match =>
         isPlayedMatch(match) &&
         window.LeiktiminnNotifications.isUnread(match.id)
     ).length;
+
+    updateAppIconBadge(count);
 
     document.querySelectorAll("[data-played-unread-count]").forEach(badge => {
         badge.hidden = count === 0;
@@ -3773,7 +3801,10 @@ function openMatch(
             : "upcoming";
 
     if (sourceView === "played") {
+
     window.LeiktiminnNotifications.markSeen(matchId);
+
+    updatePlayedUnreadCount();
 }
 
 
