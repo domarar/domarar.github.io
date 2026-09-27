@@ -4365,3 +4365,56 @@
 .match-score-controls[hidden] {
     display: none !important;
 }
+/* =========================================
+   MATCH HERO — CENTERED
+========================================= */
+
+.match-detail-hero {
+    text-align: center;
+}
+
+/* Hide "LEIKUR" */
+.match-detail-hero .match-detail-eyebrow {
+    display: none;
+}
+
+/* Teams */
+.match-detail-hero h2 {
+    text-align: center;
+}
+
+/* Competition / date / time / venue */
+.match-detail-meta {
+    justify-content: center;
+    text-align: center;
+}
+
+/* Keep each icon + value together */
+.match-meta-item {
+    justify-content: center;
+}
+/* Center score section */
+.match-score-editor {
+    align-items: center;
+    text-align: center;
+}
+
+.match-score-controls {
+    justify-content: center;
+}
+
+.match-score-display {
+    justify-content: center;
+}
+/* Hide score label */
+.match-score-label {
+    display: none;
+}
+.match-score-editor {
+    gap: 4px;
+    margin-top: 0;
+}
+
+.match-detail-hero h2 {
+    margin-bottom: 6px;
+}
