@@ -51,6 +51,11 @@ const saveMatchButton =
         "saveMatchButton"
     );
 
+const enableNotificationsButton =
+    document.getElementById(
+        "enableNotificationsButton"
+    );
+
 
 const openCreateMatchDesktop =
     document.getElementById(
@@ -283,6 +288,43 @@ async function loadCurrentMatchFormUserName(
     }
 }
 
+async function requestLeiktiminnNotificationPermission() {
+
+    if (!("Notification" in window)) {
+        window.alert(
+            "Tilkynningar eru ekki studdar í þessum vafra."
+        );
+        return;
+    }
+
+    try {
+
+        const permission =
+            await Notification.requestPermission();
+
+        if (permission === "granted") {
+
+            window.alert(
+                "Tilkynningar eru nú leyfðar."
+            );
+
+            updatePlayedUnreadCount();
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "Notification permission failed:",
+            error
+        );
+    }
+}
+
+enableNotificationsButton
+    ?.addEventListener(
+        "click",
+        requestLeiktiminnNotificationPermission
+    );
 
 /* =========================================
    USER COMPETITIONS
