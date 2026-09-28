@@ -113,6 +113,952 @@ let currentMatchFormUserName = "";
 
 let lastAutoFilledRole = "";
 
+/* =========================================
+   CUSTOM MATCH DATE / TIME PICKER
+========================================= */
+
+const matchDateTimeInput =
+    document.getElementById(
+        "match-datetime"
+    );
+
+const matchDateTimeButton =
+    document.getElementById(
+        "match-datetime-button"
+    );
+
+const matchDateTimePicker =
+    document.getElementById(
+        "match-datetime-picker"
+    );
+
+const matchDateTimeClose =
+    document.getElementById(
+        "match-datetime-close"
+    );
+
+const matchDateTimeCancel =
+    document.getElementById(
+        "match-datetime-cancel"
+    );
+
+const matchDateTimeConfirm =
+    document.getElementById(
+        "match-datetime-confirm"
+    );
+
+const matchCalendarPrev =
+    document.getElementById(
+        "match-calendar-prev"
+    );
+
+const matchCalendarNext =
+    document.getElementById(
+        "match-calendar-next"
+    );
+
+const matchCalendarMonth =
+    document.getElementById(
+        "match-calendar-month"
+    );
+
+const matchCalendarDays =
+    document.getElementById(
+        "match-calendar-days"
+    );
+
+
+
+const matchDateTimeSummary =
+    document.getElementById(
+        "match-datetime-picker-summary"
+    );
+
+
+let matchPickerSelectedDate = null;
+
+let matchPickerMonth =
+    new Date();
+
+let matchPickerMinutes =
+    20 * 60;
+
+const matchHourMinus =
+    document.getElementById(
+        "match-hour-minus"
+    );
+
+const matchHourPlus =
+    document.getElementById(
+        "match-hour-plus"
+    );
+
+const matchMinuteMinus =
+    document.getElementById(
+        "match-minute-minus"
+    );
+
+const matchMinutePlus =
+    document.getElementById(
+        "match-minute-plus"
+    );
+
+
+matchHourMinus
+    ?.addEventListener(
+        "click",
+        () => {
+
+            matchPickerMinutes -= 60;
+
+            if (matchPickerMinutes < 0) {
+                matchPickerMinutes += 24 * 60;
+            }
+
+            renderMatchTime();
+            renderMatchDateTimeSummary();
+        }
+    );
+
+
+matchHourPlus
+    ?.addEventListener(
+        "click",
+        () => {
+
+            matchPickerMinutes += 60;
+
+            if (matchPickerMinutes >= 24 * 60) {
+                matchPickerMinutes -= 24 * 60;
+            }
+
+            renderMatchTime();
+            renderMatchDateTimeSummary();
+        }
+    );
+
+
+matchMinuteMinus
+    ?.addEventListener(
+        "click",
+        () => {
+
+            matchPickerMinutes -= 5;
+
+            if (matchPickerMinutes < 0) {
+                matchPickerMinutes += 24 * 60;
+            }
+
+            renderMatchTime();
+            renderMatchDateTimeSummary();
+        }
+    );
+
+
+matchMinutePlus
+    ?.addEventListener(
+        "click",
+        () => {
+
+            matchPickerMinutes += 5;
+
+            if (matchPickerMinutes >= 24 * 60) {
+                matchPickerMinutes -= 24 * 60;
+            }
+
+            renderMatchTime();
+            renderMatchDateTimeSummary();
+        }
+    );
+
+
+/* =========================================
+   DATE HELPERS
+========================================= */
+
+const matchMonthNames = [
+    "Janúar",
+    "Febrúar",
+    "Mars",
+    "Apríl",
+    "Maí",
+    "Júní",
+    "Júlí",
+    "Ágúst",
+    "September",
+    "Október",
+    "Nóvember",
+    "Desember"
+];
+
+
+function padMatchDateTimeNumber(
+    value
+) {
+
+    return String(
+        value
+    ).padStart(
+        2,
+        "0"
+    );
+}
+
+
+function formatMatchDateTimeDisplay(
+    isoValue
+) {
+
+    if (!isoValue) {
+        return "";
+    }
+
+
+    const [
+        datePart = "",
+        timePart = ""
+    ] =
+        isoValue.split("T");
+
+
+    const [
+        year = "",
+        month = "",
+        day = ""
+    ] =
+        datePart.split("-");
+
+
+    if (
+        !year
+        ||
+        !month
+        ||
+        !day
+        ||
+        !timePart
+    ) {
+
+        return "";
+    }
+
+
+    return (
+        `${day}/${month}/${year}  ` +
+        `${timePart.slice(0, 5)}`
+    );
+}
+
+
+function setMatchDateTimeValue(
+    isoValue
+) {
+
+    if (!matchDateTimeInput) {
+        return;
+    }
+
+
+    const cleanValue =
+        String(
+            isoValue || ""
+        ).trim();
+
+
+    matchDateTimeInput.dataset.isoValue =
+        cleanValue;
+
+
+    matchDateTimeInput.value =
+        formatMatchDateTimeDisplay(
+            cleanValue
+        );
+}
+
+
+function getMatchDateTimeValue() {
+
+    if (!matchDateTimeInput) {
+        return "";
+    }
+
+
+    return String(
+        matchDateTimeInput.dataset
+            .isoValue
+        ||
+        ""
+    ).trim();
+}
+
+
+/* =========================================
+   OPEN PICKER
+========================================= */
+
+function openMatchDateTimePicker() {
+
+    if (
+        !matchDateTimePicker
+        ||
+        !matchDateTimeInput
+    ) {
+
+        return;
+    }
+
+
+    const existingValue =
+        getMatchDateTimeValue();
+
+
+    let initialDate =
+        new Date();
+
+
+    if (existingValue) {
+
+        const parsed =
+            new Date(
+                existingValue
+            );
+
+
+        if (
+            !Number.isNaN(
+                parsed.getTime()
+            )
+        ) {
+
+            initialDate =
+                parsed;
+        }
+    }
+
+
+    matchPickerSelectedDate =
+        new Date(
+            initialDate.getFullYear(),
+            initialDate.getMonth(),
+            initialDate.getDate()
+        );
+
+
+    matchPickerMonth =
+        new Date(
+            initialDate.getFullYear(),
+            initialDate.getMonth(),
+            1
+        );
+
+
+    matchPickerMinutes =
+        (
+            initialDate.getHours()
+            * 60
+        )
+        +
+        initialDate.getMinutes();
+
+
+    matchPickerMinutes =
+        Math.round(
+            matchPickerMinutes / 5
+        ) * 5;
+
+
+    if (
+        matchPickerMinutes >=
+        24 * 60
+    ) {
+
+        matchPickerMinutes = 0;
+    }
+
+
+    renderMatchDateTimePicker();
+
+
+    matchDateTimePicker.hidden =
+        false;
+}
+
+
+/* =========================================
+   CLOSE PICKER
+========================================= */
+
+function closeMatchDateTimePicker() {
+
+    if (!matchDateTimePicker) {
+        return;
+    }
+
+
+    matchDateTimePicker.hidden =
+        true;
+}
+
+
+/* =========================================
+   RENDER PICKER
+========================================= */
+
+function renderMatchDateTimePicker() {
+
+    renderMatchCalendar();
+
+    renderMatchTime();
+
+    renderMatchDateTimeSummary();
+}
+
+
+/* =========================================
+   CALENDAR
+========================================= */
+
+function renderMatchCalendar() {
+
+    if (
+        !matchCalendarDays
+        ||
+        !matchCalendarMonth
+    ) {
+
+        return;
+    }
+
+
+    const year =
+        matchPickerMonth
+            .getFullYear();
+
+    const month =
+        matchPickerMonth
+            .getMonth();
+
+
+    matchCalendarMonth.textContent =
+        `${matchMonthNames[month]} ${year}`;
+
+
+    matchCalendarDays.innerHTML =
+        "";
+
+
+    const firstDay =
+        new Date(
+            year,
+            month,
+            1
+        );
+
+
+    const mondayOffset =
+        (
+            firstDay.getDay()
+            + 6
+        ) % 7;
+
+
+    const calendarStart =
+        new Date(
+            year,
+            month,
+            1 - mondayOffset
+        );
+
+
+    const today =
+        new Date();
+
+
+    for (
+        let index = 0;
+        index < 42;
+        index += 1
+    ) {
+
+        const date =
+            new Date(
+                calendarStart
+            );
+
+
+        date.setDate(
+            calendarStart.getDate()
+            +
+            index
+        );
+
+
+        const button =
+            document.createElement(
+                "button"
+            );
+
+
+        button.type =
+            "button";
+
+
+        button.textContent =
+            String(
+                date.getDate()
+            );
+
+
+        const isOutsideMonth =
+            date.getMonth() !==
+            month;
+
+
+        const isToday =
+            (
+                date.getFullYear()
+                    ===
+                    today.getFullYear()
+                &&
+                date.getMonth()
+                    ===
+                    today.getMonth()
+                &&
+                date.getDate()
+                    ===
+                    today.getDate()
+            );
+
+
+        const isSelected =
+            (
+                matchPickerSelectedDate
+                &&
+                date.getFullYear()
+                    ===
+                    matchPickerSelectedDate
+                        .getFullYear()
+                &&
+                date.getMonth()
+                    ===
+                    matchPickerSelectedDate
+                        .getMonth()
+                &&
+                date.getDate()
+                    ===
+                    matchPickerSelectedDate
+                        .getDate()
+            );
+
+
+        button.classList.toggle(
+            "is-outside-month",
+            isOutsideMonth
+        );
+
+
+        button.classList.toggle(
+            "is-today",
+            isToday
+        );
+
+
+        button.classList.toggle(
+            "is-selected",
+            isSelected
+        );
+
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                matchPickerSelectedDate =
+                    new Date(
+                        date.getFullYear(),
+                        date.getMonth(),
+                        date.getDate()
+                    );
+
+
+                if (isOutsideMonth) {
+
+                    matchPickerMonth =
+                        new Date(
+                            date.getFullYear(),
+                            date.getMonth(),
+                            1
+                        );
+                }
+
+
+                renderMatchDateTimePicker();
+            }
+        );
+
+
+        matchCalendarDays.appendChild(
+            button
+        );
+    }
+}
+
+
+/* =========================================
+   TIME
+========================================= */
+
+function renderMatchTime() {
+
+    const hours =
+        Math.floor(
+            matchPickerMinutes / 60
+        );
+
+    const minutes =
+        matchPickerMinutes % 60;
+
+
+    const hourValue =
+        padMatchDateTimeNumber(
+            hours
+        );
+
+    const minuteValue =
+        padMatchDateTimeNumber(
+            minutes
+        );
+
+
+    const hourButton =
+        document.getElementById(
+            "match-time-hour"
+        );
+
+    const minuteButton =
+        document.getElementById(
+            "match-time-minute"
+        );
+
+
+    if (hourButton) {
+
+        hourButton.textContent =
+            hourValue;
+    }
+
+
+    if (minuteButton) {
+
+        minuteButton.textContent =
+            minuteValue;
+    }
+
+
+    const timeValue =
+        `${hourValue}:${minuteValue}`;
+
+
+    document
+        .querySelectorAll(
+            "[data-match-time]"
+        )
+        .forEach(
+            button => {
+
+                button.classList.toggle(
+                    "is-selected",
+                    button.dataset.matchTime ===
+                    timeValue
+                );
+            }
+        );
+}
+
+
+/* =========================================
+   SUMMARY
+========================================= */
+
+function renderMatchDateTimeSummary() {
+
+    if (
+        !matchDateTimeSummary
+        ||
+        !matchPickerSelectedDate
+    ) {
+
+        return;
+    }
+
+
+    const day =
+        padMatchDateTimeNumber(
+            matchPickerSelectedDate
+                .getDate()
+        );
+
+    const month =
+        padMatchDateTimeNumber(
+            matchPickerSelectedDate
+                .getMonth()
+            +
+            1
+        );
+
+    const year =
+        matchPickerSelectedDate
+            .getFullYear();
+
+
+    const hours =
+        Math.floor(
+            matchPickerMinutes / 60
+        );
+
+    const minutes =
+        matchPickerMinutes % 60;
+
+
+    matchDateTimeSummary.textContent =
+        (
+            `${day}/${month}/${year} · ` +
+            `${padMatchDateTimeNumber(hours)}:` +
+            `${padMatchDateTimeNumber(minutes)}`
+        );
+}
+
+
+/* =========================================
+   CHANGE TIME
+========================================= */
+
+function changeMatchPickerTime(
+    amount
+) {
+
+    matchPickerMinutes +=
+        amount;
+
+
+    if (
+        matchPickerMinutes <
+        0
+    ) {
+
+        matchPickerMinutes =
+            (24 * 60) - 5;
+    }
+
+
+    if (
+        matchPickerMinutes >=
+        24 * 60
+    ) {
+
+        matchPickerMinutes =
+            0;
+    }
+
+
+    renderMatchTime();
+
+    renderMatchDateTimeSummary();
+}
+
+
+/* =========================================
+   CONFIRM PICKER
+========================================= */
+
+function confirmMatchDateTimePicker() {
+
+    if (!matchPickerSelectedDate) {
+        return;
+    }
+
+
+    const year =
+        matchPickerSelectedDate
+            .getFullYear();
+
+    const month =
+        padMatchDateTimeNumber(
+            matchPickerSelectedDate
+                .getMonth()
+            +
+            1
+        );
+
+    const day =
+        padMatchDateTimeNumber(
+            matchPickerSelectedDate
+                .getDate()
+        );
+
+
+    const hours =
+        Math.floor(
+            matchPickerMinutes / 60
+        );
+
+    const minutes =
+        matchPickerMinutes % 60;
+
+
+    const isoValue =
+        (
+            `${year}-${month}-${day}T` +
+            `${padMatchDateTimeNumber(hours)}:` +
+            `${padMatchDateTimeNumber(minutes)}`
+        );
+
+
+    setMatchDateTimeValue(
+        isoValue
+    );
+
+
+    closeMatchDateTimePicker();
+}
+
+
+/* =========================================
+   PICKER EVENTS
+========================================= */
+
+matchDateTimeInput
+    ?.addEventListener(
+        "click",
+        openMatchDateTimePicker
+    );
+
+
+matchDateTimeButton
+    ?.addEventListener(
+        "click",
+        openMatchDateTimePicker
+    );
+
+
+matchDateTimeClose
+    ?.addEventListener(
+        "click",
+        closeMatchDateTimePicker
+    );
+
+
+matchDateTimeCancel
+    ?.addEventListener(
+        "click",
+        closeMatchDateTimePicker
+    );
+
+
+matchDateTimeConfirm
+    ?.addEventListener(
+        "click",
+        confirmMatchDateTimePicker
+    );
+
+
+matchCalendarPrev
+    ?.addEventListener(
+        "click",
+        () => {
+
+            matchPickerMonth =
+                new Date(
+                    matchPickerMonth
+                        .getFullYear(),
+                    matchPickerMonth
+                        .getMonth()
+                    -
+                    1,
+                    1
+                );
+
+
+            renderMatchCalendar();
+        }
+    );
+
+
+matchCalendarNext
+    ?.addEventListener(
+        "click",
+        () => {
+
+            matchPickerMonth =
+                new Date(
+                    matchPickerMonth
+                        .getFullYear(),
+                    matchPickerMonth
+                        .getMonth()
+                    +
+                    1,
+                    1
+                );
+
+
+            renderMatchCalendar();
+        }
+    );
+
+
+document
+    .querySelectorAll(
+        "[data-match-time]"
+    )
+    .forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    const [
+                        hours,
+                        minutes
+                    ] =
+                        button.dataset
+                            .matchTime
+                            .split(":")
+                            .map(Number);
+
+
+                    matchPickerMinutes =
+                        (
+                            hours * 60
+                        )
+                        +
+                        minutes;
+
+
+                    renderMatchTime();
+
+                    renderMatchDateTimeSummary();
+                }
+            );
+        }
+    );
+
+
+matchDateTimePicker
+    ?.addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target ===
+                matchDateTimePicker
+            ) {
+
+                closeMatchDateTimePicker();
+            }
+        }
+    );
+
 
 /* =========================================
    INITIALISE

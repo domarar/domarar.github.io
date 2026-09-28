@@ -1555,16 +1555,242 @@
                                 Dagsetning og tími *
                             </span>
 
-                            <input
-                                id="match-datetime"
-                                type="datetime-local"
-                                step="300"
-                                required
-                            >
+                            <div class="custom-datetime-wrap">
+
+    <input
+        id="match-datetime"
+        type="text"
+        placeholder="dd/mm/yyyy  --:--"
+        readonly
+        required
+    >
+
+    <button
+        type="button"
+        id="match-datetime-button"
+        class="custom-datetime-button"
+        aria-label="Velja dagsetningu og tíma"
+    >
+        📅
+    </button>
+
+</div>
 
                         </label>
 
                     </div>
+
+                    <div
+    id="match-datetime-picker"
+    class="match-datetime-picker"
+    hidden
+>
+
+    <div class="match-datetime-picker-card">
+
+        <div class="match-datetime-picker-header">
+            <div>
+                <div class="match-datetime-picker-title">
+                    Veldu dag og tíma
+                </div>
+
+                <div
+                    id="match-datetime-picker-summary"
+                    class="match-datetime-picker-summary"
+                >
+                    Engin dagsetning valin
+                </div>
+            </div>
+
+            <button
+                type="button"
+                id="match-datetime-close"
+                class="match-datetime-close"
+                aria-label="Loka"
+            >
+                ×
+            </button>
+        </div>
+
+        <div class="match-datetime-picker-body">
+
+            <div class="match-date-section">
+
+                <div class="match-picker-section-label">
+                    Dagsetning
+                </div>
+
+                <div class="match-calendar-header">
+
+                    <button
+                        type="button"
+                        id="match-calendar-prev"
+                        class="match-calendar-nav"
+                        aria-label="Fyrri mánuður"
+                    >
+                        ‹
+                    </button>
+
+                    <div
+                        id="match-calendar-month"
+                        class="match-calendar-month"
+                    >
+                        September 2026
+                    </div>
+
+                    <button
+                        type="button"
+                        id="match-calendar-next"
+                        class="match-calendar-nav"
+                        aria-label="Næsti mánuður"
+                    >
+                        ›
+                    </button>
+
+                </div>
+
+                <div class="match-calendar-weekdays">
+                    <span>Mán</span>
+                    <span>Þri</span>
+                    <span>Mið</span>
+                    <span>Fim</span>
+                    <span>Fös</span>
+                    <span>Lau</span>
+                    <span>Sun</span>
+                </div>
+
+                <div
+                    id="match-calendar-days"
+                    class="match-calendar-days"
+                ></div>
+
+            </div>
+
+            <div class="match-time-section">
+
+                <div class="match-picker-section-label">
+                    Klukkan
+                </div>
+
+                <div class="match-time-manual">
+
+    <div class="match-time-input-group">
+        <span>Klst</span>
+
+        <div class="match-time-stepper">
+
+            <button
+                type="button"
+                id="match-hour-minus"
+                class="match-time-stepper-button"
+                aria-label="Lækka klukkustund"
+            >
+                −
+            </button>
+
+            <button
+                type="button"
+                id="match-time-hour"
+                class="match-time-number"
+                aria-label="Velja klukkustund"
+            >
+                20
+            </button>
+
+            <button
+                type="button"
+                id="match-hour-plus"
+                class="match-time-stepper-button"
+                aria-label="Hækka klukkustund"
+            >
+                +
+            </button>
+
+        </div>
+    </div>
+
+    <div class="match-time-colon">
+        :
+    </div>
+
+    <div class="match-time-input-group">
+        <span>Mín</span>
+
+        <div class="match-time-stepper">
+
+            <button
+                type="button"
+                id="match-minute-minus"
+                class="match-time-stepper-button"
+                aria-label="Lækka mínútur"
+            >
+                −
+            </button>
+
+            <button
+                type="button"
+                id="match-time-minute"
+                class="match-time-number"
+                aria-label="Velja mínútur"
+            >
+                00
+            </button>
+
+            <button
+                type="button"
+                id="match-minute-plus"
+                class="match-time-stepper-button"
+                aria-label="Hækka mínútur"
+            >
+                +
+            </button>
+
+        </div>
+    </div>
+
+</div>
+
+                <div class="match-time-quick-list">
+    <button type="button" data-match-time="14:00">14:00</button>
+    <button type="button" data-match-time="15:00">15:00</button>
+    <button type="button" data-match-time="16:00">16:00</button>
+
+    <button type="button" data-match-time="17:00">17:00</button>
+    <button type="button" data-match-time="18:00">18:00</button>
+    <button type="button" data-match-time="19:00">19:00</button>
+
+    <button type="button" data-match-time="19:15">19:15</button>
+    <button type="button" data-match-time="19:30">19:30</button>
+    <button type="button" data-match-time="20:00">20:00</button>
+</div>
+
+            </div>
+
+        </div>
+
+        <div class="match-datetime-picker-footer">
+
+            <button
+                type="button"
+                id="match-datetime-cancel"
+                class="match-datetime-cancel"
+            >
+                Hætta við
+            </button>
+
+            <button
+                type="button"
+                id="match-datetime-confirm"
+                class="match-datetime-confirm"
+            >
+                Velja
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
 
 
                     <div class="form-row">
