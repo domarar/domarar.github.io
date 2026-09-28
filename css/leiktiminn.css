@@ -5826,3 +5826,32 @@ rgba(18, 24, 28, 0.85) 100%
         minmax(38px, 1fr)
         32px;
 }
+/* =========================================
+   MOBILE BOTTOM NAV — SVG ICONS
+========================================= */
+
+.mobile-nav-icon {
+    width: 24px;
+    height: 24px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: currentColor;
+}
+
+.mobile-nav-icon svg {
+    width: 24px;
+    height: 24px;
+
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.mobile-nav-item.active .mobile-nav-icon svg {
+    stroke-width: 2.2;
+}
