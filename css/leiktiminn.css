@@ -5206,9 +5206,13 @@ rgba(18, 24, 28, 0.85) 100%
 /* Main card */
 
 .match-datetime-picker-card {
-    width: min(620px, 100%);
+    width: min(720px, calc(100vw - 40px));
     max-height: 90vh;
+
+    box-sizing: border-box;
+
     overflow-y: auto;
+    overflow-x: hidden;
 
     background: #171c1f;
     border: 1px solid rgba(255, 255, 255, 0.09);
@@ -5272,9 +5276,9 @@ rgba(18, 24, 28, 0.85) 100%
 
 .match-datetime-picker-body {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 180px;
+    grid-template-columns: minmax(0, 1fr) 240px;
 
-    gap: 22px;
+    gap: 24px;
 }
 
 .match-picker-section-label {
@@ -5808,4 +5812,17 @@ rgba(18, 24, 28, 0.85) 100%
 
     font-size: 22px;
     font-weight: 800;
+}
+.match-time-input-group {
+    min-width: 0;
+}
+
+.match-time-stepper {
+    width: 100%;
+    min-width: 0;
+
+    grid-template-columns:
+        32px
+        minmax(38px, 1fr)
+        32px;
 }

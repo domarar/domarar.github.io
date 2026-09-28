@@ -2519,8 +2519,7 @@ function openEditModal(
     );
 
 
-    setValue(
-    "match-datetime",
+    setMatchDateTimeValue(
     match.date && match.time
         ? `${match.date}T${match.time}`
         : ""
@@ -2977,9 +2976,7 @@ if (form) {
 
 
             const matchDateTime =
-    getValue(
-        "match-datetime"
-    );
+    getMatchDateTimeValue();
 
 
 const [
@@ -3465,10 +3462,7 @@ function resetCreateForm() {
 
     form.reset();
 
-    setValue(
-    "match-datetime",
-    ""
-);
+    setMatchDateTimeValue("");
 
 
     setValue(
