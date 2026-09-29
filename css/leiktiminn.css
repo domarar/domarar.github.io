@@ -669,9 +669,86 @@ button { -webkit-tap-highlight-color: transparent; }
 
 .competition-create-row {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        44px
+        auto;
+
     gap: 8px;
+
+    align-items: center;
+
     margin-top: 7px;
+}
+
+.competition-color-picker {
+    width: 44px;
+    height: 42px;
+
+    padding: 4px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.12);
+
+    border-radius: var(--lt-radius-sm);
+
+    background:
+        rgba(255, 255, 255, 0.04);
+
+    cursor: pointer;
+}
+@media (max-width: 700px) {
+
+    .competition-create-row {
+        grid-template-columns:
+            minmax(0, 1fr)
+            48px
+            auto;
+    }
+
+
+    .competition-color-picker {
+    width: 48px;
+    height: 48px;
+
+    padding: 5px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.12);
+
+    border-radius: 12px;
+
+    background:
+        rgba(255, 255, 255, 0.035);
+
+    cursor: pointer;
+
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+
+/* Chrome / Edge / Safari */
+
+.competition-color-picker::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+
+.competition-color-picker::-webkit-color-swatch {
+    border: 0;
+    border-radius: 8px;
+}
+
+
+/* Firefox */
+
+.competition-color-picker::-moz-color-swatch {
+    border: 0;
+    border-radius: 8px;
 }
 
 
@@ -5854,4 +5931,729 @@ rgba(18, 24, 28, 0.85) 100%
 
 .mobile-nav-item.active .mobile-nav-icon svg {
     stroke-width: 2.2;
+}
+/* =========================================
+   MATCH CARDS — UPCOMING V2
+   + SHARED DATE / COMPETITION ACCENT
+========================================= */
+
+
+/* =========================================
+   SHARED ACCENT
+   Leikir + Spilaðir
+========================================= */
+
+.match-date-box strong,
+[data-view="played"] .match-date-box strong {
+    color: var(--lt-green);
+}
+
+
+/* Competition badge — shared visual language */
+
+.match-competition-inline {
+    display: inline-flex !important;
+    align-items: center;
+
+    flex: 0 0 auto;
+
+    margin: 0 !important;
+
+    padding: 3px 7px;
+
+    border:
+        1px solid
+        rgba(99, 217, 106, 0.24);
+
+    border-radius: 999px;
+
+    background:
+        rgba(99, 217, 106, 0.08);
+
+    color:
+        #79df7d;
+
+    font-size: 9px;
+    font-weight: 900;
+
+    line-height: 1;
+}
+
+
+/* Make sure the played override uses the new color too */
+
+[data-view="played"] .match-competition-inline {
+    border-color:
+        rgba(99, 217, 106, 0.24);
+
+    background:
+        rgba(99, 217, 106, 0.08);
+
+    color:
+        #79df7d;
+}
+
+
+/* =========================================
+   LEIKIR — CARD
+========================================= */
+
+[data-view="upcoming"] .matches-list {
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+
+    padding:
+        14px
+        12px
+        18px;
+}
+
+
+[data-view="upcoming"] .match-item {
+    position: relative;
+
+    display: grid;
+
+    grid-template-columns:
+        58px
+        minmax(0, 1fr)
+        auto;
+
+    gap: 13px;
+
+    align-items: center;
+
+    min-height: 72px;
+
+    margin-bottom: 0;
+
+    padding:
+        11px
+        10px
+        11px
+        0;
+
+    overflow: visible;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.095);
+
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(25, 34, 36, 0.94),
+            rgba(17, 25, 28, 0.92)
+        );
+
+    box-shadow:
+        inset
+        0
+        1px
+        0
+        rgba(255, 255, 255, 0.025);
+
+    transition:
+        border-color 160ms ease,
+        background 160ms ease,
+        transform 160ms ease;
+}
+
+
+[data-view="upcoming"] .match-item:hover {
+    border-color:
+        rgba(99, 217, 106, 0.26);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(31, 42, 43, 0.97),
+            rgba(20, 29, 31, 0.95)
+        );
+
+    transform:
+        translateY(-1px);
+}
+
+
+/* =========================================
+   LEIKIR — DATE BLOCK
+========================================= */
+
+[data-view="upcoming"] .match-date-box {
+    align-self: stretch;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    border-right:
+        1px solid
+        rgba(255, 255, 255, 0.08);
+
+    border-radius:
+        13px
+        0
+        0
+        13px;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(0, 0, 0, 0.13),
+            transparent
+        );
+}
+
+
+[data-view="upcoming"] .match-date-box strong {
+    color: var(--lt-green);
+
+    font-size: 23px;
+    font-weight: 900;
+
+    line-height: 1;
+}
+
+
+[data-view="upcoming"] .match-date-box span {
+    margin-top: 5px;
+
+    color: #aeb5ae;
+
+    font-size: 10px;
+    font-weight: 900;
+
+    letter-spacing: 0.1em;
+}
+
+
+/* =========================================
+   LEIKIR — MATCH INFO
+========================================= */
+
+[data-view="upcoming"] .match-info {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+
+    gap: 4px;
+}
+
+
+[data-view="upcoming"] .match-info > strong {
+    display: block;
+
+    margin: 0;
+
+    overflow: hidden;
+
+    color: #f3f3ee;
+
+    font-size: 15px;
+    font-weight: 900;
+
+    line-height: 1.15;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* =========================================
+   LEIKIR — SECOND LINE
+========================================= */
+
+[data-view="upcoming"] .match-secondary-line {
+    width: 100%;
+
+    display: flex !important;
+    flex-direction: row !important;
+
+    align-items: center !important;
+
+    flex-wrap: nowrap !important;
+
+    gap: 5px;
+
+    margin-top: 0 !important;
+
+    overflow: hidden;
+
+    color: #aeb5ae;
+
+    font-size: 10px;
+    font-weight: 600;
+
+    line-height: 1;
+
+    white-space: nowrap;
+}
+
+
+[data-view="upcoming"] .match-secondary-line > span {
+    display: inline-flex !important;
+
+    align-items: center;
+
+    flex: 0 0 auto;
+
+    margin-top: 0 !important;
+}
+
+
+[data-view="upcoming"] .match-secondary-separator {
+    color:
+        rgba(255, 255, 255, 0.30);
+}
+
+
+[data-view="upcoming"] .match-venue-inline {
+    min-width: 0;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+/* =========================================
+   LEIKIR — ACTIONS
+========================================= */
+
+[data-view="upcoming"] .match-actions {
+    gap: 2px;
+}
+
+
+/* =========================================
+   PHONE
+========================================= */
+
+@media (max-width: 460px) {
+
+    [data-view="upcoming"] .matches-list {
+        gap: 9px;
+
+        padding:
+            12px
+            10px
+            16px;
+    }
+
+
+    [data-view="upcoming"] .match-item {
+        grid-template-columns:
+            52px
+            minmax(0, 1fr)
+            auto;
+
+        gap: 10px;
+
+        min-height: 70px;
+
+        padding-right: 6px;
+    }
+
+
+    [data-view="upcoming"] .match-date-box strong {
+        font-size: 21px;
+    }
+
+
+    [data-view="upcoming"] .match-info > strong {
+        font-size: 14px;
+    }
+
+
+    [data-view="upcoming"] .match-secondary-line {
+        font-size: 9.5px;
+    }
+
+
+    .match-competition-inline,
+    [data-view="played"] .match-competition-inline {
+        padding:
+            3px
+            6px;
+
+        font-size: 8.5px;
+    }
+}
+/* =========================================
+   UPCOMING MATCH — 3 LINE INFO
+========================================= */
+
+[data-view="upcoming"] .match-info {
+    gap: 5px;
+}
+
+
+[data-view="upcoming"] .match-upcoming-competition {
+    display: flex !important;
+    align-items: center;
+
+    margin: 0 !important;
+
+    overflow: visible !important;
+}
+
+
+[data-view="upcoming"] .match-upcoming-competition
+.match-competition-inline {
+    margin: 0 !important;
+}
+
+
+[data-view="upcoming"] .match-secondary-line.is-upcoming {
+    display: flex !important;
+    align-items: center;
+
+    gap: 5px;
+
+    margin: 0 !important;
+
+    color: #aeb5ae;
+
+    font-size: 10px;
+    font-weight: 650;
+
+    line-height: 1.15;
+}
+
+
+[data-view="upcoming"] .match-time-inline {
+    color: #d7dbd5;
+
+    font-weight: 800;
+}
+
+
+[data-view="upcoming"] .match-venue-inline {
+    color: #9fa8a2;
+}
+[data-view="upcoming"] .match-item {
+    min-height: 82px;
+}
+/* =========================================
+   PLAYED MATCH — 3 LINE INFO
+========================================= */
+
+[data-view="played"] .match-info {
+    gap: 5px;
+}
+
+
+/* Competition gets its own row */
+
+[data-view="played"] .match-played-competition {
+    display: flex !important;
+    align-items: center;
+
+    margin: 0 !important;
+
+    overflow: visible !important;
+}
+
+
+[data-view="played"] .match-played-competition
+.match-competition-inline {
+    margin: 0 !important;
+}
+
+
+/* Make played competition badge match Leikir */
+
+[data-view="played"] .match-competition-inline {
+    padding:
+        3px
+        7px;
+
+    font-size: 9px;
+    font-weight: 900;
+
+    line-height: 1;
+
+    border:
+        1px solid
+        rgba(99, 217, 106, 0.24);
+
+    border-radius: 999px;
+
+    background:
+        rgba(99, 217, 106, 0.08);
+
+    color:
+        #79df7d;
+}
+
+
+/* Third row */
+
+[data-view="played"] .match-secondary-line.is-played {
+    display: flex !important;
+    flex-direction: row !important;
+
+    align-items: center !important;
+
+    gap: 5px;
+
+    margin: 0 !important;
+
+    overflow: hidden;
+
+    color: #aeb5ae;
+
+    font-size: 10px;
+    font-weight: 650;
+
+    line-height: 1.15;
+
+    white-space: nowrap;
+}
+
+
+[data-view="played"] .match-secondary-line.is-played > span {
+    display: inline-flex !important;
+
+    align-items: center;
+
+    flex: 0 0 auto;
+
+    margin: 0 !important;
+}
+
+
+[data-view="played"] .match-time-inline {
+    color: #d7dbd5;
+
+    font-weight: 800;
+}
+
+
+[data-view="played"] .match-venue-inline {
+    min-width: 0;
+
+    overflow: hidden;
+
+    color: #9fa8a2;
+
+    text-overflow: ellipsis;
+}
+
+
+/* Give the played card enough height for 3 lines */
+
+[data-view="played"] .match-item {
+    min-height: 82px;
+}
+/* =========================================
+   COMPETITION BADGE — SAME IN BOTH VIEWS
+========================================= */
+
+[data-view="upcoming"] .match-competition-inline,
+[data-view="played"] .match-competition-inline {
+    display: inline-flex !important;
+    align-items: center;
+
+    width: fit-content;
+
+    margin: 0 !important;
+
+    padding:
+        3px
+        7px !important;
+
+    border:
+        1px solid
+        rgba(99, 217, 106, 0.24) !important;
+
+    border-radius: 999px;
+
+    background:
+        rgba(99, 217, 106, 0.08) !important;
+
+    color:
+        #79df7d !important;
+
+    font-size: 9px !important;
+    font-weight: 900 !important;
+
+    line-height: 1 !important;
+
+    letter-spacing: 0 !important;
+
+    white-space: nowrap;
+}
+[data-view="upcoming"] .match-upcoming-competition,
+[data-view="played"] .match-played-competition {
+    display: flex !important;
+    align-items: center;
+
+    min-height: 17px;
+
+    margin: 0 !important;
+
+    overflow: visible !important;
+}
+/* =========================================
+   COMPETITION BADGE — CUSTOM COLOR
+========================================= */
+
+[data-view="upcoming"] .match-competition-inline,
+[data-view="played"] .match-competition-inline {
+    color:
+        var(
+            --competition-color,
+            var(--lt-green)
+        ) !important;
+
+    border-color:
+        color-mix(
+            in srgb,
+            var(
+                --competition-color,
+                var(--lt-green)
+            )
+            34%,
+            transparent
+        ) !important;
+
+    background:
+        color-mix(
+            in srgb,
+            var(
+                --competition-color,
+                var(--lt-green)
+            )
+            11%,
+            transparent
+        ) !important;
+}
+/* =========================================
+   EDIT COMPETITION COLOR — COMPACT
+========================================= */
+
+.competition-color-edit-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    margin-top: 7px;
+}
+
+
+.competition-color-edit-row[hidden] {
+    display: none !important;
+}
+
+
+.competition-color-edit-row
+.competition-color-picker {
+    width: 48px !important;
+    min-width: 48px !important;
+    max-width: 48px !important;
+
+    height: 42px !important;
+
+    flex: 0 0 48px;
+
+    padding: 5px !important;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.12);
+
+    border-radius: 12px;
+
+    background:
+        rgba(255, 255, 255, 0.035);
+}
+
+
+.competition-color-edit-row
+#saveCompetitionColorButton {
+    width: auto;
+
+    min-height: 42px;
+
+    padding:
+        0
+        14px;
+
+    border:
+        1px solid
+        rgba(99, 217, 106, 0.40);
+
+    border-radius: var(--lt-radius-sm);
+
+    background:
+        rgba(99, 217, 106, 0.12);
+
+    color:
+        var(--lt-green);
+
+    font-size: 12px;
+    font-weight: 900;
+
+    cursor: pointer;
+}
+/* =========================================
+   COMPETITION COLOR PICKERS — SAME STYLE
+========================================= */
+
+#newCompetitionColor,
+#editCompetitionColor {
+    width: 48px !important;
+    min-width: 48px !important;
+    max-width: 48px !important;
+
+    height: 42px !important;
+
+    flex: 0 0 48px;
+
+    padding: 5px !important;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.12);
+
+    border-radius: 12px;
+
+    background:
+        rgba(255, 255, 255, 0.035);
+
+    cursor: pointer;
+
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+
+#newCompetitionColor::-webkit-color-swatch-wrapper,
+#editCompetitionColor::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+
+#newCompetitionColor::-webkit-color-swatch,
+#editCompetitionColor::-webkit-color-swatch {
+    border: 0;
+    border-radius: 8px;
+}
+
+
+#newCompetitionColor::-moz-color-swatch,
+#editCompetitionColor::-moz-color-swatch {
+    border: 0;
+    border-radius: 8px;
 }

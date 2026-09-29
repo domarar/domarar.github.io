@@ -1448,49 +1448,116 @@
 
                         <div class="competition-field-actions">
 
-                            <button
-                                id="addCompetitionButton"
-                                class="competition-field-action"
-                                type="button"
-                            >
-                                ＋ Búa til mótarheiti
-                            </button>
+    <button
+        id="addCompetitionButton"
+        class="competition-field-action"
+        type="button"
+    >
+        ＋ Búa til mótarheiti
+    </button>
+
+    <button
+        id="editCompetitionColorButton"
+        class="competition-field-action"
+        type="button"
+    >
+        Breyta lit
+    </button>
+
+    <button
+        id="deleteCompetitionButton"
+        class="competition-field-action competition-field-action-delete"
+        type="button"
+    >
+        Eyða mótarheiti
+    </button>
+
+</div>
 
 
-                            <button
-                                id="deleteCompetitionButton"
-                                class="competition-field-action competition-field-action-delete"
-                                type="button"
-                            >
-                                Eyða mótarheiti
-                            </button>
+<div
+    id="newCompetitionRow"
+    class="competition-create-row"
+    hidden
+>
 
-                        </div>
+    <input
+        id="newCompetitionName"
+        type="text"
+        placeholder="Nafn keppni"
+        autocomplete="off"
+    >
 
+    <input
+        id="newCompetitionColor"
+        class="competition-color-picker"
+        type="color"
+        value="#63d96a"
+        aria-label="Litur keppni"
+    >
+
+    <button
+        id="saveCompetitionButton"
+        type="button"
+    >
+        Vista
+    </button>
+
+</div>
+
+
+<div
+    id="editCompetitionColorRow"
+    class="competition-color-edit-row"
+    hidden
+>
+
+    <input
+        id="editCompetitionColor"
+        class="competition-color-picker"
+        type="color"
+        value="#63d96a"
+        aria-label="Litur keppni"
+    >
+
+    <button
+        id="saveCompetitionColorButton"
+        type="button"
+    >
+        Vista lit
+    </button>
+
+</div>
 
                         <div
-                            id="newCompetitionRow"
-                            class="competition-create-row"
-                            hidden
-                        >
+    id="newCompetitionRow"
+    class="competition-create-row"
+    hidden
+>
 
-                            <input
-                                id="newCompetitionName"
-                                type="text"
-                                placeholder="Nýtt mótarheiti"
-                                autocomplete="off"
-                            >
+    <input
+        id="newCompetitionName"
+        type="text"
+        placeholder="Nafn keppni"
+        autocomplete="off"
+    >
 
-                            <button
-                                id="saveCompetitionButton"
-                                type="button"
-                            >
-                                Bæta við
-                            </button>
+    <input
+        id="newCompetitionColor"
+        class="competition-color-picker"
+        type="color"
+        value="#63d96a"
+        aria-label="Litur keppni"
+    >
 
-                        </div>
+    <button
+        id="saveCompetitionButton"
+        type="button"
+    >
+        Vista
+    </button>
 
-                    </div>
+</div>
 
 
                     <div class="form-row">

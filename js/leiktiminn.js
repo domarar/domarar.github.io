@@ -1091,7 +1091,7 @@ async function initializeLeiktiminn() {
     );
 
 
-    setupCompetitionField();
+    await setupCompetitionField();
 
 
     await loadMatchesFromSupabase({
@@ -1338,6 +1338,16 @@ function setupCompetitionControls() {
             "saveCompetitionButton"
         );
 
+    const editColorButton =
+    document.getElementById(
+        "editCompetitionColorButton"
+    );
+
+    const saveColorButton =
+    document.getElementById(
+        "saveCompetitionColorButton"
+    );
+
 
     if (
         !competitionSelect
@@ -1362,20 +1372,33 @@ function setupCompetitionControls() {
 
 
     addButton
-        ?.addEventListener(
-            "click",
-            () => {
+    ?.addEventListener(
+        "click",
+        () => {
 
-                createRow.hidden =
-                    !createRow.hidden;
+            const editColorRow =
+                document.getElementById(
+                    "editCompetitionColorRow"
+                );
 
 
-                if (!createRow.hidden) {
+            if (editColorRow) {
 
-                    nameInput?.focus();
-                }
+                editColorRow.hidden =
+                    true;
             }
-        );
+
+
+            createRow.hidden =
+                !createRow.hidden;
+
+
+            if (!createRow.hidden) {
+
+                nameInput?.focus();
+            }
+        }
+    );
 
 
     saveButton
@@ -1417,8 +1440,183 @@ function setupCompetitionControls() {
             }
         );
 
+    editColorButton
+    ?.addEventListener(
+        "click",
+        openCompetitionColorEditor
+    );
+
+
+saveColorButton
+    ?.addEventListener(
+        "click",
+        saveCompetitionColor
+    );
+
 
     updateCompetitionDeleteButton();
+}
+
+function openCompetitionColorEditor() {
+
+    const select =
+        document.getElementById(
+            "competition"
+        );
+
+
+    const row =
+        document.getElementById(
+            "editCompetitionColorRow"
+        );
+
+
+    const colorInput =
+        document.getElementById(
+            "editCompetitionColor"
+        );
+
+
+    if (
+        !select?.value
+        ||
+        !row
+        ||
+        !colorInput
+    ) {
+
+        return;
+    }
+
+
+    const competition =
+        userCompetitions.find(
+            item =>
+                item.name ===
+                select.value
+        );
+
+
+    if (!competition) {
+
+        return;
+    }
+
+
+    colorInput.value =
+        competition.color
+        ||
+        "#63d96a";
+
+
+    row.hidden =
+        false;
+}
+
+async function saveCompetitionColor() {
+
+    const select =
+        document.getElementById(
+            "competition"
+        );
+
+
+    const row =
+        document.getElementById(
+            "editCompetitionColorRow"
+        );
+
+
+    const colorInput =
+        document.getElementById(
+            "editCompetitionColor"
+        );
+
+
+    if (
+        !select?.value
+        ||
+        !colorInput
+    ) {
+
+        return;
+    }
+
+
+    const competition =
+        userCompetitions.find(
+            item =>
+                item.name ===
+                select.value
+        );
+
+
+    if (!competition) {
+
+        return;
+    }
+
+
+    const color =
+        String(
+            colorInput.value || ""
+        ).trim();
+
+
+    if (
+        !/^#[0-9a-fA-F]{6}$/.test(
+            color
+        )
+    ) {
+
+        return;
+    }
+
+
+    const {
+    data,
+    error
+} =
+    await supabaseClient
+        .from(
+            "user_competitions"
+        )
+        .update({
+            color:
+                color
+        })
+        .eq(
+            "id",
+            competition.id
+        )
+        .select(
+            "id, name, color"
+        )
+        .single();
+
+    if (error) {
+
+        console.error(
+            "Villa við að breyta lit keppni:",
+            error
+        );
+
+        return;
+    }
+
+
+    competition.color =
+        color;
+
+
+    if (row) {
+
+        row.hidden =
+            true;
+    }
+
+
+    renderAll();
 }
 
 
@@ -1462,8 +1660,8 @@ async function loadUserCompetitions() {
                     "user_competitions"
                 )
                 .select(
-                    "id, name"
-                )
+    "id, name, color"
+)
                 .eq(
                     "user_id",
                     session.user.id
@@ -1489,6 +1687,8 @@ async function loadUserCompetitions() {
 
         userCompetitions =
             data || [];
+
+        renderAll();
 
 
         renderCompetitionOptions();
@@ -1590,7 +1790,32 @@ function renderCompetitionOptions(
     updateCompetitionDeleteButton();
 }
 
+function getCompetitionColorValue() {
 
+    const input =
+        document.getElementById(
+            "newCompetitionColor"
+        );
+
+
+    const value =
+        String(
+            input?.value || ""
+        ).trim();
+
+
+    if (
+        /^#[0-9a-fA-F]{6}$/.test(
+            value
+        )
+    ) {
+
+        return value;
+    }
+
+
+    return "#63d96a";
+}
 
 async function createCompetition() {
 
@@ -1598,6 +1823,13 @@ async function createCompetition() {
         document.getElementById(
             "newCompetitionName"
         );
+
+
+    const colorInput =
+        document.getElementById(
+            "newCompetitionColor"
+        );
+
 
     const createRow =
         document.getElementById(
@@ -1609,6 +1841,10 @@ async function createCompetition() {
         normalizeCompetitionName(
             nameInput?.value
         );
+
+
+    const color =
+        getCompetitionColorValue();
 
 
     if (!name) {
@@ -1654,9 +1890,17 @@ async function createCompetition() {
         }
 
 
+        if (colorInput) {
+
+            colorInput.value =
+                "#63d96a";
+        }
+
+
         if (createRow) {
 
-            createRow.hidden = true;
+            createRow.hidden =
+                true;
         }
 
 
@@ -1675,14 +1919,19 @@ async function createCompetition() {
                     "user_competitions"
                 )
                 .insert({
+
                     user_id:
                         session.user.id,
 
                     name:
-                        name
+                        name,
+
+                    color:
+                        color
+
                 })
                 .select(
-                    "id, name"
+                    "id, name, color"
                 )
                 .single();
 
@@ -1726,10 +1975,19 @@ async function createCompetition() {
         }
 
 
+        if (colorInput) {
+
+            colorInput.value =
+                "#63d96a";
+        }
+
+
         if (createRow) {
 
-            createRow.hidden = true;
+            createRow.hidden =
+                true;
         }
+
 
     } catch (error) {
 
@@ -1740,6 +1998,49 @@ async function createCompetition() {
     }
 }
 
+function getCompetitionColor(
+    competitionName
+) {
+
+    const normalizedName =
+        normalizeCompetitionName(
+            competitionName
+        );
+
+
+    const competition =
+        userCompetitions.find(
+            item =>
+                normalizeCompetitionName(
+                    item.name
+                ).toLocaleLowerCase(
+                    "is-IS"
+                )
+                ===
+                normalizedName.toLocaleLowerCase(
+                    "is-IS"
+                )
+        );
+
+
+    const color =
+        String(
+            competition?.color || ""
+        ).trim();
+
+
+    if (
+        /^#[0-9a-fA-F]{6}$/.test(
+            color
+        )
+    ) {
+
+        return color;
+    }
+
+
+    return "#63d96a";
+}
 
 
 async function deleteSelectedCompetition() {
@@ -4101,6 +4402,11 @@ function createMatchRow(
             match
         );
 
+        const competitionColor =
+    getCompetitionColor(
+        match.competition
+    );
+
 
     const unread =
         played
@@ -4233,18 +4539,51 @@ function createMatchRow(
 
                 ${
     played
-        ? `
-            <span class="match-secondary-line">
+    ? `
+        <span class="match-played-competition">
+            <span
+    class="match-competition-inline"
+    style="--competition-color: ${escapeHtml(competitionColor)};"
+>
+                ${escapeHtml(match.competition)}
+            </span>
+        </span>
 
-                <span class="match-competition-inline">
+        <span class="match-secondary-line is-played">
+
+            <span class="match-time-inline">
+                ${escapeHtml(match.time)}
+            </span>
+
+            ${
+                match.venue
+                    ? `
+                        <span class="match-secondary-separator">
+                            ·
+                        </span>
+
+                        <span class="match-venue-inline">
+                            ${escapeHtml(match.venue)}
+                        </span>
+                    `
+                    : ""
+            }
+
+        </span>
+    `
+        : `
+            <span class="match-upcoming-competition">
+                <span
+    class="match-competition-inline"
+    style="--competition-color: ${escapeHtml(competitionColor)};"
+>
                     ${escapeHtml(match.competition)}
                 </span>
+            </span>
 
-                <span class="match-secondary-separator">
-                    ·
-                </span>
+            <span class="match-secondary-line is-upcoming">
 
-                <span>
+                <span class="match-time-inline">
                     ${escapeHtml(match.time)}
                 </span>
 
@@ -4255,24 +4594,13 @@ function createMatchRow(
                                 ·
                             </span>
 
-                            <span>
+                            <span class="match-venue-inline">
                                 ${escapeHtml(match.venue)}
                             </span>
                         `
                         : ""
                 }
 
-            </span>
-        `
-        : `
-            <span>
-                ${escapeHtml(match.competition)}
-                · ${escapeHtml(match.time)}
-                ${
-                    match.venue
-                        ? ` · ${escapeHtml(match.venue)}`
-                        : ""
-                }
             </span>
         `
 }
