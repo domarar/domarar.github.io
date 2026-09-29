@@ -56,8 +56,8 @@ body::before {
             transparent 34%
         ),
         linear-gradient(
-            rgba(5, 18, 12, 0.40),
-            rgba(4, 14, 10, 0.61)
+            rgba(5, 18, 12, 0.30),
+            rgba(4, 14, 10, 0.50)
         ),
         url("../images/backgrounds/backround-photo.jpg");
 
@@ -728,6 +728,7 @@ button { -webkit-tap-highlight-color: transparent; }
 
     appearance: none;
     -webkit-appearance: none;
+}
 }
 
 
@@ -6656,4 +6657,5 @@ rgba(18, 24, 28, 0.85) 100%
 #editCompetitionColor::-moz-color-swatch {
     border: 0;
     border-radius: 8px;
+}
 }
