@@ -1,5 +1,102 @@
 const state = { data: null, year: null, league: null, role: "referees", openName: null };
 const V1_YEARS = ["2026", "2025", "2024", "2023"];
+const ALL_LEAGUES = "__all_competitions__";
+let overallArchivePromise = null;
+let overallArchiveGames = null;
+let previousRole = "referees";
+
+// Count unique played matches per official, across all competitions and roles.
+function overallTopTwenty(year) {
+  const people = new Map();
+  const games = (overallArchiveGames || []).filter(game =>
+    String(game.date || "").startsWith(year) && game.status === "PLAYED"
+  );
+
+  games.forEach(game => {
+    const seen = new Set();
+    (game.officials || []).forEach(official => {
+      const role = String(official.role || "").toLowerCase();
+      let roleKey;
+      
+if (
+    role === "dómari" ||
+    role === "referee"
+) {
+    roleKey = "referees";
+
+} else if (
+    role === "aðstoðardómari 1" ||
+    role === "aðstoðardómari 2" ||
+    role === "assistant referee 1" ||
+    role === "assistant referee 2"
+) {
+    roleKey = "assistants";
+
+} else if (
+    role === "fjórði dómari" ||
+    role === "varadómari" ||
+    role === "fourth official" ||
+    role === "reserve referee"
+) {
+    roleKey = "fourthOfficials";
+
+} else {
+    return;
+}
+
+
+      const name = String(official.name || "").trim();
+      if (!name) return;
+      const key = official.personId != null
+        ? `id:${official.personId}`
+        : `name:${name.toLocaleLowerCase("is")}`;
+      if (seen.has(key)) return;
+      seen.add(key);
+
+      const person = people.get(key) || {
+        name, personId: official.personId ?? null,
+        appearances: 0,
+        roleCounts: { referees: 0, assistants: 0, fourthOfficials: 0 }
+      };
+      person.appearances += 1;
+      person.roleCounts[roleKey] += 1;
+      people.set(key, person);
+    });
+  });
+
+  
+return [...people.values()]
+    .sort((a, b) =>
+        b.appearances - a.appearances ||
+        b.roleCounts.referees - a.roleCounts.referees ||
+        a.name.localeCompare(b.name, "is")
+    )
+    .slice(0, 20);
+
+}
+
+function loadOverallArchive() {
+  if (overallArchivePromise) return overallArchivePromise;
+  overallArchivePromise = fetch("data/archive.json", { cache: "no-store" })
+    .then(response => {
+      if (!response.ok) throw new Error("Could not load combined archive");
+      return response.json();
+    })
+    .then(data => {
+      if (!Array.isArray(data.games)) throw new Error("Archive is missing games");
+      overallArchiveGames = data.games;
+      if (state.league === ALL_LEAGUES) renderRanking();
+    })
+    .catch(error => {
+      console.error(error);
+      overallArchivePromise = null;
+      if (state.league === ALL_LEAGUES) {
+        els.ranking.innerHTML = '<p class="stats-empty">Ekki tókst að sækja leikjagögn.</p>';
+      }
+    });
+  return overallArchivePromise;
+}
+
 const els = {
   years: document.getElementById("statsYearSelect"),
   league: document.getElementById("statsLeagueSelect"),
@@ -8,31 +105,24 @@ const els = {
   coverage: document.getElementById("statsCoverage"),
   ranking: document.getElementById("statsRanking"),
 };
-
 function escapeHtml(value) {
   return String(value ?? "").replace(/[&<>'"]/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[char]));
 }
-
 function initials(name) {
   return name.split(/\s+/).filter(Boolean).slice(0, 2).map(part => part[0]).join("").toUpperCase();
 }
-
 function refereePhoto(name) {
   if (typeof refereeProfiles === "undefined") return "";
-
   const matchedName = Object.keys(refereeProfiles).find(
     profileName =>
       profileName.toLowerCase() === name.toLowerCase()
   );
-
   return matchedName
     ? refereeProfiles[matchedName]?.image || ""
     : "";
 }
-
 function refereeAvatar(person) {
   const image = refereePhoto(person.name);
-
   if (!image) {
     return `
       <span class="stats-avatar">
@@ -40,7 +130,6 @@ function refereeAvatar(person) {
       </span>
     `;
   }
-
   return `
     <span class="stats-avatar stats-avatar-has-photo">
       <img
@@ -52,21 +141,17 @@ function refereeAvatar(person) {
     </span>
   `;
 }
-
 function currentLeague() {
   return (state.data?.seasons?.[state.year] || []).find(item => item.name === state.league);
 }
-
 function buildTopTen(league) {
   const combined = new Map();
-
   ["referees", "assistants", "fourthOfficials"]
     .forEach(role => {
       (league[role] || []).forEach(person => {
         const key = person.personId
           ? `id:${person.personId}`
           : `name:${person.name.toLowerCase()}`;
-
         const existing = combined.get(key) || {
   name: person.name,
   personId: person.personId || null,
@@ -77,16 +162,12 @@ function buildTopTen(league) {
     fourthOfficials: 0
   }
 };
-
 const appearances = Number(person.appearances || 0);
-
 existing.appearances += appearances;
 existing.roleCounts[role] += appearances;
-
 combined.set(key, existing);
       });
     });
-
   return [...combined.values()]
     .sort((a, b) =>
       b.appearances - a.appearances ||
@@ -94,21 +175,17 @@ combined.set(key, existing);
     )
     .slice(0, 10);
 }
-
 function formatNumber(value) {
   return Number(value).toLocaleString("is-IS", { minimumFractionDigits: value < 1 ? 2 : 1, maximumFractionDigits: 2 });
 }
-
 function metricLabel(metric) {
   return { yellow: "Gul spjöld / leik", red: "Rauð spjöld / leik", penalty: "Víti / leik" }[metric];
 }
-
 function differenceText(value, average) {
   const difference = Number((value - average).toFixed(2));
   if (difference === 0) return "sama og meðaltal";
   return `${formatNumber(Math.abs(difference))} ${difference < 0 ? "undir" : "yfir"} meðaltali`;
 }
-
 function detailHtml(person, league) {
   if (!person.reportedGames) return "";
   const metrics = ["yellow", "red", "penalty"];
@@ -133,12 +210,10 @@ function detailHtml(person, league) {
       }).join("")}
     </div>`;
 }
-
 function renderYears() {
     const years = V1_YEARS.filter(
         year => state.data.seasons[year]
     );
-
     els.years.innerHTML = years
         .map(year => `
             <option
@@ -150,34 +225,54 @@ function renderYears() {
         `)
         .join("");
 }
-
 function renderLeagues() {
   const leagues = state.data.seasons[state.year] || [];
-  els.league.innerHTML = leagues.map(item => `<option value="${escapeHtml(item.name)}" ${item.name === state.league ? "selected" : ""}>${escapeHtml(item.name)}</option>`).join("");
+  els.league.innerHTML = `<option value="${ALL_LEAGUES}" ${state.league === ALL_LEAGUES ? "selected" : ""}>Allar keppnir</option>` +
+    leagues.map(item => `<option value="${escapeHtml(item.name)}" ${item.name === state.league ? "selected" : ""}>${escapeHtml(item.name)}</option>`).join("");
 }
 
+function updateRoleTabs() {
+  const all = state.league === ALL_LEAGUES;
+  els.roles.hidden = all;
+  els.roles.style.display = all ? "none" : "";
+  if (all) {
+    if (state.role !== "topTen") previousRole = state.role;
+    state.role = "topTen";
+  } else if (state.role === "topTen" && previousRole !== "topTen") {
+    state.role = previousRole;
+  }
+  els.roles.querySelectorAll("button").forEach(item =>
+    item.classList.toggle("is-active", item.dataset.role === state.role)
+  );
+}
 function renderRanking() {
-  const league = currentLeague();
-  if (!league) return;
- const isReferee = state.role === "referees";
-const people = state.role === "topTen"
-  ? buildTopTen(league)
-  : league[state.role] || [];
+  const isOverall = state.league === ALL_LEAGUES;
+  const league = isOverall ? null : currentLeague();
+  if (!isOverall && !league) return;
+  if (isOverall && !overallArchiveGames) {
+    els.title.innerHTML = `Allar keppnir <span>· TOPP 20 · ${escapeHtml(state.year)}</span>`;
+    els.coverage.textContent = "Allir spilaðir leikir · Dómari + AD + Fjórði";
+    els.ranking.innerHTML = '<p class="stats-empty">Sæki leikjagögn…</p>';
+    loadOverallArchive();
+    return;
+  }
+  const isReferee = !isOverall && state.role === "referees";
+  const people = isOverall ? overallTopTwenty(state.year) : state.role === "topTen"
+    ? buildTopTen(league)
+    : league[state.role] || [];
 const maximum = people[0]?.appearances || 1;
-
 const roleLabel = {
   referees: "Dómari",
   assistants: "AD",
   fourthOfficials: "Fjórði",
-  topTen: "TOPP 10"
+  topTen: isOverall ? "TOPP 20" : "TOPP 10"
 }[state.role];
-
 els.title.innerHTML =
-  `${escapeHtml(league.name)} <span>· ${roleLabel}</span>`;
-
-const coverage = league.reportCoverage;
-
-els.coverage.textContent = isReferee && coverage.available
+  `${isOverall ? "Allar keppnir" : escapeHtml(league.name)} <span>· ${roleLabel}${isOverall ? ` · ${escapeHtml(state.year)}` : ""}</span>`;
+const coverage = league?.reportCoverage || {};
+els.coverage.textContent = isOverall
+  ? "Allir spilaðir leikir · Dómari + AD + Fjórði · hver leikur talinn einu sinni"
+  : isReferee && coverage.available
   ? `Leikskýrslur: ${coverage.available} af ${coverage.total}${coverage.complete ? "" : " · Meðaltöl byggja aðeins á tiltækum skýrslum"}`
   : isReferee
     ? "Spjalda- og vítatölfræði er ekki tiltæk fyrir þetta tímabil."
@@ -202,7 +297,6 @@ els.coverage.textContent = isReferee && coverage.available
   <span class="stats-name">
     ${escapeHtml(person.name)}
   </span>
-
   ${state.role === "topTen" ? `
     <span class="stats-role-breakdown">
       Dómari ${person.roleCounts.referees}
@@ -219,14 +313,13 @@ els.coverage.textContent = isReferee && coverage.available
     </article>`;
   }).join("");
 }
-
 function selectYear(year) {
   state.year = year;
   state.league = state.data.seasons[year]?.[0]?.name || null;
   state.openName = null;
+  updateRoleTabs();
   renderYears(); renderLeagues(); renderRanking();
 }
-
 function setupMenu() {
   const button = document.getElementById("menuButton");
   const overlay = document.getElementById("menuOverlay");
@@ -237,7 +330,6 @@ function setupMenu() {
   overlay.addEventListener("click", event => { if (event.target === overlay) setOpen(false); });
   document.addEventListener("keydown", event => { if (event.key === "Escape") setOpen(false); });
 }
-
 async function start() {
   setupMenu();
   try {
@@ -251,14 +343,19 @@ async function start() {
     els.ranking.innerHTML = '<p class="stats-empty">Ekki tókst að sækja tölfræði.</p>';
   }
 }
-
 els.years.addEventListener("change", () => {
     selectYear(els.years.value);
 });
-els.league.addEventListener("change", () => { state.league = els.league.value; state.openName = null; renderRanking(); });
+els.league.addEventListener("change", () => {
+  state.league = els.league.value;
+  state.openName = null;
+  updateRoleTabs();
+  renderRanking();
+});
 els.roles.addEventListener("click", event => {
   const button = event.target.closest("[data-role]"); if (!button) return;
-  state.role = button.dataset.role; state.openName = null;
+  if (state.league === ALL_LEAGUES) return;
+  state.role = button.dataset.role; previousRole = state.role; state.openName = null;
   els.roles.querySelectorAll("button").forEach(item => item.classList.toggle("is-active", item === button));
   renderRanking();
 });
@@ -267,18 +364,14 @@ els.ranking.addEventListener("click", event => {
   state.openName = state.openName === button.dataset.name ? null : button.dataset.name;
   renderRanking();
 });
-
 start();
 (() => {
     const isStandalone =
         window.matchMedia("(display-mode: standalone)").matches ||
         window.navigator.standalone === true;
-
     if (!isStandalone) return;
-
     document.addEventListener("click", event => {
         const link = event.target.closest("a[href]");
-
         if (
             !link ||
             link.hasAttribute("download") ||
@@ -286,19 +379,16 @@ start();
         ) {
             return;
         }
-
         const url = new URL(
             link.getAttribute("href"),
             window.location.href
         );
-
         if (
             url.origin !== window.location.origin ||
             !["http:", "https:"].includes(url.protocol)
         ) {
             return;
         }
-
         event.preventDefault();
         window.location.assign(url.href);
     });
