@@ -304,14 +304,17 @@ for match_id, match in matches_by_id.items():
     )
 
     home_team = match.get("homeTeam") or {}
-    away_team = match.get("awayTeam") or {}
+away_team = match.get("awayTeam") or {}
 
-    "officials": officials
+officials = officials_by_match.get(
+    match_id,
+    []
+)
 
-    previous_game = previous_games_by_id.get(
-        match_id,
-        {}
-    )
+previous_game = previous_games_by_id.get(
+    match_id,
+    {}
+)
 
     match_date = match.get("matchDate")
 
@@ -352,11 +355,8 @@ for match_id, match in matches_by_id.items():
             "liveStatus"
         ),
         "homeScore": match.get("homeScore"),
-        "awayScore": match.get("awayScore"),
-        "officials": officials_by_match.get(
-            match_id,
-            []
-        )
+"awayScore": match.get("awayScore"),
+"officials": officials
     })
 
 games.sort(
