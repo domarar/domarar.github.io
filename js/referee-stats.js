@@ -271,7 +271,7 @@ els.title.innerHTML =
   `${isOverall ? "Allar keppnir" : escapeHtml(league.name)} <span>· ${roleLabel}${isOverall ? ` · ${escapeHtml(state.year)}` : ""}</span>`;
 const coverage = league?.reportCoverage || {};
 els.coverage.textContent = isOverall
-  ? "Allir spilaðir leikir · Dómari + AD + Fjórði · hver leikur talinn einu sinni"
+  ? "Allir leikir og hlutverk tekin saman og sett í röð eftir fjölda leikja"
   : isReferee && coverage.available
   ? `Leikskýrslur: ${coverage.available} af ${coverage.total}${coverage.complete ? "" : " · Meðaltöl byggja aðeins á tiltækum skýrslum"}`
   : isReferee
