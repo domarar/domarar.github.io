@@ -296,6 +296,7 @@ for match_id_chunk in chunks(match_ids, 100):
             for official in officials
         ]
 
+
 games = []
 
 for match_id, match in matches_by_id.items():
@@ -304,17 +305,17 @@ for match_id, match in matches_by_id.items():
     )
 
     home_team = match.get("homeTeam") or {}
-away_team = match.get("awayTeam") or {}
+    away_team = match.get("awayTeam") or {}
 
-officials = officials_by_match.get(
-    match_id,
-    []
-)
+    officials = officials_by_match.get(
+        match_id,
+        []
+    )
 
-previous_game = previous_games_by_id.get(
-    match_id,
-    {}
-)
+    previous_game = previous_games_by_id.get(
+        match_id,
+        {}
+    )
 
     match_date = match.get("matchDate")
 
@@ -355,9 +356,11 @@ previous_game = previous_games_by_id.get(
             "liveStatus"
         ),
         "homeScore": match.get("homeScore"),
-"awayScore": match.get("awayScore"),
-"officials": officials
+        "awayScore": match.get("awayScore"),
+        "officials": officials
     })
+
+
 
 games.sort(
     key=lambda game: game.get("date") or ""
