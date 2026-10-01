@@ -12,7 +12,6 @@ on:
           - "2026"
           - "2025"
           - "2024"
-
   schedule:
     - cron: "37 3 * * *"
 
@@ -22,56 +21,42 @@ permissions:
 jobs:
   update-archive:
     runs-on: ubuntu-latest
-
     env:
       ARCHIVE_YEAR: ${{ github.event.inputs.year || '2026' }}
-
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-
       - name: Download selected KSÍ archive
         run: |
           python <<'PY'
-          import glob
           import json
           import os
           import urllib.request
-
-          from datetime import (
-              date,
-              datetime,
-              timedelta,
-              timezone
-          )
-
+          from datetime import date, datetime, timedelta, timezone
+          
           endpoint = "https://www.abler.io/comet-backend/graphql"
-
-          archive_year = int(
-              os.environ.get("ARCHIVE_YEAR", "2026")
-          )
-
+          archive_year = int(os.environ.get("ARCHIVE_YEAR", "2026"))
           year_start = date(archive_year, 1, 1)
           year_end = date(archive_year, 12, 31)
-
+          year_filename = f"data/archive-{archive_year}.json"
+          
+          previous_games_by_id = {}
+          if os.path.exists(year_filename):
+              with open(year_filename, "r", encoding="utf-8") as file:
+                  previous_archive = json.load(file)
+              previous_games_by_id = {
+                  game["id"]: game
+                  for game in previous_archive.get("games", [])
+                  if game.get("id") is not None
+              }
+          
           fixtures_query = """
-          query CometMatches(
-            $first: Int!,
-            $after: String,
-            $filter: CometMatchFilterInput,
-            $sort: CometMatchSort
-          ) {
-            cometMatches(
-              first: $first,
-              after: $after,
-              filter: $filter,
-              sort: $sort
-            ) {
+          query CometMatches($first: Int!, $after: String, $filter: CometMatchFilterInput, $sort: CometMatchSort) {
+            cometMatches(first: $first, after: $after, filter: $filter, sort: $sort) {
               totalCount
               edges {
                 node {
@@ -83,43 +68,24 @@ jobs:
                   homeScore
                   awayScore
                   facilityName
-
-                  competition {
-                    name
-                    category
-                    gender
-                    competitionType
-                  }
-
-                  homeTeam {
-                    name
-                    logo
-                  }
-
-                  awayTeam {
-                    name
-                    logo
-                  }
+                  competition { name category gender competitionType }
+                  homeTeam { name logo }
+                  awayTeam { name logo }
                 }
               }
             }
           }
           """
-
+          
           officials_query = """
           query MatchesOfficials($matchIds: [Int!]!) {
             matchesOfficials(matchIds: $matchIds) {
               matchId
-              officials {
-                personId
-                name
-                role
-                orderNumber
-              }
+              officials { personId name role orderNumber }
             }
           }
           """
-
+          
           allowed_competitions = (
               "Besta deild karla",
               "Besta deild kvenna",
@@ -133,356 +99,198 @@ jobs:
               "Mjólkurbikar kvenna",
               "Deildabikar karla",
               "Deildabikar kvenna",
-              "Gatorade bikarinn 2026"
+              "Gatorade bikarinn 2026",
           )
-
+          
           def send_graphql_request(payload):
               request = urllib.request.Request(
                   endpoint,
                   data=json.dumps(payload).encode("utf-8"),
-                  headers={
-                      "Content-Type": "application/json",
-                      "User-Agent": "domarar-archive"
-                  },
-                  method="POST"
+                  headers={"Content-Type": "application/json", "User-Agent": "domarar-archive"},
+                  method="POST",
               )
-
-              with urllib.request.urlopen(
-                  request,
-                  timeout=60
-              ) as response:
+              with urllib.request.urlopen(request, timeout=60) as response:
                   result = json.load(response)
-
               if result.get("errors"):
-                  raise RuntimeError(
-                      "GraphQL error: "
-                      + json.dumps(
-                          result["errors"],
-                          ensure_ascii=False
-                      )
-                  )
-
+                  raise RuntimeError("GraphQL error: " + json.dumps(result["errors"], ensure_ascii=False))
+              if result.get("data") is None:
+                  raise RuntimeError("GraphQL response has no data")
               return result
-
+          
           def chunks(items, size):
               for index in range(0, len(items), size):
                   yield items[index:index + size]
-
+          
           matches_by_id = {}
-
           window_start = year_start
-
           while window_start <= year_end:
-              window_end = min(
-                  window_start + timedelta(days=6),
-                  year_end
-              )
-
-              date_from = (
-                  f"{window_start.isoformat()}"
-                  "T00:00:00.000+00:00"
-              )
-
-              date_to = (
-                  f"{window_end.isoformat()}"
-                  "T23:59:59.999+00:00"
-              )
-
+              window_end = min(window_start + timedelta(days=6), year_end)
+              date_from = f"{window_start.isoformat()}T00:00:00.000+00:00"
+              date_to = f"{window_end.isoformat()}T23:59:59.999+00:00"
               fixtures_payload = {
                   "operationName": "CometMatches",
                   "variables": {
                       "first": 100,
-                      "filter": {
-                          "categories": ["Adults"],
-                          "dateFrom": date_from,
-                          "dateTo": date_to
-                      },
-                      "sort": "NEXT_FIRST"
+                      "filter": {"categories": ["Adults"], "dateFrom": date_from, "dateTo": date_to},
+                      "sort": "NEXT_FIRST",
                   },
-                  "query": fixtures_query
+                  "query": fixtures_query,
               }
-
-              fixtures_result = send_graphql_request(
-                  fixtures_payload
-              )
-
-              comet_matches = (
-                  fixtures_result
-                  .get("data", {})
-                  .get("cometMatches", {})
-              )
-
-              total_count = comet_matches.get(
-                  "totalCount",
-                  0
-              )
-
-              edges = comet_matches.get(
-                  "edges",
-                  []
-              )
-
-              if total_count > 100:
-                  raise RuntimeError(
-                      "More than 100 matches returned "
-                      f"between {window_start} and "
-                      f"{window_end}."
-                  )
-
+              fixtures_result = send_graphql_request(fixtures_payload)
+              comet_matches = fixtures_result["data"].get("cometMatches")
+              if not isinstance(comet_matches, dict):
+                  raise RuntimeError(f"Missing cometMatches data: {window_start} to {window_end}")
+              total_count = comet_matches.get("totalCount", 0)
+              edges = comet_matches.get("edges")
+              if not isinstance(edges, list):
+                  raise RuntimeError(f"Missing match edges: {window_start} to {window_end}")
+              if total_count > 100 or len(edges) < total_count:
+                  raise RuntimeError(f"Incomplete match page: {window_start} to {window_end}")
               for edge in edges:
                   match = edge.get("node") or {}
-
-                  competition = (
-                      match.get("competition") or {}
-                  )
-
-                  competition_name = competition.get(
-                      "name",
-                      ""
-                  )
-
+                  competition = match.get("competition") or {}
+                  competition_name = competition.get("name") or ""
                   if competition.get("category") != "Adults":
                       continue
-
-                  if not any(
-                      allowed in competition_name
-                      for allowed in allowed_competitions
-                  ):
+                  if not any(allowed in competition_name for allowed in allowed_competitions):
                       continue
-
                   match_id = match.get("matchId")
-
                   if match_id is not None:
                       matches_by_id[match_id] = match
-
-              print(
-                  f"{window_start} to {window_end}: "
-                  f"{len(edges)} API matches, "
-                  f"{len(matches_by_id)} accepted total"
-              )
-
-              window_start = (
-                  window_end + timedelta(days=1)
-              )
-
-          match_ids = sorted(matches_by_id.keys())
+              print(f"{window_start} to {window_end}: {len(edges)} API matches, {len(matches_by_id)} accepted total")
+              window_start = window_end + timedelta(days=1)
+          
+          if not matches_by_id:
+              raise RuntimeError("API returned no eligible matches; refusing to replace archive")
+          
+          match_ids = sorted(matches_by_id)
           officials_by_match = {}
-
           for match_id_chunk in chunks(match_ids, 100):
               officials_payload = {
                   "operationName": "MatchesOfficials",
-                  "variables": {
-                      "matchIds": match_id_chunk
-                  },
-                  "query": officials_query
+                  "variables": {"matchIds": match_id_chunk},
+                  "query": officials_query,
               }
-
-              officials_result = send_graphql_request(
-                  officials_payload
-              )
-
-              officials_matches = (
-                  officials_result
-                  .get("data", {})
-                  .get("matchesOfficials", [])
-              )
-
+              officials_result = send_graphql_request(officials_payload)
+              officials_matches = officials_result["data"].get("matchesOfficials")
+              if not isinstance(officials_matches, list):
+                  raise RuntimeError("Missing matchesOfficials data; refusing to replace archive")
               for match_officials in officials_matches:
-                  match_id = match_officials.get(
-                      "matchId"
-                  )
-
+                  match_id = match_officials.get("matchId")
                   officials = sorted(
-                      match_officials.get(
-                          "officials"
-                      ) or [],
-                      key=lambda official: (
-                          official.get("orderNumber")
-                          if official.get("orderNumber")
-                          is not None
-                          else 999
-                      )
+                      match_officials.get("officials") or [],
+                      key=lambda official: official.get("orderNumber") if official.get("orderNumber") is not None else 999,
                   )
-
                   officials_by_match[match_id] = [
                       {
-                          "personId": official.get(
-                              "personId"
-                          ),
+                          "personId": official.get("personId"),
                           "name": official.get("name"),
                           "role": official.get("role"),
-                          "orderNumber": official.get(
-                              "orderNumber"
-                          )
+                          "orderNumber": official.get("orderNumber"),
                       }
                       for official in officials
                   ]
-
+          
           games = []
-
+          recovered_assignments = 0
           for match_id, match in matches_by_id.items():
-              competition = (
-                  match.get("competition") or {}
-              )
-
+              competition = match.get("competition") or {}
               home_team = match.get("homeTeam") or {}
               away_team = match.get("awayTeam") or {}
-
+              officials = officials_by_match.get(match_id, [])
+              previous_game = previous_games_by_id.get(match_id, {})
+              match_date = match.get("matchDate")
+              is_past_match = bool(match_date) and match_date[:10] < date.today().isoformat()
+              if is_past_match and not officials and previous_game.get("officials"):
+                  officials = previous_game["officials"]
+                  recovered_assignments += 1
               games.append({
                   "id": match_id,
-                  "date": match.get("matchDate"),
-                  "description": match.get(
-                      "matchDescription"
-                  ),
-                  "competition": competition.get(
-                      "name"
-                  ),
+                  "date": match_date,
+                  "description": match.get("matchDescription"),
+                  "competition": competition.get("name"),
                   "gender": competition.get("gender"),
-                  "competitionType": competition.get(
-                      "competitionType"
-                  ),
+                  "competitionType": competition.get("competitionType"),
                   "home": home_team.get("name"),
                   "away": away_team.get("name"),
                   "homeLogo": home_team.get("logo"),
                   "awayLogo": away_team.get("logo"),
-                  "facility": match.get(
-                      "facilityName"
-                  ),
+                  "facility": match.get("facilityName"),
                   "status": match.get("matchStatus"),
-                  "liveStatus": match.get(
-                      "liveStatus"
-                  ),
+                  "liveStatus": match.get("liveStatus"),
                   "homeScore": match.get("homeScore"),
                   "awayScore": match.get("awayScore"),
-                  "officials": officials_by_match.get(
-                      match_id,
-                      []
-                  )
+                  "officials": officials,
               })
-
-          games.sort(
-              key=lambda game: game.get("date") or ""
-          )
-
+          
+          # Reject an unexpectedly incomplete fetch before overwriting existing archives.
+          previous_past_ids = {
+              match_id for match_id, game in previous_games_by_id.items()
+              if (game.get("date") or "")[:10] < date.today().isoformat()
+          }
+          new_ids = {game["id"] for game in games}
+          missing_past_ids = previous_past_ids - new_ids
+          if missing_past_ids:
+              raise RuntimeError(
+                  f"API omitted {len(missing_past_ids)} previously archived past matches; "
+                  "refusing to overwrite archive"
+              )
+          
+          games.sort(key=lambda game: game.get("date") or "")
+          print(f"Preserved historical officials for {recovered_assignments} matches")
+          print(f"Matches with officials: {sum(bool(game['officials']) for game in games)} / {len(games)}")
+          
           year_output = {
-              "updatedAt": datetime.now(
-                  timezone.utc
-              ).isoformat(),
+              "updatedAt": datetime.now(timezone.utc).isoformat(),
               "year": archive_year,
               "dateFrom": year_start.isoformat(),
               "dateTo": year_end.isoformat(),
               "gameCount": len(games),
-              "games": games
+              "games": games,
           }
-
           os.makedirs("data", exist_ok=True)
-
-          year_filename = (
-              f"data/archive-{archive_year}.json"
-          )
-
-          with open(
-              year_filename,
-              "w",
-              encoding="utf-8"
-          ) as file:
-              json.dump(
-                  year_output,
-                  file,
-                  ensure_ascii=False,
-                  indent=2
-              )
-
-          print(
-              f"Saved {len(games)} matches to "
-              f"{year_filename}"
-          )
-
-          # =====================================
-          # COMBINE EVERY YEAR
-          # =====================================
-
+          with open(year_filename, "w", encoding="utf-8") as file:
+              json.dump(year_output, file, ensure_ascii=False, indent=2)
+          print(f"Saved {len(games)} matches to {year_filename}")
+          
+          # Combine only official season archives; ignore -test and other backup files.
           combined_games_by_id = {}
           included_years = []
-
-          archive_files = sorted(
-              glob.glob("data/archive-20*.json")
-          )
-
-          for archive_file in archive_files:
-              with open(
-                  archive_file,
-                  "r",
-                  encoding="utf-8"
-              ) as file:
+          for year in (2023, 2024, 2025, 2026):
+              archive_file = f"data/archive-{year}.json"
+              if not os.path.exists(archive_file):
+                  continue
+              with open(archive_file, "r", encoding="utf-8") as file:
                   archive_data = json.load(file)
-
-              file_year = archive_data.get("year")
-
-              if file_year is not None:
-                  included_years.append(file_year)
-
+              included_years.append(year)
               for game in archive_data.get("games", []):
                   game_id = game.get("id")
-
                   if game_id is not None:
                       combined_games_by_id[game_id] = game
-
-          combined_games = list(
-              combined_games_by_id.values()
-          )
-
-          combined_games.sort(
-              key=lambda game: game.get("date") or ""
-          )
-
+          combined_games = sorted(combined_games_by_id.values(), key=lambda game: game.get("date") or "")
           combined_output = {
-              "updatedAt": datetime.now(
-                  timezone.utc
-              ).isoformat(),
+              "updatedAt": datetime.now(timezone.utc).isoformat(),
               "years": sorted(set(included_years)),
               "gameCount": len(combined_games),
-              "games": combined_games
+              "games": combined_games,
           }
-
-          with open(
-              "data/archive.json",
-              "w",
-              encoding="utf-8"
-          ) as file:
-              json.dump(
-                  combined_output,
-                  file,
-                  ensure_ascii=False,
-                  indent=2
-              )
-
-          print(
-              f"Combined {len(combined_games)} matches "
-              f"from years "
-              f"{sorted(set(included_years))}"
-          )
+          with open("data/archive.json", "w", encoding="utf-8") as file:
+              json.dump(combined_output, file, ensure_ascii=False, indent=2)
+          print(f"Combined {len(combined_games)} matches from years {sorted(set(included_years))}")
           PY
-        
       - name: Generate 2026 standings
         run: |
           python generate_standings.py
-
-     
       - name: Commit updated archive
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
           git add data/archive*.json data/standings.json
-
           if git diff --cached --quiet; then
             echo "No archive changes"
           else
             git commit -m "Update KSÍ archive"
-
             git fetch origin main
             git rebase origin/main
-
             git push origin main
           fi
