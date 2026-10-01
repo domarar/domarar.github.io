@@ -379,9 +379,6 @@ year_output = {
 
 os.makedirs("data", exist_ok=True)
 
-year_filename = (
-    f"data/archive-{archive_year}.json"
-)
 
 with open(
     year_filename,
