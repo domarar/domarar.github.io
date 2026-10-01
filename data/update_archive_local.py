@@ -19,6 +19,24 @@ archive_year = int(
 year_start = date(archive_year, 1, 1)
 year_end = date(archive_year, 12, 31)
 
+year_filename = f"data/archive-{archive_year}.json"
+
+previous_games_by_id = {}
+
+if os.path.exists(year_filename):
+    with open(
+        year_filename,
+        "r",
+        encoding="utf-8"
+    ) as file:
+        previous_archive = json.load(file)
+
+    previous_games_by_id = {
+        game["id"]: game
+        for game in previous_archive.get("games", [])
+        if game.get("id") is not None
+    }
+
 fixtures_query = """
 query CometMatches(
 $first: Int!,
@@ -278,6 +296,7 @@ for match_id_chunk in chunks(match_ids, 100):
             for official in officials
         ]
 
+
 games = []
 
 for match_id, match in matches_by_id.items():
@@ -287,6 +306,30 @@ for match_id, match in matches_by_id.items():
 
     home_team = match.get("homeTeam") or {}
     away_team = match.get("awayTeam") or {}
+
+    officials = officials_by_match.get(
+        match_id,
+        []
+    )
+
+    previous_game = previous_games_by_id.get(
+        match_id,
+        {}
+    )
+
+    match_date = match.get("matchDate")
+
+    is_past_match = (
+        bool(match_date)
+        and match_date[:10] < date.today().isoformat()
+    )
+
+    if (
+        is_past_match
+        and not officials
+        and previous_game.get("officials")
+    ):
+        officials = previous_game["officials"]
 
     games.append({
         "id": match_id,
@@ -314,11 +357,10 @@ for match_id, match in matches_by_id.items():
         ),
         "homeScore": match.get("homeScore"),
         "awayScore": match.get("awayScore"),
-        "officials": officials_by_match.get(
-            match_id,
-            []
-        )
+        "officials": officials
     })
+
+
 
 games.sort(
     key=lambda game: game.get("date") or ""
@@ -337,9 +379,6 @@ year_output = {
 
 os.makedirs("data", exist_ok=True)
 
-year_filename = (
-    f"data/archive-{archive_year}.json"
-)
 
 with open(
     year_filename,
