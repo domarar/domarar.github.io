@@ -110,9 +110,12 @@ const refereeProfiles = {
         category: "Landsdómari"
     },
 
-    "Antoníus Bjarki Halldórsson": {
-        category: "Landsdómari"
-    },
+    
+"Antoníus Bjarki Halldórsson": {
+    category: "Landsdómari",
+    image: "images/referees/antonius_bjarki_halldorsson-test.jpg"
+},
+
 
     "Arnar Hólm Einarsson": {
         category: "Landsdómari"
