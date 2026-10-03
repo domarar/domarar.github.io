@@ -3,9 +3,6 @@
     const menuButton =
         document.getElementById("menuButton");
 
-    const authMenuButton =
-        document.getElementById("authMenuButton");
-
     const menuOverlay =
         document.getElementById("menuOverlay");
 
@@ -55,14 +52,6 @@
                 "true"
             );
         }
-
-
-        if (authMenuButton) {
-            authMenuButton.setAttribute(
-                "aria-expanded",
-                "true"
-            );
-        }
     }
 
 
@@ -98,19 +87,11 @@
                 "false"
             );
         }
-
-
-        if (authMenuButton) {
-            authMenuButton.setAttribute(
-                "aria-expanded",
-                "false"
-            );
-        }
     }
 
 
     /* =========================================
-       UM LEIKTÍMANN
+       UM DÓMARAR
     ========================================== */
 
     function openAbout() {
@@ -190,15 +171,6 @@
     if (menuButton) {
 
         menuButton.addEventListener(
-            "click",
-            openMenu
-        );
-    }
-
-
-    if (authMenuButton) {
-
-        authMenuButton.addEventListener(
             "click",
             openMenu
         );
