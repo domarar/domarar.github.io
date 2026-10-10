@@ -1,7 +1,7 @@
 {
   "id": 7100290,
-  "liveStatus": "SCHEDULED",
-  "currentMinute": null,
+  "liveStatus": "PLAYED",
+  "currentMinute": "FT",
   "dateTimeUTC": 1791640800000,
   "round": "3",
   "attendance": null,
@@ -26,7 +26,7 @@
     "current": 3
   },
   "awayTeamResult": {
-    "current": 2
+    "current": 5
   },
   "lineups": {
     "home": {
@@ -507,6 +507,18 @@
           "hideProfile": false,
           "events": [
             {
+              "eventId": 8381339,
+              "eventType": {
+                "fcdName": "YELLOW"
+              },
+              "player": {
+                "personId": 11014,
+                "hideProfile": false
+              },
+              "player2": null,
+              "homeTeam": false
+            },
+            {
               "eventId": 8381300,
               "eventType": {
                 "fcdName": "SUBSTITUTION"
@@ -536,6 +548,18 @@
           "orderNumber": 6,
           "hideProfile": false,
           "events": [
+            {
+              "eventId": 8381334,
+              "eventType": {
+                "fcdName": "GOAL"
+              },
+              "player": {
+                "personId": 46164,
+                "hideProfile": false
+              },
+              "player2": null,
+              "homeTeam": false
+            },
             {
               "eventId": 8381306,
               "eventType": {
@@ -591,7 +615,20 @@
           "position": null,
           "orderNumber": 9,
           "hideProfile": false,
-          "events": []
+          "events": [
+            {
+              "eventId": 8381326,
+              "eventType": {
+                "fcdName": "GOAL"
+              },
+              "player": {
+                "personId": 45297,
+                "hideProfile": false
+              },
+              "player2": null,
+              "homeTeam": false
+            }
+          ]
         },
         {
           "roleId": 8380360,
@@ -619,6 +656,18 @@
             },
             {
               "eventId": 8381316,
+              "eventType": {
+                "fcdName": "GOAL"
+              },
+              "player": {
+                "personId": 59919,
+                "hideProfile": false
+              },
+              "player2": null,
+              "homeTeam": false
+            },
+            {
+              "eventId": 8381321,
               "eventType": {
                 "fcdName": "GOAL"
               },
@@ -867,12 +916,50 @@
   },
   "events": [
     {
+      "eventId": 8381334,
+      "eventType": {
+        "fcdName": "GOAL"
+      },
+      "displayMinute": "2'",
+      "orderNumber": 1,
+      "matchPhase": {
+        "fcdName": "FIRST_HALF"
+      },
+      "player": {
+        "personId": 46164,
+        "name": "Adolf Daði Birgisson",
+        "hideProfile": false
+      },
+      "player2": null,
+      "homeTeam": false,
+      "teamOfficial": null
+    },
+    {
+      "eventId": 8381326,
+      "eventType": {
+        "fcdName": "GOAL"
+      },
+      "displayMinute": "16'",
+      "orderNumber": 2,
+      "matchPhase": {
+        "fcdName": "FIRST_HALF"
+      },
+      "player": {
+        "personId": 45297,
+        "name": "Tómas Orri Róbertsson",
+        "hideProfile": false
+      },
+      "player2": null,
+      "homeTeam": false,
+      "teamOfficial": null
+    },
+    {
       "eventId": 8381311,
       "eventType": {
         "fcdName": "GOAL"
       },
       "displayMinute": "32'",
-      "orderNumber": 1,
+      "orderNumber": 3,
       "matchPhase": {
         "fcdName": "FIRST_HALF"
       },
@@ -891,7 +978,7 @@
         "fcdName": "GOAL"
       },
       "displayMinute": "50'",
-      "orderNumber": 2,
+      "orderNumber": 4,
       "matchPhase": {
         "fcdName": "SECOND_HALF"
       },
@@ -910,7 +997,26 @@
         "fcdName": "GOAL"
       },
       "displayMinute": "56'",
-      "orderNumber": 3,
+      "orderNumber": 5,
+      "matchPhase": {
+        "fcdName": "SECOND_HALF"
+      },
+      "player": {
+        "personId": 59919,
+        "name": "Gils Gíslason",
+        "hideProfile": false
+      },
+      "player2": null,
+      "homeTeam": false,
+      "teamOfficial": null
+    },
+    {
+      "eventId": 8381321,
+      "eventType": {
+        "fcdName": "GOAL"
+      },
+      "displayMinute": "58'",
+      "orderNumber": 6,
       "matchPhase": {
         "fcdName": "SECOND_HALF"
       },
@@ -929,7 +1035,7 @@
         "fcdName": "SUBSTITUTION"
       },
       "displayMinute": "64'",
-      "orderNumber": 4,
+      "orderNumber": 7,
       "matchPhase": {
         "fcdName": "SECOND_HALF"
       },
@@ -952,7 +1058,7 @@
         "fcdName": "SUBSTITUTION"
       },
       "displayMinute": "64'",
-      "orderNumber": 5,
+      "orderNumber": 8,
       "matchPhase": {
         "fcdName": "SECOND_HALF"
       },
@@ -970,12 +1076,31 @@
       "teamOfficial": null
     },
     {
+      "eventId": 8381339,
+      "eventType": {
+        "fcdName": "YELLOW"
+      },
+      "displayMinute": "69'",
+      "orderNumber": 9,
+      "matchPhase": {
+        "fcdName": "SECOND_HALF"
+      },
+      "player": {
+        "personId": 11014,
+        "name": "Kristján Flóki Finnbogason",
+        "hideProfile": false
+      },
+      "player2": null,
+      "homeTeam": false,
+      "teamOfficial": null
+    },
+    {
       "eventId": 8381226,
       "eventType": {
         "fcdName": "SUBSTITUTION"
       },
       "displayMinute": "72'",
-      "orderNumber": 6,
+      "orderNumber": 10,
       "matchPhase": {
         "fcdName": "SECOND_HALF"
       },
@@ -998,7 +1123,7 @@
         "fcdName": "SUBSTITUTION"
       },
       "displayMinute": "72'",
-      "orderNumber": 7,
+      "orderNumber": 11,
       "matchPhase": {
         "fcdName": "SECOND_HALF"
       },
@@ -1021,7 +1146,7 @@
         "fcdName": "SUBSTITUTION"
       },
       "displayMinute": "72'",
-      "orderNumber": 8,
+      "orderNumber": 12,
       "matchPhase": {
         "fcdName": "SECOND_HALF"
       },
@@ -1044,7 +1169,7 @@
         "fcdName": "SUBSTITUTION"
       },
       "displayMinute": "80'",
-      "orderNumber": 9,
+      "orderNumber": 13,
       "matchPhase": {
         "fcdName": "SECOND_HALF"
       },
@@ -1067,7 +1192,7 @@
         "fcdName": "SUBSTITUTION"
       },
       "displayMinute": "80'",
-      "orderNumber": 10,
+      "orderNumber": 14,
       "matchPhase": {
         "fcdName": "SECOND_HALF"
       },
@@ -1090,7 +1215,7 @@
         "fcdName": "GOAL"
       },
       "displayMinute": "85'",
-      "orderNumber": 11,
+      "orderNumber": 15,
       "matchPhase": {
         "fcdName": "SECOND_HALF"
       },
@@ -1109,7 +1234,7 @@
         "fcdName": "SUBSTITUTION"
       },
       "displayMinute": "86'",
-      "orderNumber": 12,
+      "orderNumber": 16,
       "matchPhase": {
         "fcdName": "SECOND_HALF"
       },
@@ -1132,7 +1257,7 @@
         "fcdName": "YELLOW"
       },
       "displayMinute": "89'",
-      "orderNumber": 13,
+      "orderNumber": 17,
       "matchPhase": {
         "fcdName": "SECOND_HALF"
       },
@@ -1151,7 +1276,7 @@
         "fcdName": "GOAL"
       },
       "displayMinute": "90'",
-      "orderNumber": 14,
+      "orderNumber": 18,
       "matchPhase": {
         "fcdName": "SECOND_HALF"
       },
