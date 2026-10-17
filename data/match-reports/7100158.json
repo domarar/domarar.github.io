@@ -1,7 +1,7 @@
 {
   "id": 7100158,
-  "liveStatus": "SCHEDULED",
-  "currentMinute": null,
+  "liveStatus": "PLAYED",
+  "currentMinute": "FT",
   "dateTimeUTC": 1792178100000,
   "round": "4",
   "attendance": null,
@@ -877,6 +877,18 @@
                 "hideProfile": false
               },
               "homeTeam": false
+            },
+            {
+              "eventId": 8390041,
+              "eventType": {
+                "fcdName": "YELLOW"
+              },
+              "player": {
+                "personId": 81172,
+                "hideProfile": false
+              },
+              "player2": null,
+              "homeTeam": false
             }
           ]
         },
@@ -1305,6 +1317,25 @@
       "player": {
         "personId": 9131,
         "name": "Daníel Hafsteinsson",
+        "hideProfile": false
+      },
+      "player2": null,
+      "homeTeam": false,
+      "teamOfficial": null
+    },
+    {
+      "eventId": 8390041,
+      "eventType": {
+        "fcdName": "YELLOW"
+      },
+      "displayMinute": "88'",
+      "orderNumber": 18,
+      "matchPhase": {
+        "fcdName": "SECOND_HALF"
+      },
+      "player": {
+        "personId": 81172,
+        "name": "Nikolaj Andreas Hansen",
         "hideProfile": false
       },
       "player2": null,
